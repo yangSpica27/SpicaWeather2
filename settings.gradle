@@ -30,9 +30,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "SpicaWeather2"
 include ':app'
-include ':base'
-include ':network'
-include ':weather'
-include ':manager_city'
-include ':persistence'
-include ':setting'

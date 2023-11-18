@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="me.spica.spicaweather2">
+
+    <!-- 网络权限 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 手机状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 网络状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 允许获取设备和运营商信息，用于问题排查，必选 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <permission-group android:name="${applicationId}.andpermission" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- 允许读设备等信息，用于问题排查，必选 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 允许app联网，必选 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 允许获取网络状态，必选 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 允许获取wifi网络信息，用于网络定位（无gps情况下的定位），若需网络定位则必选 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <application
+        android:theme="@style/Theme.SpicaWeather"
+        android:name="App"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_app"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true">
+
+        <meta-data android:name="io.sentry.dsn"
+            android:value="http://c4a8f55137f14be49711243eb3fe4f50@43.248.185.248:29002/2" />
+
+        <!-- enable debug mode, it's disabled by default -->
+        <meta-data android:name="io.sentry.debug" android:value="true" />
+
+        <!-- it's 30s by default, making it 5s for testing -->
+        <meta-data android:name="io.sentry.session-tracking.timeout-interval-millis" android:value="30000" />
+
+
+    </application>
+
+</manifest>

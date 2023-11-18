@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="me.spica.spicaweather2.MainActivity"
-    app:layoutDescription="@xml/activity_main_scene">
+    android:background="@color/window_background"
+    app:layoutDescription="@xml/activity_main_scene"
+    tools:context="me.spica.spicaweather2.ui.main.MainActivity">
+
+    <include
+        android:id="@+id/manager_city_layout"
+        layout="@layout/layout_manager_city" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
@@ -16,20 +20,18 @@
         app:cardCornerRadius="0dp"
         app:contentPadding="0dp">
 
-        <me.spica.weather.view.WeatherBackgroundView
-            android:id="@+id/weather_background"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/title_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="26sp"
-            android:alpha="0"
-            android:text="标题" />
+        <include
+            android:id="@+id/weather_layout"
+            layout="@layout/layout_weather_page" />
 
     </androidx.cardview.widget.CardView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_start"
+        android:layout_width="wrap_content"
+        android:text="开始"
+        android:layout_gravity="center"
+        style="@style/ThemeOverlay.Material3.Button.TextButton"
+        android:layout_height="wrap_content"/>
 
 </FrameLayout>
