@@ -1,0 +1,46 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+        agp_version = '7.1.2'
+    }
+    ext.booster_version = '4.4.0'
+    repositories {
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/public'}
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.44'
+        classpath "com.didiglobal.booster:booster-gradle-plugin:$booster_version"
+        classpath "com.didiglobal.booster:booster-task-compression-pngquant:$booster_version"
+        classpath "com.didiglobal.booster:booster-task-compression-cwebp:$booster_version"
+        classpath "com.didiglobal.booster:booster-task-compression-processed-res:$booster_version"
+        classpath "com.didiglobal.booster:booster-task-resource-deredundancy:$booster_version"
+        classpath "com.didiglobal.booster:booster-transform-r-inline:$booster_version"
+        classpath "com.didiglobal.booster:booster-transform-br-inline:$booster_version"
+        classpath "com.didiglobal.booster:booster-transform-toast:$booster_version"
+        classpath "com.didiglobal.booster:booster-transform-activity-thread:$booster_version"
+        classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.2.21'
+    }
+
+}
+
+
+plugins {
+    id 'com.android.application' version '7.1.2' apply false
+    id 'com.android.library' version '7.1.2' apply false
+    id 'org.jetbrains.kotlin.android' version '1.8.10' apply false
+}
+
+apply plugin: 'com.didiglobal.booster'
+
+tasks.register('clean', Delete) {
+    delete rootProject.buildDir
+}
+

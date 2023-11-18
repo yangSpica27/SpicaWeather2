@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/weather">
+
+        <Constraint android:id="@+id/card_view">
+
+            <Layout android:layout_width="match_parent"
+                />
+
+        </Constraint>
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/manager_city">
+
+    </ConstraintSet>
+
+    <Transition
+        app:constraintSetStart="@+id/weather"
+        app:constraintSetEnd="@id/manager_city" />
+</MotionScene>
