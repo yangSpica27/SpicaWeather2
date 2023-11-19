@@ -1,47 +1,80 @@
 package me.spica.spicaweather2.ui.main
 
 import android.animation.ValueAnimator
+import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
+import androidx.activity.viewModels
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
+import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.base.BindingActivity
 import me.spica.spicaweather2.databinding.ActivityMainBinding
-import me.spica.spicaweather2.tools.dp
+import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.view.weather_bg.NowWeatherView
+import me.spica.spicaweather2.work.DataSyncWorker
+import timber.log.Timber
 
-
+@AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>() {
 
+    private val viewModel: MainViewModel by viewModels()
 
     private val anim = ValueAnimator.ofFloat(0f, 1f).setDuration(450)
+
+    private val mainPagerAdapter by lazy {
+        MainPagerAdapter(this)
+    }
 
 
     private var isExpand = false
 
 
     override fun initializer() {
-        viewBinding.weatherLayout.weatherBackground.bgColor = ContextCompat.getColor(this, R.color.light_blue_600)
-        viewBinding.weatherLayout.weatherBackground.currentWeatherAnimType = NowWeatherView.WeatherAnimType.RAIN
+        viewBinding.weatherLayout.viewPager.adapter = mainPagerAdapter
+
+        lifecycleScope.launch {
+            viewModel.allCityFlow.collectLatest {
+                Timber.tag("获取到城市").e("${it}个")
+                mainPagerAdapter.diffUtil.submitList(it)
+            }
+        }
+
+        mainPagerAdapter.diffUtil.submitList(
+            listOf(
+                CityBean(cityName = "阿坝", sortName = "aba", lat = "31.93", lon = "102.72", isSelected = true),
+            )
+        )
+
+        startService(Intent(this, DataSyncWorker::class.java))
+
+        viewBinding.weatherBackground.bgColor = ContextCompat.getColor(this, R.color.light_blue_600)
+        viewBinding.weatherBackground.currentWeatherAnimType = NowWeatherView.WeatherAnimType.RAIN
         viewBinding.btnStart.setOnClickListener {
             anim.removeAllListeners()
 
             anim.addUpdateListener {
-                 viewBinding.weatherLayout.weatherBackground.alpha = it.animatedValue as Float
+                viewBinding.weatherBackground.alpha = it.animatedValue as Float
                 setExpandProgress(it.animatedValue as Float)
             }
 
             anim.doOnStart {
-                 viewBinding.weatherLayout.weatherBackground.pauseWeatherAnim()
+                viewBinding.weatherBackground.pauseWeatherAnim()
+                viewBinding.weatherLayout.root.visibility = View.GONE
             }
 
             anim.doOnEnd {
-                 viewBinding.weatherLayout.weatherBackground.resumeWeatherAnim()
+                viewBinding.weatherBackground.resumeWeatherAnim()
+                viewBinding.weatherLayout.root.visibility = View.VISIBLE
             }
 
             if (!isExpand) {
@@ -71,14 +104,14 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
         val marginBottomPixel = fullHeight / 4f - fullHeight / 4f * progress
 
-        viewBinding.cardView.radius = 12.dp+ progress * 24.dp
+
         viewBinding.cardView.updateLayoutParams<MarginLayoutParams> {
             width = currentWidth.toInt()
             height = currentHeight.toInt()
             updateMargins(left = 0, top = 0, right = 0, bottom = marginBottomPixel.toInt())
         }
 
-        viewBinding.cardView.setCardBackgroundColor(
+        viewBinding.cardView.setBackgroundColor(
             blendColors(
                 Color.WHITE,
                 Color.TRANSPARENT,

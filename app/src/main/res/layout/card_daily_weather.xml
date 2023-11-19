@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginHorizontal="14dp"
+    android:background="@drawable/bg_card">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/card_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:textColor="@color/textColorPrimary"
+        android:textStyle="bold"
+        android:layout_marginTop="12dp"
+        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+        android:text="天级气象信息" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tip_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:visibility="gone"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/textColorPrimaryLight"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:text="最近的降雨带在东南109公里外呢" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="12dp"
+        android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_day_info"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_day_info"
+            android:nestedScrollingEnabled="false"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

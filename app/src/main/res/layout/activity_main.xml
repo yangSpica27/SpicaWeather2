@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,26 +13,30 @@
         android:id="@+id/manager_city_layout"
         layout="@layout/layout_manager_city" />
 
-    <androidx.cardview.widget.CardView
+    <FrameLayout
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        app:cardCornerRadius="0dp"
-        app:contentPadding="0dp">
+        android:background="@drawable/bg_card"
+        android:layout_gravity="center">
+
+        <me.spica.spicaweather2.view.weather_bg.WeatherBackgroundView
+            android:layout_width="match_parent"
+            android:id="@+id/weatherBackground"
+            android:layout_height="match_parent" />
 
         <include
             android:id="@+id/weather_layout"
             layout="@layout/layout_weather_page" />
 
-    </androidx.cardview.widget.CardView>
+    </FrameLayout>
 
     <androidx.appcompat.widget.AppCompatButton
+        style="@style/ThemeOverlay.Material3.Button.TextButton"
         android:id="@+id/btn_start"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="开始"
-        android:layout_gravity="center"
-        style="@style/ThemeOverlay.Material3.Button.TextButton"
-        android:layout_height="wrap_content"/>
+        android:layout_gravity="center" />
 
 </FrameLayout>

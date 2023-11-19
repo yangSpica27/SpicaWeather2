@@ -23,7 +23,7 @@ class RainDrawable : WeatherDrawable() {
     fun ready(width: Int, height: Int) {
         synchronized(rains){
             rains.clear()
-            for (i in 0 until 30) {
+            for (i in 0 until 10) {
                 rains.add(RainFlake.create(width, height, rainPaint))
             }
         }

@@ -1,50 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.viewpager2.widget.ViewPager2
+    android:id="@+id/view_pager"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
 
-    <me.spica.spicaweather2.view.weather_bg.WeatherBackgroundView
-        android:id="@+id/weather_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:scrollbars="none"
-        android:overScrollMode="never"
-        android:layout_height="match_parent">
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_view_1"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="20dp"
-                app:cardBackgroundColor="#4DFFFFFF"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_view_2"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="20dp"
-                android:layout_marginTop="20dp"
-                app:cardBackgroundColor="#4DFFFFFF"
-                app:layout_constraintTop_toBottomOf="@id/card_view_1" />
-
-
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-
-</FrameLayout>
+</androidx.viewpager2.widget.ViewPager2>
