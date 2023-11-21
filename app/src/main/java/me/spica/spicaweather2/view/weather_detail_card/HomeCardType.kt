@@ -6,17 +6,19 @@ enum class HomeCardType(val code: Int) {
     DAY_WEATHER(2), // 日级天气
     SUNRISE(3),// 日出日落
     AIR(4),
-    TIPS(5);// 生活指数
+    TIPS(5),// 生活指数
+    TODAY_EXTRA(6);// 生活指数
+}
 
-}
-fun Int.toHomeCardType(): HomeCardType {
-    return when (this) {
-        HomeCardType.NOW_WEATHER.code -> HomeCardType.NOW_WEATHER
-        HomeCardType.HOUR_WEATHER.code -> HomeCardType.HOUR_WEATHER
-        HomeCardType.DAY_WEATHER.code -> HomeCardType.DAY_WEATHER
-        HomeCardType.SUNRISE.code -> HomeCardType.SUNRISE
-        HomeCardType.AIR.code -> HomeCardType.AIR
-        HomeCardType.TIPS.code -> HomeCardType.TIPS
-        else -> HomeCardType.NOW_WEATHER
-    }
-}
+//fun Int.toHomeCardType(): HomeCardType {
+//    return when (this) {
+//        HomeCardType.NOW_WEATHER.code -> HomeCardType.NOW_WEATHER
+//        HomeCardType.HOUR_WEATHER.code -> HomeCardType.HOUR_WEATHER
+//        HomeCardType.DAY_WEATHER.code -> HomeCardType.DAY_WEATHER
+//        HomeCardType.SUNRISE.code -> HomeCardType.SUNRISE
+//        HomeCardType.AIR.code -> HomeCardType.AIR
+//        HomeCardType.TIPS.code -> HomeCardType.TIPS
+//        HomeCardType.TODAY_EXTRA.code -> HomeCardType.TODAY_EXTRA
+//        else -> HomeCardType.NOW_WEATHER
+//    }
+//}

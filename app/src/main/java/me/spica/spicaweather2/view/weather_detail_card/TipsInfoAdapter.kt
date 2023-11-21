@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import me.spica.spicaweather2.databinding.ItemTipsBinding
 
-class DayExtraInfoAdapter : RecyclerView.Adapter<DayExtraInfoAdapter.ViewHolder>() {
+class TipsInfoAdapter : RecyclerView.Adapter<TipsInfoAdapter.ViewHolder>() {
 
     // 数据
     val items: MutableList<ShowData> = mutableListOf()

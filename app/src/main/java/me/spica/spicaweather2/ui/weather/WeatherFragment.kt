@@ -57,15 +57,15 @@ class WeatherFragment : BindingFragment<FragmentWeatherBinding>() {
 
         viewBinding.rvCards.adapter = mainCardAdapter
 
-        mainCardAdapter.setItems(HomeCardType.values().toMutableList())
-
-
-
-//        viewBinding.rvCards.addOnScrollListener(object :RecyclerView.OnScrollListener(){
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                mainCardAdapter.onScroll()
-//            }
-//        })
+        mainCardAdapter.setItems(
+            listOf(
+                HomeCardType.NOW_WEATHER,
+                HomeCardType.TODAY_EXTRA,
+//                HomeCardType.HOUR_WEATHER,
+//                HomeCardType.SUNRISE,
+                HomeCardType.AIR
+            )
+        )
 
 
         lifecycleScope.launch {

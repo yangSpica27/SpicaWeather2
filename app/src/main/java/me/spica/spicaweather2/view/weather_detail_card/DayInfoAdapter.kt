@@ -105,43 +105,43 @@ class DayInfoAdapter : RecyclerView.Adapter<DayInfoAdapter.ViewHolder>() {
         holder.ItemDayWeather2Binding.tempView.init()
         holder.ItemDayWeather2Binding.icon.progress = .5f
         holder.ItemDayWeather2Binding.icon.setMaxProgress(.5f)
-        val dayExtraInfoAdapter = DayExtraInfoAdapter()
-        dayExtraInfoAdapter.backgroundColor = getColorWithAlpha(.2f,themeColor)
-        dayExtraInfoAdapter.items.clear()
-        dayExtraInfoAdapter.items.addAll(
+        val tipsInfoAdapter = TipsInfoAdapter()
+        tipsInfoAdapter.backgroundColor = getColorWithAlpha(.2f,themeColor)
+        tipsInfoAdapter.items.clear()
+        tipsInfoAdapter.items.addAll(
             listOf(
-                DayExtraInfoAdapter.ShowData(
+                TipsInfoAdapter.ShowData(
                     "湿度",
                     "${items[position].water}%",
                     R.drawable.ic_water
                 ),
-                DayExtraInfoAdapter.ShowData(
+                TipsInfoAdapter.ShowData(
                     "降水量",
                     "${items[position].precip}mm",
                     R.drawable.ic_heavy_rain_outline
                 ),
-                DayExtraInfoAdapter.ShowData(
+                TipsInfoAdapter.ShowData(
                     "风速",
                     "${items[position].windSpeed}km/h",
                     R.drawable.ic_wind
                 ),
-                DayExtraInfoAdapter.ShowData(
+                TipsInfoAdapter.ShowData(
                     "紫外线强度",
                     items[position].uv,
                     R.drawable.ic_ux
                 ),
-                DayExtraInfoAdapter.ShowData(
+                TipsInfoAdapter.ShowData(
                     "云层覆盖率",
                     "${items[position].cloud}%",
                     R.drawable.ic_cloud_outline
                 ),
-                DayExtraInfoAdapter.ShowData(
+                TipsInfoAdapter.ShowData(
                     "能见度",
                     "${items[position].cloud}km",
                     R.drawable.ic_vis
                 ),
             )
         )
-        holder.ItemDayWeather2Binding.rvWeatherInfo.adapter = dayExtraInfoAdapter
+        holder.ItemDayWeather2Binding.rvWeatherInfo.adapter = tipsInfoAdapter
     }
 }
