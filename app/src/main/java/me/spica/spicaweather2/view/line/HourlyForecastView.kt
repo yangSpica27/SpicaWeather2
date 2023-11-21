@@ -248,7 +248,9 @@ class HourlyForecastView : View {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         setMeasuredDimension(
-            (ITEM_WIDTH * (weathers.size - 1) + paddingL + paddingR).toInt(), (ITEM_MIN_HEIGHT + paddingT + paddingB + DATE_TEXT_HEIGHT + LEVEL_RECT_HEIGHT + TEMP_TEXT_HEIGHT + TEMP_HEIGHT_SECTION).toInt()
+            (ITEM_WIDTH * (weathers.size - 1) + paddingL + paddingR).toInt(),
+            (ITEM_MIN_HEIGHT + paddingT + paddingB + DATE_TEXT_HEIGHT +
+                    LEVEL_RECT_HEIGHT + TEMP_TEXT_HEIGHT + TEMP_HEIGHT_SECTION).toInt()
         )
     }
 

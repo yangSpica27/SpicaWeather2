@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.view_group.AirCardLayout
 import me.spica.spicaweather2.view.view_group.NowWeatherLayout
+import me.spica.spicaweather2.view.view_group.TipsLayout
 import me.spica.spicaweather2.view.view_group.TodayExtraLayout
 import me.spica.spicaweather2.view.weather_detail_card.DailyWeatherCard
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
@@ -56,8 +57,7 @@ class MainCardAdapter(
             }
 
             HomeCardType.TIPS.code -> {
-                val itemView = TipsCard(parent.context)
-                itemView.layoutParams = lp
+                val itemView = TipsLayout( parent.context)
                 // 生活指数卡片点击跳转
                 return AbstractMainViewHolder(itemView, itemView)
             }

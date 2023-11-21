@@ -61,6 +61,7 @@ class WeatherFragment : BindingFragment<FragmentWeatherBinding>() {
             listOf(
                 HomeCardType.NOW_WEATHER,
                 HomeCardType.TODAY_EXTRA,
+                HomeCardType.TIPS,
 //                HomeCardType.HOUR_WEATHER,
 //                HomeCardType.SUNRISE,
                 HomeCardType.AIR
