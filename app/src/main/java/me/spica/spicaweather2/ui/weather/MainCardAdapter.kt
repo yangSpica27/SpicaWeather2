@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.view_group.AirCardLayout
+import me.spica.spicaweather2.view.view_group.DailyWeatherLayout
 import me.spica.spicaweather2.view.view_group.HourlyCardLayout
 import me.spica.spicaweather2.view.view_group.NowWeatherLayout
 import me.spica.spicaweather2.view.view_group.TipsLayout
@@ -19,7 +20,7 @@ import me.spica.spicaweather2.view.weather_detail_card.SunriseCard
 
 
 class MainCardAdapter(
-    private val activity: Activity, private val recyclerView: RecyclerView, private val scope: CoroutineScope
+   private val recyclerView: RecyclerView, private val scope: CoroutineScope
 ) : RecyclerView.Adapter<AbstractMainViewHolder>() {
 
 
@@ -44,8 +45,7 @@ class MainCardAdapter(
         )
         when (viewType) {
             HomeCardType.DAY_WEATHER.code -> {
-                val itemView = DailyWeatherCard(parent.context)
-                itemView.layoutParams = lp
+                val itemView = DailyWeatherLayout(parent.context)
                 return AbstractMainViewHolder(itemView, itemView)
             }
 
@@ -61,11 +61,6 @@ class MainCardAdapter(
             }
 
             HomeCardType.NOW_WEATHER.code -> {
-//        val itemView = NowWeatherCard(parent.context)
-//        itemView.layoutParams = lp
-//        itemView.setOnClickListener {
-////          todayWeatherDetailDialog.show(activity)
-//        }
                 val itemView = NowWeatherLayout(parent.context)
                 itemView.layoutParams = lp
                 return AbstractMainViewHolder(itemView, itemView)
@@ -86,10 +81,8 @@ class MainCardAdapter(
                 val itemView = TodayExtraLayout(parent.context)
                 return AbstractMainViewHolder(itemView, itemView)
             }
-
-            else -> {
-                val itemView = DailyWeatherCard(parent.context)
-                itemView.layoutParams = lp
+            else->{
+                val itemView = DailyWeatherLayout(parent.context)
                 return AbstractMainViewHolder(itemView, itemView)
             }
         }

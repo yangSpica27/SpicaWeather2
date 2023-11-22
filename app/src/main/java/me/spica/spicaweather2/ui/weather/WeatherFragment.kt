@@ -38,7 +38,6 @@ class WeatherFragment : BindingFragment<FragmentWeatherBinding>() {
         }
 
         mainCardAdapter = MainCardAdapter(
-            requireActivity(),
             viewBinding.rvCards,
             lifecycleScope
         )
@@ -59,6 +58,7 @@ class WeatherFragment : BindingFragment<FragmentWeatherBinding>() {
                 HomeCardType.NOW_WEATHER,
                 HomeCardType.TODAY_EXTRA,
                 HomeCardType.HOUR_WEATHER,
+                HomeCardType.DAY_WEATHER,
                 HomeCardType.AIR,
                 HomeCardType.TIPS
 //                HomeCardType.SUNRISE,

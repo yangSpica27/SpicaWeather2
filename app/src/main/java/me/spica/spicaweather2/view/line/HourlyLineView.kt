@@ -68,7 +68,7 @@ class HourlyLineView : View {
 
     private val tempPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
         typeface = Typeface.DEFAULT_BOLD
-        textSize = 50f
+        textSize = 16.dp
         color = ContextCompat.getColor(context, R.color.textColorPrimary)
         textAlign = Paint.Align.CENTER
     }
@@ -251,14 +251,14 @@ class HourlyLineView : View {
 
 
     private val popTextPaint = TextPaint().apply {
-        textSize = 50f
+        textSize = 15.dp
         color = ContextCompat.getColor(context, R.color.textColorPrimaryHint)
         typeface = Typeface.DEFAULT_BOLD
         textAlign = Paint.Align.CENTER
     }
 
     private val weatherNameTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = 55f
+        textSize = 18.dp
         textAlign = Paint.Align.CENTER
     }
 
@@ -282,7 +282,7 @@ class HourlyLineView : View {
     }
 
     private val drawTimeTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = 46f
+        textSize = 16.dp
         textAlign = Paint.Align.CENTER
         color = ContextCompat.getColor(context, R.color.textColorPrimary)
         typeface = Typeface.DEFAULT_BOLD

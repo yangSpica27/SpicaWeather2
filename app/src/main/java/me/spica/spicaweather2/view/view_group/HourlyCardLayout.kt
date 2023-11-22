@@ -28,7 +28,6 @@ class HourlyCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply {
-            topMargin = 12.dp
             leftMargin = 14.dp
             rightMargin = 14.dp
         }
