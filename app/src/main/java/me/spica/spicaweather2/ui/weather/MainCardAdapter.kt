@@ -9,14 +9,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.view_group.AirCardLayout
+import me.spica.spicaweather2.view.view_group.HourlyCardLayout
 import me.spica.spicaweather2.view.view_group.NowWeatherLayout
 import me.spica.spicaweather2.view.view_group.TipsLayout
 import me.spica.spicaweather2.view.view_group.TodayExtraLayout
 import me.spica.spicaweather2.view.weather_detail_card.DailyWeatherCard
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
-import me.spica.spicaweather2.view.weather_detail_card.HourWeatherCard
 import me.spica.spicaweather2.view.weather_detail_card.SunriseCard
-import me.spica.spicaweather2.view.weather_detail_card.TipsCard
 
 
 class MainCardAdapter(
@@ -51,8 +50,7 @@ class MainCardAdapter(
             }
 
             HomeCardType.HOUR_WEATHER.code -> {
-                val itemView = HourWeatherCard(parent.context)
-                itemView.layoutParams = lp
+                val itemView = HourlyCardLayout(context = parent.context)
                 return AbstractMainViewHolder(itemView, itemView)
             }
 

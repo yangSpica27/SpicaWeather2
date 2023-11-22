@@ -12,7 +12,6 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.marginTop
-import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.weather.LifeIndexBean
@@ -168,7 +167,7 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             paddingTop+sptIcon.marginTop
         )
         sptTitle.layout(
-            measuredWidth / 6 - sptTitle.width / 2,
+            sptTitle.toViewHorizontalCenter(sptIcon),
             sptIcon.bottom + sptTitle.marginTop
         )
         sptDesc.layout(
@@ -195,14 +194,12 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             true
         )
         airTitle.layout(
-            measuredWidth / 6 - airTitle.width / 2,
-            airIcon.bottom + airTitle.marginTop,
-            true
+            airTitle.toViewHorizontalCenter(airIcon),
+            airIcon.bottom + airTitle.marginTop
         )
         airDesc.layout(
-            measuredWidth / 6 - airDesc.width / 2,
-            airTitle.bottom + airDesc.marginTop,
-            true
+            airDesc.toViewHorizontalCenter(airIcon),
+            airTitle.bottom + airDesc.marginTop
         )
 
         // car

@@ -30,10 +30,6 @@ class WeatherFragment : BindingFragment<FragmentWeatherBinding>() {
         FragmentWeatherBinding = FragmentWeatherBinding.inflate(inflater, container, false)
 
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     override fun init() {
         currentCity = arguments?.getParcelable("city")
@@ -53,7 +49,8 @@ class WeatherFragment : BindingFragment<FragmentWeatherBinding>() {
             .size(12.dp.toInt())
             .showFirstDivider()
             .showLastDivider()
-            .build().addTo(viewBinding.rvCards)
+            .build()
+            .addTo(viewBinding.rvCards)
 
         viewBinding.rvCards.adapter = mainCardAdapter
 
@@ -61,10 +58,10 @@ class WeatherFragment : BindingFragment<FragmentWeatherBinding>() {
             listOf(
                 HomeCardType.NOW_WEATHER,
                 HomeCardType.TODAY_EXTRA,
-                HomeCardType.TIPS,
-//                HomeCardType.HOUR_WEATHER,
+                HomeCardType.HOUR_WEATHER,
+                HomeCardType.AIR,
+                HomeCardType.TIPS
 //                HomeCardType.SUNRISE,
-                HomeCardType.AIR
             )
         )
 

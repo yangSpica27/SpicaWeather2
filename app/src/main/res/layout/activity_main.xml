@@ -9,35 +9,17 @@
     app:layoutDescription="@xml/activity_main_scene"
     tools:context="me.spica.spicaweather2.ui.main.MainActivity">
 
-    <include
-        android:id="@+id/manager_city_layout"
-        layout="@layout/layout_manager_city" />
 
-    <FrameLayout
-        android:id="@+id/card_view"
+    <me.spica.spicaweather2.view.weather_bg.WeatherBackgroundView
+        android:id="@+id/weather_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_card"
-        android:layout_gravity="center">
+        android:orientation="vertical"/>
 
-        <me.spica.spicaweather2.view.weather_bg.WeatherBackgroundView
-            android:layout_width="match_parent"
-            android:id="@+id/weatherBackground"
-            android:layout_height="match_parent" />
-
-        <include
-            android:id="@+id/weather_layout"
-            layout="@layout/layout_weather_page" />
-
-    </FrameLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        style="@style/ThemeOverlay.Material3.Button.TextButton"
-        android:id="@+id/btn_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="64dp"
-        android:text="开始"
-        android:layout_gravity="bottom|right" />
 
 </FrameLayout>

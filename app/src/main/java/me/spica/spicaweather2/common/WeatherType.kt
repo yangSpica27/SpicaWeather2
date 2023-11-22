@@ -2,6 +2,7 @@ package me.spica.spicaweather2.common
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.view.weather_bg.NowWeatherView
@@ -21,24 +22,24 @@ enum class WeatherType {
     WEATHER_THUNDERSTORM
 }
 
-//// 拓展方法 用于获取对应类型的图标
-//@DrawableRes
-//fun WeatherType.getIconRes(): Int {
-//
-//    return when (this) {
-//        WeatherType.WEATHER_CLEAR -> R.drawable.ic_sunny
-//        WeatherType.WEATHER_CLOUDY -> R.drawable.ic_cloudly
-//        WeatherType.WEATHER_CLOUD -> R.drawable.ic_cloudly
-//        WeatherType.WEATHER_RAINY -> R.drawable.ic_rain
-//        WeatherType.WEATHER_SNOW -> R.drawable.ic_snow
-//        WeatherType.WEATHER_SLEET -> R.drawable.ic_rain
-//        WeatherType.WEATHER_FOG -> R.drawable.ic_fog
-//        WeatherType.WEATHER_HAZE -> R.drawable.ic_fog
-//        WeatherType.WEATHER_HAIL -> R.drawable.ic_rain
-//        WeatherType.WEATHER_THUNDER -> R.drawable.ic_thumb
-//        WeatherType.WEATHER_THUNDERSTORM -> R.drawable.ic_rain_thumb
-//    }
-//}
+// 拓展方法 用于获取对应类型的图标
+@DrawableRes
+fun WeatherType.getIconRes(): Int {
+
+    return when (this) {
+        WeatherType.WEATHER_CLEAR -> R.drawable.ic_sunny
+        WeatherType.WEATHER_CLOUDY -> R.drawable.ic_cloudly
+        WeatherType.WEATHER_CLOUD -> R.drawable.ic_cloudly
+        WeatherType.WEATHER_RAINY -> R.drawable.ic_rain
+        WeatherType.WEATHER_SNOW -> R.drawable.ic_snow
+        WeatherType.WEATHER_SLEET -> R.drawable.ic_rain
+        WeatherType.WEATHER_FOG -> R.drawable.ic_fog
+        WeatherType.WEATHER_HAZE -> R.drawable.ic_fog
+        WeatherType.WEATHER_HAIL -> R.drawable.ic_rain
+        WeatherType.WEATHER_THUNDER -> R.drawable.ic_thumb
+        WeatherType.WEATHER_THUNDERSTORM -> R.drawable.ic_rain_thumb
+    }
+}
 
 @RawRes
 fun WeatherType.getAnimRes(): Int {

@@ -4,12 +4,8 @@ import android.animation.ValueAnimator
 import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.ViewGroup.MarginLayoutParams
 import androidx.activity.viewModels
-import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updateMargins
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +15,6 @@ import me.spica.spicaweather2.R
 import me.spica.spicaweather2.base.BindingActivity
 import me.spica.spicaweather2.databinding.ActivityMainBinding
 import me.spica.spicaweather2.persistence.entity.city.CityBean
-import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.view.weather_bg.NowWeatherView
 import me.spica.spicaweather2.work.DataSyncWorker
 import timber.log.Timber
@@ -40,9 +35,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
 
 
     override fun initializer() {
-        viewBinding.weatherLayout.viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        viewBinding.weatherLayout.viewPager.adapter = mainPagerAdapter
-
+        viewBinding.viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        viewBinding.viewPager.adapter = mainPagerAdapter
+        viewBinding.viewPager.isUserInputEnabled = false
         lifecycleScope.launch {
             viewModel.allCityFlow.collectLatest {
                 Timber.tag("获取到城市").e("${it}个")
@@ -61,63 +56,63 @@ class MainActivity : BindingActivity<ActivityMainBinding>() {
         viewBinding.weatherBackground.bgColor = ContextCompat.getColor(this, R.color.light_blue_600)
         viewBinding.weatherBackground.currentWeatherAnimType = NowWeatherView.WeatherAnimType.RAIN
 
-        viewBinding.btnStart.setOnClickListener {
-            anim.removeAllListeners()
-
-            anim.addUpdateListener {
-                viewBinding.weatherBackground.alpha = it.animatedValue as Float
-                setExpandProgress(it.animatedValue as Float)
-            }
-            viewBinding.weatherBackground.pauseWeatherAnim()
-
-            anim.doOnEnd {
-                viewBinding.weatherBackground.resumeWeatherAnim()
-//                viewBinding.weatherLayout.root.visibility = View.VISIBLE
-            }
-
-           doOnMainThreadIdle({
-               if (!isExpand) {
-                   anim.setFloatValues(anim.animatedValue as Float, 0f)
-                   anim.start()
-               } else {
-                   anim.setFloatValues(anim.animatedValue as Float, 1f)
-                   anim.start()
-               }
-           })
-
-            isExpand = !isExpand
-        }
+//        viewBinding.btnStart.setOnClickListener {
+//            anim.removeAllListeners()
+//
+//            anim.addUpdateListener {
+//                viewBinding.weatherBackground.alpha = it.animatedValue as Float
+//                setExpandProgress(it.animatedValue as Float)
+//            }
+//            viewBinding.weatherBackground.pauseWeatherAnim()
+//
+//            anim.doOnEnd {
+//                viewBinding.weatherBackground.resumeWeatherAnim()
+////                viewBinding.weatherLayout.root.visibility = View.VISIBLE
+//            }
+//
+//           doOnMainThreadIdle({
+//               if (!isExpand) {
+//                   anim.setFloatValues(anim.animatedValue as Float, 0f)
+//                   anim.start()
+//               } else {
+//                   anim.setFloatValues(anim.animatedValue as Float, 1f)
+//                   anim.start()
+//               }
+//           })
+//
+//            isExpand = !isExpand
+//        }
     }
 
     override fun setupViewBinding(inflater: LayoutInflater): ActivityMainBinding = ActivityMainBinding.inflate(inflater)
 
     private fun setExpandProgress(progress: Float) {
 
-        val fullWidth = resources.displayMetrics.widthPixels
-        val fullHeight = resources.displayMetrics.heightPixels
-
-        val minWidth = fullWidth / 8f * 7
-        val minHeight = fullHeight / 8f
-
-        val currentWidth = (fullWidth - minWidth) * progress + minWidth
-        val currentHeight = (fullHeight - minHeight) * progress * 1.1 + minHeight
-
-        val marginBottomPixel = fullHeight / 4f - fullHeight / 4f * progress
-
-
-        viewBinding.cardView.updateLayoutParams<MarginLayoutParams> {
-            width = currentWidth.toInt()
-            height = currentHeight.toInt()
-            updateMargins(left = 0, top = 0, right = 0, bottom = marginBottomPixel.toInt())
-        }
-
-        viewBinding.cardView.setBackgroundColor(
-            blendColors(
-                Color.WHITE,
-                Color.TRANSPARENT,
-                progress
-            )
-        )
+//        val fullWidth = resources.displayMetrics.widthPixels
+//        val fullHeight = resources.displayMetrics.heightPixels
+//
+//        val minWidth = fullWidth / 8f * 7
+//        val minHeight = fullHeight / 8f
+//
+//        val currentWidth = (fullWidth - minWidth) * progress + minWidth
+//        val currentHeight = (fullHeight - minHeight) * progress * 1.1 + minHeight
+//
+//        val marginBottomPixel = fullHeight / 4f - fullHeight / 4f * progress
+//
+//
+//        viewBinding.cardView.updateLayoutParams<MarginLayoutParams> {
+//            width = currentWidth.toInt()
+//            height = currentHeight.toInt()
+//            updateMargins(left = 0, top = 0, right = 0, bottom = marginBottomPixel.toInt())
+//        }
+//
+//        viewBinding.cardView.setBackgroundColor(
+//            blendColors(
+//                Color.WHITE,
+//                Color.TRANSPARENT,
+//                progress
+//            )
+//        )
 
 //        viewBinding.cardView.requestLayout()
 
