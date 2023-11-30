@@ -2,11 +2,11 @@ package me.spica.spicaweather2.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
+import rikka.material.app.MaterialActivity
 
 
-abstract class BindingActivity<ViewBindingType : ViewBinding> : AppCompatActivity() {
+abstract class BindingActivity<ViewBindingType : ViewBinding> : MaterialActivity() {
 
     private var _binding: ViewBindingType? = null
 

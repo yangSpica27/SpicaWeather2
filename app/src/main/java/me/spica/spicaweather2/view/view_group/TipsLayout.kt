@@ -16,6 +16,7 @@ import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.weather.LifeIndexBean
 import me.spica.spicaweather2.persistence.entity.weather.Weather
+import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 
 class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
@@ -223,7 +224,7 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
     override var enterAnim: AnimatorSet = AnimatorSet()
 
-    override var index: Int = 0
+    override var index: Int = HomeCardType.TIPS.code
 
     override var hasInScreen: Boolean = false
 

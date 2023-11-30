@@ -27,6 +27,8 @@ buildscript {
         classpath "com.didiglobal.booster:booster-transform-toast:$booster_version"
         classpath "com.didiglobal.booster:booster-transform-activity-thread:$booster_version"
         classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.2.21'
+        classpath 'com.android.tools.build:gradle:7.1.2'
+        classpath("com.android.tools:r8:8.1.72")
     }
 
 }

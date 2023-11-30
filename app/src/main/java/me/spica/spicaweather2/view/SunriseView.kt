@@ -10,6 +10,8 @@ import android.view.View
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.doOnPreDraw
+import androidx.core.view.drawToBitmap
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
 import java.util.*
@@ -21,15 +23,15 @@ private const val ARC_ANGLE = 135
 
 class SunriseView : View {
 
-    /**
-     * 太阳图标[0]
-     * 月亮图标[1]X暂不做月落图
-     */
-    private var sunIcon: Bitmap
 
-    private val drawablePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val drawablePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        isDither = true
+        style = Paint.Style.FILL_AND_STROKE
+        color = ContextCompat.getColor(context, R.color.material_yellow_600)
+        maskFilter = BlurMaskFilter(10f, BlurMaskFilter.Blur.SOLID)
+    }
 
-    private val iconSize = 40.dp
+    private val sunSize = 28.dp
 
     // =========各个文本的bound========
 
@@ -88,15 +90,7 @@ class SunriseView : View {
         defStyleAttr
     )
 
-    init {
-        val option = BitmapFactory.Options()
-        option.inJustDecodeBounds = true
-        BitmapFactory.decodeResource(resources, R.drawable.ic_sun, option)
-        option.inJustDecodeBounds = false
-        option.inDensity = option.outWidth
-        option.inTargetDensity = iconSize.toInt()
-        sunIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_sun, option)
-    }
+
 
     private var startTime = 0
 
@@ -124,13 +118,13 @@ class SunriseView : View {
                 MeasureSpec.EXACTLY
             ),
             MeasureSpec.makeMeasureSpec(
-                (height + 2 * 8.dp).toInt(),
+                ((height + 2 * 8.dp).toInt() + 12.dp).toInt(),
                 MeasureSpec.EXACTLY
             )
         )
 
         val centerX = measuredWidth / 2F
-        val centerY = (8.dp + radius) * 1F
+        val centerY = (8.dp + radius) * 1F + 12.dp
         mRectF.set(
             centerX - radius,
             centerY - radius,
@@ -148,6 +142,10 @@ class SunriseView : View {
         this.endTime = decodeTime(endTime)
         this.currentTime = decodeTime(currentTime)
         ensureProgress()
+        if (cacheBitmap?.isRecycled == false) {
+            cacheBitmap?.recycle()
+            cacheBitmap = null
+        }
         ViewCompat.postInvalidateOnAnimation(this)
     }
 
@@ -164,6 +162,8 @@ class SunriseView : View {
         )
     }
 
+    private var cacheBitmap: Bitmap? = null
+
     fun startAnim() {
         val animator = ValueAnimator.ofInt(0, currentTime - startTime)
         animator.duration = 1500
@@ -173,6 +173,10 @@ class SunriseView : View {
         }
         animator.doOnEnd {
             it.removeAllListeners()
+            doOnPreDraw {
+                cacheBitmap = this.drawToBitmap()
+                invalidate()
+            }
         }
         animator.start()
     }
@@ -192,6 +196,12 @@ class SunriseView : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
+        cacheBitmap?.let {
+            canvas.drawBitmap(it, 0f, 0f, null)
+            return
+        }
+
+
         val startAngle: Float = 270f - ARC_ANGLE / 2f
 
         var progressSweepAngle = (progress.toFloat() / max.toFloat() * ARC_ANGLE)
@@ -207,7 +217,7 @@ class SunriseView : View {
 
         val deltaWidth = Math.abs(
             mRectF.width() / 2f *
-                    Math.cos(Math.toRadians(deltaAngle.toDouble()))
+                Math.cos(Math.toRadians(deltaAngle.toDouble()))
         ).toFloat()
 
 
@@ -220,13 +230,13 @@ class SunriseView : View {
             if (
                 progressEndAngle > 270
             ) {
-                mRectF.centerX() + deltaWidth - iconSize / 2f
+                mRectF.centerX() + deltaWidth
             } else {
-                mRectF.centerX() - deltaWidth - iconSize / 2f
+                mRectF.centerX() - deltaWidth
             }
 
 
-        val iconPositionY = mRectF.centerY() - deltaHeight - iconSize / 2f
+        val iconPositionY = mRectF.centerY() - deltaHeight
         val layerId = canvas.saveLayer(
             mRectF.left, mRectF.top, mRectF.right, mRectF.top + mRectF.height() / 2,
             null
@@ -247,12 +257,12 @@ class SunriseView : View {
         pathPaint.shader = null
         canvas.drawRect(
             (
-                    (mRectF.centerX() + mRectF.width() / 2
-                            * Math.cos(
-                        (360 - progressEndAngle)
-                                * Math.PI / 180
-                    )).toFloat()
-                    ),
+                (mRectF.centerX() + mRectF.width() / 2
+                    * Math.cos(
+                    (360 - progressEndAngle)
+                        * Math.PI / 180
+                )).toFloat()
+                ),
             mRectF.top,
             mRectF.right,
             mRectF.top + mRectF.height() / 2,
@@ -294,11 +304,7 @@ class SunriseView : View {
 
 
         canvas.translate(iconPositionX, iconPositionY)
-        canvas.drawBitmap(
-            sunIcon,
-            0f, 0f,
-            drawablePaint
-        )
+        canvas.drawCircle(0f, 0f, sunSize / 2, drawablePaint)
 
         canvas.restoreToCount(restoreCount)
     }

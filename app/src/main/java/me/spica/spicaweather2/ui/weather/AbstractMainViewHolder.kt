@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 
-open class AbstractMainViewHolder(val card: SpicaWeatherCard, itemView: View) :
+open class AbstractMainViewHolder(private val card: SpicaWeatherCard, itemView: View) :
     RecyclerView.ViewHolder(itemView) {
 
 

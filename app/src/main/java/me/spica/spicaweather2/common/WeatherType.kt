@@ -37,7 +37,7 @@ fun WeatherType.getIconRes(): Int {
         WeatherType.WEATHER_HAZE -> R.drawable.ic_fog
         WeatherType.WEATHER_HAIL -> R.drawable.ic_rain
         WeatherType.WEATHER_THUNDER -> R.drawable.ic_thumb
-        WeatherType.WEATHER_THUNDERSTORM -> R.drawable.ic_rain_thumb
+        WeatherType.WEATHER_THUNDERSTORM -> R.drawable.ic_thumb
     }
 }
 

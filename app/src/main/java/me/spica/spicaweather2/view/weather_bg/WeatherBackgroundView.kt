@@ -158,7 +158,7 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
     }
 
     private fun roundClip(canvas: Canvas) {
-        canvas.clipPath(clipPath)
+//        canvas.clipPath(clipPath)
         canvas.drawColor(bgColor)
     }
 

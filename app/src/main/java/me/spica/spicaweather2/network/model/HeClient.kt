@@ -22,7 +22,7 @@ class HeClient @Inject constructor(private val heService: HeService) {
   suspend fun getMinute(
     lon: String,
     lat: String
-  ): ApiResponse<CaiyunBean> = heService.getMinutely(location = "$lon,$lat")
+  ): ApiResponse<CaiyunBean> = heService.getMinutely(lat.toDouble(),lon.toDouble())
 
 
 }

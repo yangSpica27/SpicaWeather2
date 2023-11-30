@@ -50,5 +50,6 @@
     <string name="request_runtime_permission">申请运行时权限</string>
     <string name="get_location_fail">获取地理位置失败</string>
     <string name="loc_to">定位%1$s</string>
+    <string name="add_city">添加城市</string>
 
 </resources>

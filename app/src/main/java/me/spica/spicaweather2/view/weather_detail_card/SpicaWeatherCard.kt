@@ -29,7 +29,6 @@ interface SpicaWeatherCard {
     }
 
     fun resetAnim() {
-        return
         hasInScreen = false
         animatorView.alpha = 0f
 
@@ -42,7 +41,7 @@ interface SpicaWeatherCard {
             ObjectAnimator.ofFloat(
                 animatorView, "translationY", 120.dp, 0f
             ).apply {
-                interpolator = OvershootInterpolator(.3f * (index + 1))
+                interpolator = OvershootInterpolator(.3f * (index/2f + 1))
             },
             ObjectAnimator.ofFloat(
                 animatorView, "scaleY", 1.025f, 1f

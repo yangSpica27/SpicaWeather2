@@ -15,7 +15,7 @@ import me.spica.spicaweather2.tools.dp
 class RainImageView : LottieAnimationView {
 
     // 降雨概率
-    var rainfallProbability = 60f
+    private var rainfallProbability = 60f
         set(value) {
             field = value
             text = "${rainfallProbability}mm"

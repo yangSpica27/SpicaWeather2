@@ -15,7 +15,7 @@ class SnowDrawable : WeatherDrawable() {
 
 
     // 绘制雨水的paint
-    private val snowPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val snowPaint = Paint().apply {
         strokeCap = Paint.Cap.ROUND
         strokeWidth = 4.dp
         color = Color.WHITE
@@ -23,24 +23,30 @@ class SnowDrawable : WeatherDrawable() {
     }
 
   fun ready(width: Int, height: Int) {
-        snows.clear()
-        for (i in 0 until 30) {
-            snows.add(SnowFlake.create(width, height, snowPaint))
-        }
+      synchronized(snows){
+          snows.clear()
+          for (i in 0 until 30) {
+              snows.add(SnowFlake.create(width, height, snowPaint))
+          }
+      }
     }
 
 
     @WorkerThread
     fun calculate(width: Int, height: Int) {
-        snows.forEach { snow ->
-            snow.onlyCalculation(width, height)
+        synchronized(snows){
+            snows.forEach { snow ->
+                snow.onlyCalculation(width, height)
+            }
         }
     }
 
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
-        snows.forEach { snow ->
-            snow.onlyDraw(canvas)
+        synchronized(snows){
+            snows.forEach { snow ->
+                snow.onlyDraw(canvas)
+            }
         }
     }
 

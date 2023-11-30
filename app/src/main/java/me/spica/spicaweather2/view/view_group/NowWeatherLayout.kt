@@ -1,120 +1,102 @@
 package me.spica.spicaweather2.view.view_group
 
 import android.animation.AnimatorSet
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import android.graphics.LinearGradient
-import android.graphics.Shader
+import android.graphics.Paint
+import android.graphics.Typeface
+import android.text.format.DateUtils
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.marginLeft
+import androidx.core.view.marginRight
 import androidx.core.view.marginTop
 import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.weather.Weather
+import me.spica.spicaweather2.view.NowWeatherInfoCard
+import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
+
 
 class NowWeatherLayout(context: Context) : AViewGroup(context = context), SpicaWeatherCard {
 
 
-    private val weatherNameText = AppCompatTextView(context).apply {
+    @SuppressLint("SetTextI18n")
+    private val dateTimeTextView = AppCompatTextView(context).apply {
+        setTextAppearance(context, R.style.TextAppearance_Material3_HeadlineLarge)
+        layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
+            it.updateMargins(
+                top = 20.dp, left = 14.dp
+            )
+        }
+        paint.isFakeBoldText = true
+        typeface = Typeface.defaultFromStyle(Typeface.BOLD)
+        paint.style = Paint.Style.FILL_AND_STROKE
+        0.7.toFloat().also { paint.strokeWidth = it }
+        text =
+            "${DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_NO_YEAR)} ${DateUtils.formatDateTime(context, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_WEEKDAY)}"
+        setTextColor(Color.WHITE)
+    }
+
+    private val helloText = AppCompatTextView(context).apply {
         setTextAppearance(context, R.style.TextAppearance_Material3_LabelLarge)
         layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
             it.updateMargins(
-                left = 8.dp,
+                top = 12.dp, left = 14.dp
             )
+            paint.isFakeBoldText = true
         }
-        includeFontPadding = false
-        lastBaselineToBottomHeight = 0
-        firstBaselineToTopHeight = 0
+        text = "所赴远山，其下皆川"
+        setTextColor(Color.WHITE)
     }
 
-    private val currentTempText = AppCompatTextView(context).apply {
-        setTextAppearance(context, R.style.TextAppearance_Material3_DisplayLarge)
-        textSize = 40.dp.toFloat()
-//        setBackgroundColor(Color.BLACK)
-        layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
+    private val nowWeatherInfoCard = NowWeatherInfoCard(context).apply {
+        layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
             it.updateMargins(
-                left = 14.dp,
-                top = 80.dp
+                top = 12.dp, left = 14.dp, right = 14.dp
             )
         }
-        includeFontPadding = false
-        lastBaselineToBottomHeight = 0
-        firstBaselineToTopHeight = 0
-    }
-
-    private val currentTempTagText = AppCompatTextView(context).apply {
-        setTextAppearance(context, R.style.TextAppearance_Material3_DisplayMedium)
-        layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
-            it.updateMargins(
-                left = 8.dp
-            )
-        }
-        includeFontPadding = false
-        lastBaselineToBottomHeight = 0
-        firstBaselineToTopHeight = 0
     }
 
     init {
         isFocusable = false
         isClickable = false
-        setTextViewStyles(weatherNameText)
-        setTextViewStyles(currentTempText)
-        setTextViewStyles(currentTempTagText)
-        addView(weatherNameText)
-        addView(currentTempText)
-        addView(currentTempTagText)
-    }
-
-    private fun setTextViewStyles(textView: TextView) {
-        val mLinearGradient = LinearGradient(
-            0f,
-            0f, 0f, textView.height * 1f,
-            Color.WHITE,
-            Color.parseColor("#CCFFFFFF"),
-            Shader.TileMode.CLAMP
-        )
-        textView.paint.shader = mLinearGradient
-        textView.postInvalidateOnAnimation()
-    }
-
-
-    private val screenHeight by lazy {
-        context.resources.displayMetrics.heightPixels
+        addView(dateTimeTextView)
+        addView(helloText)
+        addView(nowWeatherInfoCard)
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        ).apply {
+            topMargin = 100.dp
+        }
     }
 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        weatherNameText.autoMeasure()
-        currentTempText.autoMeasure()
-        currentTempTagText.autoMeasure()
+        dateTimeTextView.autoMeasure()
+        helloText.autoMeasure()
+        nowWeatherInfoCard.measure(
+            (measuredWidth - nowWeatherInfoCard.marginLeft - nowWeatherInfoCard.marginRight).toExactlyMeasureSpec(), nowWeatherInfoCard.defaultHeightMeasureSpec(this)
+        )
         setMeasuredDimension(
-            measuredWidth,
-            screenHeight / 5*3
+            measuredWidth, dateTimeTextView.measuredHeightWithMargins + helloText.measuredHeightWithMargins + nowWeatherInfoCard.measuredHeightWithMargins
         )
     }
 
     override fun onLayout(p0: Boolean, p1: Int, p2: Int, p3: Int, p4: Int) {
-        currentTempText.layout(
-            currentTempText.marginLeft,
-            currentTempText.marginTop
+        dateTimeTextView.layout(
+            dateTimeTextView.marginLeft, dateTimeTextView.marginTop
         )
-        currentTempTagText.layout(
-            currentTempText.right + currentTempTagText.marginLeft,
-            currentTempText.top +  currentTempTagText.height -20.dp
+        helloText.layout(
+            helloText.marginLeft, dateTimeTextView.bottom + helloText.marginTop
         )
-
-        weatherNameText.layout(
-            currentTempText.right + weatherNameText.marginLeft,
-            currentTempText.bottom -
-                weatherNameText.height -
-                currentTempText.lastBaselineToBottomHeight
+        nowWeatherInfoCard.layout(
+            nowWeatherInfoCard.marginLeft, helloText.bottom + nowWeatherInfoCard.marginTop
         )
-
     }
 
 
@@ -122,14 +104,12 @@ class NowWeatherLayout(context: Context) : AViewGroup(context = context), SpicaW
 
     override var enterAnim: AnimatorSet = AnimatorSet()
 
-    override var index: Int = 0
+    override var index: Int = HomeCardType.NOW_WEATHER.code
 
     override var hasInScreen: Boolean = false
 
     override fun bindData(weather: Weather) {
-        currentTempText.text = weather.todayWeather.temp.toString()
-        currentTempTagText.text = "℃"
-        weatherNameText.text = "${weather.todayWeather.weatherName} 体感${weather.todayWeather.feelTemp}℃"
+        nowWeatherInfoCard.bindData(weather)
     }
 
 

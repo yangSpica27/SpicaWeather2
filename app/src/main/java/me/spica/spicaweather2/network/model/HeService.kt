@@ -4,7 +4,6 @@ import com.skydoves.sandwich.ApiResponse
 import me.spica.spicaweather2.network.model.caiyun.CaiyunBean
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 @Suppress("unused")
@@ -20,10 +19,11 @@ interface HeService {
   ): ApiResponse<BaseResponse<Weather>>
 
 
-  @GET("https://api.caiyunapp.com/v2.6/mOQ3KNVG1rXoCH75/{location}/weather?alert=true&dailysteps=1&hourlysteps=24")
+  @GET("https://weatherapi.market.xiaomi.com/wtr-v3/weather/all")
   suspend fun getMinutely(
-    @Path("location") location: String,
-    @Query("alert") alert: Boolean = true
+    @Query("latitude") latitude: Double,
+    @Query("longitude") longitude: Double,
+
   ): ApiResponse<CaiyunBean>
 
 }

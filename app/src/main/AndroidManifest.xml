@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.main.ActivityMain"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,6 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".ui.manager_city.ActivityManagerCity" />
+        <activity android:name=".ui.add_city.ActivityAddCity" />
+
         <service android:name=".work.DataSyncWorker" />
     </application>
 

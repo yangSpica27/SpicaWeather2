@@ -40,9 +40,9 @@ public class RainRandomGenerator {
     int temp = getRandomWidth(width);
     for (int i = 0; i < 4; i += 4) {
       tempCheckNum[i] = temp;
-      tempCheckNum[i + 1] = (int) (Math.random() * height / 8);
+      tempCheckNum[i + 1] = (int) (Math.random() * height / 20);
       tempCheckNum[i + 2] = temp;
-      tempCheckNum[i + 3] = (int) (Math.random() * height / 4);
+      tempCheckNum[i + 3] = (int) (Math.random() * height / 16);
     }
     return tempCheckNum;
   }

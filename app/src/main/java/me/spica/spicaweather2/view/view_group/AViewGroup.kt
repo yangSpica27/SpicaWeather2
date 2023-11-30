@@ -38,6 +38,10 @@ abstract class AViewGroup(context: Context, attributeSet: AttributeSet? = null) 
         return MeasureSpec.makeMeasureSpec(this, MeasureSpec.AT_MOST)
     }
 
+    protected fun Int.toUnspecifiedMeasureSpec(): Int {
+        return MeasureSpec.makeMeasureSpec(this, MeasureSpec.UNSPECIFIED)
+    }
+
     protected fun View.autoMeasure() {
         measure(
             this.defaultWidthMeasureSpec(parentView = this@AViewGroup),

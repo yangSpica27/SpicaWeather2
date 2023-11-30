@@ -10,9 +10,9 @@ import me.spica.spicaweather2.view.weather_bg.RainFlake
 class RainDrawable : WeatherDrawable() {
 
     // 绘制雨水的paint
-    private val rainPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val rainPaint = Paint().apply {
         strokeCap = Paint.Cap.ROUND
-        strokeWidth = 4.dp
+        strokeWidth = 12.dp
         color = Color.WHITE
         style = Paint.Style.FILL
     }
@@ -23,7 +23,7 @@ class RainDrawable : WeatherDrawable() {
     fun ready(width: Int, height: Int) {
         synchronized(rains){
             rains.clear()
-            for (i in 0 until 10) {
+            for (i in 0 until 20) {
                 rains.add(RainFlake.create(width, height, rainPaint))
             }
         }
@@ -31,18 +31,21 @@ class RainDrawable : WeatherDrawable() {
     }
 
     fun calculate(width: Int, height: Int) {
-        synchronized(rains){
-            rains.forEach { rain ->
-                rain.calculation(width, height)
-            }
-        }
+//        val count = measureTimeMillis {
+//            synchronized(rains){
+//                rains.forEach { rain ->
+//                    rain.calculation(width, height)
+//                }
+//            }
+//        }
+//        Timber.tag("计算耗时").e("$count 毫秒")
     }
 
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
         synchronized(rains){
             rains.forEach { rainFlake ->
-                rainFlake.onlyDraw(canvas)
+                rainFlake.draw(canvas)
             }
         }
     }

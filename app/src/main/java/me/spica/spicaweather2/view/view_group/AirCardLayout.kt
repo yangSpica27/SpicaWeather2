@@ -6,7 +6,7 @@ import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.ContextCompat
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
 import androidx.core.view.marginTop
@@ -15,6 +15,7 @@ import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.AirCircleProgressView
+import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 
 class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
@@ -30,8 +31,8 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             )
         }
         setTextAppearance(context, R.style.TextAppearance_Material3_TitleMedium)
-        setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
         typeface = Typeface.DEFAULT_BOLD
+        text = "空气质量"
     }
 
 
@@ -51,6 +52,8 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             )
         }
         setTextAppearance(context, R.style.TextAppearance_Material3_LabelMedium)
+        text = "二氧化碳"
+
     }
     private val tvC0Value = AppCompatTextView(context).apply {
         layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
@@ -59,6 +62,7 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             )
         }
         setTextAppearance(context, R.style.TextAppearance_Material3_BodySmall)
+        text = "$--微克/m³"
     }
 
     private val tvSo2Title = AppCompatTextView(context).apply {
@@ -68,6 +72,7 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             )
         }
         setTextAppearance(context, R.style.TextAppearance_Material3_LabelMedium)
+        text = "二氧化硫"
     }
     private val tvSo2Value = AppCompatTextView(context).apply {
         layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
@@ -76,6 +81,7 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             )
         }
         setTextAppearance(context, R.style.TextAppearance_Material3_BodySmall)
+        text = "$--微克/m³"
     }
 
     private val tvNo2Title = AppCompatTextView(context).apply {
@@ -85,6 +91,7 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             )
         }
         setTextAppearance(context, R.style.TextAppearance_Material3_LabelMedium)
+        text = "二氧化氮"
     }
     private val tvNo2Value = AppCompatTextView(context).apply {
         layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
@@ -93,6 +100,7 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             )
         }
         setTextAppearance(context, R.style.TextAppearance_Material3_BodySmall)
+        text = "$--微克/m³"
     }
 
     private val tvPm25Title = AppCompatTextView(context).apply {
@@ -102,6 +110,7 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             )
         }
         setTextAppearance(context, R.style.TextAppearance_Material3_LabelMedium)
+        text = "PM2.5"
     }
     private val tvPm25Value = AppCompatTextView(context).apply {
         layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
@@ -110,6 +119,7 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             )
         }
         setTextAppearance(context, R.style.TextAppearance_Material3_BodySmall)
+        text = "$--微克/m³"
     }
 
     init {
@@ -143,7 +153,6 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         airCircleProgressView.measure(
             (measuredWidth / 2 - airCircleProgressView.marginLeft).toExactlyMeasureSpec(), airCircleProgressView.defaultHeightMeasureSpec(this)
         )
-
         tvC0Title.autoMeasure()
         tvC0Value.autoMeasure()
         tvNo2Title.autoMeasure()
@@ -154,15 +163,20 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         tvPm25Value.autoMeasure()
         setMeasuredDimension(
             measuredWidth, Math.max(
-                airCircleProgressView.measuredHeightWithMargins + titleText.measuredHeightWithMargins, tvNo2Title.measuredHeightWithMargins + tvC0Title.measuredHeightWithMargins + tvPm25Title.measuredHeightWithMargins + tvSo2Title.measuredHeightWithMargins + titleText.measuredHeightWithMargins + paddingBottom
+                airCircleProgressView.measuredHeightWithMargins +
+                    titleText.measuredHeightWithMargins,
+                tvNo2Title.measuredHeightWithMargins +
+                    tvC0Title.measuredHeightWithMargins +
+                    tvPm25Title.measuredHeightWithMargins +
+                    tvSo2Title.measuredHeightWithMargins +
+                    titleText.measuredHeightWithMargins +
+                    paddingBottom + paddingTop
             )
         )
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-
         titleText.layout(titleText.marginLeft, titleText.marginTop)
-
         airCircleProgressView.layout(
             airCircleProgressView.marginLeft, titleText.bottom + airCircleProgressView.marginTop
         )
@@ -185,7 +199,8 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
         tvC0Value.layout(
             tvC0Value.marginRight,
-            tvC0Title.bottom - tvC0Value.height, true
+            tvC0Value.toViewVerticalCenter(tvC0Title),
+            true
         )
 
 
@@ -195,7 +210,7 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         )
 
         tvSo2Value.layout(
-            tvSo2Value.marginRight, tvSo2Title.bottom - tvSo2Value.height, true
+            tvSo2Value.marginRight, tvSo2Value.toViewVerticalCenter(tvSo2Title), true
         )
 
         tvNo2Title.layout(
@@ -204,7 +219,8 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         )
 
         tvNo2Value.layout(
-            tvNo2Value.marginRight, tvNo2Title.bottom - tvNo2Value.height, true
+            tvNo2Value.marginRight,
+            tvNo2Value.toViewVerticalCenter(tvNo2Title), true
         )
 
         tvPm25Title.layout(
@@ -214,7 +230,7 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
         tvPm25Value.layout(
             tvPm25Value.marginRight,
-            tvPm25Title.bottom - tvPm25Value.height, true
+            tvPm25Value.toViewVerticalCenter(tvPm25Title), true
         )
 
 
@@ -224,24 +240,25 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
     override var animatorView: View = this
 
     override var enterAnim: AnimatorSet = AnimatorSet()
-    override var index: Int = 2
+    override var index: Int = HomeCardType.AIR.code
     override var hasInScreen: Boolean = false
 
     override fun bindData(weather: Weather) {
         val themeColor = weather.getWeatherType().getThemeColor()
         airCircleProgressView.bindProgress(weather.air.aqi, weather.air.category)
         titleText.setTextColor(themeColor)
-        titleText.text = "空气质量"
-        tvC0Title.text = "二氧化碳"
         tvC0Value.text = "${weather.air.co}微克/m³"
-        tvNo2Title.text = "二氧化氮"
         tvNo2Value.text = "${weather.air.no2}微克/m³"
-        tvPm25Title.text = "PM2.5"
         tvPm25Value.text = "${weather.air.pm2p5}微克/m³"
-        tvSo2Title.text = "二氧化硫"
         tvSo2Value.text = "${weather.air.so2}微克/m³"
         airCircleProgressView.postInvalidate()
+        doOnPreDraw {
+            requestLayout()
+        }
     }
 
-
+    override fun startEnterAnim() {
+        super.startEnterAnim()
+        airCircleProgressView.startAnim()
+    }
 }

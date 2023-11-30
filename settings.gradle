@@ -7,6 +7,9 @@ pluginManagement {
         maven { url "https://jitpack.io" }
         google()
         mavenCentral()
+        maven {
+            url = uri("https://storage.googleapis.com/r8-releases/raw")
+        }
     }
 }
 
@@ -26,6 +29,9 @@ dependencyResolutionManagement {
         maven { url "https://jitpack.io" }
         google()
         mavenCentral()
+        maven {
+            url = uri("https://storage.googleapis.com/r8-releases/raw")
+        }
     }
 }
 rootProject.name = "SpicaWeather2"

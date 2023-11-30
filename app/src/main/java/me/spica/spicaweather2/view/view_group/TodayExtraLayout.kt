@@ -76,7 +76,7 @@ class TodayExtraLayout(context: Context) : AViewGroup(context), SpicaWeatherCard
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT,
         ).also {
-            it.updateMargins(left = 14.dp, right = 14.dp, top = 12.dp)
+            it.updateMargins(left = 14.dp, right = 14.dp)
         }
         layoutParams = lp
     }

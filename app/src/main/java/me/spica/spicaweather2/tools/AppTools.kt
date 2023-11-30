@@ -7,8 +7,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
@@ -27,7 +25,6 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import me.spica.spicaweather2.R
-import timber.log.Timber
 
 /**
  * 获取版本号
@@ -188,13 +185,13 @@ inline fun <reified T : Activity> Context.startActivityWithAnimation(
     ContextCompat.startActivity(this, intent, bundle)
 }
 
-fun View.getBitmap(): Bitmap {
-    val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-    val canvas = Canvas(bmp)
-    draw(canvas)
-    canvas.save()
-    return bmp
-}
+//fun View.getBitmap(): Bitmap {
+//    val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+//    val canvas = Canvas(bmp)
+//    draw(canvas)
+//    canvas.save()
+//    return bmp
+//}
 
 val Int.dp: Float
     get() = android.util.TypedValue.applyDimension(

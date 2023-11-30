@@ -1,26 +1,21 @@
 package me.spica.spicaweather2.ui.weather
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.view_group.AirCardLayout
 import me.spica.spicaweather2.view.view_group.DailyWeatherLayout
 import me.spica.spicaweather2.view.view_group.HourlyCardLayout
 import me.spica.spicaweather2.view.view_group.NowWeatherLayout
+import me.spica.spicaweather2.view.view_group.SunriseCardLayout
 import me.spica.spicaweather2.view.view_group.TipsLayout
-import me.spica.spicaweather2.view.view_group.TodayExtraLayout
-import me.spica.spicaweather2.view.weather_detail_card.DailyWeatherCard
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
-import me.spica.spicaweather2.view.weather_detail_card.SunriseCard
 
 
 class MainCardAdapter(
-   private val recyclerView: RecyclerView, private val scope: CoroutineScope
+   private val recyclerView: RecyclerView
 ) : RecyclerView.Adapter<AbstractMainViewHolder>() {
 
 
@@ -29,6 +24,7 @@ class MainCardAdapter(
     private var weather: Weather? = null
 
     init {
+        setHasStableIds(true)
         recyclerView.setItemViewCacheSize(10)
     }
 
@@ -39,51 +35,61 @@ class MainCardAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AbstractMainViewHolder {
-        val lp = ViewGroup.MarginLayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-        )
         when (viewType) {
             HomeCardType.DAY_WEATHER.code -> {
                 val itemView = DailyWeatherLayout(parent.context)
-                return AbstractMainViewHolder(itemView, itemView)
+                return AbstractMainViewHolder(itemView, itemView).apply {
+                    reset()
+                }
             }
 
             HomeCardType.HOUR_WEATHER.code -> {
                 val itemView = HourlyCardLayout(context = parent.context)
-                return AbstractMainViewHolder(itemView, itemView)
+                return AbstractMainViewHolder(itemView, itemView).apply {
+                    reset()
+                }
             }
 
             HomeCardType.TIPS.code -> {
                 val itemView = TipsLayout( parent.context)
                 // 生活指数卡片点击跳转
-                return AbstractMainViewHolder(itemView, itemView)
+                return AbstractMainViewHolder(itemView, itemView).apply {
+                    reset()
+                }
             }
 
             HomeCardType.NOW_WEATHER.code -> {
                 val itemView = NowWeatherLayout(parent.context)
-                itemView.layoutParams = lp
-                return AbstractMainViewHolder(itemView, itemView)
+                return AbstractMainViewHolder(itemView, itemView).apply {
+                    reset()
+                }
             }
 
             HomeCardType.SUNRISE.code -> {
-                val itemView = SunriseCard(parent.context)
-                itemView.layoutParams = lp
-                return AbstractMainViewHolder(itemView, itemView)
+                val itemView = SunriseCardLayout(context = parent.context)
+                return AbstractMainViewHolder(itemView, itemView).apply {
+                    reset()
+                }
             }
 
             HomeCardType.AIR.code -> {
                 val itemView = AirCardLayout(parent.context)
-                return AbstractMainViewHolder(itemView, itemView)
+                return AbstractMainViewHolder(itemView, itemView).apply {
+                    reset()
+                }
             }
 
-            HomeCardType.TODAY_EXTRA.code -> {
-                val itemView = TodayExtraLayout(parent.context)
-                return AbstractMainViewHolder(itemView, itemView)
-            }
+//            HomeCardType.TODAY_EXTRA.code -> {
+//                val itemView = TodayExtraLayout(parent.context)
+//                return AbstractMainViewHolder(itemView, itemView).apply {
+//                    reset()
+//                }
+//            }
             else->{
                 val itemView = DailyWeatherLayout(parent.context)
-                return AbstractMainViewHolder(itemView, itemView)
+                return AbstractMainViewHolder(itemView, itemView).apply {
+                    reset()
+                }
             }
         }
     }
@@ -97,11 +103,6 @@ class MainCardAdapter(
         weather?.let {
             holder.bindView(it)
         }
-        holder.itemView.post {
-            scope.launch(Dispatchers.Default) {
-                holder.checkEnterScreen()
-            }
-        }
     }
 
 
@@ -109,8 +110,15 @@ class MainCardAdapter(
     fun notifyData(weather: Weather) {
         this.weather = weather
         notifyDataSetChanged()
-        recyclerView.scrollToPosition(0)
+        recyclerView.doOnPreDraw {
+            recyclerView.smoothScrollToPosition(0)
+        }
+        recyclerView.doOnPreDraw {
+            onScroll()
+        }
     }
+
+
 
 
     fun onScroll() {
@@ -118,8 +126,10 @@ class MainCardAdapter(
         if (itemCount == 0) return
         for (i in 0 until itemCount) {
             if (recyclerView.findViewHolderForAdapterPosition(i) != null) {
-                holder = recyclerView.findViewHolderForAdapterPosition(i) as AbstractMainViewHolder
-                holder.checkEnterScreen()
+                if (recyclerView.findViewHolderForAdapterPosition(i) is AbstractMainViewHolder){
+                    holder = recyclerView.findViewHolderForAdapterPosition(i) as AbstractMainViewHolder
+                    holder.checkEnterScreen()
+                }
             }
         }
     }

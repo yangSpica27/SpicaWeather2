@@ -26,6 +26,8 @@ class CityRepository @Inject constructor(
     fun allCityList() = cityDao.getAllList()
 
 
+    fun allCitiesWithWeatherFlow() = cityDao.getCitiesWithWeather().flowOn(Dispatchers.IO)
+
 
     /**
      * 选择城市
@@ -37,6 +39,13 @@ class CityRepository @Inject constructor(
             cityDao.update(it)
         }
         cityBean.isSelected = true
+        cityDao.insertCities(cityBean)
+    }
+
+
+    @WorkerThread
+    suspend fun add(cityBean: CityBean) = withContext(Dispatchers.IO) {
+        cityBean.isSelected = false
         cityDao.insertCities(cityBean)
     }
 

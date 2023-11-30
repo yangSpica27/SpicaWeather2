@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/add_city"
+        android:enabled="true"
+        android:icon="@drawable/icon_plus_black"
+        android:iconTint="#333"
+        android:iconTintMode="src_in"
+        android:showAsAction="always"
+        android:title="@string/add_city" />
+
+</menu>

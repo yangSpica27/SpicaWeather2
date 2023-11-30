@@ -4,11 +4,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import com.github.stuxuhai.jpinyin.PinyinFormat
-import com.github.stuxuhai.jpinyin.PinyinHelper
 import com.skydoves.sandwich.getOrNull
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -23,7 +19,6 @@ import me.spica.spicaweather2.network.model.HeClient
 import me.spica.spicaweather2.persistence.dao.CityDao
 import me.spica.spicaweather2.persistence.dao.WeatherDao
 import me.spica.spicaweather2.persistence.entity.city.CityBean
-import me.spica.spicaweather2.persistence.entity.city.Province
 import me.spica.spicaweather2.persistence.entity.weather.AlertBean
 import me.spica.spicaweather2.persistence.entity.weather.CaiyunExtendBean
 import java.io.BufferedReader
@@ -110,54 +105,9 @@ class DataSyncWorker : Service() {
     }
 
     private suspend fun initCityList(context: Context) {
-        val provinces = arrayListOf<Province>()
-        val cityList = arrayListOf<CityBean>()
-        val moshi = Moshi.Builder().build()
-        val listOfCardsType = Types.newParameterizedType(
-            List::class.java, Province::class.java
-        )
-
-        val jsonAdapter = moshi.adapter<List<Province>>(listOfCardsType)
-
-        provinces.addAll(
-            jsonAdapter.fromJson(
-                getJsonString(context)
-            ) ?: listOf()
-        )
-
-        cityList.addAll(
-            provinces.map {
-                CityBean(
-                    cityName = it.name,
-                    sortName = PinyinHelper.convertToPinyinString
-                        (it.name, "", PinyinFormat.WITHOUT_TONE),
-                    lon = it.log,
-                    lat = it.lat
-                )
-            }.filter {
-                it.cityName.isNotEmpty()
-            }
-        )
-
-        provinces.forEach {
-            cityList.addAll(
-                it.children.map { city ->
-                    CityBean(
-                        cityName = city.name,
-                        sortName = PinyinHelper.convertToPinyinString
-                            (city.name, "", PinyinFormat.WITHOUT_TONE),
-                        lon = city.log,
-                        lat = city.lat
-                    )
-                }
-            )
-        }
-
-        cityList.sortBy {
-            it.sortName
-        }
-        cityList[0].isSelected = true
+        val  cityList = CityBean.getAllCities(context)
         cityDao.insertCities(cityList.first())
+        cityDao.insertCities(cityList[2])
     }
 
 

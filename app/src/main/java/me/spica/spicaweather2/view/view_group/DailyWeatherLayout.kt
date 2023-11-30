@@ -8,6 +8,7 @@ import androidx.core.view.children
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.dailyItem.DailyItemView
+import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 
 class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
@@ -29,7 +30,6 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply {
-            topMargin = 12.dp
             leftMargin = 14.dp
             rightMargin = 14.dp
         }
@@ -47,19 +47,34 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
     override var animatorView: View = this
 
     override var enterAnim: AnimatorSet = AnimatorSet()
-    override var index: Int = 2
+    override var index: Int = HomeCardType.DAY_WEATHER.code
     override var hasInScreen: Boolean = false
     override fun bindData(weather: Weather) {
         removeAllViews()
+        if (weather.dailyWeather.isEmpty())return
+        var minMinTemp = weather.dailyWeather[0].minTemp
+        var maxMaxTemp = weather.dailyWeather[0].maxTemp
         weather.dailyWeather.forEach {
+            minMinTemp = minOf(minMinTemp, it.minTemp)
+            maxMaxTemp = maxOf(maxMaxTemp, it.maxTemp)
+        }
+        weather.dailyWeather.forEachIndexed { index, it ->
             val lp = LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             val dailyItemView = DailyItemView(context)
             dailyItemView.layoutParams = lp
-            dailyItemView.setData(it)
+            dailyItemView.setData(it,index == 0,minMinTemp,maxMaxTemp)
             addView(dailyItemView)
         }
+    }
+
+    override fun startEnterAnim() {
+        super.startEnterAnim()
+    }
+
+    override fun resetAnim() {
+        super.resetAnim()
     }
 }

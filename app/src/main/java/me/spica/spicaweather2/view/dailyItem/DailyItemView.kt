@@ -5,8 +5,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Rect
+import android.graphics.Shader
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
@@ -35,12 +37,35 @@ class DailyItemView : View {
 
     private var isFirst = false
 
+    private var maxMaxTemp = 0
+
+    private var minMinTemp = 0
+
     init {
-        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
-   fun setData(dailyWeatherBean: DailyWeatherBean, isFirst: Boolean = false) {
+    fun setData(dailyWeatherBean: DailyWeatherBean, isFirst: Boolean = false, maxTemp: Int, minTemp: Int) {
         this.dailyWeatherBean = dailyWeatherBean
+        this.isFirst = isFirst
+        this.maxMaxTemp = maxTemp
+        this.minMinTemp = minTemp
+        startColor = if (minMinTemp < 0) {
+            context.getColor(R.color.light_blue_900)
+        } else if (minMinTemp < 10) {
+            context.getColor(R.color.light_blue_600)
+        } else {
+            context.getColor(R.color.light_blue_200)
+        }
+
+        endColor = if (maxMaxTemp in 10..19) {
+            context.getColor(R.color.l6)
+        } else if (maxMaxTemp >= 30) {
+            context.getColor(R.color.l8)
+        } else {
+            context.getColor(R.color.l3)
+        }
+        progressShader = null
         invalidate()
     }
 
@@ -51,6 +76,12 @@ class DailyItemView : View {
 
     }
 
+
+    private var startColor = Color.TRANSPARENT
+
+    private var endColor = Color.TRANSPARENT
+
+    private var progressShader: LinearGradient? = null
 
     private val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         strokeWidth = 8.dp
@@ -68,7 +99,7 @@ class DailyItemView : View {
     private val sdfWeek = SimpleDateFormat("E", Locale.CHINA)
 
     init {
-        setPadding(14.dp.toInt(),0, 14.dp.toInt(),0)
+        setPadding(14.dp.toInt(), 0, 14.dp.toInt(), 0)
     }
 
     private val iconPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -87,7 +118,7 @@ class DailyItemView : View {
             canvas.drawText(
                 dateText,
                 paddingStart * 1f,
-                height/2f+textBound.height()/2f,
+                height / 2f + textBound.height() / 2f,
                 textPaint
             )
             var endX = 50.dp
@@ -96,8 +127,8 @@ class DailyItemView : View {
             textPaint.getTextBounds(weatherNameText, 0, weatherNameText.length, textBound)
             canvas.drawText(
                 weatherNameText,
-                endX+12.dp,
-                height/2f+textBound.height()/2f,
+                endX + 12.dp,
+                height / 2f + textBound.height() / 2f,
                 textPaint
             )
             endX += 60.dp
@@ -109,11 +140,15 @@ class DailyItemView : View {
             canvas.drawText(
                 maxTempText,
                 (width - paddingRight).toFloat() - textBound.width(),
-                height/2f+textBound.height()/2f,
+                height / 2f + textBound.height() / 2f,
                 textPaint
             )
 
-            var startX = width-paddingRight - 30.dp
+            var startX = width - paddingRight - 40.dp
+
+            progressPaint.shader = null
+            progressPaint.strokeWidth = 8.dp
+            progressPaint.color = ContextCompat.getColor(context, R.color.rainRectColor)
 
             canvas.drawLine(
                 startX * 1f - 12.dp,
@@ -123,6 +158,34 @@ class DailyItemView : View {
                 progressPaint
             )
 
+            if (progressShader == null) {
+                progressShader = LinearGradient(
+                    startX - width / 4f,
+                    0F,
+                    startX * 1f - 12.dp,
+                    0f,
+                    startColor,
+                    endColor,
+                    Shader.TileMode.CLAMP
+                )
+            }
+
+            progressPaint.color = ContextCompat.getColor(context, R.color.black)
+            progressPaint.shader = progressShader
+            val left = ((startX * 1f - 12.dp) - (startX - width / 4f)) *
+                (dailyWeatherBean.minTemp - minMinTemp) / (maxMaxTemp - minMinTemp) + startX - width / 4f
+            val right = ((startX * 1f - 12.dp) - (startX - width / 4f)) *
+                (dailyWeatherBean.maxTemp - minMinTemp) / (maxMaxTemp - minMinTemp) + startX - width / 4f
+            canvas.drawLine(
+                left,
+                height / 2f,
+                right,
+                height / 2f,
+                progressPaint
+            )
+
+            progressPaint.shader = null
+
             startX -= width / 4f + 12.dp
 
             val minTempText = "${dailyWeatherBean.minTemp}℃"
@@ -130,22 +193,23 @@ class DailyItemView : View {
             canvas.drawText(
                 minTempText,
                 startX - 12.dp - textBound.width(),
-                height/2f+textBound.height()/2f,
+                height / 2f + textBound.height() / 2f,
                 textPaint
             )
-            startX -=  30.dp+12.dp
+            startX -= 30.dp + 12.dp
 
-            val bitmap = ContextCompat.getDrawable(context,WeatherCodeUtils.getWeatherCode(dailyWeatherBean.iconId).getIconRes())!!.toBitmap(
-                width = 24.dp.toInt(),height = 24.dp.toInt(), config = Bitmap.Config.ARGB_8888)
+            val bitmap = ContextCompat.getDrawable(context, WeatherCodeUtils.getWeatherCode(dailyWeatherBean.iconId).getIconRes())!!.toBitmap(
+                width = 24.dp.toInt(), height = 24.dp.toInt(), config = Bitmap.Config.ARGB_8888
+            )
 
-            canvas.drawBitmap(bitmap,startX/2f+endX/2f-12.dp,height/2f -12.dp,iconPaint)
+            canvas.drawBitmap(bitmap, startX / 2f + endX / 2f - 12.dp, height / 2f - 12.dp, iconPaint)
 
         }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        setMeasuredDimension(measuredWidth,45.dp.toInt())
+        setMeasuredDimension(measuredWidth, 45.dp.toInt())
     }
 
 }
