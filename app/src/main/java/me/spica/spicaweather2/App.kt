@@ -1,6 +1,7 @@
 package me.spica.spicaweather2
 
 import android.app.Application
+import com.badlogic.gdx.Gdx
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -16,5 +17,6 @@ class App :Application(){
         super.onCreate()
         Timber.plant(Timber.DebugTree())
         instance = this
+
     }
 }

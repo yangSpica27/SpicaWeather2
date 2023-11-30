@@ -40,6 +40,12 @@ android {
         buildConfigField 'String', 'CAIYUN', quotWrapper("mOQ3KNVG1rXoCH75")
     }
 
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
     signingConfigs {
         signingConfig {
             storeFile rootProject.file("key.jks")
@@ -67,9 +73,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    buildFeatures {
-        viewBinding true
-    }
 
     tasks.withType(KotlinCompile).configureEach {
         kotlinOptions.freeCompilerArgs += ["-Xopt-in=kotlin.time.ExperimentalTime"]
@@ -78,6 +81,9 @@ android {
 
     kotlinOptions {
         jvmTarget = '11'
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 
@@ -153,6 +159,15 @@ dependencies {
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     implementation("org.greenrobot:eventbus:3.3.1")
+
+
+    configurations { natives }
+    implementation 'com.badoo.mobile:android-weak-handler:1.1'
+    implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+    implementation "com.badlogicgames.gdx:gdx-box2d:$box2dVersion"
+    natives "com.badlogicgames.gdx:gdx-box2d-platform:$box2dVersion:natives-arm64-v8a"
+    implementation "com.esotericsoftware.spine:spine-libgdx:4.1.0"
 }
 
 kapt {
@@ -203,3 +218,36 @@ task ktlintFormat(type: JavaExec, group: "formatting") {
     main = "com.pinterest.ktlint.Main"
     args "-F", "src/**/*.kt"
 }
+
+task copyAndroidNatives {
+    doFirst {
+        file("libs/armeabi/").mkdirs()
+        file("libs/armeabi-v7a/").mkdirs()
+        file("libs/arm64-v8a/").mkdirs()
+        file("libs/x86_64/").mkdirs()
+        file("libs/x86/").mkdirs()
+
+        configurations.natives.files.each { jar ->
+            def outputDir = null
+            if (jar.name.endsWith("natives-arm64-v8a.jar")) outputDir = file("libs/arm64-v8a")
+            if (jar.name.endsWith("natives-armeabi-v7a.jar")) outputDir = file("libs/armeabi-v7a")
+            if(jar.name.endsWith("natives-armeabi.jar")) outputDir = file("libs/armeabi")
+            if(jar.name.endsWith("natives-x86_64.jar")) outputDir = file("libs/x86_64")
+            if(jar.name.endsWith("natives-x86.jar")) outputDir = file("libs/x86")
+            if(outputDir != null) {
+                copy {
+                    from zipTree(jar)
+                    into outputDir
+                    include "*.so"
+                }
+            }
+        }
+    }
+}
+
+tasks.whenTaskAdded { packageTask ->
+    if (packageTask.name.contains("package")) {
+        packageTask.dependsOn 'copyAndroidNatives'
+    }
+}
+

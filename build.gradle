@@ -3,6 +3,10 @@
 buildscript {
     ext {
         agp_version = '7.1.2'
+
+        gdxVersion = '1.12.1'
+        box2dVersion = '1.12.1'
+
     }
     ext.booster_version = '4.4.0'
     repositories {
