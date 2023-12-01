@@ -17,7 +17,7 @@ private const val FLAKE_SIZE_UPPER = 4f
 
 class RainFlake(// 雨滴
     private var mRandom: RainRandomGenerator,// 雨滴的速度
-    private var mLine: Line,
+     var mLine: Line,
     private var mIncrement: Float,// 雨滴的大小
     private var mFlakeSize: Float,// 画笔
     private var mPaint: Paint

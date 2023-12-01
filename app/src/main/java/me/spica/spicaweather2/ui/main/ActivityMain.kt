@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.children
 import androidx.core.view.drawToBitmap
@@ -16,19 +17,21 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.WeatherCodeUtils
-import me.spica.spicaweather2.common.getThemeColor
-import me.spica.spicaweather2.common.getWeatherAnimType
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
 import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.tools.MessageEvent
 import me.spica.spicaweather2.tools.MessageType
 import me.spica.spicaweather2.tools.doOnMainThreadIdle
+import me.spica.spicaweather2.tools.hide
 import me.spica.spicaweather2.tools.startActivityWithAnimation
 import me.spica.spicaweather2.ui.manager_city.ActivityManagerCity
+import me.spica.spicaweather2.ui.test.TestActivity
 import me.spica.spicaweather2.view.Manger2HomeView
 import me.spica.spicaweather2.view.view_group.ActivityMainLayout
 import me.spica.spicaweather2.view.view_group.WeatherMainLayout
+import me.spica.spicaweather2.view.weather_bg.NowWeatherView
 import me.spica.spicaweather2.work.DataSyncWorker
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -114,6 +117,10 @@ class ActivityMain : MaterialActivity() {
             enterManagerCity()
         }
 
+        layout.mainTitleLayout.titleTextView.setOnClickListener {
+            startActivityWithAnimation<TestActivity> {  }
+        }
+        layout.viewPager2.hide()
         layout.viewPager2.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         layout.viewPager2.adapter = mainPagerAdapter
         layout.viewPager2.isUserInputEnabled = true
@@ -182,8 +189,9 @@ class ActivityMain : MaterialActivity() {
             layout.mainTitleLayout.titleTextView.text = currentCity.cityName
             currentCurrentCity = currentCity
             WeatherCodeUtils.getWeatherCode(currentWeather?.todayWeather?.iconId ?: 100).let {
-                layout.weatherBackgroundSurfaceView.currentWeatherAnimType = it.getWeatherAnimType()
-                layout.weatherBackgroundSurfaceView.bgColor = it.getThemeColor()
+//                layout.weatherBackgroundSurfaceView.currentWeatherAnimType = it.getWeatherAnimType()
+                layout.weatherBackgroundSurfaceView.currentWeatherAnimType = NowWeatherView.WeatherAnimType.RAIN
+                layout.weatherBackgroundSurfaceView.bgColor = ContextCompat.getColor(this, R.color.black)
             }
         } catch (e: Exception) {
             e.printStackTrace()
