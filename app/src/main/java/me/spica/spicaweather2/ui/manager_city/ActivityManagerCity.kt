@@ -89,7 +89,7 @@ class ActivityManagerCity : MaterialActivity() {
             viewModel.deleteCity(cityWithWeather.city)
         }
 
-        adapter.itemClickListener = { _, view ->
+        adapter.itemClickListener = { position, view ->
             lifecycleScope.launch(Dispatchers.Default) {
                 val intArray = IntArray(2)
                 view.getLocationInWindow(intArray)
@@ -100,7 +100,7 @@ class ActivityManagerCity : MaterialActivity() {
                     intArray[1] + view.height * 1f,
                 )
                 Manger2HomeView.mBackground = window.decorView.drawToBitmap()
-                EventBus.getDefault().post(MessageEvent.create(MessageType.Get2MainActivityAnim))
+                EventBus.getDefault().post(MessageEvent.create(MessageType.Get2MainActivityAnim,position))
                 withContext(Dispatchers.Main) {
                     finish()
                 }

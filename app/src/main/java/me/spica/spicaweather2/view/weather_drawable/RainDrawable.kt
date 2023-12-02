@@ -27,7 +27,7 @@ class RainDrawable : WeatherDrawable() {
         rainEffectRender.init(width, height)
         synchronized(rains) {
             rains.clear()
-            for (i in 0 until 30) {
+            for (i in 0 until 50) {
                 rains.add(
                     RainPoint().apply {
                         rainEffectRender.createParticle(this)

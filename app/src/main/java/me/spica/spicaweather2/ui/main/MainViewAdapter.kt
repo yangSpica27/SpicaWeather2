@@ -20,7 +20,7 @@ class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
     private val items = arrayListOf<CityWithWeather>()
 
     init {
-        setHasStableIds(true)
+//        setHasStableIds(true)
     }
 
     @SuppressLint("NotifyDataSetChanged")

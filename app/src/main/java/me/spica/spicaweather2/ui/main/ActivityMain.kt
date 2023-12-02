@@ -19,6 +19,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.WeatherCodeUtils
+import me.spica.spicaweather2.common.getThemeColor
+import me.spica.spicaweather2.common.getWeatherAnimType
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
 import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.tools.MessageEvent
@@ -37,6 +39,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import rikka.material.app.MaterialActivity
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -61,6 +64,7 @@ class ActivityMain : MaterialActivity() {
         super.onCreate(savedInstanceState)
         setContentView(layout)
         initializer()
+        EventBus.getDefault().register(this)
     }
 
     var positionAndOffset = Pair(0, 0)
@@ -68,10 +72,16 @@ class ActivityMain : MaterialActivity() {
             if (value.first == 0) {
                 val progress = -value.second * 1f / (resources.displayMetrics.heightPixels / 3f)
                 layout.mainTitleLayout.setBackgroundWhiteColor(progress)
-                WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = progress > 0.5
+                WindowCompat.getInsetsController(
+                    window,
+                    window.decorView
+                ).isAppearanceLightStatusBars = progress > 0.5
             } else {
                 layout.mainTitleLayout.setBackgroundWhiteColor(1f)
-                WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
+                WindowCompat.getInsetsController(
+                    window,
+                    window.decorView
+                ).isAppearanceLightStatusBars = true
             }
             field = value
         }
@@ -84,24 +94,19 @@ class ActivityMain : MaterialActivity() {
         Manger2HomeView(this)
     }
 
-    override fun onStart() {
-        super.onStart()
-        EventBus.getDefault().register(this)
-    }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: MessageEvent) {
         when (event.tag) {
             MessageType.Get2MainActivityAnim.tag -> {
+                layout.viewPager2.setCurrentItem(event.extra as Int,false)
                 manger2HomeView.invalidate()
             }
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        EventBus.getDefault().unregister(this)
-    }
+
 
     override fun onResume() {
         super.onResume()
@@ -118,9 +123,9 @@ class ActivityMain : MaterialActivity() {
         }
 
         layout.mainTitleLayout.titleTextView.setOnClickListener {
-            startActivityWithAnimation<TestActivity> {  }
+            startActivityWithAnimation<TestActivity> { }
         }
-        layout.viewPager2.hide()
+//        layout.viewPager2.hide()
         layout.viewPager2.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         layout.viewPager2.adapter = mainPagerAdapter
         layout.viewPager2.isUserInputEnabled = true
@@ -141,7 +146,11 @@ class ActivityMain : MaterialActivity() {
                 updateTitle(position)
             }
 
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
                 updateOtherPageScroller()
             }
@@ -163,7 +172,7 @@ class ActivityMain : MaterialActivity() {
                     startActivityWithAnimation<ActivityManagerCity> {
                         putExtra(ActivityManagerCity.ARG_CITY_NAME, currentCurrentCity?.cityName)
                     }
-                },500)
+                }, 500)
             }
         }
 
@@ -189,9 +198,9 @@ class ActivityMain : MaterialActivity() {
             layout.mainTitleLayout.titleTextView.text = currentCity.cityName
             currentCurrentCity = currentCity
             WeatherCodeUtils.getWeatherCode(currentWeather?.todayWeather?.iconId ?: 100).let {
-//                layout.weatherBackgroundSurfaceView.currentWeatherAnimType = it.getWeatherAnimType()
-                layout.weatherBackgroundSurfaceView.currentWeatherAnimType = NowWeatherView.WeatherAnimType.RAIN
-                layout.weatherBackgroundSurfaceView.bgColor = ContextCompat.getColor(this, R.color.black)
+                layout.weatherBackgroundSurfaceView.currentWeatherAnimType = it.getWeatherAnimType()
+//                layout.weatherBackgroundSurfaceView.currentWeatherAnimType = NowWeatherView.WeatherAnimType.RAIN
+                layout.weatherBackgroundSurfaceView.bgColor = it.getThemeColor()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -207,5 +216,9 @@ class ActivityMain : MaterialActivity() {
         return Color.argb(a.toInt(), r.toInt(), g.toInt(), b.toInt())
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
 
 }

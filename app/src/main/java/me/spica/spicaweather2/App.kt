@@ -17,7 +17,5 @@ class App :Application(){
         super.onCreate()
         Timber.plant(Timber.DebugTree())
         instance = this
-        System.loadLibrary("liquidfun");
-        System.loadLibrary("liquidfun_jni");
     }
 }

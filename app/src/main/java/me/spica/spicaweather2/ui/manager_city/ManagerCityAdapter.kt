@@ -39,13 +39,13 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
 
     var deleteCityClickListener: ((CityWithWeather) -> Unit)? = null
 
-    var itemClickListener: ((CityWithWeather,View) -> Unit)? = null
+    var itemClickListener: ((Int,View) -> Unit)? = null
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.layout.tag = items[position].city.cityName
         holder.layout.setData(items[position])
         holder.itemView.setOnClickListener {
-            itemClickListener?.invoke(items[position],holder.layout)
+            itemClickListener?.invoke(position,holder.layout)
         }
         holder.layout.iconDelete.setOnClickListener {
             deleteCityClickListener?.invoke(items[position])

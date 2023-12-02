@@ -6,5 +6,5 @@ data class MessageEvent(val tag: String, val extra: Any? = null){
     }
 }
 enum class MessageType(val tag: String) {
-    Get2MainActivityAnim("1"),
+    Get2MainActivityAnim("1")
 }
