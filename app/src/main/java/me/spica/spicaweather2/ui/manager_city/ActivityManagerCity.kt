@@ -91,15 +91,7 @@ class ActivityManagerCity : MaterialActivity() {
 
         adapter.itemClickListener = { position, view ->
             lifecycleScope.launch(Dispatchers.Default) {
-                val intArray = IntArray(2)
-                view.getLocationInWindow(intArray)
-                Manger2HomeView.originRect.set(
-                    intArray[0] * 1f,
-                    intArray[1] * 1f,
-                    intArray[0] + view.width * 1f,
-                    intArray[1] + view.height * 1f,
-                )
-                Manger2HomeView.mBackground = window.decorView.drawToBitmap()
+                Manger2HomeView.initFromViewRect(view,window)
                 EventBus.getDefault().post(MessageEvent.create(MessageType.Get2MainActivityAnim,position))
                 withContext(Dispatchers.Main) {
                     finish()
@@ -152,7 +144,7 @@ class ActivityManagerCity : MaterialActivity() {
             addTarget(endView)
             scrimColor = Color.TRANSPARENT
             containerColor = Color.TRANSPARENT
-            duration = 850
+            duration = 450
         }
 
         transform.doOnStart {

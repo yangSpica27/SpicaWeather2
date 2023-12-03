@@ -15,9 +15,12 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.view.animation.DecelerateInterpolator
 import androidx.core.animation.doOnEnd
+import androidx.core.view.drawToBitmap
 import me.spica.spicaweather2.tools.dp
+import me.spica.spicaweather2.view.weather_bg.WeatherBackgroundView
 
 
 class Manger2HomeView : View {
@@ -25,7 +28,22 @@ class Manger2HomeView : View {
     companion object {
         var mBackground: Bitmap? = null
         var originRect = RectF()
+
+
+        fun initFromViewRect(from: View, window: Window) {
+            val intArray = IntArray(2)
+            from.getLocationInWindow(intArray)
+            originRect.set(
+                intArray[0] * 1f,
+                intArray[1] * 1f,
+                intArray[0] + from.width * 1f,
+                intArray[1] + from.height * 1f,
+            )
+            mBackground = window.decorView.drawToBitmap()
+        }
+
     }
+
 
     private var clearRect = RectF(0f, 0f, 0f, 0f)
 
@@ -37,12 +55,16 @@ class Manger2HomeView : View {
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
 
     private val progressAnimation =
-        ValueAnimator.ofFloat(0f, 1f).setDuration(550).apply {
-            interpolator = DecelerateInterpolator(1.5f)
+        ValueAnimator.ofFloat(0f, 1f).setDuration(450).apply {
+            interpolator = DecelerateInterpolator(1.2f)
             addUpdateListener {
                 val progress = it.animatedValue as Float
                 val widthExtra = (width - originRect.width()) / 2f * progress
