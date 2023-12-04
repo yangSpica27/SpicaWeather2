@@ -34,13 +34,7 @@ class ActivityManagerCityLayout(context: Context) : AViewGroup(context) {
         }
     }
 
-    private val btnAddCity = MaterialButton(context).apply {
-        text = "新增"
-        layoutParams = LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-        )
-    }
+
 
 
     val recyclerView = RecyclerView(context).apply {

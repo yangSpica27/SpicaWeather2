@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.animation.DecelerateInterpolator
 import androidx.activity.viewModels
 import androidx.core.transition.doOnEnd
 import androidx.core.transition.doOnStart
@@ -99,6 +100,13 @@ class ActivityManagerCity : MaterialActivity() {
             }
         }
 
+        adapter.addCityClickListener = {
+            startActivityWithAnimation<ActivityAddCity>(
+                enterResId = android.R.anim.fade_in,
+                exitResId = android.R.anim.fade_out
+            ) { }
+        }
+
         if (ActivityMain.screenBitmap != null) {
             layout.transformerImageView.setImageBitmap(ActivityMain.screenBitmap)
         }
@@ -106,7 +114,7 @@ class ActivityManagerCity : MaterialActivity() {
         layout.recyclerView.addOnChildAttachStateChangeListener(
             object : RecyclerView.OnChildAttachStateChangeListener {
                 override fun onChildViewAttachedToWindow(view: View) {
-                    if (view.tag.toString() == intent.getStringExtra(ARG_CITY_NAME)) {
+                    if (view.tag?.toString() == intent.getStringExtra(ARG_CITY_NAME)) {
                         startTransformerAnim(view)
                         layout.recyclerView.removeOnChildAttachStateChangeListener(this)
                     }
@@ -144,7 +152,9 @@ class ActivityManagerCity : MaterialActivity() {
             addTarget(endView)
             scrimColor = Color.TRANSPARENT
             containerColor = Color.TRANSPARENT
-            duration = 450
+            duration = 550
+//            interpolator = DecelerateInterpolator(1.2f)
+//            fadeMode = MaterialContainerTransform.FADE_MODE_THROUGH
         }
 
         transform.doOnStart {

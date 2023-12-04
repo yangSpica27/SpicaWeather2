@@ -6,6 +6,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.city.CityBean
+import me.spica.spicaweather2.tools.dp
 
 class AddCityAdapter :RecyclerView.Adapter<AddCityAdapter.ViewHolder>() {
 
@@ -33,7 +34,17 @@ class AddCityAdapter :RecyclerView.Adapter<AddCityAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(AppCompatTextView(parent.context).apply {
-            setBackgroundResource(R.drawable.bg_city)
+            layoutParams = RecyclerView.LayoutParams(
+                RecyclerView.LayoutParams.MATCH_PARENT,
+                RecyclerView.LayoutParams.WRAP_CONTENT,
+            )
+            setPadding(
+                14.dp.toInt(),
+                12.dp.toInt(),
+                14.dp.toInt(),
+                12.dp.toInt()
+            )
+            setTextAppearance(R.style.TextAppearance_Material3_HeadlineSmall)
         })
     }
 

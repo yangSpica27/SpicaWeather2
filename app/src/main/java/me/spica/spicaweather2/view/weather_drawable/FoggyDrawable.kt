@@ -55,127 +55,129 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
 
 
     fun ready(viewWidth: Int, viewHeight: Int) {
-        circles.clear()
-        path.reset()
-        circles.add(
-            Circle(
-                PointF(
-                    viewWidth / 4f,
-                    viewHeight / 4f,
-                ),
-                viewHeight / 5f,
-                8.dp
-            )
-        )
+       synchronized(circles){
+           circles.clear()
+           path.reset()
+           circles.add(
+               Circle(
+                   PointF(
+                       viewWidth / 4f,
+                       viewHeight / 4f,
+                   ),
+                   viewHeight / 5f,
+                   8.dp
+               )
+           )
 
-        circles.add(
-            Circle(
-                PointF(
-                    viewHeight / 6f,
-                    viewHeight / 2f,
-                ),
-                viewWidth / 5.5f,
-                10.dp
-            )
-        )
+           circles.add(
+               Circle(
+                   PointF(
+                       viewHeight / 6f,
+                       viewHeight / 2f,
+                   ),
+                   viewWidth / 5.5f,
+                   10.dp
+               )
+           )
 
-        circles.add(
-            Circle(
-                PointF(
-                    viewHeight / 4f,
-                    viewHeight - viewHeight / 4f,
-                ),
-                viewHeight / 4f,
-                20.dp
-            )
-        )
-
-
-        circles.add(
-            Circle(
-                PointF(
-                    viewHeight / 3f,
-                    viewHeight - viewHeight / 4f,
-                ),
-                viewHeight / 4f,
-                12.dp
-            )
-        )
+           circles.add(
+               Circle(
+                   PointF(
+                       viewHeight / 4f,
+                       viewHeight - viewHeight / 4f,
+                   ),
+                   viewHeight / 4f,
+                   20.dp
+               )
+           )
 
 
-        circles.add(
-            Circle(
-                PointF(
-                    viewHeight / 2f,
-                    viewHeight - viewHeight / 4f,
-                ),
-                viewHeight / 4f,
-                12.dp
-            )
-        )
-
-        circles.add(
-            Circle(
-                PointF(
-                    viewWidth - viewWidth / 3f,
-                    viewHeight - viewHeight / 5f,
-                ),
-                viewHeight / 5f,
-                10.dp
-            )
-        )
-
-        circles.add(
-            Circle(
-                PointF(
-                    viewWidth - viewWidth / 6f,
-                    viewHeight - viewHeight / 4f,
-                ),
-                viewHeight / 4.5f,
-                12.dp
-            )
-        )
+           circles.add(
+               Circle(
+                   PointF(
+                       viewHeight / 3f,
+                       viewHeight - viewHeight / 4f,
+                   ),
+                   viewHeight / 4f,
+                   12.dp
+               )
+           )
 
 
+           circles.add(
+               Circle(
+                   PointF(
+                       viewHeight / 2f,
+                       viewHeight - viewHeight / 4f,
+                   ),
+                   viewHeight / 4f,
+                   12.dp
+               )
+           )
 
-        circles.add(
-            Circle(
-                PointF(
-                    viewWidth - viewWidth / 5f,
-                    viewHeight - viewHeight / 1.9f - 22.dp,
-                ),
-                viewHeight / 5.5f,
-                6.dp
-            )
-        )
+           circles.add(
+               Circle(
+                   PointF(
+                       viewWidth - viewWidth / 3f,
+                       viewHeight - viewHeight / 5f,
+                   ),
+                   viewHeight / 5f,
+                   10.dp
+               )
+           )
 
-        circles.add(
-            Circle(
-                PointF(
-                    viewWidth - viewWidth / 3.6f + 6.dp,
-                    viewHeight / 5f,
-                ),
-                viewHeight / 5f,
-                8.dp
-            )
-        )
+           circles.add(
+               Circle(
+                   PointF(
+                       viewWidth - viewWidth / 6f,
+                       viewHeight - viewHeight / 4f,
+                   ),
+                   viewHeight / 4.5f,
+                   12.dp
+               )
+           )
 
-        circles.add(
-            Circle(
-                PointF(
-                    viewWidth / 2f,
-                    viewHeight / 3.5f,
-                ),
-                viewHeight / 4f,
-                10.dp
-            )
-        )
 
-        path.moveTo(circles[0].centerPoint.x, circles[0].centerPoint.y)
-        circles.forEach {
-            path.lineTo(it.centerPoint.x, it.centerPoint.y)
-        }
-        path.close()
+
+           circles.add(
+               Circle(
+                   PointF(
+                       viewWidth - viewWidth / 5f,
+                       viewHeight - viewHeight / 1.9f - 22.dp,
+                   ),
+                   viewHeight / 5.5f,
+                   6.dp
+               )
+           )
+
+           circles.add(
+               Circle(
+                   PointF(
+                       viewWidth - viewWidth / 3.6f + 6.dp,
+                       viewHeight / 5f,
+                   ),
+                   viewHeight / 5f,
+                   8.dp
+               )
+           )
+
+           circles.add(
+               Circle(
+                   PointF(
+                       viewWidth / 2f,
+                       viewHeight / 3.5f,
+                   ),
+                   viewHeight / 4f,
+                   10.dp
+               )
+           )
+
+           path.moveTo(circles[0].centerPoint.x, circles[0].centerPoint.y)
+           circles.forEach {
+               path.lineTo(it.centerPoint.x, it.centerPoint.y)
+           }
+           path.close()
+       }
     }
 
     private val path = Path()

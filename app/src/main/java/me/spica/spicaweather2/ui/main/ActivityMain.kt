@@ -168,11 +168,9 @@ class ActivityMain : MaterialActivity() {
                 window.decorView.drawToBitmap()
             ) {
                 screenBitmap = it
-                doOnMainThreadIdle({
-                    startActivityWithAnimation<ActivityManagerCity> {
-                        putExtra(ActivityManagerCity.ARG_CITY_NAME, currentCurrentCity?.cityName)
-                    }
-                }, 500)
+                startActivityWithAnimation<ActivityManagerCity> {
+                    putExtra(ActivityManagerCity.ARG_CITY_NAME, currentCurrentCity?.cityName)
+                }
             }
         }
 

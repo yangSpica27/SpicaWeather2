@@ -36,12 +36,6 @@ class ActivityAddCityLayout(context: Context) : AViewGroup(context) {
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         )
-        layoutManager = FlexboxLayoutManager(context).apply {
-            flexWrap = FlexWrap.WRAP
-            flexDirection = FlexDirection.ROW
-            justifyContent = JustifyContent.FLEX_START
-        }
-        addItemDecoration(FlowLayoutSpacesDecoration(8.dp, 12.dp))
     }
 
     init {

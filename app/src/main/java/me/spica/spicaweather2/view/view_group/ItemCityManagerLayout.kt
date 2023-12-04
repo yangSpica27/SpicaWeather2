@@ -100,14 +100,12 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
                 iconDelete.measuredWidthWithMargins).toExactlyMeasureSpec(),
             weatherName.defaultHeightMeasureSpec(this)
         )
-        Timber.tag("cityName-Height").d("${cityName.measuredHeightWithMargins}")
         weatherName.measure(
             (measuredWidth -
                 iconSort.measuredWidthWithMargins -
                 iconDelete.measuredWidthWithMargins).toExactlyMeasureSpec(),
             weatherName.defaultHeightMeasureSpec(this)
         )
-        Timber.tag("weatherName-Height").d("${weatherName.measuredHeightWithMargins}")
         setMeasuredDimension(
             measuredWidth,
             cityName.measuredHeightWithMargins +
