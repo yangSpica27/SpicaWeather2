@@ -20,9 +20,7 @@ import me.spica.spicaweather2.view.weather_drawable.SnowDrawable
 import me.spica.spicaweather2.view.weather_drawable.SunnyDrawable
 import java.util.UUID
 
-
 class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
-
 
     @Volatile
     private var isWork = false // 是否预备绘制
@@ -32,11 +30,9 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     private val lock = Any()
 
-
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
 
     init {
         holder.addCallback(this)
@@ -89,7 +85,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
             }
         }
 
-
     private val cloudDrawable = CloudDrawable(context)
 
     private val foggyDrawable = FoggyDrawable(context)
@@ -101,7 +96,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     private val sunnyDrawable = SunnyDrawable(context)
 
     private val hazeDrawable = HazeDrawable(context)
-
 
     private val drawRunnable = object : Runnable {
         override fun run() {
@@ -132,29 +126,30 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
                 // 保证两张帧之间间隔16ms(60帧)
                 drawHandler.postDelayed(this, 32)
             }
-
         }
     }
 
-
     fun getScreenCopy(foregroundBitmap: Bitmap, callbacks: (Bitmap) -> Unit) {
         val background = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        PixelCopy.request(this, background, OnPixelCopyFinishedListener { copyResult ->
-            val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(result)
-            if (PixelCopy.SUCCESS == copyResult) {
-                canvas.drawBitmap(background, 0f, 0f, null)
-                canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
-            } else {
-                canvas.drawColor(bgColor)
-                canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
-            }
-            canvas.save()
-            canvas.restore();
-            callbacks(result)
-        }, handler)
+        PixelCopy.request(
+            this, background,
+            OnPixelCopyFinishedListener { copyResult ->
+                val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                val canvas = Canvas(result)
+                if (PixelCopy.SUCCESS == copyResult) {
+                    canvas.drawBitmap(background, 0f, 0f, null)
+                    canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
+                } else {
+                    canvas.drawColor(bgColor)
+                    canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
+                }
+                canvas.save()
+                canvas.restore()
+                callbacks(result)
+            },
+            handler
+        )
     }
-
 
     private fun initDrawableRect(width: Int, height: Int) {
         rainDrawable.ready(width, height)
@@ -164,7 +159,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
     private var mCanvas: Canvas? = null
-
 
     private var mholder: SurfaceHolder? = null
 
@@ -180,7 +174,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
         // ================进行绘制==============
         mCanvas?.let { canvas ->
-
 
 //            translationDrawable.doOnDraw(canvas, width, height)
             roundClip(canvas)
@@ -205,7 +198,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
             mholder?.unlockCanvasAndPost(canvas)
         }
-
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
@@ -239,7 +231,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         cloudDrawable.cancelAnim()
         foggyDrawable.cancelAnim()
     }
-
 
     private fun roundClip(canvas: Canvas) {
 //        canvas.clipPath(clipPath)

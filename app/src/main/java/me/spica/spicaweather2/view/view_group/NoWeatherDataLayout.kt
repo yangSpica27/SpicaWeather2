@@ -8,7 +8,6 @@ import me.spica.spicaweather2.R
 
 class NoWeatherDataLayout(context: Context) : AViewGroup(context) {
 
-
     private val loadingFailImageView = AppCompatImageView(context).apply {
         setImageResource(R.drawable.img_loading_fail)
     }
@@ -17,11 +16,9 @@ class NoWeatherDataLayout(context: Context) : AViewGroup(context) {
         text = "重试"
     }
 
-
     init {
         setPadding(22.dp, 0, 22.dp, 0)
     }
-
 
     init {
         addView(loadingFailImageView)
@@ -44,10 +41,7 @@ class NoWeatherDataLayout(context: Context) : AViewGroup(context) {
             paddingLeft,
             loadingFailImageView.bottom + 20.dp
         )
-
-
     }
-
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -61,6 +55,4 @@ class NoWeatherDataLayout(context: Context) : AViewGroup(context) {
         )
         setMeasuredDimension(measuredWidth, measuredHeight)
     }
-
-
 }

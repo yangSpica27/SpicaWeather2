@@ -20,9 +20,7 @@ import me.spica.spicaweather2.view.NowWeatherInfoCard
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 
-
 class NowWeatherLayout(context: Context) : AViewGroup(context = context), SpicaWeatherCard {
-
 
     @SuppressLint("SetTextI18n")
     private val dateTimeTextView = AppCompatTextView(context).apply {
@@ -74,7 +72,6 @@ class NowWeatherLayout(context: Context) : AViewGroup(context = context), SpicaW
         }
     }
 
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         dateTimeTextView.autoMeasure()
@@ -99,7 +96,6 @@ class NowWeatherLayout(context: Context) : AViewGroup(context = context), SpicaW
         )
     }
 
-
     override var animatorView: View = this
 
     override var enterAnim: AnimatorSet = AnimatorSet()
@@ -111,6 +107,4 @@ class NowWeatherLayout(context: Context) : AViewGroup(context = context), SpicaW
     override fun bindData(weather: Weather) {
         nowWeatherInfoCard.bindData(weather)
     }
-
-
 }

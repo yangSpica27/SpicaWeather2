@@ -18,7 +18,6 @@ import java.util.Locale
 
 class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
-
     private val cardTypeText = AppCompatTextView(context).apply {
         setTextAppearance(R.style.TextAppearance_Material3_TitleMedium)
         layoutParams = LayoutParams(
@@ -35,14 +34,12 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
         )
     }
 
-
     private val sunriseView = SunriseView(context).apply {
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
     }
-
 
     private val sunriseText = AppCompatTextView(context).apply {
         setTextAppearance(R.style.TextAppearance_Material3_BodyMedium)
@@ -59,7 +56,6 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
     }
-
 
     init {
         setPadding(14.dp, 12.dp, 14.dp, 12.dp)
@@ -85,7 +81,7 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
         sunriseText.autoMeasure()
         sunsetText.autoMeasure()
         sunriseView.measure(
-            (measuredWidth-paddingLeft-paddingRight).toExactlyMeasureSpec(),
+            (measuredWidth - paddingLeft - paddingRight).toExactlyMeasureSpec(),
             sunriseView.defaultHeightMeasureSpec(this)
         )
         setMeasuredDimension(
@@ -119,12 +115,11 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
         )
     }
 
-
     override var animatorView: View = this
 
     override var enterAnim: AnimatorSet = AnimatorSet()
 
-    override var index: Int =  HomeCardType.SUNRISE.code
+    override var index: Int = HomeCardType.SUNRISE.code
 
     override var hasInScreen: Boolean = false
 
@@ -145,7 +140,6 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
         sunsetText.text = "下午 ${sdf.format(endTime)}"
     }
 
-
     override fun startEnterAnim() {
         super.startEnterAnim()
         sunriseView.startAnim()
@@ -154,5 +148,4 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
     override fun resetAnim() {
         super.resetAnim()
     }
-
 }

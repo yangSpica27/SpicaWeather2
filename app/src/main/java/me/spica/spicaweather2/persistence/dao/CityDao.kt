@@ -33,10 +33,8 @@ interface CityDao {
     @Query("SELECT * FROM t_city ORDER  by cityName")
     fun getAllList(): List<CityBean>
 
-
     @Query("SELECT * FROM t_city WHERE isSelected == 1 LIMIT 1")
     fun getSelectedCity(): CityBean?
-
 
     @Transaction
     @Query("SELECT * FROM t_city")

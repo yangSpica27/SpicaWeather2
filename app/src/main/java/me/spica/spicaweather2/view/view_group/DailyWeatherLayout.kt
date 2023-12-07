@@ -13,7 +13,6 @@ import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 
 class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         var allHeight = 0f
@@ -43,7 +42,6 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
         }
     }
 
-
     override var animatorView: View = this
 
     override var enterAnim: AnimatorSet = AnimatorSet()
@@ -65,7 +63,7 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
             )
             val dailyItemView = DailyItemView(context)
             dailyItemView.layoutParams = lp
-            dailyItemView.setData(it,index == 0,minMinTemp,maxMaxTemp)
+            dailyItemView.setData(it, index == 0, minMinTemp, maxMaxTemp)
             addView(dailyItemView)
         }
     }

@@ -13,11 +13,9 @@ import me.spica.spicaweather2.view.view_group.SunriseCardLayout
 import me.spica.spicaweather2.view.view_group.TipsLayout
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 
-
 class MainCardAdapter(
-   private val recyclerView: RecyclerView
+    private val recyclerView: RecyclerView
 ) : RecyclerView.Adapter<AbstractMainViewHolder>() {
-
 
     private val items = arrayListOf<HomeCardType>()
 
@@ -51,7 +49,7 @@ class MainCardAdapter(
             }
 
             HomeCardType.TIPS.code -> {
-                val itemView = TipsLayout( parent.context)
+                val itemView = TipsLayout(parent.context)
                 // 生活指数卡片点击跳转
                 return AbstractMainViewHolder(itemView, itemView).apply {
                     reset()
@@ -85,7 +83,7 @@ class MainCardAdapter(
 //                    reset()
 //                }
 //            }
-            else->{
+            else -> {
                 val itemView = DailyWeatherLayout(parent.context)
                 return AbstractMainViewHolder(itemView, itemView).apply {
                     reset()
@@ -93,7 +91,6 @@ class MainCardAdapter(
             }
         }
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return items[position].code
@@ -104,7 +101,6 @@ class MainCardAdapter(
             holder.bindView(it)
         }
     }
-
 
     @SuppressLint("NotifyDataSetChanged")
     fun notifyData(weather: Weather) {
@@ -118,15 +114,12 @@ class MainCardAdapter(
         }
     }
 
-
-
-
     fun onScroll() {
         var holder: AbstractMainViewHolder
         if (itemCount == 0) return
         for (i in 0 until itemCount) {
             if (recyclerView.findViewHolderForAdapterPosition(i) != null) {
-                if (recyclerView.findViewHolderForAdapterPosition(i) is AbstractMainViewHolder){
+                if (recyclerView.findViewHolderForAdapterPosition(i) is AbstractMainViewHolder) {
                     holder = recyclerView.findViewHolderForAdapterPosition(i) as AbstractMainViewHolder
                     holder.checkEnterScreen()
                 }
@@ -139,6 +132,4 @@ class MainCardAdapter(
     }
 
     override fun getItemCount(): Int = items.size
-
-
 }

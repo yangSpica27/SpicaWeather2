@@ -39,9 +39,7 @@ data class CityBean(
         "#"
     }
 
-
     companion object {
-
 
         @JvmStatic
         @WorkerThread
@@ -65,7 +63,7 @@ data class CityBean(
                     CityBean(
                         cityName = it.name,
                         sortName = PinyinHelper.convertToPinyinString
-                            (it.name, "", PinyinFormat.WITHOUT_TONE),
+                        (it.name, "", PinyinFormat.WITHOUT_TONE),
                         lon = it.log,
                         lat = it.lat
                     )
@@ -80,7 +78,7 @@ data class CityBean(
                         CityBean(
                             cityName = city.name,
                             sortName = PinyinHelper.convertToPinyinString
-                                (city.name, "", PinyinFormat.WITHOUT_TONE),
+                            (city.name, "", PinyinFormat.WITHOUT_TONE),
                             lon = city.log,
                             lat = city.lat
                         )
@@ -93,7 +91,6 @@ data class CityBean(
             }
             return cityList
         }
-
 
         @Throws(IOException::class)
         private fun getJsonString(context: Context): String {
@@ -119,5 +116,4 @@ data class CityBean(
             return sb.toString()
         }
     }
-
 }

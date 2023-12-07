@@ -20,7 +20,6 @@ import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 
 class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
-
     // 标题文字
     private val titleText = AppCompatTextView(context).apply {
         layoutParams = LayoutParams(
@@ -34,7 +33,6 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         typeface = Typeface.DEFAULT_BOLD
         text = "空气质量"
     }
-
 
     // 进度条
     private val airCircleProgressView = AirCircleProgressView(context).apply {
@@ -53,7 +51,6 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         }
         setTextAppearance(context, R.style.TextAppearance_Material3_LabelMedium)
         text = "二氧化碳"
-
     }
     private val tvC0Value = AppCompatTextView(context).apply {
         layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
@@ -146,7 +143,6 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         layoutParams = lp
     }
 
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         titleText.autoMeasure()
@@ -162,7 +158,8 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         tvPm25Title.autoMeasure()
         tvPm25Value.autoMeasure()
         setMeasuredDimension(
-            measuredWidth, Math.max(
+            measuredWidth,
+            Math.max(
                 airCircleProgressView.measuredHeightWithMargins +
                     titleText.measuredHeightWithMargins,
                 tvNo2Title.measuredHeightWithMargins +
@@ -191,7 +188,6 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
         val itemSpacer = Math.max(0, progressHeight - titleHeight) / 4
 
-
         tvC0Title.layout(
             width / 2 + tvC0Title.marginLeft,
             airCircleProgressView.top + tvC0Title.marginTop
@@ -202,7 +198,6 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             tvC0Value.toViewVerticalCenter(tvC0Title),
             true
         )
-
 
         tvSo2Title.layout(
             width / 2 + tvSo2Title.marginLeft,
@@ -232,10 +227,7 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             tvPm25Value.marginRight,
             tvPm25Value.toViewVerticalCenter(tvPm25Title), true
         )
-
-
     }
-
 
     override var animatorView: View = this
 

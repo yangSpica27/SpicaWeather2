@@ -9,7 +9,6 @@ import org.jbox2d.dynamics.BodyType
 import org.jbox2d.dynamics.FixtureDef
 import org.jbox2d.dynamics.World
 
-
 class RainEffectRender {
 
     private lateinit var world: World
@@ -24,7 +23,6 @@ class RainEffectRender {
     private val dt = 1f / 60f
     private val velocityIterations = 5
     private val positionIterations = 20
-
 
     private val mProportion = 50 // 模拟世界和view坐标的转化比例
     private var mDensity = .5f
@@ -41,32 +39,27 @@ class RainEffectRender {
         updateHorizontalBounds()
     }
 
-
     private fun updateHorizontalBounds() {
         val bodyDef = BodyDef()
-        //创建静止刚体
+        // 创建静止刚体
         bodyDef.type = BodyType.STATIC
-        //定义的形状
+        // 定义的形状
         val box = PolygonShape()
         val boxWidth: Float = mappingView2Body(mWorldWidth * 1f)
         val boxHeight: Float = mappingView2Body(mProportion * 1f)
-        box.setAsBox(boxWidth, boxHeight) //确定为矩形
-
+        box.setAsBox(boxWidth, boxHeight) // 确定为矩形
 
         val fixtureDef = FixtureDef()
         fixtureDef.shape = box
         fixtureDef.density = mDensity
-        fixtureDef.friction = 0.8f //摩擦系数
-        fixtureDef.restitution = 0.5f //补偿系数
-
+        fixtureDef.friction = 0.8f // 摩擦系数
+        fixtureDef.restitution = 0.5f // 补偿系数
 
         bodyDef.position[0f] = mappingView2Body(mWorldHeight * 1f) + boxHeight
-        val bottomBody: Body = world.createBody(bodyDef) //创建一个真实的下边 body
+        val bottomBody: Body = world.createBody(bodyDef) // 创建一个真实的下边 body
 
         bottomBody.createFixture(fixtureDef)
-
     }
-
 
     fun createParticle(view: BaseParticle) {
         val bodyDef = BodyDef()
@@ -92,7 +85,6 @@ class RainEffectRender {
         world.step(dt, velocityIterations, positionIterations)
     }
 
-
     fun getXy(view: BaseParticle) {
         view.x = getViewX(view)
         view.y = getViewY(view)
@@ -112,7 +104,6 @@ class RainEffectRender {
         }
     }
 
-
     private fun getViewX(view: BaseParticle): Float {
         val body = view.body
         return if (body != null) {
@@ -126,7 +117,6 @@ class RainEffectRender {
             mappingBody2View(body.position.y) - view.height / 2f
         } else 0f
     }
-
 
     private fun mappingView2Body(view: Float): Float {
         return view / mProportion

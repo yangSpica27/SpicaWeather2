@@ -13,22 +13,18 @@ import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.persistence.repository.CityRepository
 import javax.inject.Inject
 
-
 @HiltViewModel
 class CityViewModel @Inject constructor(
     private val cityRepository: CityRepository
 ) : ViewModel() {
 
-
     private val allCity = arrayListOf<CityBean>()
 
     private val citySearchKeyword = MutableStateFlow<String>("")
 
-
     val searchFlow = citySearchKeyword.map { keyword ->
         allCity.filter { it.cityName.contains(keyword) || it.sortName.contains(keyword) }
     }.flowOn(Dispatchers.IO)
-
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -42,11 +38,7 @@ class CityViewModel @Inject constructor(
         }
     }
 
-
-
-   suspend fun addCity(city: CityBean) {
+    suspend fun addCity(city: CityBean) {
         cityRepository.add(city)
     }
-
-
 }

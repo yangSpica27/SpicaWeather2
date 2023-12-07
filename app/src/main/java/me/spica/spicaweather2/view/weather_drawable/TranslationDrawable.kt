@@ -11,26 +11,21 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.core.content.ContextCompat
 
-
 private const val mXMoveDistance = 40.0
 private const val mYMoveDistance = 40.0
 
 class TranslationDrawable(private val context: Context) : WeatherDrawable(), SensorEventListener {
 
-
     private var mCenterX = 0
     private var mCenterY = 0
-
 
     fun ready(width: Int, height: Int) {
         mCenterX = width / 2
         mCenterY = height / 2
 
-
         if (sensorManager == null) {
             sensorManager = ContextCompat.getSystemService(context, SensorManager::class.java)
         }
-
 
         sensorManager?.registerListener(
             this, sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME
@@ -40,7 +35,6 @@ class TranslationDrawable(private val context: Context) : WeatherDrawable(), Sen
             this, sensorManager?.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_GAME
         )
     }
-
 
     private var mAcceleValues: FloatArray? = null
 
@@ -58,7 +52,6 @@ class TranslationDrawable(private val context: Context) : WeatherDrawable(), Sen
 
     private var currentY = 0f
 
-
     private val animation = ObjectAnimator.ofFloat(0f, 1f).apply {
         addUpdateListener {
             currentX = (it.animatedValue as Float) * (scrollX - lastX) + lastX
@@ -67,13 +60,11 @@ class TranslationDrawable(private val context: Context) : WeatherDrawable(), Sen
         duration = 150
     }
 
-
     private val mDegreeYMin = -20.0
     private val mDegreeYMax = 20.0
 
     private val mDegreeXMin = -20.0
     private val mDegreeXMax = 20.0
-
 
     private val MAX_ROTATE_DEGREE = .4f
     private val mMatrix = Matrix()
@@ -87,7 +78,6 @@ class TranslationDrawable(private val context: Context) : WeatherDrawable(), Sen
 //        mMatrix.postTranslate
 //        canvas.concat(mMatrix)
 //    }
-
 
     // 方向传感器
     private var sensorManager: SensorManager? = null
@@ -104,7 +94,6 @@ class TranslationDrawable(private val context: Context) : WeatherDrawable(), Sen
         mMatrix.setTranslate(-currentX, -currentY)
         canvas.concat(mMatrix)
     }
-
 
     override fun onSensorChanged(sv: SensorEvent) {
 

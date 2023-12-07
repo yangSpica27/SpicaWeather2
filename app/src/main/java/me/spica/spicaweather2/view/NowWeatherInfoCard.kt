@@ -23,8 +23,6 @@ import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 
 class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), SpicaWeatherCard {
 
-
-
     init {
         setBackgroundResource(R.drawable.bg_card)
     }
@@ -38,7 +36,6 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
         repeatCount = LottieDrawable.INFINITE
         repeatMode = LottieDrawable.RESTART
     }
-
 
     private val currentTemperature = AppCompatTextView(context).apply {
         layoutParams = LayoutParams(
@@ -68,7 +65,6 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
         text = "多云 体感--°C -℃ | -℃"
     }
 
-
     private val divider = View(context).apply {
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -89,9 +85,12 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
             )
         }
         gravity = Gravity.CENTER
-        setCompoundDrawables(ContextCompat.getDrawable(context, R.drawable.ic_water)?.apply {
-            setBounds(0, 0, 20.dp, 20.dp)
-        }, null, null, null)
+        setCompoundDrawables(
+            ContextCompat.getDrawable(context, R.drawable.ic_water)?.apply {
+                setBounds(0, 0, 20.dp, 20.dp)
+            },
+            null, null, null
+        )
         setTextAppearance(R.style.TextAppearance_Material3_TitleLarge)
         text = "-%"
     }
@@ -106,9 +105,12 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
             )
         }
         setTextAppearance(R.style.TextAppearance_Material3_TitleLarge)
-        setCompoundDrawables(ContextCompat.getDrawable(context, R.drawable.ic_pressure)?.apply {
-            setBounds(0, 0, 20.dp, 20.dp)
-        }, null, null, null)
+        setCompoundDrawables(
+            ContextCompat.getDrawable(context, R.drawable.ic_pressure)?.apply {
+                setBounds(0, 0, 20.dp, 20.dp)
+            },
+            null, null, null
+        )
         gravity = Gravity.CENTER
         text = "--pa"
     }
@@ -123,13 +125,15 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
             )
         }
         setTextAppearance(R.style.TextAppearance_Material3_TitleLarge)
-        setCompoundDrawables(ContextCompat.getDrawable(context, R.drawable.ic_wind2)?.apply {
-            setBounds(0, 0, 20.dp, 20.dp)
-        }, null, null, null)
+        setCompoundDrawables(
+            ContextCompat.getDrawable(context, R.drawable.ic_wind2)?.apply {
+                setBounds(0, 0, 20.dp, 20.dp)
+            },
+            null, null, null
+        )
         gravity = Gravity.CENTER
         text = "--m/s"
     }
-
 
     init {
         setPadding(14.dp, 0, 14.dp, 20.dp)
@@ -141,7 +145,6 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
         addView(lottieAnimationView)
         addView(divider)
     }
-
 
     @SuppressLint("SetTextI18n")
     override fun bindData(weather: Weather) {
@@ -171,11 +174,11 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
         windSpeed.autoMeasure()
         setMeasuredDimension(
             measuredWidth,
-            currentTemperature.measuredHeightWithMargins
-                + temperatureDescText.measuredHeightWithMargins
-                + divider.measuredHeightWithMargins
-                + waterText.measuredHeightWithMargins
-                + paddingBottom + paddingTop
+            currentTemperature.measuredHeightWithMargins +
+                temperatureDescText.measuredHeightWithMargins +
+                divider.measuredHeightWithMargins +
+                waterText.measuredHeightWithMargins +
+                paddingBottom + paddingTop
         )
     }
 

@@ -20,9 +20,7 @@ import me.spica.spicaweather2.view.weather_drawable.SnowDrawable
 import me.spica.spicaweather2.view.weather_drawable.SunnyDrawable
 import java.util.UUID
 
-
 class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
-
 
     @Volatile
     private var isWork = false // 是否预备绘制
@@ -91,7 +89,6 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
             }
         }
 
-
     private val cloudDrawable = CloudDrawable(context)
 
     private val foggyDrawable = FoggyDrawable(context)
@@ -111,7 +108,6 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
         hazeDrawable.ready(width, height)
     }
 
-
     // 停止所有的动画
     private fun stopAllAnim() {
         sunnyDrawable.cancelAnim()
@@ -121,14 +117,12 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
 
     private var mCanvas: Canvas? = null
 
-
     private fun doOnDraw() {
 
         mCanvas = lockCanvas()
 
         // ================进行绘制==============
         mCanvas?.let { canvas ->
-
 
 //            translationDrawable.doOnDraw(canvas, width, height)
             canvas.drawColor(ContextCompat.getColor(context, R.color.window_background))
@@ -154,7 +148,6 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
 
             unlockCanvasAndPost(canvas)
         }
-
     }
 
     private fun roundClip(canvas: Canvas) {
@@ -164,40 +157,38 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
 
     private var lastSyncTime = 0L
 
-
     private val drawRunnable = object : Runnable {
         override fun run() {
-                while (isWork) {
-                    // 记录上次执行渲染时间
-                    lastSyncTime = System.currentTimeMillis()
+            while (isWork) {
+                // 记录上次执行渲染时间
+                lastSyncTime = System.currentTimeMillis()
 
-                    when (currentWeatherAnimType) {
-                        NowWeatherView.WeatherAnimType.RAIN -> {
-                            rainDrawable.calculate(width, height)
-                        }
-
-                        NowWeatherView.WeatherAnimType.SNOW -> {
-                            snowDrawable.calculate(width, height)
-                        }
-
-                        NowWeatherView.WeatherAnimType.FOG -> {
-                            foggyDrawable.calculate(width, height)
-                        }
-
-                        NowWeatherView.WeatherAnimType.HAZE -> {
-                            hazeDrawable.calculate()
-                        }
-
-                        else -> {}
+                when (currentWeatherAnimType) {
+                    NowWeatherView.WeatherAnimType.RAIN -> {
+                        rainDrawable.calculate(width, height)
                     }
-                    // 执行渲染
-                    synchronized(lock){
-                        doOnDraw()
+
+                    NowWeatherView.WeatherAnimType.SNOW -> {
+                        snowDrawable.calculate(width, height)
                     }
-                    // 保证两张帧之间间隔16ms(60帧)
-                    drawHandler.postDelayed(this, 32)
+
+                    NowWeatherView.WeatherAnimType.FOG -> {
+                        foggyDrawable.calculate(width, height)
+                    }
+
+                    NowWeatherView.WeatherAnimType.HAZE -> {
+                        hazeDrawable.calculate()
+                    }
+
+                    else -> {}
                 }
-
+                // 执行渲染
+                synchronized(lock) {
+                    doOnDraw()
+                }
+                // 保证两张帧之间间隔16ms(60帧)
+                drawHandler.postDelayed(this, 32)
+            }
         }
     }
 
@@ -207,14 +198,15 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
         super.onSizeChanged(w, h, oldw, oldh)
         clipPath.reset()
         clipPath.addRoundRect(
-            0f, 0f, width * 1f, height * 1f, floatArrayOf(
+            0f, 0f, width * 1f, height * 1f,
+            floatArrayOf(
                 8.dp, 8.dp, 8.dp, 8.dp,
                 8.dp, 8.dp, 8.dp, 8.dp,
-            ), Path.Direction.CCW
+            ),
+            Path.Direction.CCW
         )
         initDrawableRect(width, height)
     }
-
 
     @Synchronized
     fun resumeWeatherAnim() {
@@ -240,7 +232,6 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
     }
 
     override fun onSurfaceTextureSizeChanged(p0: SurfaceTexture, p1: Int, p2: Int) {
-
     }
 
     override fun onSurfaceTextureDestroyed(p0: SurfaceTexture): Boolean {
@@ -254,6 +245,4 @@ class WeatherBackgroundView : TextureView, TextureView.SurfaceTextureListener {
     }
 
     override fun onSurfaceTextureUpdated(p0: SurfaceTexture) = Unit
-
-
 }

@@ -20,20 +20,17 @@ import me.spica.spicaweather2.view.view_group.ActivityAddCityLayout
 import me.spica.spicaweather2.work.DataSyncWorker
 import rikka.material.app.MaterialActivity
 
-
 /**
  * 添加城市
  */
 @AndroidEntryPoint
 class ActivityAddCity : MaterialActivity() {
 
-
     private val layout by lazy {
         ActivityAddCityLayout(this)
     }
 
     private val addCityAdapter = AddCityAdapter()
-
 
     private val cityViewModel by viewModels<CityViewModel>()
 
@@ -43,13 +40,12 @@ class ActivityAddCity : MaterialActivity() {
         init()
     }
 
-
     private fun init() {
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
-        layout.recyclerView.layoutManager = LinearLayoutManager(this,RecyclerView.VERTICAL,false)
+        layout.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         dividerBuilder()
             .color(getColor(R.color.line_divider))
-            .size(2,TypedValue.COMPLEX_UNIT_PX)
+            .size(2, TypedValue.COMPLEX_UNIT_PX)
             .build()
             .addTo(layout.recyclerView)
         layout.recyclerView.adapter = addCityAdapter
@@ -71,6 +67,4 @@ class ActivityAddCity : MaterialActivity() {
             }
         }
     }
-
-
 }

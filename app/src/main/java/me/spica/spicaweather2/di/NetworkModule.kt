@@ -65,6 +65,4 @@ object NetworkModule {
     fun provideHeRepository(heClient: HeClient): HeRepository {
         return HeRepository(heClient)
     }
-
-
 }

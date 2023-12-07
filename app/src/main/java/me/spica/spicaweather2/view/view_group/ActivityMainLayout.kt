@@ -9,7 +9,6 @@ import me.spica.spicaweather2.view.weather_bg.WeatherBackgroundSurfaceView
 
 class ActivityMainLayout(context: Context) : AViewGroup(context) {
 
-
     val weatherBackgroundSurfaceView = WeatherBackgroundSurfaceView(context)
         .apply {
             layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
@@ -39,7 +38,7 @@ class ActivityMainLayout(context: Context) : AViewGroup(context) {
         children.forEach {
             it.autoMeasure()
         }
-        setMeasuredDimension(measuredWidth,measuredHeight)
+        setMeasuredDimension(measuredWidth, measuredHeight)
     }
 
     override fun onLayout(p0: Boolean, p1: Int, p2: Int, p3: Int, p4: Int) {
@@ -47,6 +46,4 @@ class ActivityMainLayout(context: Context) : AViewGroup(context) {
         viewPager2.layout(0, 0)
         mainTitleLayout.layout(0, 0)
     }
-
-
 }

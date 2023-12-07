@@ -16,10 +16,8 @@ import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.WeatherCodeUtils
 import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
-import timber.log.Timber
 
 class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
-
 
     private val iconSort = AppCompatImageView(context).apply {
         setImageResource(R.drawable.ic_drag)
@@ -30,8 +28,6 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
         }
     }
 
-
-
     private val cityName = AppCompatTextView(context).apply {
         setTextAppearance(R.style.TextAppearance_Material3_TitleLarge)
         setTextColor(ContextCompat.getColor(context, R.color.white))
@@ -40,7 +36,6 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
         )
         text = "城市"
     }
-
 
     private val weatherName = AppCompatTextView(context).apply {
         setTextAppearance(R.style.TextAppearance_Material3_TitleMedium)
@@ -53,8 +48,7 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
         text = "天气"
     }
 
-
-     val iconDelete = AppCompatImageView(context).apply {
+    val iconDelete = AppCompatImageView(context).apply {
         setImageResource(R.drawable.ic_close_small)
         layoutParams = LayoutParams(
             24.dp, 24.dp
@@ -84,7 +78,7 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
     fun setData(cityWithWeather: CityWithWeather) {
         val themeColor = WeatherCodeUtils.getWeatherCode(cityWithWeather.weather?.todayWeather?.iconId ?: 100).getThemeColor()
         val backgroundDrawable = background
-        backgroundDrawable?.colorFilter =PorterDuffColorFilter(themeColor, PorterDuff.Mode.SRC_IN)
+        backgroundDrawable?.colorFilter = PorterDuffColorFilter(themeColor, PorterDuff.Mode.SRC_IN)
         background = backgroundDrawable
         cityName.text = cityWithWeather.city.cityName
         weatherName.text = "${cityWithWeather.weather?.todayWeather?.weatherName} ${cityWithWeather.weather?.todayWeather?.temp}℃"
@@ -95,15 +89,19 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
         iconSort.autoMeasure()
         iconDelete.autoMeasure()
         cityName.measure(
-            (measuredWidth -
-                iconSort.measuredWidthWithMargins -
-                iconDelete.measuredWidthWithMargins).toExactlyMeasureSpec(),
+            (
+                measuredWidth -
+                    iconSort.measuredWidthWithMargins -
+                    iconDelete.measuredWidthWithMargins
+                ).toExactlyMeasureSpec(),
             weatherName.defaultHeightMeasureSpec(this)
         )
         weatherName.measure(
-            (measuredWidth -
-                iconSort.measuredWidthWithMargins -
-                iconDelete.measuredWidthWithMargins).toExactlyMeasureSpec(),
+            (
+                measuredWidth -
+                    iconSort.measuredWidthWithMargins -
+                    iconDelete.measuredWidthWithMargins
+                ).toExactlyMeasureSpec(),
             weatherName.defaultHeightMeasureSpec(this)
         )
         setMeasuredDimension(
@@ -120,11 +118,11 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
         )
         cityName.layout(
             iconSort.right + cityName.marginLeft + iconSort.marginRight,
-            paddingTop+ cityName.marginTop
+            paddingTop + cityName.marginTop
         )
         weatherName.layout(
             iconSort.right + cityName.marginLeft + iconSort.marginRight,
-            cityName.bottom+weatherName.marginTop
+            cityName.bottom + weatherName.marginTop
         )
         iconDelete.layout(
             paddingRight,
@@ -132,5 +130,4 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
             true
         )
     }
-
 }

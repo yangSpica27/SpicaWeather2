@@ -13,25 +13,22 @@ import me.spica.spicaweather2.view.view_group.AViewGroup
 
 class SearchBarLayout(context: Context) : AViewGroup(context) {
 
-
     val editText = AppCompatEditText(context).apply {
         layoutParams = LayoutParams(
             24.dp,
             24.dp
         )
-        setPadding(12.dp,4.dp,12.dp,4.dp)
+        setPadding(12.dp, 4.dp, 12.dp, 4.dp)
         setBackgroundDrawable(null)
     }
-
 
     private val iconLeft = AppCompatImageView(context).apply {
         setImageResource(R.drawable.ic_search)
         layoutParams = LayoutParams(
-           24.dp,
+            24.dp,
             24.dp,
         )
     }
-
 
     private val iconClear = AppCompatImageView(context).apply {
         setImageResource(R.drawable.ic_close)
@@ -69,21 +66,25 @@ class SearchBarLayout(context: Context) : AViewGroup(context) {
         iconLeft.autoMeasure()
         iconClear.autoMeasure()
         editText.measure(
-            (measuredWidth -
-                iconLeft.measuredWidth -
-                iconClear.measuredWidth -
-                editText.marginLeft -
-                editText.marginRight).toExactlyMeasureSpec(),
+            (
+                measuredWidth -
+                    iconLeft.measuredWidth -
+                    iconClear.measuredWidth -
+                    editText.marginLeft -
+                    editText.marginRight
+                ).toExactlyMeasureSpec(),
             defaultHeightMeasureSpec(this)
         )
-        setMeasuredDimension(measuredWidth - marginLeft - marginRight,
-            editText.measuredHeight + paddingTop + paddingBottom)
+        setMeasuredDimension(
+            measuredWidth - marginLeft - marginRight,
+            editText.measuredHeight + paddingTop + paddingBottom
+        )
     }
 
     override fun onLayout(change: Boolean, p1: Int, p2: Int, p3: Int, p4: Int) {
         iconLeft.layout(
             paddingLeft,
-            0+(height-iconLeft.measuredHeight)/2
+            0 + (height - iconLeft.measuredHeight) / 2
         )
         editText.layout(
             iconLeft.right + editText.marginLeft,
@@ -91,9 +92,8 @@ class SearchBarLayout(context: Context) : AViewGroup(context) {
         )
         iconClear.layout(
             paddingRight,
-            0+(height-iconClear.height)/2,
+            0 + (height - iconClear.height) / 2,
             true
         )
-
     }
 }

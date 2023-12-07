@@ -32,7 +32,6 @@ class DailyItemView : View {
         defStyleAttr
     )
 
-
     private var dailyWeatherBean: DailyWeatherBean? = null
 
     private var isFirst = false
@@ -69,13 +68,10 @@ class DailyItemView : View {
         invalidate()
     }
 
-
     private val expandAnim = ValueAnimator.ofFloat().setDuration(225)
 
     fun expand(expand: Boolean) {
-
     }
-
 
     private var startColor = Color.TRANSPARENT
 
@@ -132,7 +128,6 @@ class DailyItemView : View {
                 textPaint
             )
             endX += 60.dp
-
 
             textPaint.textSize = 16.dp
             val maxTempText = "${dailyWeatherBean.maxTemp}℃"
@@ -203,7 +198,6 @@ class DailyItemView : View {
             )
 
             canvas.drawBitmap(bitmap, startX / 2f + endX / 2f - 12.dp, height / 2f - 12.dp, iconPaint)
-
         }
     }
 
@@ -211,5 +205,4 @@ class DailyItemView : View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         setMeasuredDimension(measuredWidth, 45.dp.toInt())
     }
-
 }

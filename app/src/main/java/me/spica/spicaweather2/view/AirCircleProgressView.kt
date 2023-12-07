@@ -17,7 +17,6 @@ import androidx.core.view.ViewCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
 
-
 // 空气质量指数view
 private val VIEW_MARGIN = 14.dp
 
@@ -26,11 +25,9 @@ class AirCircleProgressView : View {
     private var mCenterX = 0
     private var mCenterY = 0
 
-
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
 
     private val mRectF: RectF = RectF()
 
@@ -38,7 +35,6 @@ class AirCircleProgressView : View {
         textSize = 50.dp
         color = ContextCompat.getColor(context, R.color.textColorPrimary)
     }
-
 
     private val secondTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
         textSize = 16.dp
@@ -115,7 +111,6 @@ class AirCircleProgressView : View {
         )
     }
 
-
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         mCenterX = width / 2
@@ -137,7 +132,6 @@ class AirCircleProgressView : View {
         super.onDraw(canvas)
         // 背景弧
         drawBack(canvas)
-
 
         // 绘制中心文本
         val valueText = (progress * lv).toInt().toString()
@@ -161,7 +155,6 @@ class AirCircleProgressView : View {
         canvas.rotate(-startAngle + swipeAngle * progress)
         canvas.translate(0f, -mRectF.width() / 2f - 4.dp)
         canvas.drawBitmap(indicatorBitmap, matrix, linePaint)
-
     }
 
     private val bgColors = listOf(
@@ -185,11 +178,5 @@ class AirCircleProgressView : View {
         }
     }
 
-
-
-
-
     private var steadyAnim: ValueAnimator = ValueAnimator()
-
-
 }

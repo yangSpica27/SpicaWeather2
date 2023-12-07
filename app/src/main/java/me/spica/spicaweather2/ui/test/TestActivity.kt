@@ -55,5 +55,4 @@ class TestActivity : MaterialActivity() {
         handler.removeCallbacksAndMessages(null)
         handlerThread.quitSafely()
     }
-
 }

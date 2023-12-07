@@ -18,12 +18,9 @@ import me.spica.spicaweather2.view.recyclerView.RecyclerViewAtViewPager2
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import rikka.recyclerview.fixEdgeEffect
 
-
 class WeatherMainLayout(context: Context) : RecyclerViewAtViewPager2(context) {
 
-
     private var mainCardAdapter: MainCardAdapter
-
 
     init {
         val activityMain = getActivityFromContext(context) as ActivityMain
@@ -48,26 +45,18 @@ class WeatherMainLayout(context: Context) : RecyclerViewAtViewPager2(context) {
             HomeCardType.values().toMutableList()
         )
 
-
-
         adapter = mainCardAdapter
-
-
 
         fixEdgeEffect()
 
         setPullDownListener(object : RecyclerViewAtViewPager2.PullDownListener {
 
             override fun onPullDown(downY: Float) {
-
             }
 
             override fun onPullUp(downY: Float) {
-
             }
-
         })
-
 
         addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -78,21 +67,18 @@ class WeatherMainLayout(context: Context) : RecyclerViewAtViewPager2(context) {
                 mainCardAdapter.onScroll()
             }
         })
-
-
     }
-
 
     fun getPositionAndOffset(): Pair<Int, Int> {
         var lastOffset = 0
         var lastPosition = 0
         val layoutManager = getLayoutManager() as LinearLayoutManager
-        //获取可视的第一个view
+        // 获取可视的第一个view
         val topView = layoutManager.getChildAt(0)
         if (topView != null) {
-            //获取与该view的顶部的偏移量
+            // 获取与该view的顶部的偏移量
             lastOffset = topView.top
-            //得到该View的数组位置
+            // 得到该View的数组位置
             lastPosition = layoutManager.getPosition(topView)
         }
         return Pair(lastPosition, lastOffset)
@@ -102,7 +88,6 @@ class WeatherMainLayout(context: Context) : RecyclerViewAtViewPager2(context) {
         mainCardAdapter.notifyData(weather)
         tag = weather.cityName
     }
-
 
     private fun getActivityFromContext(@Nullable context: Context?): Activity? {
         if (context == null) {

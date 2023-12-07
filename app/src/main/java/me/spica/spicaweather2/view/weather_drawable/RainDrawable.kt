@@ -7,7 +7,6 @@ import me.spica.spicaweather2.render.RainEffectRender
 import me.spica.spicaweather2.render.RainPoint
 import me.spica.spicaweather2.tools.dp
 
-
 class RainDrawable : WeatherDrawable() {
 
     // 绘制雨水的paint
@@ -41,7 +40,6 @@ class RainDrawable : WeatherDrawable() {
 //                rains.add(RainFlake.create(width, height, rainPaint))
 //            }
 //        }
-
     }
 
     fun calculate(width: Int, height: Int) {
@@ -55,7 +53,6 @@ class RainDrawable : WeatherDrawable() {
 //        }
 //        Timber.tag("计算耗时").e("$count 毫秒")
     }
-
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
         synchronized(rains) {

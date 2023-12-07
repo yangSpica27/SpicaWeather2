@@ -11,11 +11,10 @@ import me.spica.spicaweather2.view.view_group.WeatherMainLayout
 
 class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
 
-    companion object{
+    companion object {
         private const val TYPE_EMPTY = -1
-        private const val TYPE_DATA  = 1
+        private const val TYPE_DATA = 1
     }
-
 
     private val items = arrayListOf<CityWithWeather>()
 
@@ -30,15 +29,12 @@ class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun setWeather(weather: Weather) {
             (itemView as WeatherMainLayout).initData(weather)
         }
-
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         if (viewType == TYPE_EMPTY) {
@@ -49,9 +45,8 @@ class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int = items.size
 
-
     override fun getItemViewType(position: Int): Int {
-        if (items[position].weather!= null){
+        if (items[position].weather != null) {
             return TYPE_DATA
         }
         return TYPE_EMPTY
@@ -63,7 +58,6 @@ class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
         }
         return 0
     }
-
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val weather = items[position].weather

@@ -14,12 +14,10 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
 
     private val items: MutableList<CityWithWeather> = arrayListOf<CityWithWeather>()
 
-
     companion object {
         const val ITEM_TYPE_NORMAL = 0
         const val ITEM_TYPE_ADD = 1
     }
-
 
     init {
         setHasStableIds(true)
@@ -33,29 +31,30 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun itemLayout()= itemView as ItemCityManagerLayout
+        fun itemLayout() = itemView as ItemCityManagerLayout
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         if (ITEM_TYPE_NORMAL == viewType) {
             ViewHolder(ItemCityManagerLayout(parent.context))
         } else if (ITEM_TYPE_ADD == viewType) {
-            ViewHolder(MaterialButton(parent.context).apply {
-                layoutParams = RecyclerView.LayoutParams(
-                    RecyclerView.LayoutParams.MATCH_PARENT,
-                    RecyclerView.LayoutParams.WRAP_CONTENT
-                ).apply {
-                    updateMargins(left = 14.dp.toInt(), right = 14.dp.toInt())
+            ViewHolder(
+                MaterialButton(parent.context).apply {
+                    layoutParams = RecyclerView.LayoutParams(
+                        RecyclerView.LayoutParams.MATCH_PARENT,
+                        RecyclerView.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        updateMargins(left = 14.dp.toInt(), right = 14.dp.toInt())
+                    }
+                    cornerRadius = 16.dp.toInt()
+                    text = "新增城市"
                 }
-                cornerRadius = 16.dp.toInt()
-                text = "新增城市"
-            })
+            )
         } else {
             ViewHolder(ItemCityManagerLayout(parent.context))
         }
 
-
-    override fun getItemCount(): Int = (items.size+1).coerceAtMost(5)
+    override fun getItemCount(): Int = (items.size + 1).coerceAtMost(5)
 
     override fun getItemViewType(position: Int): Int {
         if (position == items.size) return ITEM_TYPE_ADD
@@ -67,12 +66,11 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
         return items[position].city.cityName.hashCode().toLong()
     }
 
-
     var deleteCityClickListener: ((CityWithWeather) -> Unit)? = null
 
     var itemClickListener: ((Int, View) -> Unit)? = null
 
-    var addCityClickListener:(() -> Unit)? = null
+    var addCityClickListener: (() -> Unit)? = null
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (holder.itemViewType == ITEM_TYPE_NORMAL) {
@@ -89,6 +87,5 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
                 addCityClickListener?.invoke()
             }
         }
-
     }
 }

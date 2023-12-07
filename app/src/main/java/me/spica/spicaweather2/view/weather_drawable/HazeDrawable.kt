@@ -61,12 +61,10 @@ class HazeDrawable(private val context: Context) : WeatherDrawable() {
         }
     }
 
-
     private inner class Particle(
         @ColorInt private val color: Int,
         private val paint: Paint = pointPaint,
     ) {
-
 
         private var alpha = 0
 
@@ -81,7 +79,6 @@ class HazeDrawable(private val context: Context) : WeatherDrawable() {
         private var speedX: Float = 0f
 
         private var speedY: Float = 0f
-
 
         init {
             init()
@@ -125,6 +122,4 @@ class HazeDrawable(private val context: Context) : WeatherDrawable() {
             )
         }
     }
-
-
 }

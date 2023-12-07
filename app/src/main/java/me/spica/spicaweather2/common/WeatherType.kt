@@ -7,7 +7,6 @@ import androidx.annotation.RawRes
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.view.weather_bg.NowWeatherView
 
-
 enum class WeatherType {
     WEATHER_CLEAR,
     WEATHER_CLOUDY,

@@ -63,7 +63,6 @@ fun doOnMainThreadIdle(action: () -> Unit, timeout: Long? = null) {
         try {
             action()
         } catch (_: Exception) {
-
         }
 
         return@IdleHandler false
@@ -76,7 +75,6 @@ fun doOnMainThreadIdle(action: () -> Unit, timeout: Long? = null) {
                 try {
                     action()
                 } catch (_: Exception) {
-
                 }
             }, timeout)
         }
@@ -185,13 +183,13 @@ inline fun <reified T : Activity> Context.startActivityWithAnimation(
     ContextCompat.startActivity(this, intent, bundle)
 }
 
-//fun View.getBitmap(): Bitmap {
+// fun View.getBitmap(): Bitmap {
 //    val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 //    val canvas = Canvas(bmp)
 //    draw(canvas)
 //    canvas.save()
 //    return bmp
-//}
+// }
 
 val Int.dp: Float
     get() = android.util.TypedValue.applyDimension(
@@ -199,14 +197,12 @@ val Int.dp: Float
         Resources.getSystem().displayMetrics
     )
 
-
-fun View.show(anim:Boolean = true) {
+fun View.show(anim: Boolean = true) {
     this.visibility = View.VISIBLE
-    if (anim){
+    if (anim) {
         startAnimation(AnimationUtils.loadAnimation(context, R.anim.in_bottom))
     }
 }
-
 
 fun View.hide() {
     this.visibility = View.GONE
@@ -233,7 +229,7 @@ fun AppCompatActivity.addNewFragment(
 fun AppCompatActivity.showOldFragment(
     show_old_fragment: Fragment,
     hide_fragment_list:
-    List<Fragment> = listOf()
+        List<Fragment> = listOf()
 ) {
 
     val transaction = this.supportFragmentManager.beginTransaction()
@@ -245,7 +241,6 @@ fun AppCompatActivity.showOldFragment(
 
     transaction.commit() // 提交
 }
-
 
 fun Context.getStatusBarHeight(): Int {
     var height = 0

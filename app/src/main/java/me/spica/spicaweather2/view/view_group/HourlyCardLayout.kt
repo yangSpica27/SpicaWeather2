@@ -12,14 +12,12 @@ import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 
 class HourlyCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
-
     private val hourlyLineView = HourlyLineView(context).apply {
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
     }
-
 
     init {
         setPadding(0, 12.dp, 0, 12.dp)
@@ -51,7 +49,6 @@ class HourlyCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard
         )
     }
 
-
     override var animatorView: View = this
 
     override var enterAnim: AnimatorSet = AnimatorSet()
@@ -60,5 +57,4 @@ class HourlyCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard
     override fun bindData(weather: Weather) {
         hourlyLineView.setData(weather.hourlyWeather)
     }
-
 }

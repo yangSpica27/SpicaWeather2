@@ -37,16 +37,13 @@ import java.util.Locale
 import kotlin.math.abs
 import kotlin.system.measureTimeMillis
 
-
 class HourlyLineView : View {
 
-
     private val mScroller: OverScroller = OverScroller(context)
-    private val mVelocityTracker: VelocityTracker = VelocityTracker.obtain();
+    private val mVelocityTracker: VelocityTracker = VelocityTracker.obtain()
 
-    private val maximumFlingVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity;
-    private val minimumFlingVelocity = ViewConfiguration.get(context).scaledMinimumFlingVelocity;
-
+    private val maximumFlingVelocity = ViewConfiguration.get(context).scaledMaximumFlingVelocity
+    private val minimumFlingVelocity = ViewConfiguration.get(context).scaledMinimumFlingVelocity
 
     // 手的移动要大于这个距离才开始移动控件
     private val mTouchSlop = ViewConfiguration.get(context).scaledTouchSlop
@@ -57,15 +54,12 @@ class HourlyLineView : View {
         context, attrs, defStyleAttr
     )
 
-
     private val gapWidth = 50f
     private var offset = 0f
     private var lastX = 0f
     private var lastY = 0f
 
-
     private val data: ArrayList<HourlyWeatherBean> = arrayListOf() // 数据源
-
 
     private val topIconPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
@@ -81,7 +75,6 @@ class HourlyLineView : View {
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
     }
-
 
     private val itemWidth = 75.dp // 每个单元的宽度
 
@@ -118,7 +111,6 @@ class HourlyLineView : View {
         cacheBitmap = null
         invalidate()
     }
-
 
     private val mPointList: MutableList<Point> = arrayListOf()
 
@@ -157,9 +149,11 @@ class HourlyLineView : View {
             colors.add(themeColor)
         }
         linePaint.shader = LinearGradient(
-            0f, 0f, paddingLeft + paddingRight + itemWidth * data.size * 1f, 0f, colors.toIntArray(), List(data.size) { index ->
+            0f, 0f, paddingLeft + paddingRight + itemWidth * data.size * 1f, 0f, colors.toIntArray(),
+            List(data.size) { index ->
                 (1f / data.size) * index
-            }.toFloatArray(), TileMode.CLAMP
+            }.toFloatArray(),
+            TileMode.CLAMP
         )
         mPointList.forEachIndexed { index, point ->
             // 上个点
@@ -220,7 +214,6 @@ class HourlyLineView : View {
                     controlPointLeft.x, controlPointLeft.y, controlPointRight.x, controlPointRight.y, point.x * 1f, point.y * 1f
                 )
             }
-
         }
         invalidate()
     }
@@ -260,7 +253,6 @@ class HourlyLineView : View {
         }
         Timber.tag("耗时").e("${timeCount}ms")
     }
-
 
     private val popTextPaint = TextPaint().apply {
         textSize = 15.dp
@@ -322,13 +314,11 @@ class HourlyLineView : View {
         )
     }
 
-
     private fun drawTempText(canvas: Canvas, index: Int, point: Point) {
         canvas.drawText(
             "${data[index].temp}℃", point.x.toFloat(), point.y - 20.dp, tempPaint
         )
     }
-
 
     private fun drawIcon(canvas: Canvas, index: Int, point: Point) {
         val bitmap = bitmaps[index]
@@ -340,7 +330,6 @@ class HourlyLineView : View {
     private fun drawTempLine(canvas: Canvas) {
         canvas.drawPath(tempLinePath, linePaint)
     }
-
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -390,7 +379,6 @@ class HourlyLineView : View {
         return true
     }
 
-
     private var initX = 0f
 
     private var initY = 0f
@@ -430,7 +418,6 @@ class HourlyLineView : View {
         return super.dispatchTouchEvent(ev)
     }
 
-
     private var parentPager2: ViewPager2? = null
 
     private fun getViewPager2Parent(view: ViewParent?): ViewPager2? {
@@ -449,6 +436,4 @@ class HourlyLineView : View {
             postInvalidateOnAnimation()
         }
     }
-
-
 }

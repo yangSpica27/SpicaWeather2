@@ -14,9 +14,7 @@ import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
 import me.spica.spicaweather2.tools.getColorWithAlpha
 import me.spica.spicaweather2.tools.getStatusBarHeight
 
-
 class MainTitleLayout(context: Context, attributeSet: AttributeSet? = null) : AViewGroup(context, attributeSet) {
-
 
     val titleTextView = AppCompatTextView(context).apply {
         layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -24,7 +22,6 @@ class MainTitleLayout(context: Context, attributeSet: AttributeSet? = null) : AV
         text = "城市名称"
         setTextColor(Color.WHITE)
     }
-
 
     val plusBtn = AppCompatImageView(context).apply {
         layoutParams = LayoutParams(24.dp, 24.dp)
@@ -39,7 +36,6 @@ class MainTitleLayout(context: Context, attributeSet: AttributeSet? = null) : AV
         this.setDotIndicatorColor(ContextCompat.getColor(context, me.spica.spicaweather2.R.color.white))
         this.setStrokeDotsIndicatorColor(ContextCompat.getColor(context, me.spica.spicaweather2.R.color.white))
     }
-
 
     fun setBackgroundWhiteColor(progress: Float) {
         setBackgroundColor(getColorWithAlpha(progress, Color.WHITE))
@@ -70,7 +66,6 @@ class MainTitleLayout(context: Context, attributeSet: AttributeSet? = null) : AV
         addView(dotIndicator)
     }
 
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         titleTextView.autoMeasure()
@@ -78,13 +73,12 @@ class MainTitleLayout(context: Context, attributeSet: AttributeSet? = null) : AV
         dotIndicator.autoMeasure()
         setMeasuredDimension(
             measuredWidth,
-            titleTextView.measuredHeightWithMargins
-                + dotIndicator.measuredHeightWithMargins
-                + paddingBottom
-                + paddingTop
+            titleTextView.measuredHeightWithMargins +
+                dotIndicator.measuredHeightWithMargins +
+                paddingBottom +
+                paddingTop
         )
     }
-
 
     override fun onLayout(p0: Boolean, p1: Int, p2: Int, p3: Int, p4: Int) {
         titleTextView.layout(
@@ -101,6 +95,4 @@ class MainTitleLayout(context: Context, attributeSet: AttributeSet? = null) : AV
             titleTextView.bottom + dotIndicator.marginTop
         )
     }
-
-
 }

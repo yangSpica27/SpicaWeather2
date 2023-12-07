@@ -23,7 +23,6 @@ private const val ARC_ANGLE = 135
 
 class SunriseView : View {
 
-
     private val drawablePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         isDither = true
         style = Paint.Style.FILL_AND_STROKE
@@ -34,7 +33,6 @@ class SunriseView : View {
     private val sunSize = 28.dp
 
     // =========各个文本的bound========
-
 
     private val mRectF: RectF = RectF()
 
@@ -58,12 +56,10 @@ class SunriseView : View {
             postInvalidate()
         }
 
-
     // 区域绘制
     private val pathPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
     }
-
 
     private val dottedLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         pathEffect = DashPathEffect(floatArrayOf(5.dp, 2.dp), 0F)
@@ -90,17 +86,13 @@ class SunriseView : View {
         defStyleAttr
     )
 
-
-
     private var startTime = 0
 
     private var currentTime = 100
 
     private var endTime = 200
 
-
     private lateinit var shader: Shader
-
 
     override fun onMeasure(
         widthMeasureSpec: Int,
@@ -132,7 +124,6 @@ class SunriseView : View {
             centerY + radius
         )
     }
-
 
     /**
      *  设置时间
@@ -192,7 +183,6 @@ class SunriseView : View {
         progress = Math.min(max, progress)
     }
 
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
@@ -200,7 +190,6 @@ class SunriseView : View {
             canvas.drawBitmap(it, 0f, 0f, null)
             return
         }
-
 
         val startAngle: Float = 270f - ARC_ANGLE / 2f
 
@@ -214,17 +203,14 @@ class SunriseView : View {
 
         val deltaAngle = progressEndAngle - 180
 
-
         val deltaWidth = Math.abs(
             mRectF.width() / 2f *
                 Math.cos(Math.toRadians(deltaAngle.toDouble()))
         ).toFloat()
 
-
         val deltaHeight =
             Math.abs(mRectF.width() / 2f * Math.sin(Math.toRadians(deltaAngle.toDouble())))
                 .toFloat()
-
 
         val iconPositionX =
             if (
@@ -235,13 +221,11 @@ class SunriseView : View {
                 mRectF.centerX() - deltaWidth
             }
 
-
         val iconPositionY = mRectF.centerY() - deltaHeight
         val layerId = canvas.saveLayer(
             mRectF.left, mRectF.top, mRectF.right, mRectF.top + mRectF.height() / 2,
             null
         )
-
 
         // 绘制阴影
         pathPaint.shader = shader
@@ -257,11 +241,13 @@ class SunriseView : View {
         pathPaint.shader = null
         canvas.drawRect(
             (
-                (mRectF.centerX() + mRectF.width() / 2
-                    * Math.cos(
-                    (360 - progressEndAngle)
-                        * Math.PI / 180
-                )).toFloat()
+                (
+                    mRectF.centerX() + mRectF.width() / 2 *
+                        Math.cos(
+                            (360 - progressEndAngle) *
+                                Math.PI / 180
+                        )
+                    ).toFloat()
                 ),
             mRectF.top,
             mRectF.right,
@@ -300,15 +286,11 @@ class SunriseView : View {
         )
         val restoreCount: Int = canvas.save()
 
-
-
-
         canvas.translate(iconPositionX, iconPositionY)
         canvas.drawCircle(0f, 0f, sunSize / 2, drawablePaint)
 
         canvas.restoreToCount(restoreCount)
     }
-
 
     @Suppress("DEPRECATION")
     private fun decodeTime(time: Date): Int {
@@ -320,5 +302,4 @@ class SunriseView : View {
         val rgb = 0x00ffffff and baseColor
         return a + rgb
     }
-
 }

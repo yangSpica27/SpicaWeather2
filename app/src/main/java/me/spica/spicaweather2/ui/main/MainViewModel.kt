@@ -14,16 +14,8 @@ class MainViewModel @Inject constructor(
     private val cityRepository: CityRepository,
 ) : ViewModel() {
 
-
-
-
-
     val allCityWithWeather = cityRepository.allCitiesWithWeatherFlow()
 
-
     @WorkerThread
-    fun  getAllCity() = cityRepository.allCityList()
-
-
-
+    fun getAllCity() = cityRepository.allCityList()
 }

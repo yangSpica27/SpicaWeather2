@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 
-
 /**
  * Created by Radoslav Yankov on 07.12.2017
  * Dev Labs
@@ -24,9 +23,9 @@ class Transitioner(startingView: View, endingView: View) {
      * The duration of the animation
      */
     var duration = 400
-    set(value) {
-        if (value >= 0) field = value
-    }
+        set(value) {
+            if (value >= 0) field = value
+        }
 
     /**
      * The current progress of the animation
@@ -42,12 +41,12 @@ class Transitioner(startingView: View, endingView: View) {
         currentProgress = progress
         onPercentChanged(progress)
         mappedViews.forEach {
-            it.apply{
-            startV.x = origDimens.x + (endV.x - origDimens.x) * progress
-            startV.y = origDimens.y + (endV.y - origDimens.y) * progress
-            startV.layoutParams.width = origDimens.width + ((endV.width - origDimens.width) * progress).toInt()
-            startV.layoutParams.height = origDimens.height + ((endV.height - origDimens.height) * progress).toInt()
-            startV.requestLayout()
+            it.apply {
+                startV.x = origDimens.x + (endV.x - origDimens.x) * progress
+                startV.y = origDimens.y + (endV.y - origDimens.y) * progress
+                startV.layoutParams.width = origDimens.width + ((endV.width - origDimens.width) * progress).toInt()
+                startV.layoutParams.height = origDimens.height + ((endV.height - origDimens.height) * progress).toInt()
+                startV.requestLayout()
             }
         }
     }
@@ -61,7 +60,7 @@ class Transitioner(startingView: View, endingView: View) {
     fun animateTo(percent: Float, duration: Long? = null, interpolator: TimeInterpolator? = null) {
         if (currentProgress == percent || percent < 0f || percent > 1f) return
 
-        ValueAnimator.ofFloat(currentProgress, percent).apply{
+        ValueAnimator.ofFloat(currentProgress, percent).apply {
             this.duration = duration ?: this@Transitioner.duration.toLong()
             this.interpolator = interpolator ?: this@Transitioner.interpolator
             addUpdateListener { animation ->
@@ -93,9 +92,10 @@ class Transitioner(startingView: View, endingView: View) {
     init {
         startingChildViews.forEach { old ->
             endingChildViews
-                    .filter { old.tag == it.tag }
-                    .forEach { mappedViews.add(StateOfViews(old, it, Dimensions(old.x.toInt(), old.y.toInt(), old.width, old.height)))
-                    }
+                .filter { old.tag == it.tag }
+                .forEach {
+                    mappedViews.add(StateOfViews(old, it, Dimensions(old.x.toInt(), old.y.toInt(), old.width, old.height)))
+                }
         }
     }
 
@@ -115,4 +115,3 @@ class Transitioner(startingView: View, endingView: View) {
     private data class StateOfViews(var startV: View, var endV: View, var origDimens: Dimensions)
     private data class Dimensions(var x: Int, var y: Int, var width: Int, var height: Int)
 }
-

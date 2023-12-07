@@ -7,12 +7,10 @@ import androidx.annotation.WorkerThread
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.view.weather_bg.SnowFlake
 
-
 class SnowDrawable : WeatherDrawable() {
 
     // 雪的集合
     private var snows: ArrayList<SnowFlake> = arrayListOf()
-
 
     // 绘制雨水的paint
     private val snowPaint = Paint().apply {
@@ -22,33 +20,29 @@ class SnowDrawable : WeatherDrawable() {
         style = Paint.Style.FILL
     }
 
-  fun ready(width: Int, height: Int) {
-      synchronized(snows){
-          snows.clear()
-          for (i in 0 until 30) {
-              snows.add(SnowFlake.create(width, height, snowPaint))
-          }
-      }
+    fun ready(width: Int, height: Int) {
+        synchronized(snows) {
+            snows.clear()
+            for (i in 0 until 30) {
+                snows.add(SnowFlake.create(width, height, snowPaint))
+            }
+        }
     }
-
 
     @WorkerThread
     fun calculate(width: Int, height: Int) {
-        synchronized(snows){
+        synchronized(snows) {
             snows.forEach { snow ->
                 snow.onlyCalculation(width, height)
             }
         }
     }
 
-
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
-        synchronized(snows){
+        synchronized(snows) {
             snows.forEach { snow ->
                 snow.onlyDraw(canvas)
             }
         }
     }
-
-
 }

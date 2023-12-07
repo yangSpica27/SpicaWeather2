@@ -9,12 +9,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.view.animation.DecelerateInterpolator
 import androidx.activity.viewModels
 import androidx.core.transition.doOnEnd
 import androidx.core.transition.doOnStart
 import androidx.core.view.WindowCompat
-import androidx.core.view.drawToBitmap
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -46,13 +44,11 @@ class ActivityManagerCity : MaterialActivity() {
         const val ARG_CITY_NAME = "arg_position"
     }
 
-
     private val layout by lazy {
         ActivityManagerCityLayout(this)
     }
 
     private val adapter = ManagerCityAdapter()
-
 
     private val viewModel by viewModels<CityManagerViewModel>()
 
@@ -92,8 +88,8 @@ class ActivityManagerCity : MaterialActivity() {
 
         adapter.itemClickListener = { position, view ->
             lifecycleScope.launch(Dispatchers.Default) {
-                Manger2HomeView.initFromViewRect(view,window)
-                EventBus.getDefault().post(MessageEvent.create(MessageType.Get2MainActivityAnim,position))
+                Manger2HomeView.initFromViewRect(view, window)
+                EventBus.getDefault().post(MessageEvent.create(MessageType.Get2MainActivityAnim, position))
                 withContext(Dispatchers.Main) {
                     finish()
                 }
@@ -130,7 +126,6 @@ class ActivityManagerCity : MaterialActivity() {
         }
     }
 
-
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             val firstItemView = layout.recyclerView.findViewHolderForAdapterPosition(0)?.itemView
@@ -141,7 +136,6 @@ class ActivityManagerCity : MaterialActivity() {
         }
         return super.onKeyDown(keyCode, event)
     }
-
 
     private fun startTransformerAnim(toView: View) {
         val container = findViewById<ViewGroup>(android.R.id.content)
@@ -185,6 +179,4 @@ class ActivityManagerCity : MaterialActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-
 }

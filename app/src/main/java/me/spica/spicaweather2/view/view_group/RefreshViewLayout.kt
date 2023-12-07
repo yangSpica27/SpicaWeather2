@@ -62,6 +62,4 @@ class RefreshViewLayout(context: Context) : AViewGroup(context) {
             loadingImageView.bottom + loadingImageView.marginBottom
         )
     }
-
-
 }

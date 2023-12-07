@@ -17,7 +17,6 @@ import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 
 class TodayExtraLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
-
     private val waterTitle = AppCompatTextView(context).apply {
         initTitleText(this)
     }
@@ -34,7 +33,6 @@ class TodayExtraLayout(context: Context) : AViewGroup(context), SpicaWeatherCard
         initValueText(this)
     }
 
-
     private val windPaTitleText = AppCompatTextView(context).apply {
         initTitleText(this)
     }
@@ -42,7 +40,6 @@ class TodayExtraLayout(context: Context) : AViewGroup(context), SpicaWeatherCard
     private val windPaValueText = AppCompatTextView(context).apply {
         initValueText(this)
     }
-
 
     private fun initTitleText(textView: AppCompatTextView) {
         textView.layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -91,7 +88,6 @@ class TodayExtraLayout(context: Context) : AViewGroup(context), SpicaWeatherCard
         )
     }
 
-
     override fun onLayout(p0: Boolean, p1: Int, p2: Int, p3: Int, p4: Int) {
         waterTitle.layout(
             paddingLeft, paddingTop
@@ -139,6 +135,4 @@ class TodayExtraLayout(context: Context) : AViewGroup(context), SpicaWeatherCard
         windPaValueText.text = "${weather.todayWeather.windPa}hpa"
         windSpeedValueText.text = "${weather.todayWeather.windSpeed}km/h"
     }
-
-
 }

@@ -9,12 +9,11 @@ import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 open class AbstractMainViewHolder(private val card: SpicaWeatherCard, itemView: View) :
     RecyclerView.ViewHolder(itemView) {
 
-
     fun bindView(weather: Weather) {
         card.bindData(weather)
     }
 
-    fun reset(){
+    fun reset() {
         card.resetAnim()
     }
 
@@ -26,7 +25,5 @@ open class AbstractMainViewHolder(private val card: SpicaWeatherCard, itemView: 
         } catch (e: Exception) {
             e.message
         }
-
     }
-
 }

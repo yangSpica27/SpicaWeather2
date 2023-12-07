@@ -19,47 +19,45 @@ import timber.log.Timber
  */
 class HeRepository(private val heClient: HeClient) : Repository {
 
+    override fun fetchCaiyunExtend(lon: String, lat: String, onError: (String?) -> Unit) =
+        flow {
+            val response = heClient.getMinute(lon, lat)
+            response.suspendOnSuccess(SuccessMinutelyMapper) {
+                Timber.e("请求成功")
+                emit(this)
+            }.suspendOnFailure {
+                Timber.e("请求失败")
+                emit(null)
+                Timber.e(this)
+                onError(this)
+            }.suspendOnError {
+                Timber.e("请求失败")
+                emit(null)
+                Timber.e(message())
+                onError(message())
+            }
+        }.flowOn(Dispatchers.IO)
 
-  override fun fetchCaiyunExtend(lon: String, lat: String, onError: (String?) -> Unit) =
-    flow {
-      val response = heClient.getMinute(lon, lat)
-      response.suspendOnSuccess(SuccessMinutelyMapper) {
-        Timber.e("请求成功")
-        emit(this)
-      }.suspendOnFailure {
-        Timber.e("请求失败")
-        emit(null)
-        Timber.e(this)
-        onError(this)
-      }.suspendOnError {
-        Timber.e("请求失败")
-        emit(null)
-        Timber.e(message())
-        onError(message())
-      }
-    }.flowOn(Dispatchers.IO)
-
-  override fun fetchWeather(
-    lon: String,
-    lat: String,
-    onError: (String?) -> Unit
-  ): Flow<Weather?> =
-    flow {
-      val response = heClient.getAllWeather(lon, lat)
-      response.suspendOnSuccess(SuccessWeatherMapper) {
-        Timber.e("请求成功")
-        emit(this)
-      }.suspendOnFailure {
-        Timber.e("请求失败")
-        emit(null)
-        Timber.e(this)
-        onError(this)
-      }.suspendOnError {
-        Timber.e("请求失败")
-        emit(null)
-        Timber.e(message())
-        onError(message())
-      }
-    }.flowOn(Dispatchers.IO)
-
+    override fun fetchWeather(
+        lon: String,
+        lat: String,
+        onError: (String?) -> Unit
+    ): Flow<Weather?> =
+        flow {
+            val response = heClient.getAllWeather(lon, lat)
+            response.suspendOnSuccess(SuccessWeatherMapper) {
+                Timber.e("请求成功")
+                emit(this)
+            }.suspendOnFailure {
+                Timber.e("请求失败")
+                emit(null)
+                Timber.e(this)
+                onError(this)
+            }.suspendOnError {
+                Timber.e("请求失败")
+                emit(null)
+                Timber.e(message())
+                onError(message())
+            }
+        }.flowOn(Dispatchers.IO)
 }

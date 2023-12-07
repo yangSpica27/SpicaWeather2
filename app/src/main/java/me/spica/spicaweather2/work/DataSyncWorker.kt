@@ -32,7 +32,6 @@ class DataSyncWorker : Service() {
 
     private val scope = CoroutineScope(Dispatchers.IO + job)
 
-
     @Inject
     lateinit var heClient: HeClient
 
@@ -41,7 +40,6 @@ class DataSyncWorker : Service() {
 
     @Inject
     lateinit var weatherDao: WeatherDao
-
 
     override fun onBind(intent: Intent): IBinder? = null
 
@@ -58,35 +56,35 @@ class DataSyncWorker : Service() {
             val ds: ArrayList<Deferred<Boolean>> = arrayListOf()
             cityDao.getAllList()
                 .forEach { cityBean ->
-                val res: Deferred<Boolean> = async(Dispatchers.IO, CoroutineStart.DEFAULT) {
-                    val weatherResponse = heClient.getAllWeather(cityBean.lon, cityBean.lat).getOrNull()
-                    val minuteBaseResponse = heClient.getMinute(cityBean.lon, cityBean.lat).getOrNull()
+                    val res: Deferred<Boolean> = async(Dispatchers.IO, CoroutineStart.DEFAULT) {
+                        val weatherResponse = heClient.getAllWeather(cityBean.lon, cityBean.lat).getOrNull()
+                        val minuteBaseResponse = heClient.getMinute(cityBean.lon, cityBean.lat).getOrNull()
 
-                    var caiyunExtBean: CaiyunExtendBean? = null
+                        var caiyunExtBean: CaiyunExtendBean? = null
 
-                    if (minuteBaseResponse != null) {
-                        caiyunExtBean = CaiyunExtendBean(
-                            alerts = minuteBaseResponse.result.alert.content.map {
-                                AlertBean(title = it.title, description = it.description, status = it.status, code = it.code, source = it.source)
-                            },
-                            description = minuteBaseResponse.result.hourly.description,
-                            forecastKeypoint = minuteBaseResponse.result.forecastKeypoint
-                        )
+                        if (minuteBaseResponse != null) {
+                            caiyunExtBean = CaiyunExtendBean(
+                                alerts = minuteBaseResponse.result.alert.content.map {
+                                    AlertBean(title = it.title, description = it.description, status = it.status, code = it.code, source = it.source)
+                                },
+                                description = minuteBaseResponse.result.hourly.description,
+                                forecastKeypoint = minuteBaseResponse.result.forecastKeypoint
+                            )
+                        }
+
+                        weatherResponse?.data?.let { weather ->
+                            weather.descriptionForToday = caiyunExtBean?.forecastKeypoint ?: ""
+                            weather.descriptionForToWeek = caiyunExtBean?.description ?: ""
+                            weather.alerts = caiyunExtBean?.alerts ?: listOf()
+                            weather.cityName = cityBean.cityName
+                            weatherDao.insertWeather(weather)
+                            return@async true
+                        }
+
+                        return@async false
                     }
-
-                    weatherResponse?.data?.let { weather ->
-                        weather.descriptionForToday = caiyunExtBean?.forecastKeypoint ?: ""
-                        weather.descriptionForToWeek = caiyunExtBean?.description ?: ""
-                        weather.alerts = caiyunExtBean?.alerts ?: listOf()
-                        weather.cityName = cityBean.cityName
-                        weatherDao.insertWeather(weather)
-                        return@async true
-                    }
-
-                    return@async false
+                    ds.add(res)
                 }
-                ds.add(res)
-            }
 
             ds.forEach { deferred ->
                 deferred.await()
@@ -95,7 +93,6 @@ class DataSyncWorker : Service() {
             withContext(Dispatchers.Main) {
                 stopSelf()
             }
-
         }
     }
 
@@ -105,11 +102,10 @@ class DataSyncWorker : Service() {
     }
 
     private suspend fun initCityList(context: Context) {
-        val  cityList = CityBean.getAllCities(context)
+        val cityList = CityBean.getAllCities(context)
         cityDao.insertCities(cityList.first())
         cityDao.insertCities(cityList[2])
     }
-
 
     @Throws(IOException::class)
     private fun getJsonString(context: Context): String {
@@ -134,5 +130,4 @@ class DataSyncWorker : Service() {
         }
         return sb.toString()
     }
-
 }

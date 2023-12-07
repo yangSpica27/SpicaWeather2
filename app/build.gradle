@@ -8,6 +8,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'AndResGuard'
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -81,6 +82,7 @@ android {
 
     kotlinOptions {
         jvmTarget = '11'
+//        useK2 = true
     }
     lintOptions {
         abortOnError false
@@ -130,7 +132,7 @@ dependencies {
 
     //Json解析
     implementation 'com.squareup.moshi:moshi-kotlin:1.15.0'
-    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.15.0'
+    ksp 'com.squareup.moshi:moshi-kotlin-codegen:1.15.0'
 
     //network 网络请求相关
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
@@ -141,7 +143,7 @@ dependencies {
 
     def roomVersion = "2.4.1"
     implementation("androidx.room:room-runtime:$roomVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
 
     implementation "com.github.fondesa:recycler-view-divider:3.5.0"
@@ -149,8 +151,8 @@ dependencies {
     implementation 'com.github.SilenceDut:jpinyin:v1.0'
 
     // hilt
-    implementation 'com.google.dagger:hilt-android:2.44'
-    kapt 'com.google.dagger:hilt-compiler:2.44'
+    implementation 'com.google.dagger:hilt-android:2.48'
+    ksp 'com.google.dagger:hilt-compiler:2.48'
 
     implementation 'no.danielzeller.blurbehindlib:blurbehindlib:1.0.0'
     implementation 'com.airbnb.android:lottie:5.2.0'
@@ -167,11 +169,11 @@ dependencies {
 
 }
 
-kapt {
-    correctErrorTypes true
-}
+//kapt {
+//    correctErrorTypes true
+//}
 
-configurations.all {
+configurations.configureEach {
     exclude group: 'androidx.appcompat', module: 'appcompat'
 }
 
@@ -204,7 +206,7 @@ dependencies {
 task ktlint(type: JavaExec, group: "verification") {
     description = "Check Kotlin code style."
     classpath = configurations.ktlint
-    main = "com.pinterest.ktlint.Main"
+    mainClass = "com.pinterest.ktlint.Main"
     args "src/**/*.kt"
 }
 check.dependsOn ktlint
@@ -212,7 +214,7 @@ check.dependsOn ktlint
 task ktlintFormat(type: JavaExec, group: "formatting") {
     description = "Fix Kotlin code style deviations."
     classpath = configurations.ktlint
-    main = "com.pinterest.ktlint.Main"
+    mainClass = "com.pinterest.ktlint.Main"
     args "-F", "src/**/*.kt"
 }
 

@@ -11,7 +11,6 @@ import com.airbnb.lottie.LottieAnimationView
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
 
-
 class RainImageView : LottieAnimationView {
 
     // 降雨概率
@@ -19,7 +18,7 @@ class RainImageView : LottieAnimationView {
         set(value) {
             field = value
             text = "${rainfallProbability}mm"
-           postInvalidate()
+            postInvalidate()
         }
 
     private var text = ""

@@ -20,15 +20,12 @@ import android.view.animation.DecelerateInterpolator
 import androidx.core.animation.doOnEnd
 import androidx.core.view.drawToBitmap
 import me.spica.spicaweather2.tools.dp
-import me.spica.spicaweather2.view.weather_bg.WeatherBackgroundView
-
 
 class Manger2HomeView : View {
 
     companion object {
         var mBackground: Bitmap? = null
         var originRect = RectF()
-
 
         fun initFromViewRect(from: View, window: Window) {
             val intArray = IntArray(2)
@@ -41,9 +38,7 @@ class Manger2HomeView : View {
             )
             mBackground = window.decorView.drawToBitmap()
         }
-
     }
-
 
     private var clearRect = RectF(0f, 0f, 0f, 0f)
 
@@ -60,7 +55,6 @@ class Manger2HomeView : View {
         attrs,
         defStyleAttr
     )
-
 
     private val progressAnimation =
         ValueAnimator.ofFloat(0f, 1f).setDuration(450).apply {
@@ -95,7 +89,6 @@ class Manger2HomeView : View {
         throw RuntimeException("Activity not found!")
     }
 
-
     fun startAnim() {
         progressAnimation.start()
     }
@@ -112,7 +105,6 @@ class Manger2HomeView : View {
         isAttached = true
         invalidate()
     }
-
 
     private fun detachFromRootView() {
         mRootView.removeView(this)
@@ -147,6 +139,4 @@ class Manger2HomeView : View {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         return true
     }
-
-
 }

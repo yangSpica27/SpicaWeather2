@@ -10,13 +10,11 @@ import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.button.MaterialButton
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.getStatusBarHeight
 import rikka.recyclerview.fixEdgeEffect
 
 class ActivityManagerCityLayout(context: Context) : AViewGroup(context) {
-
 
     val titleBar = MaterialToolbar(context).apply {
         setNavigationIcon(R.drawable.ic_left)
@@ -34,9 +32,6 @@ class ActivityManagerCityLayout(context: Context) : AViewGroup(context) {
         }
     }
 
-
-
-
     val recyclerView = RecyclerView(context).apply {
         layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         layoutParams = LayoutParams(
@@ -53,7 +48,6 @@ class ActivityManagerCityLayout(context: Context) : AViewGroup(context) {
             ViewGroup.LayoutParams.MATCH_PARENT
         )
     }
-
 
     init {
         layoutParams = LayoutParams(
@@ -82,6 +76,4 @@ class ActivityManagerCityLayout(context: Context) : AViewGroup(context) {
         recyclerView.layout(0, titleBar.height)
         transformerImageView.layout(0, 0)
     }
-
-
 }

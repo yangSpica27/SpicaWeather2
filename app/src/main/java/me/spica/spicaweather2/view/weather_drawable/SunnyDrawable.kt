@@ -13,7 +13,6 @@ import me.spica.spicaweather2.tools.dp
 
 class SunnyDrawable(private val context: Context) : WeatherDrawable() {
 
-
     // 绘制太阳的paint
     private val sunnyPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = ContextCompat.getColor(context, R.color.l8)
@@ -26,16 +25,13 @@ class SunnyDrawable(private val context: Context) : WeatherDrawable() {
         interpolator = LinearInterpolator()
     }
 
-
     fun startAnim() {
         sunnyAnim.start()
     }
 
-
     fun cancelAnim() {
         sunnyAnim.cancel()
     }
-
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
         sunnyPaint.alpha = 20
@@ -63,6 +59,4 @@ class SunnyDrawable(private val context: Context) : WeatherDrawable() {
         // 画布复位用于后面的绘制
         canvas.restore()
     }
-
-
 }

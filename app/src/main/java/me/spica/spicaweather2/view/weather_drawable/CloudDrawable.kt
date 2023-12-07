@@ -10,9 +10,7 @@ import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
 
-
 class CloudDrawable(private val context: Context) : WeatherDrawable() {
-
 
     private val cloudAnim = ValueAnimator.ofFloat(
         0f, 1f
@@ -31,7 +29,6 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
         interpolator = LinearInterpolator()
     }
 
-
     fun startAnim() {
         cloudAnim.start()
         cloudAnim2.start()
@@ -42,12 +39,11 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
         cloudAnim2.cancel()
     }
 
-    //画笔
+    // 画笔
     private val cloudPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = ContextCompat.getColor(context, R.color.cloud_color)
         style = Paint.Style.FILL
     }
-
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
         canvas.save()
@@ -69,7 +65,7 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
         )
         canvas.restore()
         canvas.save()
-        //=========
+        // =========
         canvas.translate(width / 2f, 8.dp)
         cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color)
         canvas.drawCircle(
@@ -103,6 +99,4 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
         )
         canvas.restore()
     }
-
-
 }

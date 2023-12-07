@@ -9,7 +9,6 @@ import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.persistence.repository.CityRepository
 import javax.inject.Inject
 
-
 @HiltViewModel
 class CityManagerViewModel @Inject constructor(
     private val cityRepository: CityRepository,
@@ -17,12 +16,9 @@ class CityManagerViewModel @Inject constructor(
 
     val allCityWithWeather = cityRepository.allCitiesWithWeatherFlow()
 
-
- fun deleteCity(cityBean: CityBean) {
-        viewModelScope.launch(Dispatchers.IO){
+    fun deleteCity(cityBean: CityBean) {
+        viewModelScope.launch(Dispatchers.IO) {
             cityRepository.deleteCity(cityBean)
         }
     }
-
-
 }

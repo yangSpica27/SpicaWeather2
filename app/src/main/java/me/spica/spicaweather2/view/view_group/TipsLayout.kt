@@ -21,14 +21,12 @@ import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 
 class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
-
     // SPT
     private val sptIcon = createIconView()
 
     private val sptTitle = createTitleView()
 
     private val sptDesc = createDescView()
-
 
     // CLOTHES
     private val clothesIcon = createIconView()
@@ -145,7 +143,6 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         return textView
     }
 
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         children.forEach { childView ->
@@ -153,11 +150,13 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         }
         setMeasuredDimension(
             measuredWidth,
-            (carIcon.measuredHeightWithMargins +
+            (
+                carIcon.measuredHeightWithMargins +
                     carTitle.measuredHeightWithMargins +
-                    carDesc.measuredHeightWithMargins) * 2 +
-                    paddingTop +
-                    paddingBottom
+                    carDesc.measuredHeightWithMargins
+                ) * 2 +
+                paddingTop +
+                paddingBottom
         )
     }
 
@@ -165,7 +164,7 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         // SPT
         sptIcon.layout(
             measuredWidth / 6 - sptIcon.width / 2,
-            paddingTop+sptIcon.marginTop
+            paddingTop + sptIcon.marginTop
         )
         sptTitle.layout(
             sptTitle.toViewHorizontalCenter(sptIcon),
@@ -178,7 +177,7 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         // clothes
         clothesIcon.layout(
             clothesIcon.toHorizontalCenter(this),
-            paddingTop+  clothesIcon.marginTop
+            paddingTop + clothesIcon.marginTop
         )
         clothesTitle.layout(
             clothesTitle.toHorizontalCenter(this),
@@ -191,7 +190,7 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         // air
         airIcon.layout(
             measuredWidth / 6 - airIcon.width / 2,
-            paddingTop+   airIcon.marginTop,
+            paddingTop + airIcon.marginTop,
             true
         )
         airTitle.layout(
@@ -216,9 +215,7 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             carDesc.toViewHorizontalCenter(sptIcon),
             carTitle.bottom + carDesc.marginTop,
         )
-
     }
-
 
     override var animatorView: View = this
 
@@ -227,6 +224,4 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
     override var index: Int = HomeCardType.TIPS.code
 
     override var hasInScreen: Boolean = false
-
-
 }

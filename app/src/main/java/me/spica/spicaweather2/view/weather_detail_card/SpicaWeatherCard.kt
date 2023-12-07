@@ -11,13 +11,11 @@ import me.spica.spicaweather2.tools.dp
 
 interface SpicaWeatherCard {
 
-
     var animatorView: View
 
     var enterAnim: AnimatorSet
 
     var index: Int
-
 
     fun startEnterAnim() {
         enterAnim.removeAllListeners()
@@ -32,7 +30,6 @@ interface SpicaWeatherCard {
         hasInScreen = false
         animatorView.alpha = 0f
 
-
         enterAnim.playTogether(
             ObjectAnimator.ofFloat(
                 animatorView,
@@ -41,7 +38,7 @@ interface SpicaWeatherCard {
             ObjectAnimator.ofFloat(
                 animatorView, "translationY", 120.dp, 0f
             ).apply {
-                interpolator = OvershootInterpolator(.3f * (index/2f + 1))
+                interpolator = OvershootInterpolator(.3f * (index / 2f + 1))
             },
             ObjectAnimator.ofFloat(
                 animatorView, "scaleY", 1.025f, 1f
@@ -59,7 +56,6 @@ interface SpicaWeatherCard {
 
     var hasInScreen: Boolean
 
-
     fun checkEnterScreen(
         isIn: Boolean
     ) {
@@ -75,8 +71,6 @@ interface SpicaWeatherCard {
         }
     }
 
-
     // 绑定数据
     fun bindData(weather: Weather)
-
 }
