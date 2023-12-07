@@ -26,7 +26,7 @@ class RainDrawable : WeatherDrawable() {
         rainEffectRender.init(width, height)
         synchronized(rains) {
             rains.clear()
-            for (i in 0 until 50) {
+            for (i in 0 until 100) {
                 rains.add(
                     RainPoint().apply {
                         rainEffectRender.createParticle(this)
@@ -34,24 +34,14 @@ class RainDrawable : WeatherDrawable() {
                 )
             }
         }
-//        synchronized(rains){
-//            rains.clear()
-//            for (i in 0 until 20) {
-//                rains.add(RainFlake.create(width, height, rainPaint))
-//            }
-//        }
+    }
+
+    fun setBackgroundY(y: Int) {
+        rainEffectRender.setBackgroundY(y)
     }
 
     fun calculate(width: Int, height: Int) {
         rainEffectRender.run()
-//        val count = measureTimeMillis {
-//            synchronized(rains){
-//                rains.forEach { rain ->
-//                    rain.calculation(width, height)
-//                }
-//            }
-//        }
-//        Timber.tag("计算耗时").e("$count 毫秒")
     }
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {

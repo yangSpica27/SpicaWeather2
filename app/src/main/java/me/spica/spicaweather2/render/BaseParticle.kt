@@ -9,6 +9,6 @@ abstract class BaseParticle(
     var x: Float = 0f,
     var y: Float = 0f,
     var body: Body? = null,
-    var width: Float = 10.dp,
-    var height: Float = 10.dp
+    var width: Float = 4.dp,
+    var height: Float = 4.dp
 )

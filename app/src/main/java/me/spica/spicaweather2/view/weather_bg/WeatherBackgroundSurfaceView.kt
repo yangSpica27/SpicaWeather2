@@ -232,6 +232,10 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         foggyDrawable.cancelAnim()
     }
 
+    fun setBackgroundY(y:Int){
+        rainDrawable.setBackgroundY(y)
+    }
+
     private fun roundClip(canvas: Canvas) {
 //        canvas.clipPath(clipPath)
         canvas.drawColor(bgColor)

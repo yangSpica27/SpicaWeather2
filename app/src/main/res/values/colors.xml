@@ -26,9 +26,9 @@
     <color name="textColorPrimaryLight">#de6c6969</color>
     <color name="line_default">#4DB6AC</color>
 
-    <color name="test">#CCFFFFFF</color>
+    <color name="test">#4dbfef</color>
 
-    <color name="sun_light_color">#34FF9800</color>
+    <color name="sun_light_color">#0DFFFFFF</color>
 
     <color name="l8">#f5222d</color>
     <color name="l7">#ff7875</color>

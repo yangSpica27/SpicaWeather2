@@ -27,7 +27,7 @@ data class Weather(
     fun getWeatherType(): WeatherType {
         when (todayWeather.iconId.toString()) {
             "100" -> {
-                return WeatherType.WEATHER_CLEAR
+                return WeatherType.WEATHER_SUNNY
             }
             "101", "151", "153", "103" -> {
                 return WeatherType.WEATHER_CLOUDY
@@ -70,13 +70,13 @@ data class Weather(
                 WeatherType.WEATHER_THUNDERSTORM
             }
         }
-        return WeatherType.WEATHER_CLEAR
+        return WeatherType.WEATHER_SUNNY
     }
 
     @DrawableRes
     fun getWeatherIcon(): Int {
         return when (getWeatherType()) {
-            WeatherType.WEATHER_CLEAR -> R.drawable.ic_sunny
+            WeatherType.WEATHER_SUNNY -> R.drawable.ic_sunny
             WeatherType.WEATHER_CLOUDY -> R.drawable.ic_cloudly
             WeatherType.WEATHER_CLOUD -> R.drawable.ic_cloudly
             WeatherType.WEATHER_RAINY -> R.drawable.ic_rain

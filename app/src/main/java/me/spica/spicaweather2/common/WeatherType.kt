@@ -8,7 +8,7 @@ import me.spica.spicaweather2.R
 import me.spica.spicaweather2.view.weather_bg.NowWeatherView
 
 enum class WeatherType {
-    WEATHER_CLEAR,
+    WEATHER_SUNNY,
     WEATHER_CLOUDY,
     WEATHER_CLOUD,
     WEATHER_RAINY,
@@ -26,7 +26,7 @@ enum class WeatherType {
 fun WeatherType.getIconRes(): Int {
 
     return when (this) {
-        WeatherType.WEATHER_CLEAR -> R.drawable.ic_sunny
+        WeatherType.WEATHER_SUNNY -> R.drawable.ic_sunny
         WeatherType.WEATHER_CLOUDY -> R.drawable.ic_cloudly
         WeatherType.WEATHER_CLOUD -> R.drawable.ic_cloudly
         WeatherType.WEATHER_RAINY -> R.drawable.ic_rain
@@ -43,7 +43,7 @@ fun WeatherType.getIconRes(): Int {
 @RawRes
 fun WeatherType.getAnimRes(): Int {
     return when (this) {
-        WeatherType.WEATHER_CLEAR -> R.raw.sunny
+        WeatherType.WEATHER_SUNNY -> R.raw.sunny
         WeatherType.WEATHER_CLOUDY -> R.raw.windy
         WeatherType.WEATHER_CLOUD -> R.raw.foggy
         WeatherType.WEATHER_RAINY -> R.raw.shower
@@ -60,19 +60,19 @@ fun WeatherType.getAnimRes(): Int {
 @ColorInt
 fun WeatherType.getThemeColor(): Int {
     return when (this) {
-        WeatherType.WEATHER_CLEAR -> Color.parseColor("#FFC107")
-        WeatherType.WEATHER_CLOUDY -> Color.parseColor("#03A9F4")
-        WeatherType.WEATHER_CLOUD -> Color.parseColor("#2196F3")
-        WeatherType.WEATHER_THUNDER -> Color.parseColor("#3F51B5")
+        WeatherType.WEATHER_SUNNY -> Color.parseColor("#FFC107")
+        WeatherType.WEATHER_CLOUDY -> Color.parseColor("#4dbfef")
+        WeatherType.WEATHER_CLOUD -> Color.parseColor("#62b1ff")
+        WeatherType.WEATHER_THUNDER -> Color.parseColor("#7187db")
         WeatherType.WEATHER_FOG -> Color.parseColor("#5A5A5A")
         WeatherType.WEATHER_HAZE -> Color.parseColor("#FF5722")
-        else -> Color.parseColor("#00BCD4")
+        else -> Color.parseColor("#6188da")
     }
 }
 
 fun WeatherType.getWeatherAnimType(): NowWeatherView.WeatherAnimType {
     return when (this) {
-        WeatherType.WEATHER_CLEAR -> NowWeatherView.WeatherAnimType.SUNNY
+        WeatherType.WEATHER_SUNNY -> NowWeatherView.WeatherAnimType.SUNNY
         WeatherType.WEATHER_CLOUDY -> NowWeatherView.WeatherAnimType.CLOUDY
         WeatherType.WEATHER_CLOUD -> NowWeatherView.WeatherAnimType.CLOUDY
         WeatherType.WEATHER_RAINY -> NowWeatherView.WeatherAnimType.RAIN

@@ -6,7 +6,7 @@ object WeatherCodeUtils {
         when (iconId.toString()) {
 
             "100" -> {
-                return WeatherType.WEATHER_CLEAR
+                return WeatherType.WEATHER_SUNNY
             }
             "101", "151", "153", "103" -> {
                 return WeatherType.WEATHER_CLOUDY
@@ -50,6 +50,6 @@ object WeatherCodeUtils {
             }
         }
 
-        return WeatherType.WEATHER_CLEAR
+        return WeatherType.WEATHER_SUNNY
     }
 }

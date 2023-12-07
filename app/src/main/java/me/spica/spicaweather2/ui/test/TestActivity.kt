@@ -1,23 +1,21 @@
 package me.spica.spicaweather2.ui.test
 
-import android.opengl.GLSurfaceView
+import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
 import android.os.HandlerThread
 import android.view.ViewGroup
+import me.spica.spicaweather2.view.SunView
 import rikka.material.app.MaterialActivity
 
 class TestActivity : MaterialActivity() {
 
-    private val openGLSurfaceView: GLSurfaceView by lazy {
-        GLSurfaceView(this).apply {
-            setEGLContextClientVersion(3)
-//            setRenderer(LiquidRender())
-            renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+    private val openGLSurfaceView: SunView by lazy {
+        SunView(this).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
+            setBackgroundColor(Color.WHITE)
         }
     }
 
@@ -25,34 +23,12 @@ class TestActivity : MaterialActivity() {
         start()
     }
 
-    private val handler = Handler(handlerThread.looper)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(openGLSurfaceView)
-        handler.post(runnable)
     }
 
-    private val runnable = object : Runnable {
-        override fun run() {
-            openGLSurfaceView.requestRender()
-            handler.post(this)
-        }
-    }
 
-    override fun onResume() {
-        super.onResume()
-        openGLSurfaceView.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        openGLSurfaceView.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        handler.removeCallbacksAndMessages(null)
-        handlerThread.quitSafely()
-    }
 }

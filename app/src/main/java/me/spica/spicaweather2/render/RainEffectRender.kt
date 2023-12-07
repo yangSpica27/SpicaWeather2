@@ -1,5 +1,6 @@
 package me.spica.spicaweather2.render
 
+import me.spica.spicaweather2.tools.dp
 import org.jbox2d.collision.shapes.CircleShape
 import org.jbox2d.collision.shapes.PolygonShape
 import org.jbox2d.common.Vec2
@@ -20,24 +21,36 @@ class RainEffectRender {
      * 迭代速率
      * 迭代次数
      * */
-    private val dt = 1f / 60f
+    private val dt = 1f / 30f
     private val velocityIterations = 5
     private val positionIterations = 20
 
-    private val mProportion = 50 // 模拟世界和view坐标的转化比例
+    private val mProportion = 60f // 模拟世界和view坐标的转化比例
     private var mDensity = .5f
-    private val mFrictionRatio = 0.2f // 摩擦系数
-    private val mRestitutionRatio = 0.1f // 回复系数
+    private val mFrictionRatio = 0.1f // 摩擦系数
+    private val mRestitutionRatio = 0.3f // 回复系数
 
     private var mWorldWidth = 0
     private var mWorldHeight = 0
 
+
+    private var boxWidth: Float = 0f
+    private var boxHeight: Float = 0f
+
+    private var isInitOK = false
+
     fun init(width: Int, height: Int) {
         this.mWorldWidth = width
         this.mWorldHeight = height
+        boxWidth = mappingView2Body(mWorldWidth * 1f - 28.dp) / 2f
+        boxHeight = mappingView2Body(mProportion * 1f)
         world = World(Vec2(0f, 9.8f))
+        world.isAllowSleep = true
         updateHorizontalBounds()
+        isInitOK = true
     }
+
+    private var backgroundBody: Body? = null
 
     private fun updateHorizontalBounds() {
         val bodyDef = BodyDef()
@@ -45,44 +58,62 @@ class RainEffectRender {
         bodyDef.type = BodyType.STATIC
         // 定义的形状
         val box = PolygonShape()
-        val boxWidth: Float = mappingView2Body(mWorldWidth * 1f)
-        val boxHeight: Float = mappingView2Body(mProportion * 1f)
         box.setAsBox(boxWidth, boxHeight) // 确定为矩形
-
         val fixtureDef = FixtureDef()
         fixtureDef.shape = box
         fixtureDef.density = mDensity
-        fixtureDef.friction = 0.8f // 摩擦系数
+        fixtureDef.friction = 0.0f // 摩擦系数
         fixtureDef.restitution = 0.5f // 补偿系数
 
-        bodyDef.position[0f] = mappingView2Body(mWorldHeight * 1f) + boxHeight
+        bodyDef.position[boxWidth + mappingView2Body(16.dp)] =
+            mappingView2Body(mWorldHeight * 1f) / 7f + boxHeight
         val bottomBody: Body = world.createBody(bodyDef) // 创建一个真实的下边 body
-
-        bottomBody.createFixture(fixtureDef)
+        val fixture = bottomBody.createFixture(fixtureDef)
+        val body = fixture.body
+        backgroundBody = body
     }
 
     fun createParticle(view: BaseParticle) {
-        val bodyDef = BodyDef()
-        view.x = (0..mWorldWidth).random(random).toFloat()
-        view.y = (-3 * mWorldHeight..0).random(random).toFloat()
-        bodyDef.type = BodyType.DYNAMIC
-        bodyDef.position[mappingView2Body(view.x + view.width / 2)] = mappingView2Body(view.y + view.height / 2)
-        val shape = CircleShape()
-        shape.radius = mappingView2Body(view.width / 2)
-        val def = FixtureDef()
-        def.shape = shape
-        def.density = mDensity
-        def.friction = mFrictionRatio
-        def.restitution = mRestitutionRatio
-        val body = world.createBody(bodyDef)
-        view.body = body
-        body.linearVelocity = Vec2(random.nextFloat(), random.nextFloat())
-        body.createFixture(def)
-        body.linearDamping = 0.5f
+        synchronized(world) {
+            val bodyDef = BodyDef()
+            view.x = (0..mWorldWidth).random(random).toFloat()
+            view.y = (-3 * mWorldHeight..0).random(random).toFloat()
+            bodyDef.type = BodyType.DYNAMIC
+            bodyDef.position[mappingView2Body(view.x + view.width / 2)] = mappingView2Body(view.y + view.height / 2)
+            val shape = CircleShape()
+            shape.radius = mappingView2Body(view.width / 2)
+            val def = FixtureDef()
+            def.shape = shape
+            def.density = mDensity
+            def.friction = mFrictionRatio
+            def.restitution = mRestitutionRatio
+            val body = world.createBody(bodyDef)
+            view.body = body
+            body.linearVelocity = Vec2(random.nextFloat(), random.nextFloat())
+            body.createFixture(def)
+            body.linearDamping = 0.5f
+        }
     }
 
     fun run() {
-        world.step(dt, velocityIterations, positionIterations)
+        if (!isInitOK)return
+        synchronized(world) {
+            world.step(dt, velocityIterations, positionIterations)
+        }
+    }
+
+
+    fun setBackgroundY(y: Int) {
+        if (!isInitOK) return
+        synchronized(world) {
+            backgroundBody?.setTransform(
+                Vec2(
+                    boxWidth + mappingView2Body(16.dp),
+                    mappingView2Body(y * 1f + 12.dp)
+                ),
+                0f
+            )
+        }
     }
 
     fun getXy(view: BaseParticle) {

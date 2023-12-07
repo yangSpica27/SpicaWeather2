@@ -184,7 +184,6 @@ class ActivityMain : MaterialActivity() {
             currentCurrentCity = currentCity
             WeatherCodeUtils.getWeatherCode(currentWeather?.todayWeather?.iconId ?: 100).let {
                 layout.weatherBackgroundSurfaceView.currentWeatherAnimType = it.getWeatherAnimType()
-//                layout.weatherBackgroundSurfaceView.currentWeatherAnimType = NowWeatherView.WeatherAnimType.RAIN
                 layout.weatherBackgroundSurfaceView.bgColor = it.getThemeColor()
             }
         } catch (e: Exception) {
@@ -199,6 +198,11 @@ class ActivityMain : MaterialActivity() {
         val g = (Color.green(color1) * inverseRatio) + (Color.green(color2) * ratio)
         val b = (Color.blue(color1) * inverseRatio) + (Color.blue(color2) * ratio)
         return Color.argb(a.toInt(), r.toInt(), g.toInt(), b.toInt())
+    }
+
+
+    fun setBox2dBackground(y:Int){
+        layout.weatherBackgroundSurfaceView.setBackgroundY(y)
     }
 
     override fun onDestroy() {

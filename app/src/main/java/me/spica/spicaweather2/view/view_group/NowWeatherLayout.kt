@@ -51,7 +51,7 @@ class NowWeatherLayout(context: Context) : AViewGroup(context = context), SpicaW
         setTextColor(Color.WHITE)
     }
 
-    private val nowWeatherInfoCard = NowWeatherInfoCard(context).apply {
+    val nowWeatherInfoCard = NowWeatherInfoCard(context).apply {
         layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
             it.updateMargins(
                 top = 12.dp, left = 14.dp, right = 14.dp

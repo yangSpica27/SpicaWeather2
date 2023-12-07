@@ -146,6 +146,12 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
         addView(divider)
     }
 
+    private val nowCardXY = intArrayOf(0, 0)
+    fun getNowCardTop(): Int {
+        currentTemperature.getLocationOnScreen(nowCardXY)
+        return nowCardXY[1]
+    }
+
     @SuppressLint("SetTextI18n")
     override fun bindData(weather: Weather) {
         lottieAnimationView.setAnimation(WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId).getAnimRes())
