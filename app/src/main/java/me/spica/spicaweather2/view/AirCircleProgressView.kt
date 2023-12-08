@@ -3,16 +3,17 @@ package me.spica.spicaweather2.view
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
+import android.graphics.SweepGradient
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.ViewCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
@@ -41,22 +42,14 @@ class AirCircleProgressView : View {
         color = ContextCompat.getColor(context, R.color.textColorPrimary)
     }
 
-    private val startColor = ContextCompat.getColor(context, R.color.line_default)
 
-    private val endColor = ContextCompat.getColor(context, R.color.l8)
-
-    private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         strokeWidth = 12.dp
         style = Paint.Style.STROKE
         color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
+
     }
 
-    private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeWidth = 6.dp
-        style = Paint.Style.STROKE
-        color = ContextCompat.getColor(context, R.color.line_default)
-        strokeCap = Paint.Cap.ROUND
-    }
 
     private val startAngle = 135f
 
@@ -109,24 +102,19 @@ class AirCircleProgressView : View {
             measuredWidth - VIEW_MARGIN,
             measuredHeight - VIEW_MARGIN
         )
+
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         mCenterX = width / 2
         mCenterY = height / 2
+        setProgressColourAsGradient()
     }
 
-    private val indicatorBitmap by lazy {
-        ContextCompat.getDrawable(context, R.drawable.icon_triangle)!!.toBitmap(
-            width = 12.dp.toInt(),
-            height = 12.dp.toInt()
-        )
-    }
 
     private val textBound = Rect()
 
-    private val matrix = Matrix()
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -150,11 +138,6 @@ class AirCircleProgressView : View {
             mRectF.bottom - textBound.height(),
             secondTextPaint
         )
-
-        canvas.translate(width / 2f, height / 2f)
-        canvas.rotate(-startAngle + swipeAngle * progress)
-        canvas.translate(0f, -mRectF.width() / 2f - 4.dp)
-        canvas.drawBitmap(indicatorBitmap, matrix, linePaint)
     }
 
     private val bgColors = listOf(
@@ -163,20 +146,46 @@ class AirCircleProgressView : View {
         ContextCompat.getColor(context, R.color.l3),
         ContextCompat.getColor(context, R.color.l4),
         ContextCompat.getColor(context, R.color.l5),
+        ContextCompat.getColor(context, R.color.l6),
+        ContextCompat.getColor(context, R.color.l7),
+        ContextCompat.getColor(context, R.color.l8),
     )
 
-    private fun drawBack(canvas: Canvas) {
-        for (index in 0..4) {
-            bgPaint.color = bgColors[index]
-            canvas.drawArc(
-                mRectF,
-                startAngle + swipeAngle * 1f / 5 * (index),
-                swipeAngle / 5,
-                false,
-                bgPaint
-            )
-        }
+    private lateinit var progressShader: SweepGradient
+
+    private fun setProgressColourAsGradient() {
+        val sweepGradient = SweepGradient(
+            mCenterX * 1f, mCenterY * 1f, bgColors.toIntArray(),
+            floatArrayOf(.1f, 0.2f, .3f, .4f, .5f, .6f, .7f, .8f)
+        )
+        //Make the gradient start from 90 degrees
+        val matrix = Matrix()
+        matrix.setRotate(90f, width / 2f, height / 2f)
+        sweepGradient.setLocalMatrix(matrix)
+        progressShader = sweepGradient
     }
 
-    private var steadyAnim: ValueAnimator = ValueAnimator()
+    private fun drawBack(canvas: Canvas) {
+        linePaint.strokeWidth = 12.dp
+        linePaint.color = ContextCompat.getColor(context, R.color.material_grey_200)
+        linePaint.shader = null
+        canvas.drawArc(
+            mRectF,
+            startAngle,
+            swipeAngle,
+            false,
+            linePaint
+        )
+        linePaint.strokeWidth = 15.dp
+        linePaint.color = Color.WHITE
+        linePaint.shader = progressShader
+        canvas.drawArc(
+            mRectF,
+            startAngle,
+            swipeAngle * progress,
+            false,
+            linePaint
+        )
+    }
+
 }

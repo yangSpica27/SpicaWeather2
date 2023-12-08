@@ -33,17 +33,18 @@
     <color name="l8">#f5222d</color>
     <color name="l7">#ff7875</color>
     <color name="l6">#fa8c16</color>
-    <color name="l5">#d48806</color>
-    <color name="l4">#ad8b00</color>
+    <color name="l5">#FFA100</color>
+    <color name="l4">#F4C400</color>
     <color name="l3">#FFD54F</color>
     <color name="l2">#389e0d</color>
-    <color name="l1">#135200</color>
+    <color name="l1">#1F8400</color>
 
     <color name="light_blue_50">#FFE1F5FE</color>
     <color name="light_blue_200">#FF81D4FA</color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="light_blue_900">#FF01579B</color>
 
+    <color name="rain_pop">#149A9A9A</color>
 
     <color name="seed">#039BE5</color>
     <color name="md_theme_light_primary">#006496</color>

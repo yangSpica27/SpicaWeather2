@@ -114,9 +114,13 @@ class HourlyLineView : View {
 
     private val mPointList: MutableList<Point> = arrayListOf()
 
+    private val rainPointList: MutableList<Point> = arrayListOf()
+
     private val colors = arrayListOf<Int>()
 
     private val tempLinePath = Path()
+
+    private val rainLinePath = Path()
 
     private val bitmaps = arrayListOf<Bitmap>()
 
@@ -127,6 +131,7 @@ class HourlyLineView : View {
         mPointList.clear()
         colors.clear()
         tempLinePath.reset()
+        rainLinePath.reset()
         bitmaps.clear()
         // 获取极值用于计算锚点
         this.data.forEach { item ->
@@ -143,18 +148,25 @@ class HourlyLineView : View {
         data.forEachIndexed { index, item ->
             val x = paddingLeft + index * itemWidth + itemWidth / 2f
             val tempFraction = (item.temp - minTemp) * 1f / (maxTemp - minTemp)
-            val y = paddingTop + 12.dp + 24.dp + tempTextHeight + 12.dp + lineHeight * tempFraction - 12.dp
+            val y = paddingTop + 12.dp + 24.dp + tempTextHeight + 12.dp + lineHeight - lineHeight * tempFraction - 12.dp
             mPointList.add(Point(x.toInt(), y.toInt()))
+
+            val rainX = paddingLeft + index * itemWidth + itemWidth / 2f
+            val rainFraction = (item.pop) / 100f
+            val rainY = paddingTop + 12.dp + 24.dp + tempTextHeight + 12.dp + lineHeight - lineHeight * rainFraction - 12.dp
+            rainPointList.add(Point(rainX.toInt(), rainY.toInt()))
             val themeColor = WeatherCodeUtils.getWeatherCode(iconId = item.iconId).getThemeColor()
             colors.add(themeColor)
         }
+
         linePaint.shader = LinearGradient(
-            0f, 0f, paddingLeft + paddingRight + itemWidth * data.size * 1f, 0f, colors.toIntArray(),
-            List(data.size) { index ->
+            0f, 0f, paddingLeft + paddingRight + itemWidth * data.size * 1f, 0f, colors.toIntArray(), List(data.size) { index ->
                 (1f / data.size) * index
-            }.toFloatArray(),
-            TileMode.CLAMP
+            }.toFloatArray(), TileMode.CLAMP
         )
+
+
+
         mPointList.forEachIndexed { index, point ->
             // 上个点
             val lastPoint: Point
@@ -230,6 +242,7 @@ class HourlyLineView : View {
                 cacheBitmap = Bitmap.createBitmap((paddingLeft + paddingRight + mPointList.size * itemWidth).toInt(), height, Bitmap.Config.ARGB_8888)
                 val cacheCanvas = Canvas(cacheBitmap!!)
                 drawTempLine(cacheCanvas)
+                drawRainLine(cacheCanvas)
                 mPointList.forEachIndexed { index, point ->
                     // 提示文字
                     drawTempText(cacheCanvas, index, point)
@@ -331,6 +344,25 @@ class HourlyLineView : View {
         canvas.drawPath(tempLinePath, linePaint)
     }
 
+    private val rainRectPaint = Paint().apply {
+        strokeWidth = itemWidth / 2f
+        color = ContextCompat.getColor(context, R.color.rain_pop)
+    }
+
+    private fun drawRainLine(canvas: Canvas) {
+        for (point in rainPointList) {
+            canvas.drawLine(
+                point.x.toFloat(),
+                point.y.toFloat(),
+                point.x.toFloat(),
+                paddingTop + 12.dp + 24.dp +
+                    tempTextHeight + 12.dp
+                    + lineHeight - 12.dp,
+                rainRectPaint
+            )
+        }
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         setMeasuredDimension(
@@ -410,8 +442,7 @@ class HourlyLineView : View {
                 }
             }
 
-            MotionEvent.ACTION_CANCEL,
-            MotionEvent.ACTION_UP -> {
+            MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
                 parentPager?.isUserInputEnabled = true
             }
         }

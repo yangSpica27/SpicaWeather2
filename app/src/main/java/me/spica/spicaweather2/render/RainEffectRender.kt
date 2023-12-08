@@ -1,6 +1,9 @@
 package me.spica.spicaweather2.render
 
 import me.spica.spicaweather2.tools.dp
+import org.jbox2d.callbacks.ContactImpulse
+import org.jbox2d.callbacks.ContactListener
+import org.jbox2d.collision.Manifold
 import org.jbox2d.collision.shapes.CircleShape
 import org.jbox2d.collision.shapes.PolygonShape
 import org.jbox2d.common.Vec2
@@ -9,6 +12,7 @@ import org.jbox2d.dynamics.BodyDef
 import org.jbox2d.dynamics.BodyType
 import org.jbox2d.dynamics.FixtureDef
 import org.jbox2d.dynamics.World
+import org.jbox2d.dynamics.contacts.Contact
 
 class RainEffectRender {
 
@@ -48,6 +52,32 @@ class RainEffectRender {
         world.isAllowSleep = true
         updateHorizontalBounds()
         isInitOK = true
+        world.setContactListener(object : ContactListener {
+            override fun beginContact(contact: Contact) {
+//                if (contact.fixtureA.body.userData == 0) {
+//                    contact.fixtureA.body.userData = 1
+//                    contact.isEnabled = true
+//                } else if (contact.fixtureB.body.userData == 0) {
+//                    contact.fixtureB.body.userData = 1
+//                    contact.isEnabled = true
+//                } else {
+//                    contact.isEnabled = false
+//                }
+            }
+
+            override fun endContact(contact: Contact) {
+
+            }
+
+            override fun preSolve(contact: Contact?, oldManifold: Manifold) {
+
+            }
+
+            override fun postSolve(contact: Contact?, impulse: ContactImpulse) {
+
+            }
+
+        })
     }
 
     private var backgroundBody: Body? = null
@@ -64,13 +94,13 @@ class RainEffectRender {
         fixtureDef.density = mDensity
         fixtureDef.friction = 0.0f // 摩擦系数
         fixtureDef.restitution = 0.5f // 补偿系数
-
         bodyDef.position[boxWidth + mappingView2Body(16.dp)] =
             mappingView2Body(mWorldHeight * 1f) / 7f + boxHeight
         val bottomBody: Body = world.createBody(bodyDef) // 创建一个真实的下边 body
         val fixture = bottomBody.createFixture(fixtureDef)
         val body = fixture.body
         backgroundBody = body
+        backgroundBody?.userData = -1
     }
 
     fun createParticle(view: BaseParticle) {
@@ -92,11 +122,12 @@ class RainEffectRender {
             body.linearVelocity = Vec2(random.nextFloat(), random.nextFloat())
             body.createFixture(def)
             body.linearDamping = 0.5f
+            bodyDef.userData = 0
         }
     }
 
     fun run() {
-        if (!isInitOK)return
+        if (!isInitOK) return
         synchronized(world) {
             world.step(dt, velocityIterations, positionIterations)
         }
@@ -132,6 +163,7 @@ class RainEffectRender {
                 0f
             )
             view.body?.linearVelocity = Vec2(random.nextFloat(), random.nextFloat())
+            view.body?.userData = 0
         }
     }
 

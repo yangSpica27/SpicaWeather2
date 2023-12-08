@@ -41,6 +41,7 @@ class ActivityAddCity : MaterialActivity() {
     }
 
     private fun init() {
+
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
         layout.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         dividerBuilder()
