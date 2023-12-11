@@ -35,7 +35,6 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.math.abs
-import kotlin.system.measureTimeMillis
 
 class HourlyLineView : View {
 
@@ -235,36 +234,33 @@ class HourlyLineView : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         if (data.isEmpty() || width == 0) return
-        val timeCount = measureTimeMillis {
-            // 读取缓存图片
-            if (cacheBitmap == null) {
-                // 没有缓存就画一遍 然后画完生成位图保存 后面直接加载图片就可以了 避免重复绘制工作
-                cacheBitmap = Bitmap.createBitmap((paddingLeft + paddingRight + mPointList.size * itemWidth).toInt(), height, Bitmap.Config.ARGB_8888)
-                val cacheCanvas = Canvas(cacheBitmap!!)
-                drawTempLine(cacheCanvas)
-                drawRainLine(cacheCanvas)
-                mPointList.forEachIndexed { index, point ->
-                    // 提示文字
-                    drawTempText(cacheCanvas, index, point)
-                    // 图标
-                    drawIcon(cacheCanvas, index, point)
-                    // 概率
-                    drawPop(cacheCanvas, index, point)
-                    // 天气数据
-                    drawWeatherName(cacheCanvas, index, point)
-                    // 时间
-                    drawTime(cacheCanvas, point, index)
-                }
-                // 保存绘制内容到位图
-                cacheCanvas.save()
-                cacheCanvas.restore()
+        // 读取缓存图片
+        if (cacheBitmap == null) {
+            // 没有缓存就画一遍 然后画完生成位图保存 后面直接加载图片就可以了 避免重复绘制工作
+            cacheBitmap = Bitmap.createBitmap((paddingLeft + paddingRight + mPointList.size * itemWidth).toInt(), height, Bitmap.Config.ARGB_8888)
+            val cacheCanvas = Canvas(cacheBitmap!!)
+            drawTempLine(cacheCanvas)
+            drawRainLine(cacheCanvas)
+            mPointList.forEachIndexed { index, point ->
+                // 提示文字
+                drawTempText(cacheCanvas, index, point)
+                // 图标
+                drawIcon(cacheCanvas, index, point)
+                // 概率
+                drawPop(cacheCanvas, index, point)
+                // 天气数据
+                drawWeatherName(cacheCanvas, index, point)
+                // 时间
+                drawTime(cacheCanvas, point, index)
             }
-            // 根据用户手指滑动距离，移动画布，看上去就是跟随移动了
-            canvas.translate(-offset, 0f)
-            // 绘制图片
-            canvas.drawBitmap(cacheBitmap!!, 0f, 0f, topIconPaint)
+            // 保存绘制内容到位图
+            cacheCanvas.save()
+            cacheCanvas.restore()
         }
-        Timber.tag("耗时").e("${timeCount}ms")
+        // 根据用户手指滑动距离，移动画布，看上去就是跟随移动了
+        canvas.translate(-offset, 0f)
+        // 绘制图片
+        canvas.drawBitmap(cacheBitmap!!, 0f, 0f, topIconPaint)
     }
 
     private val popTextPaint = TextPaint().apply {

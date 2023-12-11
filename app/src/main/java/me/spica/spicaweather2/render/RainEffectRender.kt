@@ -1,18 +1,17 @@
 package me.spica.spicaweather2.render
 
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.physics.box2d.BodyDef
+import com.badlogic.gdx.physics.box2d.CircleShape
+import com.badlogic.gdx.physics.box2d.Contact
+import com.badlogic.gdx.physics.box2d.ContactImpulse
+import com.badlogic.gdx.physics.box2d.ContactListener
+import com.badlogic.gdx.physics.box2d.FixtureDef
+import com.badlogic.gdx.physics.box2d.Manifold
+import com.badlogic.gdx.physics.box2d.PolygonShape
+import com.badlogic.gdx.physics.box2d.World
 import me.spica.spicaweather2.tools.dp
-import org.jbox2d.callbacks.ContactImpulse
-import org.jbox2d.callbacks.ContactListener
-import org.jbox2d.collision.Manifold
-import org.jbox2d.collision.shapes.CircleShape
-import org.jbox2d.collision.shapes.PolygonShape
-import org.jbox2d.common.Vec2
-import org.jbox2d.dynamics.Body
-import org.jbox2d.dynamics.BodyDef
-import org.jbox2d.dynamics.BodyType
-import org.jbox2d.dynamics.FixtureDef
-import org.jbox2d.dynamics.World
-import org.jbox2d.dynamics.contacts.Contact
 
 class RainEffectRender {
 
@@ -25,13 +24,13 @@ class RainEffectRender {
      * 迭代速率
      * 迭代次数
      * */
-    private val dt = 1f / 30f
+    private val dt = 1f / 60f
     private val velocityIterations = 5
     private val positionIterations = 20
 
     private val mProportion = 60f // 模拟世界和view坐标的转化比例
     private var mDensity = .5f
-    private val mFrictionRatio = 0.1f // 摩擦系数
+    private val mFrictionRatio = 0.0f // 摩擦系数
     private val mRestitutionRatio = 0.3f // 回复系数
 
     private var mWorldWidth = 0
@@ -48,36 +47,30 @@ class RainEffectRender {
         this.mWorldHeight = height
         boxWidth = mappingView2Body(mWorldWidth * 1f - 28.dp) / 2f
         boxHeight = mappingView2Body(mProportion * 1f)
-        world = World(Vec2(0f, 9.8f))
-        world.isAllowSleep = true
+        world = World(Vector2(0f, 9.8f), true)
         updateHorizontalBounds()
-        isInitOK = true
         world.setContactListener(object : ContactListener {
-            override fun beginContact(contact: Contact) {
-//                if (contact.fixtureA.body.userData == 0) {
-//                    contact.fixtureA.body.userData = 1
-//                    contact.isEnabled = true
-//                } else if (contact.fixtureB.body.userData == 0) {
-//                    contact.fixtureB.body.userData = 1
-//                    contact.isEnabled = true
-//                } else {
-//                    contact.isEnabled = false
-//                }
-            }
+            override fun beginContact(contact: Contact?) = Unit
 
             override fun endContact(contact: Contact) {
-
+                if (contact.fixtureA.body.userData == 0 && contact.fixtureB.body.userData == -1) {
+                    contact.fixtureA.body.userData = 1
+                } else if (contact.fixtureB.body.userData == 0 && contact.fixtureA.body.userData == -1) {
+                    contact.fixtureB.body.userData = 1
+                }
             }
 
-            override fun preSolve(contact: Contact?, oldManifold: Manifold) {
+            override fun preSolve(contact: Contact?, oldManifold: Manifold?) = Unit
 
-            }
-
-            override fun postSolve(contact: Contact?, impulse: ContactImpulse) {
-
-            }
+            override fun postSolve(contact: Contact?, impulse: ContactImpulse?) = Unit
 
         })
+        world.setContactFilter { fixtureA, fixtureB ->
+            if (fixtureA.body.userData == -1 && fixtureB.body.userData == 0) {
+                true
+            } else (fixtureA.body.userData == 0 && fixtureB.body.userData == -1)
+        }
+        isInitOK = true
     }
 
     private var backgroundBody: Body? = null
@@ -85,17 +78,17 @@ class RainEffectRender {
     private fun updateHorizontalBounds() {
         val bodyDef = BodyDef()
         // 创建静止刚体
-        bodyDef.type = BodyType.STATIC
+        bodyDef.type = BodyDef.BodyType.StaticBody
         // 定义的形状
         val box = PolygonShape()
         box.setAsBox(boxWidth, boxHeight) // 确定为矩形
         val fixtureDef = FixtureDef()
         fixtureDef.shape = box
         fixtureDef.density = mDensity
-        fixtureDef.friction = 0.0f // 摩擦系数
-        fixtureDef.restitution = 0.5f // 补偿系数
+        fixtureDef.friction = 0.1f // 摩擦系数
+        fixtureDef.restitution = 0.3f // 补偿系数
         bodyDef.position[boxWidth + mappingView2Body(16.dp)] =
-            mappingView2Body(mWorldHeight * 1f) / 7f + boxHeight
+            mappingView2Body(mWorldHeight * 1f)  + boxHeight
         val bottomBody: Body = world.createBody(bodyDef) // 创建一个真实的下边 body
         val fixture = bottomBody.createFixture(fixtureDef)
         val body = fixture.body
@@ -108,7 +101,7 @@ class RainEffectRender {
             val bodyDef = BodyDef()
             view.x = (0..mWorldWidth).random(random).toFloat()
             view.y = (-3 * mWorldHeight..0).random(random).toFloat()
-            bodyDef.type = BodyType.DYNAMIC
+            bodyDef.type = BodyDef.BodyType.DynamicBody
             bodyDef.position[mappingView2Body(view.x + view.width / 2)] = mappingView2Body(view.y + view.height / 2)
             val shape = CircleShape()
             shape.radius = mappingView2Body(view.width / 2)
@@ -119,10 +112,10 @@ class RainEffectRender {
             def.restitution = mRestitutionRatio
             val body = world.createBody(bodyDef)
             view.body = body
-            body.linearVelocity = Vec2(random.nextFloat(), random.nextFloat())
+            body.linearVelocity = Vector2(random.nextFloat(), random.nextFloat())
             body.createFixture(def)
-            body.linearDamping = 0.5f
-            bodyDef.userData = 0
+            body.linearDamping = 0.6f
+            body.userData = 0
         }
     }
 
@@ -138,7 +131,7 @@ class RainEffectRender {
         if (!isInitOK) return
         synchronized(world) {
             backgroundBody?.setTransform(
-                Vec2(
+                Vector2(
                     boxWidth + mappingView2Body(16.dp),
                     mappingView2Body(y * 1f + 12.dp)
                 ),
@@ -149,21 +142,24 @@ class RainEffectRender {
 
     fun getXy(view: BaseParticle) {
         view.x = getViewX(view)
-        view.y = getViewY(view)
-        if (view.y > mWorldHeight || view.x < 0 || view.x > mWorldWidth) {
+        val newY = getViewY(view)
+        val sameY = newY == view.y
+        view.y = newY
+        if (view.y > mWorldHeight || view.x < 0 || view.x > mWorldWidth || sameY) {
             view.x = (0..mWorldWidth).random(random).toFloat()
 
             view.y = (-mWorldHeight..0).random(random).toFloat()
 
             view.body?.setTransform(
-                Vec2(
+                Vector2(
                     mappingView2Body(view.x),
                     mappingView2Body(view.y)
                 ),
                 0f
             )
-            view.body?.linearVelocity = Vec2(random.nextFloat(), random.nextFloat())
+            view.body?.linearVelocity = Vector2(random.nextFloat(), random.nextFloat())
             view.body?.userData = 0
+            view.body?.isSleepingAllowed = false
         }
     }
 

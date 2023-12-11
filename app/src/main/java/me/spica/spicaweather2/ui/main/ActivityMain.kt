@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.spica.spicaweather2.common.WeatherCodeUtils
 import me.spica.spicaweather2.common.getThemeColor
-import me.spica.spicaweather2.common.getWeatherAnimType
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
 import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.tools.MessageEvent
@@ -30,6 +29,7 @@ import me.spica.spicaweather2.ui.test.TestActivity
 import me.spica.spicaweather2.view.Manger2HomeView
 import me.spica.spicaweather2.view.view_group.ActivityMainLayout
 import me.spica.spicaweather2.view.view_group.WeatherMainLayout
+import me.spica.spicaweather2.view.weather_bg.NowWeatherView
 import me.spica.spicaweather2.work.DataSyncWorker
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -183,7 +183,7 @@ class ActivityMain : MaterialActivity() {
             layout.mainTitleLayout.titleTextView.text = currentCity.cityName
             currentCurrentCity = currentCity
             WeatherCodeUtils.getWeatherCode(currentWeather?.todayWeather?.iconId ?: 100).let {
-                layout.weatherBackgroundSurfaceView.currentWeatherAnimType = it.getWeatherAnimType()
+                layout.weatherBackgroundSurfaceView.currentWeatherAnimType = NowWeatherView.WeatherAnimType.RAIN
                 layout.weatherBackgroundSurfaceView.bgColor = it.getThemeColor()
             }
         } catch (e: Exception) {

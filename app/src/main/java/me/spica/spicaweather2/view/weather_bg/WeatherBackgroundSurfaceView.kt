@@ -97,6 +97,8 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     private val hazeDrawable = HazeDrawable(context)
 
+    private var lastDrawTime = System.currentTimeMillis()
+
     private val drawRunnable = object : Runnable {
         override fun run() {
             while (isWork) {
@@ -124,7 +126,8 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
                     doOnDraw()
                 }
                 // 保证两张帧之间间隔16ms(60帧)
-                drawHandler.postDelayed(this, 32)
+                drawHandler.postDelayed(this, Math.max(32 - (System.currentTimeMillis() - lastDrawTime), 16))
+                lastDrawTime = System.currentTimeMillis()
             }
         }
     }
@@ -232,7 +235,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         foggyDrawable.cancelAnim()
     }
 
-    fun setBackgroundY(y:Int){
+    fun setBackgroundY(y: Int) {
         rainDrawable.setBackgroundY(y)
     }
 

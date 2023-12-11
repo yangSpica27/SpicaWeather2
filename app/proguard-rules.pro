@@ -1,21 +1,9 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+-dontwarn com.badlogic.gdx.graphics.g2d.freetype.FreetypeBuild
+-dontwarn com.badlogic.gdx.physics.box2d.utils.Box2DBuild
+-dontwarn com.badlogic.gdx.physics.bullet.BulletBuild
+-dontwarn com.badlogic.gdx.utils.GdxBuild
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+-keepnames class com.badlogic.gdx.backends.android.AndroidInput*
+-keepclassmembers class com.badlogic.gdx.backends.android.AndroidInput* {<init>(...);}
+-keep class com.badlogic.gdx.physics.box2d.B2ContactListener
