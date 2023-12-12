@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import me.spica.spicaweather2.network.model.HeClient
+import me.spica.spicaweather2.network.HeClient
 import me.spica.spicaweather2.network.model.hefeng.mapper.SuccessMinutelyMapper
 import me.spica.spicaweather2.network.model.hefeng.mapper.SuccessWeatherMapper
 import me.spica.spicaweather2.persistence.entity.weather.Weather

@@ -54,7 +54,7 @@ class NowWeatherLayout(context: Context) : AViewGroup(context = context), SpicaW
     val nowWeatherInfoCard = NowWeatherInfoCard(context).apply {
         layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
             it.updateMargins(
-                top = 12.dp, left = 14.dp, right = 14.dp
+                top = 150.dp, left = 14.dp, right = 14.dp
             )
         }
     }
@@ -106,5 +106,6 @@ class NowWeatherLayout(context: Context) : AViewGroup(context = context), SpicaW
 
     override fun bindData(weather: Weather) {
         nowWeatherInfoCard.bindData(weather)
+        helloText.text = weather.welcomeText
     }
 }

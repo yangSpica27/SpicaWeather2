@@ -7,8 +7,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import me.spica.spicaweather2.network.model.HeClient
-import me.spica.spicaweather2.network.model.HeService
+import me.spica.spicaweather2.network.HeClient
+import me.spica.spicaweather2.network.HeService
+import me.spica.spicaweather2.network.HitokotoClient
+import me.spica.spicaweather2.network.HitokotoRepository
+import me.spica.spicaweather2.network.HitokotoService
 import me.spica.spicaweather2.persistence.repository.HeRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -49,9 +52,15 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideHeService(retrofit: Retrofit): HeService {
-
         return retrofit
             .create(HeService::class.java)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideHitokotoService(retrofit: Retrofit): HitokotoService {
+        return retrofit.create(HitokotoService::class.java)
     }
 
     @Provides
@@ -62,7 +71,19 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    fun provideHitokotoClient(hitokotoService: HitokotoService): HitokotoClient{
+        return HitokotoClient(hitokotoService)
+    }
+
+    @Provides
+    @Singleton
     fun provideHeRepository(heClient: HeClient): HeRepository {
         return HeRepository(heClient)
+    }
+
+    @Provides
+    @Singleton
+    fun provideHitokotoRepository(hitokotoClient: HitokotoClient): HitokotoRepository {
+        return HitokotoRepository(hitokotoClient)
     }
 }

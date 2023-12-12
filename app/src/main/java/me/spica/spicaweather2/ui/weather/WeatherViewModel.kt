@@ -6,6 +6,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import me.spica.spicaweather2.network.HitokotoRepository
+import me.spica.spicaweather2.network.model.hitokoto.HitokotoBean
 import me.spica.spicaweather2.persistence.dao.WeatherDao
 import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.persistence.entity.weather.CaiyunExtendBean
@@ -16,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
     private val repository: HeRepository,
-    private val weatherDao: WeatherDao
+    private val weatherDao: WeatherDao,
+    private val hitokotoRepository: HitokotoRepository
 ) : ViewModel() {
 
     private val cityFlow: MutableStateFlow<CityBean?> = MutableStateFlow(null)
@@ -55,6 +58,13 @@ class WeatherViewModel @Inject constructor(
             )
         }
 
+    private val hitokoto: Flow<HitokotoBean?> = cityFlow
+        .filterNotNull()
+        .flatMapLatest {
+            return@flatMapLatest hitokotoRepository.fetchHitokoto()
+        }
+
+
     val weatherCacheFlow = cityFlow.filterNotNull().flatMapLatest {
         weatherDao.getWeatherFlowDistinctUntilChanged(it.cityName)
     }.flowOn(Dispatchers.IO)
@@ -75,13 +85,14 @@ class WeatherViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             // 合并和风系接口和彩云系列接口的数据
-            combine(weatherFlow, alert) { weather, alertBean ->
+            combine(weatherFlow, hitokoto, alert) { weather, hitokoto, alertBean ->
                 kotlin.run {
                     // 和风天气的天气数据+彩云的天气预警贴士(彩云接口请求失败不影响显示)
                     weather?.descriptionForToday = alertBean?.forecastKeypoint ?: ""
                     weather?.descriptionForToWeek = alertBean?.description ?: ""
                     weather?.alerts = alertBean?.alerts ?: listOf()
                     weather?.cityName = cityFlow.value?.cityName ?: ""
+                    weather?.welcomeText = hitokoto?.hitokoto ?: "昭昭若日月之明，离离如星辰之行"
                     weather
                 }
             }.collectLatest {

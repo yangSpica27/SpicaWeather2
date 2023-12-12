@@ -146,7 +146,7 @@ class ActivityManagerCity : MaterialActivity() {
             addTarget(endView)
             scrimColor = Color.TRANSPARENT
             containerColor = Color.TRANSPARENT
-            duration = 550
+            duration = 850
 //            interpolator = DecelerateInterpolator(1.2f)
 //            fadeMode = MaterialContainerTransform.FADE_MODE_THROUGH
         }

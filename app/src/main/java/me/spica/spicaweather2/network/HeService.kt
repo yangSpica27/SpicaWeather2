@@ -1,6 +1,7 @@
-package me.spica.spicaweather2.network.model
+package me.spica.spicaweather2.network
 
 import com.skydoves.sandwich.ApiResponse
+import me.spica.spicaweather2.network.model.BaseResponse
 import me.spica.spicaweather2.network.model.caiyun.CaiyunBean
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import retrofit2.http.GET
@@ -22,4 +23,6 @@ interface HeService {
         @Query("longitude") longitude: Double,
 
     ): ApiResponse<CaiyunBean>
+
+
 }

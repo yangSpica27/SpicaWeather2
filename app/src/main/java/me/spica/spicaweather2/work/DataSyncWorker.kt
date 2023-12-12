@@ -15,7 +15,8 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import me.spica.spicaweather2.network.model.HeClient
+import me.spica.spicaweather2.network.HeClient
+import me.spica.spicaweather2.network.HitokotoClient
 import me.spica.spicaweather2.persistence.dao.CityDao
 import me.spica.spicaweather2.persistence.dao.WeatherDao
 import me.spica.spicaweather2.persistence.entity.city.CityBean
@@ -34,6 +35,9 @@ class DataSyncWorker : Service() {
 
     @Inject
     lateinit var heClient: HeClient
+
+    @Inject
+    lateinit var hitokotoClient: HitokotoClient
 
     @Inject
     lateinit var cityDao: CityDao
@@ -59,6 +63,7 @@ class DataSyncWorker : Service() {
                     val res: Deferred<Boolean> = async(Dispatchers.IO, CoroutineStart.DEFAULT) {
                         val weatherResponse = heClient.getAllWeather(cityBean.lon, cityBean.lat).getOrNull()
                         val minuteBaseResponse = heClient.getMinute(cityBean.lon, cityBean.lat).getOrNull()
+                        val hitokotoResponse = hitokotoClient.getHitokoto().getOrNull()
 
                         var caiyunExtBean: CaiyunExtendBean? = null
 
@@ -68,7 +73,7 @@ class DataSyncWorker : Service() {
                                     AlertBean(title = it.title, description = it.description, status = it.status, code = it.code, source = it.source)
                                 },
                                 description = minuteBaseResponse.result.hourly.description,
-                                forecastKeypoint = minuteBaseResponse.result.forecastKeypoint
+                                forecastKeypoint = minuteBaseResponse.result.forecastKeypoint,
                             )
                         }
 
@@ -77,6 +82,7 @@ class DataSyncWorker : Service() {
                             weather.descriptionForToWeek = caiyunExtBean?.description ?: ""
                             weather.alerts = caiyunExtBean?.alerts ?: listOf()
                             weather.cityName = cityBean.cityName
+                            weather.welcomeText = hitokotoResponse?.hitokoto ?: "昭昭若日月之明，离离如星辰之行"
                             weatherDao.insertWeather(weather)
                             return@async true
                         }

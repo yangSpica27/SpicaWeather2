@@ -21,7 +21,8 @@ data class Weather(
     var cityName: String = "",
     var descriptionForToday: String? = "", // 今天的气象描述
     var descriptionForToWeek: String? = "", // 一周的气象描述
-    var alerts: List<AlertBean> = listOf()
+    var alerts: List<AlertBean> = listOf(),
+    var welcomeText:String = ""
 ) {
 
     fun getWeatherType(): WeatherType {
