@@ -6,7 +6,6 @@ import android.app.Service
 import android.content.Context
 import android.content.ContextWrapper
 import android.view.ViewGroup
-import androidx.annotation.Nullable
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fondesa.recyclerviewdivider.dividerBuilder
@@ -14,6 +13,7 @@ import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.ui.main.ActivityMain
 import me.spica.spicaweather2.ui.weather.MainCardAdapter
+import me.spica.spicaweather2.view.BounceEdgeEffectFactory2
 import me.spica.spicaweather2.view.recyclerView.RecyclerViewAtViewPager2
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import rikka.recyclerview.fixEdgeEffect
@@ -37,6 +37,8 @@ class WeatherMainLayout(context: Context) : RecyclerViewAtViewPager2(context) {
             .build()
             .addTo(this)
 
+        edgeEffectFactory = BounceEdgeEffectFactory2()
+
         mainCardAdapter = MainCardAdapter(
             this
         )
@@ -49,7 +51,7 @@ class WeatherMainLayout(context: Context) : RecyclerViewAtViewPager2(context) {
 
         fixEdgeEffect()
 
-        setPullDownListener(object : RecyclerViewAtViewPager2.PullDownListener {
+        setPullDownListener(object : PullDownListener {
 
             override fun onPullDown(downY: Float) {
             }
@@ -61,6 +63,10 @@ class WeatherMainLayout(context: Context) : RecyclerViewAtViewPager2(context) {
         addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+                // 屏幕外不做检测
+                if (activityMain.currentCurrentCity?.cityName != tag.toString()) {
+                    return
+                }
                 if (activityMain.currentCurrentCity?.cityName == tag.toString()) {
                     activityMain.positionAndOffset = getPositionAndOffset()
                     layoutManager?.findViewByPosition(activityMain.positionAndOffset.first)?.let {
@@ -68,14 +74,13 @@ class WeatherMainLayout(context: Context) : RecyclerViewAtViewPager2(context) {
                             activityMain.setBox2dBackground(it.nowWeatherInfoCard.getNowCardTop())
                         }
                     }
-
                 }
                 mainCardAdapter.onScroll()
             }
         })
     }
 
-    fun getPositionAndOffset(): Pair<Int, Int> {
+    private fun getPositionAndOffset(): Pair<Int, Int> {
         var lastOffset = 0
         var lastPosition = 0
         val layoutManager = getLayoutManager() as LinearLayoutManager
@@ -95,7 +100,11 @@ class WeatherMainLayout(context: Context) : RecyclerViewAtViewPager2(context) {
         tag = weather.cityName
     }
 
-    private fun getActivityFromContext(@Nullable context: Context?): Activity? {
+    fun checkEnterScreen() {
+        mainCardAdapter.onScroll()
+    }
+
+    private fun getActivityFromContext(context: Context?): Activity? {
         if (context == null) {
             return null
         }

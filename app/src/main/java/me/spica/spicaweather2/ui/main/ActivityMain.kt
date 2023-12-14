@@ -167,11 +167,14 @@ class ActivityMain : MaterialActivity() {
     private fun updateOtherPageScroller() {
         (layout.viewPager2.children.first() as RecyclerView)
             .children.forEach {
-                if (it is WeatherMainLayout) {
+                if (it is WeatherMainLayout && it.tag != currentCurrentCity?.cityName) {
                     (it.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
                         positionAndOffset.first,
                         positionAndOffset.second
                     )
+                    doOnMainThreadIdle({
+                        it.checkEnterScreen()
+                    })
                 }
             }
     }

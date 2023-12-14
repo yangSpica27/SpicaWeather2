@@ -77,12 +77,6 @@ class MainCardAdapter(
                 }
             }
 
-//            HomeCardType.TODAY_EXTRA.code -> {
-//                val itemView = TodayExtraLayout(parent.context)
-//                return AbstractMainViewHolder(itemView, itemView).apply {
-//                    reset()
-//                }
-//            }
             else -> {
                 val itemView = DailyWeatherLayout(parent.context)
                 return AbstractMainViewHolder(itemView, itemView).apply {
@@ -106,9 +100,6 @@ class MainCardAdapter(
     fun notifyData(weather: Weather) {
         this.weather = weather
         notifyDataSetChanged()
-        recyclerView.doOnPreDraw {
-            recyclerView.smoothScrollToPosition(0)
-        }
         recyclerView.doOnPreDraw {
             onScroll()
         }

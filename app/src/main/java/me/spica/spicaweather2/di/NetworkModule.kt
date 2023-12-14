@@ -1,18 +1,18 @@
 package me.spica.spicaweather2.di
 
 import android.content.Context
-import com.skydoves.sandwich.coroutines.CoroutinesResponseCallAdapterFactory
+import com.skydoves.sandwich.retrofit.adapters.ApiResponseCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import me.spica.spicaweather2.network.HeClient
+import me.spica.spicaweather2.network.HeRepository
 import me.spica.spicaweather2.network.HeService
 import me.spica.spicaweather2.network.HitokotoClient
 import me.spica.spicaweather2.network.HitokotoRepository
 import me.spica.spicaweather2.network.HitokotoService
-import me.spica.spicaweather2.persistence.repository.HeRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -45,7 +45,7 @@ object NetworkModule {
             .client(okHttpClient)
             .baseUrl("https://devapi.qweather.com/v7/")
             .addConverterFactory(MoshiConverterFactory.create())
-            .addCallAdapterFactory(CoroutinesResponseCallAdapterFactory.create())
+            .addCallAdapterFactory(ApiResponseCallAdapterFactory.create())
             .build()
     }
 
@@ -71,7 +71,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideHitokotoClient(hitokotoService: HitokotoService): HitokotoClient{
+    fun provideHitokotoClient(hitokotoService: HitokotoService): HitokotoClient {
         return HitokotoClient(hitokotoService)
     }
 

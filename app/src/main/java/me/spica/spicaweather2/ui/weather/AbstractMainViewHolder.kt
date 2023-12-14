@@ -20,6 +20,7 @@ open class AbstractMainViewHolder(private val card: SpicaWeatherCard, itemView: 
     private val rect = Rect()
     fun checkEnterScreen() {
         try {
+            if (card.hasInScreen) return
             val isVisible = itemView.getGlobalVisibleRect(rect)
             card.checkEnterScreen(isVisible && rect.bottom - rect.top >= itemView.height / 10f)
         } catch (e: Exception) {

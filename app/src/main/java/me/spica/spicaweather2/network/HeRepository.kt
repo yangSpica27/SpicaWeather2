@@ -1,4 +1,4 @@
-package me.spica.spicaweather2.persistence.repository
+package me.spica.spicaweather2.network
 
 import com.skydoves.sandwich.message
 import com.skydoves.sandwich.suspendOnError
@@ -8,10 +8,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import me.spica.spicaweather2.network.HeClient
 import me.spica.spicaweather2.network.model.hefeng.mapper.SuccessMinutelyMapper
 import me.spica.spicaweather2.network.model.hefeng.mapper.SuccessWeatherMapper
 import me.spica.spicaweather2.persistence.entity.weather.Weather
+import me.spica.spicaweather2.persistence.repository.Repository
 import timber.log.Timber
 
 /**
@@ -28,8 +28,8 @@ class HeRepository(private val heClient: HeClient) : Repository {
             }.suspendOnFailure {
                 Timber.e("请求失败")
                 emit(null)
-                Timber.e(this)
-                onError(this)
+                Timber.e(this.message())
+                onError(this.message())
             }.suspendOnError {
                 Timber.e("请求失败")
                 emit(null)
@@ -51,8 +51,8 @@ class HeRepository(private val heClient: HeClient) : Repository {
             }.suspendOnFailure {
                 Timber.e("请求失败")
                 emit(null)
-                Timber.e(this)
-                onError(this)
+                Timber.e(this.message())
+                onError(this.message())
             }.suspendOnError {
                 Timber.e("请求失败")
                 emit(null)

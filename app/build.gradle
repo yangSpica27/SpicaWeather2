@@ -6,7 +6,6 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'kotlin-android'
     id 'kotlin-parcelize'
-    id 'kotlin-kapt'
     id 'AndResGuard'
     id 'com.google.devtools.ksp'
 }
@@ -142,7 +141,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11")
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-    implementation 'com.github.skydoves:sandwich:1.2.3'
+    implementation "com.github.skydoves:sandwich-retrofit:2.0.5"
 
     def roomVersion = "2.4.1"
     implementation("androidx.room:room-runtime:$roomVersion")
@@ -208,7 +207,7 @@ configurations {
 dependencies {
     ktlint 'com.pinterest:ktlint:0.44.0'
 }
-task ktlint(type: JavaExec, group: "verification") {
+tasks.register('ktlint', JavaExec) {
     description = "Check Kotlin code style."
     classpath = configurations.ktlint
     mainClass = "com.pinterest.ktlint.Main"
@@ -216,14 +215,14 @@ task ktlint(type: JavaExec, group: "verification") {
 }
 check.dependsOn ktlint
 
-task ktlintFormat(type: JavaExec, group: "formatting") {
+tasks.register('ktlintFormat', JavaExec) {
     description = "Fix Kotlin code style deviations."
     classpath = configurations.ktlint
     mainClass = "com.pinterest.ktlint.Main"
     args "-F", "src/**/*.kt"
 }
 
-task copyAndroidNatives {
+tasks.register('copyAndroidNatives') {
     doFirst {
         file("libs/armeabi/").mkdirs()
         file("libs/armeabi-v7a/").mkdirs()
@@ -235,10 +234,10 @@ task copyAndroidNatives {
             def outputDir = null
             if (jar.name.endsWith("natives-arm64-v8a.jar")) outputDir = file("libs/arm64-v8a")
             if (jar.name.endsWith("natives-armeabi-v7a.jar")) outputDir = file("libs/armeabi-v7a")
-            if(jar.name.endsWith("natives-armeabi.jar")) outputDir = file("libs/armeabi")
-            if(jar.name.endsWith("natives-x86_64.jar")) outputDir = file("libs/x86_64")
-            if(jar.name.endsWith("natives-x86.jar")) outputDir = file("libs/x86")
-            if(outputDir != null) {
+            if (jar.name.endsWith("natives-armeabi.jar")) outputDir = file("libs/armeabi")
+            if (jar.name.endsWith("natives-x86_64.jar")) outputDir = file("libs/x86_64")
+            if (jar.name.endsWith("natives-x86.jar")) outputDir = file("libs/x86")
+            if (outputDir != null) {
                 copy {
                     from zipTree(jar)
                     into outputDir
@@ -249,7 +248,7 @@ task copyAndroidNatives {
     }
 }
 
-tasks.whenTaskAdded { packageTask ->
+tasks.configureEach { packageTask ->
     if (packageTask.name.contains("package")) {
         packageTask.dependsOn 'copyAndroidNatives'
     }
