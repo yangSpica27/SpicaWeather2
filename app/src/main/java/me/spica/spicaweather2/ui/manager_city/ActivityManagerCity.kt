@@ -1,14 +1,15 @@
 package me.spica.spicaweather2.ui.manager_city
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionManager
-import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.transition.doOnEnd
 import androidx.core.transition.doOnStart
@@ -91,6 +92,11 @@ class ActivityManagerCity : MaterialActivity() {
                 Manger2HomeView.initFromViewRect(view, window)
                 EventBus.getDefault().post(MessageEvent.create(MessageType.Get2MainActivityAnim, position))
                 withContext(Dispatchers.Main) {
+                    if (Build.VERSION.SDK_INT >= 34) {
+                        overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, 0, 0)
+                    } else {
+                        overridePendingTransition(0, 0)
+                    }
                     finish()
                 }
             }
@@ -124,18 +130,29 @@ class ActivityManagerCity : MaterialActivity() {
                 adapter.setItems(it)
             }
         }
+
+        onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                backToMain()
+            }
+        })
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            val firstItemView = layout.recyclerView.findViewHolderForAdapterPosition(0)?.itemView
-            if (firstItemView != null) {
-                firstItemView.performClick()
-                return false
-            }
+
+    private fun backToMain() {
+        if (Build.VERSION.SDK_INT >= 34) {
+            overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, 0, 0)
+        } else {
+            overridePendingTransition(0, 0)
         }
-        return super.onKeyDown(keyCode, event)
+        val firstItemView = layout.recyclerView.findViewHolderForAdapterPosition(0)?.itemView
+        if (firstItemView != null) {
+            firstItemView.performClick()
+            return
+        }
+        finish()
     }
+
 
     private fun startTransformerAnim(toView: View) {
         val container = findViewById<ViewGroup>(android.R.id.content)

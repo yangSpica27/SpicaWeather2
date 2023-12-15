@@ -1,8 +1,12 @@
 package me.spica.spicaweather2.ui.add_city
 
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.TypedValue
+import android.window.BackEvent
+import androidx.activity.BackEventCompat
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import androidx.core.widget.addTextChangedListener
@@ -41,7 +45,7 @@ class ActivityAddCity : MaterialActivity() {
     }
 
     private fun init() {
-
+        // handleBack()
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
         layout.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         dividerBuilder()
@@ -67,5 +71,30 @@ class ActivityAddCity : MaterialActivity() {
                 }
             }
         }
+    }
+
+    private fun handleBack() {
+        val box = layout
+        val screenWidth = Resources.getSystem().displayMetrics.widthPixels
+        val maxXShift = (screenWidth / 20)
+        val callback = object : OnBackPressedCallback(enabled = true) {
+            override fun handleOnBackProgressed(backEvent: BackEventCompat) {
+                super.handleOnBackProgressed(backEvent)
+                when (backEvent.swipeEdge) {
+                    BackEvent.EDGE_LEFT -> box.translationX = backEvent.progress * maxXShift
+
+                    BackEvent.EDGE_RIGHT -> box.translationX = -(backEvent.progress * maxXShift)
+                }
+                box.scaleX = 1F - (0.1F * backEvent.progress)
+                box.scaleY = 1F - (0.1F * backEvent.progress)
+            }
+
+            override fun handleOnBackPressed() {
+            }
+
+            override fun handleOnBackCancelled() {
+            }
+        }
+        this.onBackPressedDispatcher.addCallback(callback)
     }
 }
