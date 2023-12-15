@@ -62,20 +62,7 @@ class ActivityMain : MaterialActivity() {
 
     var positionAndOffset = Pair(0, 0)
         set(value) {
-            if (value.first == 0) {
-                val progress = -value.second * 1f / (resources.displayMetrics.heightPixels / 3f)
-                layout.mainTitleLayout.setBackgroundWhiteColor(progress)
-                WindowCompat.getInsetsController(
-                    window,
-                    window.decorView
-                ).isAppearanceLightStatusBars = progress > 0.5
-            } else {
-                layout.mainTitleLayout.setBackgroundWhiteColor(1f)
-                WindowCompat.getInsetsController(
-                    window,
-                    window.decorView
-                ).isAppearanceLightStatusBars = true
-            }
+            updateTitleBarColor(value)
             field = value
         }
 
@@ -114,7 +101,6 @@ class ActivityMain : MaterialActivity() {
         layout.mainTitleLayout.titleTextView.setOnClickListener {
             startActivityWithAnimation<TestActivity> { }
         }
-//        layout.viewPager2.hide()
         layout.viewPager2.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         layout.viewPager2.adapter = mainPagerAdapter
         layout.viewPager2.isUserInputEnabled = true
@@ -136,9 +122,7 @@ class ActivityMain : MaterialActivity() {
             }
 
             override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
+                position: Int, positionOffset: Float, positionOffsetPixels: Int
             ) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
                 updateOtherPageScroller()
@@ -164,11 +148,28 @@ class ActivityMain : MaterialActivity() {
         }
     }
 
+
+    private fun updateTitleBarColor(value: Pair<Int, Int>) {
+        if (value.first == 0) {
+            val progress = -value.second * 1f / (resources.displayMetrics.heightPixels / 3f)
+            layout.mainTitleLayout.setBackgroundWhiteColor(progress)
+            WindowCompat.getInsetsController(
+                window, window.decorView
+            ).isAppearanceLightStatusBars = progress > 0.5
+        } else {
+            layout.mainTitleLayout.setBackgroundWhiteColor(1f)
+            WindowCompat.getInsetsController(
+                window, window.decorView
+            ).isAppearanceLightStatusBars = true
+        }
+    }
+
     private fun updateOtherPageScroller() {
         (layout.viewPager2.children.first() as RecyclerView)
             .children.forEach {
                 if (it is WeatherMainLayout && it.tag != currentCurrentCity?.cityName) {
-                    (it.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
+                    (it.layoutManager as LinearLayoutManager)
+                        .scrollToPositionWithOffset(
                         positionAndOffset.first,
                         positionAndOffset.second
                     )

@@ -20,7 +20,7 @@ class RainEffectRender {
      * 迭代速率
      * 迭代次数
      * */
-    private val dt = 1f / 60f
+    private val dt = 1f / 30f
     private val velocityIterations = 5
     private val positionIterations = 20
 
@@ -45,27 +45,6 @@ class RainEffectRender {
         boxHeight = mappingView2Body(mProportion * 1f)
         world = World(Vector2(0f, 9.8f), true)
         updateHorizontalBounds()
-//        world.setContactListener(object : ContactListener {
-//            override fun beginContact(contact: Contact?) = Unit
-//
-//            override fun endContact(contact: Contact) {
-//                if (contact.fixtureA.body.userData == 0 && contact.fixtureB.body.userData == -1) {
-//                    contact.fixtureA.body.userData = 1
-//                } else if (contact.fixtureB.body.userData == 0 && contact.fixtureA.body.userData == -1) {
-//                    contact.fixtureB.body.userData = 1
-//                }
-//            }
-//
-//            override fun preSolve(contact: Contact?, oldManifold: Manifold?) = Unit
-//
-//            override fun postSolve(contact: Contact?, impulse: ContactImpulse?) = Unit
-//
-//        })
-//        world.setContactFilter { fixtureA, fixtureB ->
-//            if (fixtureA.body.userData == -1 && fixtureB.body.userData == 0) {
-//                true
-//            } else (fixtureA.body.userData == 0 && fixtureB.body.userData == -1)
-//        }
         isInitOK = true
     }
 

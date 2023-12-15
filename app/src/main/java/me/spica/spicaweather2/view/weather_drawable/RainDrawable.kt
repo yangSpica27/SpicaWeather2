@@ -7,7 +7,6 @@ import me.spica.spicaweather2.render.RainEffectRender
 import me.spica.spicaweather2.render.RainPoint
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.view.weather_bg.RainFlake
-import timber.log.Timber
 
 class RainDrawable : WeatherDrawable() {
 
@@ -50,7 +49,6 @@ class RainDrawable : WeatherDrawable() {
 
     fun calculate(width: Int, height: Int) {
         synchronized(lock) {
-            Timber.tag("rain").e("计算")
             bgRains.forEach {
                 it.calculation(width, height)
             }
@@ -61,7 +59,6 @@ class RainDrawable : WeatherDrawable() {
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
         synchronized(lock) {
-            Timber.tag("rain").e("绘制")
             val list = arrayListOf<Float>()
             rainPaint.color = Color.WHITE
             for (rain in rains) {

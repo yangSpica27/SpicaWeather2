@@ -60,6 +60,8 @@ class WeatherMainLayout(context: Context) : RecyclerViewAtViewPager2(context) {
             }
         })
 
+
+
         addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -83,7 +85,7 @@ class WeatherMainLayout(context: Context) : RecyclerViewAtViewPager2(context) {
     private fun getPositionAndOffset(): Pair<Int, Int> {
         var lastOffset = 0
         var lastPosition = 0
-        val layoutManager = getLayoutManager() as LinearLayoutManager
+        val layoutManager = layoutManager as LinearLayoutManager
         // 获取可视的第一个view
         val topView = layoutManager.getChildAt(0)
         if (topView != null) {
