@@ -6,7 +6,6 @@ import android.graphics.Paint
 import me.spica.spicaweather2.render.RainEffectRender
 import me.spica.spicaweather2.render.RainPoint
 import me.spica.spicaweather2.tools.dp
-import timber.log.Timber
 
 class RainDrawable : WeatherDrawable() {
 
@@ -55,7 +54,6 @@ class RainDrawable : WeatherDrawable() {
                     list.add(it[1])
                 }
                 rainPaint.strokeWidth = rain.width
-                Timber.tag("坐标").e("x=${rain.getPoint()[0]} y=${rain.getPoint()[1]}")
             }
             canvas.drawPoints(list.toFloatArray(), rainPaint)
         }

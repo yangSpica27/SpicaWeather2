@@ -18,7 +18,9 @@ import me.spica.spicaweather2.view.weather_drawable.HazeDrawable
 import me.spica.spicaweather2.view.weather_drawable.RainDrawable
 import me.spica.spicaweather2.view.weather_drawable.SnowDrawable
 import me.spica.spicaweather2.view.weather_drawable.SunnyDrawable
+import timber.log.Timber
 import java.util.UUID
+import kotlin.system.measureTimeMillis
 
 class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
@@ -101,7 +103,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     private val drawRunnable = object : Runnable {
         override fun run() {
-            while (isWork) {
+            synchronized(lock) {
                 when (currentWeatherAnimType) {
                     NowWeatherView.WeatherAnimType.RAIN -> {
                         rainDrawable.calculate(width, height)
@@ -122,11 +124,14 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
                     else -> {}
                 }
                 // 执行渲染
-                synchronized(lock) {
+
+
+                val count = measureTimeMillis {
                     doOnDraw()
                 }
+                Timber.tag("耗时").e("${count}ms")
                 // 保证两张帧之间间隔16ms(60帧)
-                drawHandler.postDelayed(this, Math.max(32 - (System.currentTimeMillis() - lastDrawTime), 16))
+                drawHandler.postDelayed(this, Math.max(16 - (System.currentTimeMillis() - lastDrawTime), 0))
                 lastDrawTime = System.currentTimeMillis()
             }
         }

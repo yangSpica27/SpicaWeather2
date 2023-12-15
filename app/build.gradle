@@ -41,13 +41,11 @@ android {
     }
 
     sourceSets {
-        main{
+        main {
             jni.srcDirs = []
             jniLibs.srcDirs = ['libs']
         }
     }
-
-
 
     signingConfigs {
         signingConfig {
@@ -72,10 +70,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_17
+//        targetCompatibility JavaVersion.VERSION_17
+//    }
 
     tasks.withType(KotlinCompile).configureEach {
         kotlinOptions.freeCompilerArgs += ["-Xopt-in=kotlin.time.ExperimentalTime"]
@@ -83,7 +81,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '17'
         //        useK2 = true
     }
     lintOptions {
