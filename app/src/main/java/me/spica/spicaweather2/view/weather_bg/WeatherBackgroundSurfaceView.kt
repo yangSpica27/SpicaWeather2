@@ -47,7 +47,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
             if (value == field) return
             field = value
             post {
-                drawHandler.removeCallbacksAndMessages(null)
                 when (value) {
                     NowWeatherView.WeatherAnimType.SUNNY -> {
                         stopAllAnim()

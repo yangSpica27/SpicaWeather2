@@ -124,7 +124,7 @@ class ActivityMain : MaterialActivity() {
             viewModel.allCityWithWeather.collectLatest {
                 mainPagerAdapter.updateCities(it)
                 data = it
-                updateTitle(0)
+                updateTitleAndAnim(0)
             }
         }
 
@@ -132,7 +132,7 @@ class ActivityMain : MaterialActivity() {
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                updateTitle(position)
+                updateTitleAndAnim(position)
             }
 
             override fun onPageScrolled(
@@ -179,7 +179,7 @@ class ActivityMain : MaterialActivity() {
             }
     }
 
-    private fun updateTitle(position: Int) {
+    private fun updateTitleAndAnim(position: Int) {
         try {
             val currentWeather = data[position].weather
             val currentCity = data[position].city
