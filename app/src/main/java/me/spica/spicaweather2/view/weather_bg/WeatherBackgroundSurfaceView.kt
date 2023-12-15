@@ -150,7 +150,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
     private fun initDrawableRect(width: Int, height: Int) {
-        synchronized(lock){
+        synchronized(lock) {
             rainDrawable.ready(width, height)
             snowDrawable.ready(width, height)
             foggyDrawable.ready(width, height)

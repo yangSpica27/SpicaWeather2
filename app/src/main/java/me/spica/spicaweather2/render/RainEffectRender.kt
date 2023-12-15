@@ -4,11 +4,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.CircleShape
-import com.badlogic.gdx.physics.box2d.Contact
-import com.badlogic.gdx.physics.box2d.ContactImpulse
-import com.badlogic.gdx.physics.box2d.ContactListener
 import com.badlogic.gdx.physics.box2d.FixtureDef
-import com.badlogic.gdx.physics.box2d.Manifold
 import com.badlogic.gdx.physics.box2d.PolygonShape
 import com.badlogic.gdx.physics.box2d.World
 import me.spica.spicaweather2.tools.dp
@@ -49,27 +45,27 @@ class RainEffectRender {
         boxHeight = mappingView2Body(mProportion * 1f)
         world = World(Vector2(0f, 9.8f), true)
         updateHorizontalBounds()
-        world.setContactListener(object : ContactListener {
-            override fun beginContact(contact: Contact?) = Unit
-
-            override fun endContact(contact: Contact) {
-                if (contact.fixtureA.body.userData == 0 && contact.fixtureB.body.userData == -1) {
-                    contact.fixtureA.body.userData = 1
-                } else if (contact.fixtureB.body.userData == 0 && contact.fixtureA.body.userData == -1) {
-                    contact.fixtureB.body.userData = 1
-                }
-            }
-
-            override fun preSolve(contact: Contact?, oldManifold: Manifold?) = Unit
-
-            override fun postSolve(contact: Contact?, impulse: ContactImpulse?) = Unit
-
-        })
-        world.setContactFilter { fixtureA, fixtureB ->
-            if (fixtureA.body.userData == -1 && fixtureB.body.userData == 0) {
-                true
-            } else (fixtureA.body.userData == 0 && fixtureB.body.userData == -1)
-        }
+//        world.setContactListener(object : ContactListener {
+//            override fun beginContact(contact: Contact?) = Unit
+//
+//            override fun endContact(contact: Contact) {
+//                if (contact.fixtureA.body.userData == 0 && contact.fixtureB.body.userData == -1) {
+//                    contact.fixtureA.body.userData = 1
+//                } else if (contact.fixtureB.body.userData == 0 && contact.fixtureA.body.userData == -1) {
+//                    contact.fixtureB.body.userData = 1
+//                }
+//            }
+//
+//            override fun preSolve(contact: Contact?, oldManifold: Manifold?) = Unit
+//
+//            override fun postSolve(contact: Contact?, impulse: ContactImpulse?) = Unit
+//
+//        })
+//        world.setContactFilter { fixtureA, fixtureB ->
+//            if (fixtureA.body.userData == -1 && fixtureB.body.userData == 0) {
+//                true
+//            } else (fixtureA.body.userData == 0 && fixtureB.body.userData == -1)
+//        }
         isInitOK = true
     }
 
@@ -87,6 +83,8 @@ class RainEffectRender {
         fixtureDef.density = mDensity
         fixtureDef.friction = 0.1f // 摩擦系数
         fixtureDef.restitution = 0.3f // 补偿系数
+        fixtureDef.filter.maskBits = 0b01
+        fixtureDef.filter.groupIndex = 0b01
         bodyDef.position[boxWidth + mappingView2Body(16.dp)] =
             mappingView2Body(mWorldHeight * 1f)  + boxHeight
         val bottomBody: Body = world.createBody(bodyDef) // 创建一个真实的下边 body
@@ -110,6 +108,8 @@ class RainEffectRender {
             def.density = mDensity
             def.friction = mFrictionRatio
             def.restitution = mRestitutionRatio
+            def.filter.maskBits = 0
+            def.filter.groupIndex = 0b01
             val body = world.createBody(bodyDef)
             view.body = body
             body.linearVelocity = Vector2(random.nextFloat(), random.nextFloat())
@@ -133,7 +133,7 @@ class RainEffectRender {
             backgroundBody?.setTransform(
                 Vector2(
                     boxWidth + mappingView2Body(16.dp),
-                    mappingView2Body(y * 1f + 12.dp)
+                    mappingView2Body(y * 1f + 10.dp)
                 ),
                 0f
             )
