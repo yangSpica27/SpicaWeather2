@@ -31,7 +31,6 @@ import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.weather.HourlyWeatherBean
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.tools.getColorWithAlpha
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.math.abs
@@ -415,11 +414,6 @@ class HourlyLineView : View {
         var dealtX = 0f
         var dealtY = 0f
         val parentPager = getViewPager2Parent(this.parent)
-        if (parentPager == null) {
-            Timber.tag("parentPager").e("null")
-        } else {
-            Timber.tag("parentPager").e("获取到了")
-        }
         when (ev.action) {
             MotionEvent.ACTION_DOWN -> {
                 parentPager?.isUserInputEnabled = false

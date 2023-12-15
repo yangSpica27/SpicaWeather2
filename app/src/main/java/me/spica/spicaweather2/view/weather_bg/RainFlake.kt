@@ -2,6 +2,8 @@ package me.spica.spicaweather2.view.weather_bg
 
 import android.graphics.Canvas
 import android.graphics.Paint
+import me.spica.spicaweather2.tools.dp
+import kotlin.math.sin
 
 /**
  *  雨滴单元
@@ -11,8 +13,8 @@ private const val INCREMENT_LOWER: Float = 10f
 private const val INCREMENT_UPPER = 30f
 
 // 雨滴的大小
-private const val FLAKE_SIZE_LOWER = 2f
-private const val FLAKE_SIZE_UPPER = 4f
+private val FLAKE_SIZE_LOWER = 1.dp
+private val FLAKE_SIZE_UPPER = 2.dp
 
 class RainFlake( // 雨滴
     private var mRandom: RainRandomGenerator, // 雨滴的速度
@@ -45,8 +47,8 @@ class RainFlake( // 雨滴
     fun calculation(width: Int, height: Int) {
         mPaint.strokeWidth = mFlakeSize
         // y是豎直方向，就是下落
-        val y1: Double = mLine.y1 + mIncrement * Math.sin(1.5)
-        val y2: Double = mLine.y2 + mIncrement * Math.sin(1.5)
+        val y1: Double = mLine.y1 + height/100.0
+        val y2: Double = mLine.y2 + height/100.0
 
         // 這個是設置雨滴位置，如果在很短時間內刷新一次，就是連起來的動畫效果
         mLine.set(mLine.x1, y1.toInt(), mLine.x2, y2.toInt())
@@ -72,8 +74,8 @@ class RainFlake( // 雨滴
         // 設置線寬
         mPaint.strokeWidth = mFlakeSize
         // y是豎直方向，就是下落
-        val y1: Double = mLine.y1 + mIncrement * Math.sin(1.5)
-        val y2: Double = mLine.y2 + mIncrement * Math.sin(1.5)
+        val y1: Double = mLine.y1 + mIncrement * sin(2.5)
+        val y2: Double = mLine.y2 + mIncrement * sin(2.5)
 
         // 這個是設置雨滴位置，如果在很短時間內刷新一次，就是連起來的動畫效果
         mLine.set(mLine.x1, y1.toInt(), mLine.x2, y2.toInt())

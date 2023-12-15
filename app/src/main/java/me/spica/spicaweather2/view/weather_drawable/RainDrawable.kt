@@ -6,6 +6,7 @@ import android.graphics.Paint
 import me.spica.spicaweather2.render.RainEffectRender
 import me.spica.spicaweather2.render.RainPoint
 import me.spica.spicaweather2.tools.dp
+import me.spica.spicaweather2.view.weather_bg.RainFlake
 
 class RainDrawable : WeatherDrawable() {
 
@@ -18,20 +19,26 @@ class RainDrawable : WeatherDrawable() {
     }
 
     // 雨水的合集
-//    private var rains: ArrayList<RainFlake> = arrayListOf()
     private var rains: ArrayList<RainPoint> = arrayListOf()
+    private var bgRains: ArrayList<RainFlake> = arrayListOf()
     private val rainEffectRender = RainEffectRender()
 
+    private val lock = Any()
+
     fun ready(width: Int, height: Int) {
-        rainEffectRender.init(width, height)
-        synchronized(rains) {
+        synchronized(lock) {
+            rainEffectRender.init(width, height)
             rains.clear()
+            bgRains.clear()
             for (i in 0 until 150) {
                 rains.add(
                     RainPoint().apply {
                         rainEffectRender.createParticle(this)
                     }
                 )
+            }
+            for (i in 0 until 150) {
+                bgRains.add(RainFlake.create(width, height, rainPaint))
             }
         }
     }
@@ -41,12 +48,19 @@ class RainDrawable : WeatherDrawable() {
     }
 
     fun calculate(width: Int, height: Int) {
-        rainEffectRender.run()
+        synchronized(lock) {
+            bgRains.forEach {
+                it.calculation(width, height)
+            }
+            rainEffectRender.run()
+        }
     }
 
+
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
-        synchronized(rains) {
+        synchronized(lock) {
             val list = arrayListOf<Float>()
+            rainPaint.color = Color.WHITE
             for (rain in rains) {
                 rainEffectRender.getXy(rain)
                 rain.getPoint().let {
@@ -56,11 +70,12 @@ class RainDrawable : WeatherDrawable() {
                 rainPaint.strokeWidth = rain.width
             }
             canvas.drawPoints(list.toFloatArray(), rainPaint)
+
+            rainPaint.color = Color.parseColor("#F8f8f8")
+
+            bgRains.forEach {
+                it.onlyDraw(canvas)
+            }
         }
-//        synchronized(rains){
-//            rains.forEach { rainFlake ->
-//                rainFlake.draw(canvas)
-//            }
-//        }
     }
 }

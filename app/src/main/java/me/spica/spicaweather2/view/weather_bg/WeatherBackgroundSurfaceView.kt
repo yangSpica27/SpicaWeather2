@@ -7,7 +7,6 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.util.AttributeSet
 import android.view.PixelCopy
-import android.view.PixelCopy.OnPixelCopyFinishedListener
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
@@ -18,9 +17,7 @@ import me.spica.spicaweather2.view.weather_drawable.HazeDrawable
 import me.spica.spicaweather2.view.weather_drawable.RainDrawable
 import me.spica.spicaweather2.view.weather_drawable.SnowDrawable
 import me.spica.spicaweather2.view.weather_drawable.SunnyDrawable
-import timber.log.Timber
 import java.util.UUID
-import kotlin.system.measureTimeMillis
 
 class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
@@ -124,14 +121,8 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
                     else -> {}
                 }
                 // 执行渲染
-
-
-                val count = measureTimeMillis {
-                    doOnDraw()
-                }
-                Timber.tag("耗时").e("${count}ms")
-                // 保证两张帧之间间隔16ms(60帧)
-                drawHandler.postDelayed(this, Math.max(16 - (System.currentTimeMillis() - lastDrawTime), 0))
+                doOnDraw()
+                drawHandler.postDelayed(this, (16 - (System.currentTimeMillis() - lastDrawTime)).coerceAtLeast(0))
                 lastDrawTime = System.currentTimeMillis()
             }
         }
@@ -141,7 +132,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         val background = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         PixelCopy.request(
             this, background,
-            OnPixelCopyFinishedListener { copyResult ->
+            { copyResult ->
                 val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                 val canvas = Canvas(result)
                 if (PixelCopy.SUCCESS == copyResult) {
@@ -160,10 +151,12 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
     private fun initDrawableRect(width: Int, height: Int) {
-        rainDrawable.ready(width, height)
-        snowDrawable.ready(width, height)
-        foggyDrawable.ready(width, height)
-        hazeDrawable.ready(width, height)
+        synchronized(lock){
+            rainDrawable.ready(width, height)
+            snowDrawable.ready(width, height)
+            foggyDrawable.ready(width, height)
+            hazeDrawable.ready(width, height)
+        }
     }
 
     private var mCanvas: Canvas? = null
@@ -171,28 +164,16 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     private var mholder: SurfaceHolder? = null
 
     private fun doOnDraw() {
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            mCanvas = mholder?.lockHardwareCanvas()
-//        } else {
-//            mCanvas = mholder?.lockCanvas()
-//        }
-
         mCanvas = mholder?.lockCanvas()
 
         // ================进行绘制==============
         mCanvas?.let { canvas ->
-
-//            translationDrawable.doOnDraw(canvas, width, height)
             roundClip(canvas)
 
             if (isPause) {
                 mholder?.unlockCanvasAndPost(canvas)
                 return
             }
-
-//            translationDrawable.doOnDraw(canvas, width, height)
-
             when (currentWeatherAnimType) {
                 NowWeatherView.WeatherAnimType.SUNNY -> sunnyDrawable.doOnDraw(canvas, width, height)
                 NowWeatherView.WeatherAnimType.CLOUDY -> cloudDrawable.doOnDraw(canvas, width, height)
@@ -202,8 +183,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
                 NowWeatherView.WeatherAnimType.UNKNOWN -> cloudDrawable.doOnDraw(canvas, width, height)
                 NowWeatherView.WeatherAnimType.HAZE -> hazeDrawable.doOnDraw(canvas, width, height)
             }
-            // ================绘制结束===============
-
             mholder?.unlockCanvasAndPost(canvas)
         }
     }

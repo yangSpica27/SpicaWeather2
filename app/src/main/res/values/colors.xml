@@ -46,6 +46,8 @@
 
     <color name="rain_pop">#149A9A9A</color>
 
+    <color name="rain_item">#00F8F8F8</color>
+
     <color name="seed">#039BE5</color>
     <color name="md_theme_light_primary">#006496</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>
