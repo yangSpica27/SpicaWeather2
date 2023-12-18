@@ -167,15 +167,15 @@ class ActivityMain : MaterialActivity() {
 
     private fun updateOtherPageScroller() {
         (layout.viewPager2.children.first() as RecyclerView).children.forEach {
-                if (it is WeatherMainLayout && it.tag != currentCurrentCity?.cityName) {
-                    (it.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
-                            positionAndOffset.first, positionAndOffset.second
-                        )
-                    doOnMainThreadIdle({
-                        it.checkEnterScreen()
-                    })
-                }
+            if (it is WeatherMainLayout && it.tag != currentCurrentCity?.cityName) {
+                (it.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
+                    positionAndOffset.first, positionAndOffset.second
+                )
+                doOnMainThreadIdle({
+                    it.checkEnterScreen()
+                })
             }
+        }
     }
 
     private fun updateTitleAndAnim(position: Int) {
@@ -192,7 +192,6 @@ class ActivityMain : MaterialActivity() {
             e.printStackTrace()
         }
     }
-
 
 
     private fun blendColors(color1: Int, color2: Int, ratio: Float): Int {

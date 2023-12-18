@@ -220,6 +220,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     fun setBackgroundY(y: Int) {
         rainDrawable.setBackgroundY(y)
+        snowDrawable.setBackgroundY(y)
     }
 
     private fun roundClip(canvas: Canvas) {

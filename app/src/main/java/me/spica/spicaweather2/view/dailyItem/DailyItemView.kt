@@ -19,6 +19,7 @@ import me.spica.spicaweather2.common.WeatherCodeUtils
 import me.spica.spicaweather2.common.getIconRes
 import me.spica.spicaweather2.persistence.entity.weather.DailyWeatherBean
 import me.spica.spicaweather2.tools.dp
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -167,10 +168,18 @@ class DailyItemView : View {
 
             progressPaint.color = ContextCompat.getColor(context, R.color.black)
             progressPaint.shader = progressShader
+
             val left = ((startX * 1f - 12.dp) - (startX - width / 4f)) *
                 (dailyWeatherBean.minTemp - minMinTemp) / (maxMaxTemp - minMinTemp) + startX - width / 4f
+
             val right = ((startX * 1f - 12.dp) - (startX - width / 4f)) *
                 (dailyWeatherBean.maxTemp - minMinTemp) / (maxMaxTemp - minMinTemp) + startX - width / 4f
+
+            Timber.tag("min-temp").e("${minMinTemp}")
+            Timber.tag("max-temp").e("${maxMaxTemp}")
+            Timber.tag("length").e("${maxMaxTemp - minMinTemp}")
+            Timber.tag("left").e("$left")
+            Timber.tag("right").e("$right")
             canvas.drawLine(
                 left,
                 height / 2f,
