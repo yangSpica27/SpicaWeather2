@@ -20,7 +20,6 @@ import me.spica.spicaweather2.network.HitokotoClient
 import me.spica.spicaweather2.persistence.dao.CityDao
 import me.spica.spicaweather2.persistence.dao.WeatherDao
 import me.spica.spicaweather2.persistence.entity.city.CityBean
-import me.spica.spicaweather2.persistence.entity.weather.AlertBean
 import me.spica.spicaweather2.persistence.entity.weather.CaiyunExtendBean
 import java.io.BufferedReader
 import java.io.IOException
@@ -62,20 +61,12 @@ class DataSyncWorker : Service() {
                 .forEach { cityBean ->
                     val res: Deferred<Boolean> = async(Dispatchers.IO, CoroutineStart.DEFAULT) {
                         val weatherResponse = heClient.getAllWeather(cityBean.lon, cityBean.lat).getOrNull()
-                        val minuteBaseResponse = heClient.getMinute(cityBean.lon, cityBean.lat).getOrNull()
+
                         val hitokotoResponse = hitokotoClient.getHitokoto().getOrNull()
 
                         var caiyunExtBean: CaiyunExtendBean? = null
 
-                        if (minuteBaseResponse != null) {
-                            caiyunExtBean = CaiyunExtendBean(
-                                alerts = minuteBaseResponse.result.alert.content.map {
-                                    AlertBean(title = it.title, description = it.description, status = it.status, code = it.code, source = it.source)
-                                },
-                                description = minuteBaseResponse.result.hourly.description,
-                                forecastKeypoint = minuteBaseResponse.result.forecastKeypoint,
-                            )
-                        }
+
 
                         weatherResponse?.data?.let { weather ->
                             weather.descriptionForToday = caiyunExtBean?.forecastKeypoint ?: ""

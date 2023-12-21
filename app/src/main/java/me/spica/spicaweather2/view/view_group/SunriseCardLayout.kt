@@ -10,6 +10,7 @@ import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.weather.Weather
+import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.view.SunriseView
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
@@ -142,7 +143,9 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
 
     override fun startEnterAnim() {
         super.startEnterAnim()
-        sunriseView.startAnim()
+        doOnMainThreadIdle({
+            sunriseView.startAnim()
+        })
     }
 
     override fun resetAnim() {

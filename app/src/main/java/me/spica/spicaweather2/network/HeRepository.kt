@@ -8,7 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import me.spica.spicaweather2.network.model.hefeng.mapper.SuccessMinutelyMapper
 import me.spica.spicaweather2.network.model.hefeng.mapper.SuccessWeatherMapper
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.persistence.repository.Repository
@@ -19,24 +18,6 @@ import timber.log.Timber
  */
 class HeRepository(private val heClient: HeClient) : Repository {
 
-    override fun fetchCaiyunExtend(lon: String, lat: String, onError: (String?) -> Unit) =
-        flow {
-            val response = heClient.getMinute(lon, lat)
-            response.suspendOnSuccess(SuccessMinutelyMapper) {
-                Timber.e("请求成功")
-                emit(this)
-            }.suspendOnFailure {
-                Timber.e("请求失败")
-                emit(null)
-                Timber.e(this.message())
-                onError(this.message())
-            }.suspendOnError {
-                Timber.e("请求失败")
-                emit(null)
-                Timber.e(message())
-                onError(message())
-            }
-        }.flowOn(Dispatchers.IO)
 
     override fun fetchWeather(
         lon: String,

@@ -52,4 +52,28 @@
     <string name="loc_to">定位%1$s</string>
     <string name="add_city">添加城市</string>
 
+    <string name="air_introduce_1">空气质量指数等级标准</string>
+    <string name="air_introduce_2">空气污染指数（Air Pollution Index, API）是反映空气污染物，如最常见的氮氧化物、悬浮粒子（来自汽车）和二氧化硫（来自工厂）水平的一个指数，一般是根据实际污染物观测值并用特定公式算出。指数常被用来对公众发布“空气质量日报”，让人们知道目前的空气质量，从而更妥善地规划行程和工作。各个国家或地区对空气污染指数的计算方法和规定有所不同，称谓也稍有区别。</string>
+
+    <string name="air_level1_introduce_name">优\n0–50</string>
+    <string name="air_level2_introduce_name">良\n51–100</string>
+    <string name="air_level3_introduce_name">轻度\n101–150</string>
+    <string name="air_level4_introduce_name">中度\n151–200</string>
+    <string name="air_level5_introduce_name">重度\n201–300</string>
+    <string name="air_level6_introduce_name">严重\n301–500</string>
+
+    <string name="air_level1_introduce_title">空气质量令人满意，基本无空气污染</string>
+    <string name="air_level2_introduce_title">空气质量可接受，但某些污染物可能对极少数异常敏感人群健康有较弱影响</string>
+    <string name="air_level3_introduce_title">易感人群症状有轻度加剧，健康人群出现刺激症状</string>
+    <string name="air_level4_introduce_title">进一步加剧易感人群症状，可能对健康人群心脏、呼吸系统有影响</string>
+    <string name="air_level5_introduce_title">心脏病和肺病患者症状显著加剧，运动耐受力降低，健康人群普遍出现症状</string>
+    <string name="air_level6_introduce_title">健康人群运动耐受力降低，有明显强烈症状，提前出现某些疾病</string>
+
+    <string name="air_level1_introduce_body">各类人群可正常活动</string>
+    <string name="air_level2_introduce_body">极少数异常敏感人群应减少户外活动</string>
+    <string name="air_level3_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应减少长时间、高强度的户外锻炼</string>
+    <string name="air_level4_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应避免长时间、高强度的户外锻炼，一般人群适量减少户外运动</string>
+    <string name="air_level5_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应停留在室内，停止户外活动，一般人群应避免户外活动</string>
+    <string name="air_level6_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应停留在室内，避免体力消耗，一般人群应避免户外活动</string>
+
 </resources>

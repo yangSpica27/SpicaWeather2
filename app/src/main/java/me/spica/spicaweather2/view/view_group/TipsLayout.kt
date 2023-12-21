@@ -11,6 +11,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.marginTop
 import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
@@ -59,13 +60,13 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         setBackgroundResource(R.drawable.bg_card)
         isFocusable = false
         isClickable = false
-        sptIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_spt))
+        sptIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_sport))
         sptTitle.text = "运动指数"
-        airIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_air_index))
+        airIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_breath))
         airTitle.text = "空气指数"
-        clothesIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_clothes))
+        clothesIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_clothes))
         clothesTitle.text = "穿衣指数"
-        carIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_clean_car))
+        carIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_clean_car))
         carTitle.text = "洗车指数"
         val lp = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -94,6 +95,9 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             it.type == LifeIndexBean.AIR
         }
         airDesc.text = air?.category ?: "暂无数据"
+        doOnPreDraw {
+            requestLayout()
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -104,8 +108,8 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         val appCompatImageView = AppCompatImageView(context)
         appCompatImageView.layoutParams =
             LayoutParams(
-                35.dp,
-                35.dp
+                40.dp,
+                40.dp
             ).apply {
                 topMargin = 12.dp
             }

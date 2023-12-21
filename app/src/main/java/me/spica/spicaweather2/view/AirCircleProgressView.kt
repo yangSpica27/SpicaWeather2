@@ -9,6 +9,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.SweepGradient
+import android.graphics.Typeface
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -39,15 +40,19 @@ class AirCircleProgressView : View {
 
     private val secondTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
         textSize = 16.dp
-        color = ContextCompat.getColor(context, R.color.textColorPrimary)
+        color = ContextCompat.getColor(context, R.color.white)
+        typeface = Typeface.DEFAULT_BOLD
     }
 
+    private val secondTextBackgroundPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
+        style = Paint.Style.FILL
+    }
 
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         strokeWidth = 12.dp
         style = Paint.Style.STROKE
         color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
-
     }
 
 
@@ -64,6 +69,20 @@ class AirCircleProgressView : View {
     private var category = "良"
 
     fun bindProgress(lv: Int, category: String) {
+        if (lv < 50) {
+            textPaint.color = ContextCompat.getColor(context, R.color.l1)
+        } else if (lv < 100) {
+            textPaint.color = ContextCompat.getColor(context, R.color.l2)
+        } else if (lv < 150) {
+            textPaint.color = ContextCompat.getColor(context, R.color.l5)
+        } else if (lv < 200) {
+            textPaint.color = ContextCompat.getColor(context, R.color.l6)
+        } else if (lv < 300) {
+            textPaint.color = ContextCompat.getColor(context, R.color.l7)
+        } else {
+            textPaint.color = ContextCompat.getColor(context, R.color.l8)
+        }
+        secondTextBackgroundPaint.color = textPaint.color
         this.lv = lv
         this.category = category
         ViewCompat.postInvalidateOnAnimation(this)
@@ -91,14 +110,14 @@ class AirCircleProgressView : View {
                 (width + 2 * VIEW_MARGIN).toInt(),
                 MeasureSpec.EXACTLY
             ),
-
             MeasureSpec.makeMeasureSpec(
                 (width + 2 * VIEW_MARGIN).toInt(),
                 MeasureSpec.EXACTLY
             )
         )
         mRectF.set(
-            VIEW_MARGIN * 1f, VIEW_MARGIN,
+            VIEW_MARGIN * 1f,
+            VIEW_MARGIN,
             measuredWidth - VIEW_MARGIN,
             measuredHeight - VIEW_MARGIN
         )
@@ -131,7 +150,18 @@ class AirCircleProgressView : View {
             textPaint
         )
         val tipText = category
+
         secondTextPaint.getTextBounds(tipText, 0, tipText.length, textBound)
+
+        canvas.drawRoundRect(
+            mRectF.centerX() - textBound.width() / 2f - 12.dp,
+            mRectF.bottom - textBound.height() - Math.abs(textBound.top) - 4.dp,
+            mRectF.centerX() + textBound.width() / 2f + 12.dp,
+            mRectF.bottom - textBound.height() + (textBound.bottom) + 4.dp,
+            10f,
+            10f,
+            secondTextBackgroundPaint
+        )
         canvas.drawText(
             tipText,
             mRectF.centerX() - textBound.width() / 2f,
@@ -166,7 +196,7 @@ class AirCircleProgressView : View {
     }
 
     private fun drawBack(canvas: Canvas) {
-        linePaint.strokeWidth = 12.dp
+        linePaint.strokeWidth = 8.dp
         linePaint.color = ContextCompat.getColor(context, R.color.material_grey_200)
         linePaint.shader = null
         canvas.drawArc(

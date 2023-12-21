@@ -121,7 +121,12 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
                 }
                 // 执行渲染
                 doOnDraw()
-                drawHandler.postDelayed(this, (16 - (System.currentTimeMillis() - lastDrawTime)).coerceAtLeast(0))
+                if (drawThread.isAlive) {
+                    drawHandler.postDelayed(
+                        this, (16 - (System.currentTimeMillis() - lastDrawTime))
+                            .coerceAtLeast(0)
+                    )
+                }
                 lastDrawTime = System.currentTimeMillis()
             }
         }

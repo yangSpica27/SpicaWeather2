@@ -34,6 +34,9 @@
             android:name=".ui.manager_city.ActivityManagerCity" />
         <activity android:name=".ui.add_city.ActivityAddCity" />
         <activity android:name=".ui.test.TestActivity" />
+        <activity
+            android:name=".ui.air_introduce.AirIntroductionActivity"
+            android:screenOrientation="portrait" />
 
         <service android:name=".work.DataSyncWorker" />
     </application>

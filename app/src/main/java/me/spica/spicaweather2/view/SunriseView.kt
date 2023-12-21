@@ -7,11 +7,8 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.doOnPreDraw
-import androidx.core.view.drawToBitmap
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
 import java.util.*
@@ -133,10 +130,6 @@ class SunriseView : View {
         this.endTime = decodeTime(endTime)
         this.currentTime = decodeTime(currentTime)
         ensureProgress()
-        if (cacheBitmap?.isRecycled == false) {
-            cacheBitmap?.recycle()
-            cacheBitmap = null
-        }
         ViewCompat.postInvalidateOnAnimation(this)
     }
 
@@ -153,7 +146,6 @@ class SunriseView : View {
         )
     }
 
-    private var cacheBitmap: Bitmap? = null
 
     fun startAnim() {
         val animator = ValueAnimator.ofInt(0, currentTime - startTime)
@@ -161,13 +153,6 @@ class SunriseView : View {
         animator.addUpdateListener {
             progress = it.animatedValue as Int
             ViewCompat.postInvalidateOnAnimation(this)
-        }
-        animator.doOnEnd {
-            it.removeAllListeners()
-            doOnPreDraw {
-                cacheBitmap = this.drawToBitmap()
-                invalidate()
-            }
         }
         animator.start()
     }
@@ -185,12 +170,6 @@ class SunriseView : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
-        cacheBitmap?.let {
-            canvas.drawBitmap(it, 0f, 0f, null)
-            return
-        }
-
         val startAngle: Float = 270f - ARC_ANGLE / 2f
 
         var progressSweepAngle = (progress.toFloat() / max.toFloat() * ARC_ANGLE)

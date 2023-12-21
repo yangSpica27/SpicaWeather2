@@ -7,6 +7,7 @@ import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.core.animation.doOnEnd
 import me.spica.spicaweather2.persistence.entity.weather.Weather
+import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.tools.dp
 
 interface SpicaWeatherCard {
@@ -65,9 +66,9 @@ interface SpicaWeatherCard {
 
         if (isIn) {
             hasInScreen = true
-            animatorView.postOnAnimation {
+            doOnMainThreadIdle({
                 startEnterAnim()
-            }
+            },150)
         }
     }
 

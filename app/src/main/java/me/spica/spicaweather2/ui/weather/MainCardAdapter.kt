@@ -1,10 +1,12 @@
 package me.spica.spicaweather2.ui.weather
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.RecyclerView
 import me.spica.spicaweather2.persistence.entity.weather.Weather
+import me.spica.spicaweather2.ui.air_introduce.AirIntroductionActivity
 import me.spica.spicaweather2.view.view_group.AirCardLayout
 import me.spica.spicaweather2.view.view_group.DailyWeatherLayout
 import me.spica.spicaweather2.view.view_group.HourlyCardLayout
@@ -72,6 +74,10 @@ class MainCardAdapter(
 
             HomeCardType.AIR.code -> {
                 val itemView = AirCardLayout(parent.context)
+                itemView.setOnClickListener{
+                    // 空气质量卡片点击跳转
+                    parent.context.startActivity(Intent(parent.context, AirIntroductionActivity::class.java))
+                }
                 return AbstractMainViewHolder(itemView, itemView).apply {
                     reset()
                 }
