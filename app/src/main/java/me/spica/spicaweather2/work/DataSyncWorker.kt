@@ -20,7 +20,6 @@ import me.spica.spicaweather2.network.HitokotoClient
 import me.spica.spicaweather2.persistence.dao.CityDao
 import me.spica.spicaweather2.persistence.dao.WeatherDao
 import me.spica.spicaweather2.persistence.entity.city.CityBean
-import me.spica.spicaweather2.persistence.entity.weather.CaiyunExtendBean
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -64,14 +63,7 @@ class DataSyncWorker : Service() {
 
                         val hitokotoResponse = hitokotoClient.getHitokoto().getOrNull()
 
-                        var caiyunExtBean: CaiyunExtendBean? = null
-
-
-
                         weatherResponse?.data?.let { weather ->
-                            weather.descriptionForToday = caiyunExtBean?.forecastKeypoint ?: ""
-                            weather.descriptionForToWeek = caiyunExtBean?.description ?: ""
-                            weather.alerts = caiyunExtBean?.alerts ?: listOf()
                             weather.cityName = cityBean.cityName
                             weather.welcomeText = hitokotoResponse?.hitokoto ?: "昭昭若日月之明，离离如星辰之行"
                             weatherDao.insertWeather(weather)

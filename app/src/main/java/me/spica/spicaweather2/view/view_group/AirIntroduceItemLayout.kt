@@ -57,9 +57,6 @@ class AirIntroduceItemLayout(context: Context) : AViewGroup(context) {
         rightText2View.text = rightText2
         this.leftColor = leftColor
         this.rightColor = rightColor
-        post {
-            requestLayout()
-        }
     }
 
 

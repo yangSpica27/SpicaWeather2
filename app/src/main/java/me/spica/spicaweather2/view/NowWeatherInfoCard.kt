@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.doOnPreDraw
 import androidx.core.view.marginTop
 import androidx.core.view.updateMargins
 import com.airbnb.lottie.LottieAnimationView
@@ -161,9 +160,6 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
         waterText.text = "${weather.todayWeather.water}%"
         windSpeed.text = "${weather.todayWeather.windSpeed}m/s"
         pressureText.text = "${weather.todayWeather.windPa}pa"
-        doOnPreDraw {
-            requestLayout()
-        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

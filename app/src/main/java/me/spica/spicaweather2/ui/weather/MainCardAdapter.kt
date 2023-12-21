@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.RecyclerView
+import me.spica.spicaweather2.common.WeatherType
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.ui.air_introduce.AirIntroductionActivity
 import me.spica.spicaweather2.view.view_group.AirCardLayout
@@ -25,7 +26,7 @@ class MainCardAdapter(
 
     init {
         setHasStableIds(true)
-        recyclerView.setItemViewCacheSize(10)
+        recyclerView.setItemViewCacheSize(WeatherType.values().size)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -99,6 +100,9 @@ class MainCardAdapter(
     override fun onBindViewHolder(holder: AbstractMainViewHolder, position: Int) {
         weather?.let {
             holder.bindView(it)
+            holder.itemView.doOnPreDraw {
+                holder.itemView.requestLayout()
+            }
         }
     }
 
@@ -125,7 +129,7 @@ class MainCardAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        return items[position].code.toLong()
+        return "${items[position].code},${weather?.todayWeather?.obsTime}".hashCode().toLong()
     }
 
     override fun getItemCount(): Int = items.size

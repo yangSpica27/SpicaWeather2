@@ -11,7 +11,6 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
-import androidx.core.view.doOnPreDraw
 import androidx.core.view.marginTop
 import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
@@ -95,9 +94,6 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             it.type == LifeIndexBean.AIR
         }
         airDesc.text = air?.category ?: "暂无数据"
-        doOnPreDraw {
-            requestLayout()
-        }
     }
 
     override fun onDraw(canvas: Canvas) {

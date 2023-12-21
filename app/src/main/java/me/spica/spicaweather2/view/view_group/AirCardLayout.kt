@@ -6,7 +6,6 @@ import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.view.doOnPreDraw
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
 import androidx.core.view.marginTop
@@ -245,9 +244,6 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         tvPm25Value.text = "${weather.air.pm2p5}微克/m³"
         tvSo2Value.text = "${weather.air.so2}微克/m³"
         airCircleProgressView.postInvalidate()
-        doOnPreDraw {
-            requestLayout()
-        }
     }
 
     override fun startEnterAnim() {

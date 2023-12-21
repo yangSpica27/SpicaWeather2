@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.text.TextUtils
 import android.text.format.DateUtils
 import android.view.View
 import android.view.ViewGroup
@@ -106,6 +107,10 @@ class NowWeatherLayout(context: Context) : AViewGroup(context = context), SpicaW
 
     override fun bindData(weather: Weather) {
         nowWeatherInfoCard.bindData(weather)
-        helloText.text = weather.welcomeText
+        helloText.text = if (TextUtils.isEmpty(weather.descriptionForToday)){
+            weather.welcomeText
+        }else{
+            weather.descriptionForToday
+        }
     }
 }
