@@ -75,7 +75,7 @@ class MainCardAdapter(
 
             HomeCardType.AIR.code -> {
                 val itemView = AirCardLayout(parent.context)
-                itemView.setOnClickListener{
+                itemView.setOnClickListener {
                     // 空气质量卡片点击跳转
                     parent.context.startActivity(Intent(parent.context, AirIntroductionActivity::class.java))
                 }

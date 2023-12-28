@@ -28,7 +28,7 @@ class HazeDrawable(private val context: Context) : WeatherDrawable() {
 
     private val random: Random = Random.Default
 
-    private val pointPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val pointPaint = Paint()
 
     private val points: MutableList<Particle> = arrayListOf()
 

@@ -7,10 +7,12 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.Point
 import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
 import android.os.MessageQueue
+import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.TouchDelegate
 import android.view.View
@@ -25,6 +27,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import me.spica.spicaweather2.R
+
 
 /**
  * 获取版本号
@@ -229,7 +232,7 @@ fun AppCompatActivity.addNewFragment(
 fun AppCompatActivity.showOldFragment(
     show_old_fragment: Fragment,
     hide_fragment_list:
-        List<Fragment> = listOf()
+    List<Fragment> = listOf()
 ) {
 
     val transaction = this.supportFragmentManager.beginTransaction()
@@ -250,4 +253,40 @@ fun Context.getStatusBarHeight(): Int {
         height = applicationContext.resources.getDimensionPixelSize(resourceId)
     }
     return height
+}
+
+private var screenSize: Point? = null
+
+private fun initScreenSize(context: Context) {
+    if (screenSize == null) {
+        screenSize = Point()
+        val outMetrics = DisplayMetrics()
+        ContextCompat.getDisplayOrDefault(context).getRealMetrics(outMetrics)
+        screenSize?.x = outMetrics.widthPixels
+        screenSize?.y = outMetrics.heightPixels
+    }
+}
+
+fun Context.getScreenWidth(): Int {
+    initScreenSize(this)
+    return screenSize?.x ?: 0
+}
+
+fun Context.getScreenHeight(): Int {
+    initScreenSize(this)
+    return screenSize?.y ?: 0
+}
+
+internal fun View.locationOnScreen(
+    intBuffer: IntArray = IntArray(2),
+    rectBuffer: Rect = Rect(),
+    ignoreTranslations: Boolean = false
+): Rect {
+    getLocationOnScreen(intBuffer)
+    if (ignoreTranslations) {
+        intBuffer[0] -= translationX.toInt()
+        intBuffer[1] -= translationY.toInt()
+    }
+    rectBuffer.set(intBuffer[0], intBuffer[1], intBuffer[0] + width, intBuffer[1] + height)
+    return rectBuffer
 }

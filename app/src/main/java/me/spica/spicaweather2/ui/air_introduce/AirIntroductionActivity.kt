@@ -11,7 +11,7 @@ import rikka.material.app.MaterialActivity
 
 class AirIntroductionActivity : MaterialActivity() {
 
-    private val layout  by lazy {
+    private val layout by lazy {
         AirIntroduceLayout(this).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -29,7 +29,7 @@ class AirIntroductionActivity : MaterialActivity() {
             )
             addView(layout)
             overScrollMode = ScrollView.OVER_SCROLL_NEVER
-            setBackgroundColor(ContextCompat.getColor(context,R.color.white))
+            setBackgroundColor(ContextCompat.getColor(context, R.color.white))
         }
         setContentView(scrollView)
         WindowInsetsControllerCompat(window, scrollView).isAppearanceLightStatusBars = true

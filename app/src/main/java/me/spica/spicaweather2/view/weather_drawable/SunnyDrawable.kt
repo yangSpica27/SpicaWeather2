@@ -14,7 +14,7 @@ import me.spica.spicaweather2.tools.dp
 class SunnyDrawable(private val context: Context) : WeatherDrawable() {
 
     // 绘制太阳的paint
-    private val sunnyPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val sunnyPaint = Paint().apply {
         color = ContextCompat.getColor(context, R.color.l8)
     }
 

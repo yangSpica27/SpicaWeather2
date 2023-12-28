@@ -20,7 +20,7 @@ private const val ARC_ANGLE = 135
 
 class SunriseView : View {
 
-    private val drawablePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val drawablePaint = Paint( ).apply {
         isDither = true
         style = Paint.Style.FILL_AND_STROKE
         color = ContextCompat.getColor(context, R.color.material_yellow_600)
@@ -54,18 +54,18 @@ class SunriseView : View {
         }
 
     // 区域绘制
-    private val pathPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val pathPaint = Paint( ).apply {
         style = Paint.Style.FILL
     }
 
-    private val dottedLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val dottedLinePaint = Paint( ).apply {
         pathEffect = DashPathEffect(floatArrayOf(5.dp, 2.dp), 0F)
         strokeWidth = 2.dp
         style = Paint.Style.STROKE
         color = ContextCompat.getColor(context, R.color.dottedLineColor)
     }
 
-    private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val linePaint = Paint( ).apply {
         strokeWidth = 4.dp
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND

@@ -59,16 +59,16 @@ class HourlyLineView : View {
 
     private val data: ArrayList<HourlyWeatherBean> = arrayListOf() // 数据源
 
-    private val topIconPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val topIconPaint = Paint( )
 
-    private val tempPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val tempPaint = TextPaint( ).apply {
         typeface = Typeface.DEFAULT_BOLD
         textSize = 16.dp
         color = ContextCompat.getColor(context, R.color.textColorPrimary)
         textAlign = Paint.Align.CENTER
     }
 
-    private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val linePaint = Paint( ).apply {
         strokeWidth = 3.dp
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
@@ -269,12 +269,12 @@ class HourlyLineView : View {
         textAlign = Paint.Align.CENTER
     }
 
-    private val weatherNameTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val weatherNameTextPaint = TextPaint( ).apply {
         textSize = 18.dp
         textAlign = Paint.Align.CENTER
     }
 
-    private val weatherNameBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val weatherNameBackgroundPaint = Paint( ).apply {
         style = Style.FILL
     }
 
@@ -293,7 +293,7 @@ class HourlyLineView : View {
         )
     }
 
-    private val drawTimeTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val drawTimeTextPaint = TextPaint( ).apply {
         textSize = 16.dp
         textAlign = Paint.Align.CENTER
         color = ContextCompat.getColor(context, R.color.textColorPrimary)

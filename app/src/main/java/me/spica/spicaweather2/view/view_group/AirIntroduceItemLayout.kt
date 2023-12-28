@@ -73,8 +73,8 @@ class AirIntroduceItemLayout(context: Context) : AViewGroup(context) {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        cliPath.reset()
-        cliPath.addRoundRect(
+        clipPath.reset()
+        clipPath.addRoundRect(
             0f, 0f, w.toFloat(),
             h.toFloat(),
             floatArrayOf(8.dp.toFloat(), 8.dp.toFloat(), 8.dp.toFloat(), 8.dp.toFloat(), 8.dp.toFloat(), 8.dp.toFloat(), 8.dp.toFloat(), 8.dp.toFloat()),
@@ -102,14 +102,14 @@ class AirIntroduceItemLayout(context: Context) : AViewGroup(context) {
     }
 
 
-    private val cliPath = Path()
+    private val clipPath = Path()
 
     private val backGroundPaint = Paint().apply {
         color = Color.WHITE
     }
 
     override fun dispatchDraw(canvas: Canvas) {
-        canvas.clipPath(cliPath)
+        canvas.clipPath(clipPath)
         backGroundPaint.color = leftColor
         canvas.drawRect(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), backGroundPaint)
         backGroundPaint.color = rightColor

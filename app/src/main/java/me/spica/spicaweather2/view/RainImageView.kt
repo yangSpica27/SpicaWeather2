@@ -25,7 +25,7 @@ class RainImageView : LottieAnimationView {
 
     private val textBound = Rect()
 
-    private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val textPaint = TextPaint( ).apply {
         color = ContextCompat.getColor(context, R.color.water_color)
         textSize = 10.dp
     }

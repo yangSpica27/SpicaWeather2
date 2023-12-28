@@ -12,7 +12,7 @@ import me.spica.spicaweather2.view.view_group.ItemCityManagerLayout
 
 class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>() {
 
-    private val items: MutableList<CityWithWeather> = arrayListOf<CityWithWeather>()
+    private val items: MutableList<CityWithWeather> = arrayListOf()
 
     companion object {
         const val ITEM_TYPE_NORMAL = 0

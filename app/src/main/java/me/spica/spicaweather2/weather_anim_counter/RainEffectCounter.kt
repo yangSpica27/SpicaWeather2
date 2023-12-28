@@ -1,4 +1,4 @@
-package me.spica.spicaweather2.render
+package me.spica.spicaweather2.weather_anim_counter
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
@@ -10,7 +10,8 @@ import com.badlogic.gdx.physics.box2d.World
 import me.spica.spicaweather2.tools.dp
 import java.io.Closeable
 
-class SnowEffectCounter : Closeable {
+class RainEffectCounter : Closeable {
+
     private lateinit var world: World
 
     private val random = kotlin.random.Random.Default
@@ -20,13 +21,13 @@ class SnowEffectCounter : Closeable {
      * 迭代速率
      * 迭代次数
      * */
-    private val dt = 1f / 60f
+    private val dt = 1f / 30f
     private val velocityIterations = 5
     private val positionIterations = 20
 
     private val mProportion = 60f // 模拟世界和view坐标的转化比例
     private var mDensity = .5f
-    private val mFrictionRatio = 10.0f // 摩擦系数
+    private val mFrictionRatio = 0.0f // 摩擦系数
     private val mRestitutionRatio = 0.3f // 回复系数
 
     private var mWorldWidth = 0
@@ -43,7 +44,7 @@ class SnowEffectCounter : Closeable {
         this.mWorldHeight = height
         boxWidth = mappingView2Body(mWorldWidth * 1f - 28.dp) / 2f
         boxHeight = mappingView2Body(mProportion * 1f)
-        world = World(Vector2(0f, 4.8f), true)
+        world = World(Vector2(0f, 9.8f), true)
         updateHorizontalBounds()
         isInitOK = true
     }
@@ -65,7 +66,7 @@ class SnowEffectCounter : Closeable {
         fixtureDef.filter.maskBits = 0b01
         fixtureDef.filter.groupIndex = 0b01
         bodyDef.position[boxWidth + mappingView2Body(16.dp)] =
-            mappingView2Body(mWorldHeight * 1f) + boxHeight
+            mappingView2Body(mWorldHeight * 1f)  + boxHeight
         val bottomBody: Body = world.createBody(bodyDef) // 创建一个真实的下边 body
         val fixture = bottomBody.createFixture(fixtureDef)
         val body = fixture.body
@@ -73,10 +74,10 @@ class SnowEffectCounter : Closeable {
         backgroundBody?.userData = -1
     }
 
-    fun createParticle(view: BaseParticle, isBg: Boolean = false) {
+    fun createParticle(view: BaseParticle) {
         synchronized(world) {
             val bodyDef = BodyDef()
-            view.x = (-2 * mWorldWidth..mWorldWidth).random(random).toFloat()
+            view.x = (0..mWorldWidth).random(random).toFloat()
             view.y = (-3 * mWorldHeight..0).random(random).toFloat()
             bodyDef.type = BodyDef.BodyType.DynamicBody
             bodyDef.position[mappingView2Body(view.x + view.width / 2)] = mappingView2Body(view.y + view.height / 2)
@@ -84,24 +85,17 @@ class SnowEffectCounter : Closeable {
             shape.radius = mappingView2Body(view.width / 2)
             val def = FixtureDef()
             def.shape = shape
-            def.density = .1f
+            def.density = mDensity
             def.friction = mFrictionRatio
-            def.restitution = 0f
-            def.filter.maskBits = if (isBg){
-                0b00
-            }else{
-                0b01
-            }
-            def.filter.groupIndex = if (isBg){
-                0b00
-            }else{
-                0b01
-            }
+            def.restitution = mRestitutionRatio
+            def.filter.maskBits = 0
+            def.filter.groupIndex = 0b01
             val body = world.createBody(bodyDef)
             view.body = body
             body.linearVelocity = Vector2(random.nextFloat(), random.nextFloat())
             body.createFixture(def)
             body.linearDamping = 0.6f
+            body.userData = 0
         }
     }
 
@@ -129,9 +123,10 @@ class SnowEffectCounter : Closeable {
     fun getXy(view: BaseParticle) {
         view.x = getViewX(view)
         val newY = getViewY(view)
+        val sameY = newY == view.y
         view.y = newY
-        if (view.y > mWorldHeight || view.x < 0 || view.x > mWorldWidth ) {
-            view.x = (-mWorldWidth..mWorldWidth).random(random).toFloat()
+        if (view.y > mWorldHeight || view.x < 0 || view.x > mWorldWidth || sameY) {
+            view.x = (0..mWorldWidth).random(random).toFloat()
 
             view.y = (-mWorldHeight..0).random(random).toFloat()
 
@@ -171,8 +166,8 @@ class SnowEffectCounter : Closeable {
     }
 
 
+
     override fun close() {
         world.dispose()
     }
-
 }

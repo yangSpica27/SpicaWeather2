@@ -3,6 +3,8 @@ package me.spica.spicaweather2.view.weather_bg
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.LinearGradient
+import android.graphics.Paint
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.AttributeSet
@@ -10,7 +12,6 @@ import android.view.PixelCopy
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
-import me.spica.spicaweather2.R
 import me.spica.spicaweather2.view.weather_drawable.CloudDrawable
 import me.spica.spicaweather2.view.weather_drawable.FoggyDrawable
 import me.spica.spicaweather2.view.weather_drawable.HazeDrawable
@@ -41,7 +42,18 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     private lateinit var drawHandler: Handler
 
-    var bgColor = ContextCompat.getColor(context, R.color.window_background)
+    var bgColor = ContextCompat.getColor(context, android.R.color.transparent)
+
+    private val bgPaint = Paint(Paint.DITHER_FLAG)
+
+    var bgShader: LinearGradient? = null
+        set(value) {
+            field = value
+            bgPaint.shader = value
+        }
+
+    var bgBitmap: Bitmap? = null
+
     var currentWeatherAnimType = NowWeatherView.WeatherAnimType.UNKNOWN
         set(value) {
             if (value == field) return
@@ -172,7 +184,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
         // ================进行绘制==============
         mCanvas?.let { canvas ->
-            roundClip(canvas)
+            drawBackground(canvas)
 
             if (isPause) {
                 mholder?.unlockCanvasAndPost(canvas)
@@ -228,8 +240,14 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         snowDrawable.setBackgroundY(y)
     }
 
-    private fun roundClip(canvas: Canvas) {
-//        canvas.clipPath(clipPath)
+    private fun drawBackground(canvas: Canvas) {
         canvas.drawColor(bgColor)
+        bgBitmap?.let { bgBitmap ->
+            canvas.drawBitmap(
+                bgBitmap,
+                0f, 0f, bgPaint
+            )
+        }
+
     }
 }

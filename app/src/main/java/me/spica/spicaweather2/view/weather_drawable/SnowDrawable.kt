@@ -4,14 +4,14 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import androidx.annotation.WorkerThread
-import me.spica.spicaweather2.render.RainPoint
-import me.spica.spicaweather2.render.SnowEffectCounter
 import me.spica.spicaweather2.tools.dp
+import me.spica.spicaweather2.weather_anim_counter.RainOrSnowPoint
+import me.spica.spicaweather2.weather_anim_counter.SnowEffectCounter
 
 class SnowDrawable : WeatherDrawable() {
 
     // 雪的集合
-    private var snows: ArrayList<RainPoint> = arrayListOf()
+    private var snows: ArrayList<RainOrSnowPoint> = arrayListOf()
 
     // 绘制雨水的paint
     private val snowPaint = Paint().apply {
@@ -23,40 +23,46 @@ class SnowDrawable : WeatherDrawable() {
 
     private val snowEffectCounter = SnowEffectCounter()
 
+    private val colors = intArrayOf(
+        Color.parseColor("#26787474"),
+        Color.parseColor("#ff9A9A9A"),
+        Color.WHITE
+    )
+
+
     fun ready(width: Int, height: Int) {
-      synchronized(this){
-          snows.clear()
-          snowEffectCounter.init(width,height)
-          for (i in 1..100){
-              snows.add(RainPoint().apply {
-                  this.width = 10.dp
-                  snowEffectCounter.createParticle(this, isBg = i<=80)
-              })
-          }
-      }
+        synchronized(this) {
+            snows.clear()
+            snowEffectCounter.init(width, height)
+            for (i in 1..100) {
+                snows.add(RainOrSnowPoint(
+                    color = colors[i % 3],
+                ).apply {
+                    this.width = 10.dp
+                    snowEffectCounter.createParticle(this, isBg = true)
+                })
+            }
+        }
     }
 
     @WorkerThread
     fun calculate(width: Int, height: Int) {
-        synchronized(this){
+        synchronized(this) {
             snowEffectCounter.run()
         }
     }
 
-    private val drawList = arrayListOf<Float>()
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
-        synchronized(this){
-            drawList.clear()
+        synchronized(this) {
             for (rain in snows) {
                 snowEffectCounter.getXy(rain)
                 rain.getPoint().let {
-                    drawList.add(it[0])
-                    drawList.add(it[1])
+                    snowPaint.strokeWidth = rain.width
+                    snowPaint.color = rain.color
+                    canvas.drawPoint(it[0], it[1], snowPaint)
                 }
-                snowPaint.strokeWidth = rain.width
             }
-            canvas.drawPoints(drawList.toFloatArray(), snowPaint)
         }
     }
 

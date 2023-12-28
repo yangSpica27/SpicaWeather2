@@ -189,7 +189,7 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
         }
     }
 
-    private val fogPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val fogPaint = Paint().apply {
         style = Paint.Style.FILL
         color = ContextCompat.getColor(context, R.color.fog_color)
         pathEffect = CornerPathEffect(12.dp)

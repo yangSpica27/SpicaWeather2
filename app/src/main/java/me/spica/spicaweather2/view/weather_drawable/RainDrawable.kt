@@ -3,10 +3,10 @@ package me.spica.spicaweather2.view.weather_drawable
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import me.spica.spicaweather2.render.RainEffectCounter
-import me.spica.spicaweather2.render.RainPoint
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.view.weather_bg.RainFlake
+import me.spica.spicaweather2.weather_anim_counter.RainEffectCounter
+import me.spica.spicaweather2.weather_anim_counter.RainOrSnowPoint
 
 class RainDrawable : WeatherDrawable() {
 
@@ -18,12 +18,19 @@ class RainDrawable : WeatherDrawable() {
         style = Paint.Style.FILL
     }
 
+
     // 雨水的合集
-    private var rains: ArrayList<RainPoint> = arrayListOf()
+    private var rains: ArrayList<RainOrSnowPoint> = arrayListOf()
     private var bgRains: ArrayList<RainFlake> = arrayListOf()
     private val rainEffectCounter = RainEffectCounter()
 
     private val lock = Any()
+
+    private val colors = intArrayOf(
+        Color.parseColor("#FFECECEC"),
+        Color.parseColor("#E6FFFFFF"),
+        Color.WHITE
+    )
 
     fun ready(width: Int, height: Int) {
         synchronized(lock) {
@@ -32,13 +39,15 @@ class RainDrawable : WeatherDrawable() {
             bgRains.clear()
             for (i in 0 until 150) {
                 rains.add(
-                    RainPoint().apply {
+                    RainOrSnowPoint(
+                        colors[i % colors.size],
+                    ).apply {
                         rainEffectCounter.createParticle(this)
                     }
                 )
             }
             for (i in 0 until 150) {
-                bgRains.add(RainFlake.create(width, height, rainPaint))
+                bgRains.add(RainFlake.create(width, height, rainPaint, colors[i % colors.size]))
             }
         }
     }
@@ -72,17 +81,11 @@ class RainDrawable : WeatherDrawable() {
             }
             canvas.drawPoints(drawList.toFloatArray(), rainPaint)
 
-            rainPaint.color = Color.parseColor("#F8f8f8")
-
             bgRains.forEach {
                 it.onlyDraw(canvas)
             }
         }
     }
-
-
-
-
 
 
 }

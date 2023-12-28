@@ -40,7 +40,7 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
     }
 
     // 画笔
-    private val cloudPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val cloudPaint: Paint = Paint().apply {
         color = ContextCompat.getColor(context, R.color.cloud_color)
         style = Paint.Style.FILL
     }

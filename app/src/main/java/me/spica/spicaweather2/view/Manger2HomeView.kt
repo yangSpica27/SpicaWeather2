@@ -42,7 +42,7 @@ class Manger2HomeView : View {
 
     private var clearRect = RectF(0f, 0f, 0f, 0f)
 
-    private var clearPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var clearPaint: Paint = Paint()
 
     private val mRootView: ViewGroup by lazy {
         return@lazy (getActivityFromContext(context).window.decorView as ViewGroup)

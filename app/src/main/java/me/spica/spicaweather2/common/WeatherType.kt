@@ -1,10 +1,19 @@
 package me.spica.spicaweather2.common
 
+import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
+import android.graphics.drawable.GradientDrawable
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.util.lruCache
 import me.spica.spicaweather2.R
+import me.spica.spicaweather2.tools.getScreenHeight
+import me.spica.spicaweather2.tools.getScreenWidth
 import me.spica.spicaweather2.view.weather_bg.NowWeatherView
 
 enum class WeatherType {
@@ -60,13 +69,190 @@ fun WeatherType.getAnimRes(): Int {
 @ColorInt
 fun WeatherType.getThemeColor(): Int {
     return when (this) {
-        WeatherType.WEATHER_SUNNY -> Color.parseColor("#FFC107")
-        WeatherType.WEATHER_CLOUDY -> Color.parseColor("#4dbfef")
-        WeatherType.WEATHER_CLOUD -> Color.parseColor("#62b1ff")
-        WeatherType.WEATHER_THUNDER -> Color.parseColor("#7187db")
+        WeatherType.WEATHER_SUNNY -> Color.parseColor("#fdbc4c")
+        WeatherType.WEATHER_CLOUDY -> Color.parseColor("#4297e7")
+        WeatherType.WEATHER_CLOUD -> Color.parseColor("#68baff")
+        WeatherType.WEATHER_RAINY -> Color.parseColor("#4297e7")
+        WeatherType.WEATHER_THUNDER -> Color.parseColor("#B296BD")
         WeatherType.WEATHER_FOG -> Color.parseColor("#5A5A5A")
-        WeatherType.WEATHER_HAZE -> Color.parseColor("#FF5722")
-        else -> Color.parseColor("#6188da")
+        WeatherType.WEATHER_HAZE -> Color.parseColor("#E1C899")
+        WeatherType.WEATHER_SNOW -> Color.parseColor("#68baff")
+        WeatherType.WEATHER_SLEET -> Color.parseColor("#00a5d9")
+        WeatherType.WEATHER_HAIL -> Color.parseColor("#E1C899")
+        WeatherType.WEATHER_THUNDERSTORM -> Color.parseColor("#B296BD")
+    }
+}
+
+private val bitmapCache = lruCache<WeatherType, Bitmap>(
+    20 * 1024 * 1024
+)
+
+fun WeatherType.getBackgroundBitmap(context: Context): Bitmap {
+    val cache = bitmapCache[this]
+    if (cache != null) return cache;
+    val drawable = getDrawable()
+    val bitmap = drawable.toBitmap(context.getScreenWidth(), context.getScreenHeight())
+    bitmapCache.put(this, bitmap)
+    return bitmap
+}
+
+fun WeatherType.getDrawable(): GradientDrawable {
+    return when (this) {
+        WeatherType.WEATHER_SUNNY -> GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(
+                Color.parseColor("#fdbc4c"),
+                Color.parseColor("#ff8300"),
+            )
+        )
+
+        WeatherType.WEATHER_CLOUDY -> GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(
+                Color.parseColor("#4297e7"),
+                Color.parseColor("#7F9CEA")
+            )
+        )
+
+        WeatherType.WEATHER_CLOUD -> GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(
+                Color.parseColor("#68baff"),
+                Color.parseColor("#A7B9EB"),
+            )
+        )
+
+        WeatherType.WEATHER_RAINY -> GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(
+                Color.parseColor("#4297e7"),
+                Color.parseColor("#3a4d80")
+            )
+        )
+
+        WeatherType.WEATHER_SNOW -> GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(
+                Color.parseColor("#4297e7"),
+                Color.parseColor("#3a4d80")
+            )
+        )
+
+        WeatherType.WEATHER_SLEET -> GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(
+                Color.parseColor("#00a5d9"),
+                Color.parseColor("#1762ac")
+            )
+        )
+
+        WeatherType.WEATHER_FOG -> GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(
+                Color.parseColor("#D7DDE8"),
+                Color.parseColor("#757F9A")
+            )
+        )
+
+        WeatherType.WEATHER_HAZE -> GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(
+                Color.parseColor("#E1C899"),
+                Color.parseColor("#8CA2A5")
+            )
+        )
+
+        WeatherType.WEATHER_HAIL -> GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(
+                Color.parseColor("#E1C899"),
+                Color.parseColor("#8CA2A5")
+            )
+        )
+
+        WeatherType.WEATHER_THUNDER -> GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(
+                Color.parseColor("#B296BD"),
+                Color.parseColor("#50367F")
+            )
+        )
+
+        WeatherType.WEATHER_THUNDERSTORM -> GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(
+                Color.parseColor("#B296BD"),
+                Color.parseColor("#50367F")
+            )
+        )
+    }
+}
+
+fun WeatherType.getShader(context: Context): LinearGradient {
+    return when (this) {
+        WeatherType.WEATHER_SUNNY ->
+            LinearGradient(
+                0f, 0f, 0f, context.getScreenHeight() * 1f,
+                Color.parseColor("#fdbc4c"),
+                Color.parseColor("#ff8300"),
+                Shader.TileMode.CLAMP
+            )
+
+        WeatherType.WEATHER_CLOUDY -> LinearGradient(
+            0f, 0f, 0f, context.getScreenHeight() * 1f,
+            Color.parseColor("#4297e7"),
+            Color.parseColor("#7F9CEA"), Shader.TileMode.CLAMP
+        )
+
+        WeatherType.WEATHER_CLOUD -> LinearGradient(
+            0f, 0f, 0f, context.getScreenHeight() * 1f,
+            Color.parseColor("#68baff"),
+            Color.parseColor("#A7B9EB"),
+            Shader.TileMode.CLAMP
+        )
+
+        WeatherType.WEATHER_RAINY -> LinearGradient(
+            0f, 0f, 0f, context.getScreenHeight() * 1f, Color.parseColor("#4297e7"),
+            Color.parseColor("#3a4d80"), Shader.TileMode.CLAMP
+        )
+
+        WeatherType.WEATHER_SNOW -> LinearGradient(
+            0f, 0f, 0f, context.getScreenHeight() * 1f,
+            Color.parseColor("#68baff"),
+            Color.parseColor("#225fb6"), Shader.TileMode.CLAMP
+        )
+
+        WeatherType.WEATHER_SLEET -> LinearGradient(
+            0f, 0f, 0f, context.getScreenHeight() * 1f, Color.parseColor("#00a5d9"),
+            Color.parseColor("#1762ac"), Shader.TileMode.CLAMP
+        )
+
+        WeatherType.WEATHER_FOG -> LinearGradient(
+            0f, 0f, 0f, context.getScreenHeight() * 1f, Color.parseColor("#D7DDE8"),
+            Color.parseColor("#757F9A"), Shader.TileMode.CLAMP
+        )
+
+        WeatherType.WEATHER_HAZE -> LinearGradient(
+            0f, 0f, 0f, context.getScreenHeight() * 1f, Color.parseColor("#E1C899"),
+            Color.parseColor("#8CA2A5"), Shader.TileMode.CLAMP
+        )
+
+        WeatherType.WEATHER_HAIL -> LinearGradient(
+            0f, 0f, 0f, context.getScreenHeight() * 1f, Color.parseColor("#E1C899"),
+            Color.parseColor("#8CA2A5"), Shader.TileMode.CLAMP
+        )
+
+
+        WeatherType.WEATHER_THUNDER -> LinearGradient(
+            0f, 0f, 0f, context.getScreenHeight() * 1f, Color.parseColor("#B296BD"),
+            Color.parseColor("#50367F"), Shader.TileMode.CLAMP
+        )
+
+        WeatherType.WEATHER_THUNDERSTORM -> LinearGradient(
+            0f, 0f, 0f, context.getScreenHeight() * 1f, Color.parseColor("#B296BD"),
+            Color.parseColor("#50367F"), Shader.TileMode.CLAMP
+        )
+
     }
 }
 
@@ -78,7 +264,7 @@ fun WeatherType.getWeatherAnimType(): NowWeatherView.WeatherAnimType {
         WeatherType.WEATHER_RAINY -> NowWeatherView.WeatherAnimType.RAIN
         WeatherType.WEATHER_SNOW -> NowWeatherView.WeatherAnimType.SNOW
         WeatherType.WEATHER_SLEET -> NowWeatherView.WeatherAnimType.RAIN
-        WeatherType.WEATHER_FOG -> NowWeatherView.WeatherAnimType.FOG
+        WeatherType.WEATHER_FOG -> NowWeatherView.WeatherAnimType.HAZE
         WeatherType.WEATHER_HAZE -> NowWeatherView.WeatherAnimType.HAZE
         WeatherType.WEATHER_HAIL -> NowWeatherView.WeatherAnimType.RAIN
         WeatherType.WEATHER_THUNDER -> NowWeatherView.WeatherAnimType.RAIN

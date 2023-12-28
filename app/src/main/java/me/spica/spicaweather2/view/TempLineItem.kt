@@ -31,20 +31,20 @@ class TempLineItem : View {
             initViewValue()
             postInvalidate()
         }
-    private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val linePaint = Paint().apply {
     }
 
-    private val pathPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val pathPaint = Paint().apply {
         style = Paint.Style.FILL
     }
 
-    private val dottedLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val dottedLinePaint = Paint().apply {
         pathEffect = DashPathEffect(floatArrayOf(4.dp, 2.dp), 0F)
         strokeWidth = 2.dp
         color = ContextCompat.getColor(context, R.color.dottedLineColor)
     }
 
-    private val pointPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val pointPaint = Paint()
 
     private val textPaint = TextPaint().apply {
         textSize = 12.dp
@@ -55,7 +55,7 @@ class TempLineItem : View {
 //        maskFilter = BlurMaskFilter(4.dp, BlurMaskFilter.Blur.SOLID)
     }
 
-    private val rainPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val rainPaint = Paint().apply {
         strokeWidth = 12.dp
         color = ContextCompat.getColor(context, R.color.rainRectColor)
     }

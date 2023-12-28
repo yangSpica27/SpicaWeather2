@@ -33,23 +33,23 @@ class AirCircleProgressView : View {
 
     private val mRectF: RectF = RectF()
 
-    private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val textPaint = TextPaint( ).apply {
         textSize = 50.dp
         color = ContextCompat.getColor(context, R.color.textColorPrimary)
     }
 
-    private val secondTextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val secondTextPaint = TextPaint( ).apply {
         textSize = 16.dp
         color = ContextCompat.getColor(context, R.color.white)
         typeface = Typeface.DEFAULT_BOLD
     }
 
-    private val secondTextBackgroundPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val secondTextBackgroundPaint = TextPaint( ).apply {
         color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
         style = Paint.Style.FILL
     }
 
-    private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val linePaint = Paint( ).apply {
         strokeWidth = 12.dp
         style = Paint.Style.STROKE
         color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)

@@ -17,7 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.spica.spicaweather2.common.WeatherCodeUtils
-import me.spica.spicaweather2.common.getThemeColor
+import me.spica.spicaweather2.common.getBackgroundBitmap
+import me.spica.spicaweather2.common.getShader
 import me.spica.spicaweather2.common.getWeatherAnimType
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
 import me.spica.spicaweather2.persistence.entity.city.CityBean
@@ -185,8 +186,11 @@ class ActivityMain : MaterialActivity() {
             layout.mainTitleLayout.titleTextView.text = currentCity.cityName
             currentCurrentCity = currentCity
             WeatherCodeUtils.getWeatherCode(currentWeather?.todayWeather?.iconId ?: 100).let {
-                layout.weatherBackgroundSurfaceView.currentWeatherAnimType = it.getWeatherAnimType()
-                layout.weatherBackgroundSurfaceView.bgColor = it.getThemeColor()
+                with(layout.weatherBackgroundSurfaceView) {
+                    currentWeatherAnimType = it.getWeatherAnimType()
+                    bgShader = it.getShader(this@ActivityMain)
+                    bgBitmap = it.getBackgroundBitmap(this@ActivityMain)
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()

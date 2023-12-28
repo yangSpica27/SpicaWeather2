@@ -79,12 +79,12 @@ class DailyItemView : View {
 
     private var progressShader: LinearGradient? = null
 
-    private val progressPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val progressPaint = Paint( ).apply {
         strokeWidth = 8.dp
         strokeCap = Paint.Cap.ROUND
     }
 
-    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val textPaint = Paint( ).apply {
         textSize = 12.dp
         textAlign = Paint.Align.LEFT
     }
@@ -98,7 +98,7 @@ class DailyItemView : View {
         setPadding(14.dp.toInt(), 0, 14.dp.toInt(), 0)
     }
 
-    private val iconPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val iconPaint = Paint( )
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
