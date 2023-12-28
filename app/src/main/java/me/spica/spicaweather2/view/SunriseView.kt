@@ -6,9 +6,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
 import java.util.*
@@ -18,7 +16,7 @@ import java.util.*
 private val mMargin = 14.dp
 private const val ARC_ANGLE = 135
 
-class SunriseView : View {
+class SunriseView : BufferingView {
 
     private val drawablePaint = Paint( ).apply {
         isDither = true
@@ -50,7 +48,7 @@ class SunriseView : View {
             )
             dottedLinePaint.color = getColorWithAlpha(.5f, value)
             linePaint.color = value
-            postInvalidate()
+            postDraw()
         }
 
     // 区域绘制
@@ -130,7 +128,7 @@ class SunriseView : View {
         this.endTime = decodeTime(endTime)
         this.currentTime = decodeTime(currentTime)
         ensureProgress()
-        ViewCompat.postInvalidateOnAnimation(this)
+       postDraw()
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -146,30 +144,7 @@ class SunriseView : View {
         )
     }
 
-
-    fun startAnim() {
-        val animator = ValueAnimator.ofInt(0, currentTime - startTime)
-        animator.duration = 1500
-        animator.addUpdateListener {
-            progress = it.animatedValue as Int
-            ViewCompat.postInvalidateOnAnimation(this)
-        }
-        animator.start()
-    }
-
-    private var progress = 100
-
-    private var max = 200
-
-    private fun ensureProgress() {
-        max = endTime - startTime
-        progress = currentTime - startTime
-        progress = Math.max(0, progress)
-        progress = Math.min(max, progress)
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
+    override fun drawBuffering(canvas: Canvas) {
         val startAngle: Float = 270f - ARC_ANGLE / 2f
 
         var progressSweepAngle = (progress.toFloat() / max.toFloat() * ARC_ANGLE)
@@ -270,6 +245,30 @@ class SunriseView : View {
 
         canvas.restoreToCount(restoreCount)
     }
+
+
+    fun startAnim() {
+        val animator = ValueAnimator.ofInt(0, currentTime - startTime)
+        animator.duration = 1500
+        animator.addUpdateListener {
+            progress = it.animatedValue as Int
+            postDraw()
+        }
+        animator.start()
+    }
+
+    private var progress = 100
+
+    private var max = 200
+
+    private fun ensureProgress() {
+        max = endTime - startTime
+        progress = currentTime - startTime
+        progress = Math.max(0, progress)
+        progress = Math.min(max, progress)
+    }
+
+
 
     @Suppress("DEPRECATION")
     private fun decodeTime(time: Date): Int {

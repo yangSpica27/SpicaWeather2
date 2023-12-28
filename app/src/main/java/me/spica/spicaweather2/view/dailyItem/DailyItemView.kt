@@ -1,6 +1,5 @@
 package me.spica.spicaweather2.view.dailyItem
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -10,7 +9,6 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Shader
 import android.util.AttributeSet
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -19,10 +17,11 @@ import me.spica.spicaweather2.common.WeatherCodeUtils
 import me.spica.spicaweather2.common.getIconRes
 import me.spica.spicaweather2.persistence.entity.weather.DailyWeatherBean
 import me.spica.spicaweather2.tools.dp
+import me.spica.spicaweather2.view.BufferingView
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class DailyItemView : View {
+class DailyItemView : BufferingView {
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -56,7 +55,6 @@ class DailyItemView : View {
         } else {
             context.getColor(R.color.light_blue_200)
         }
-
         endColor = if (maxMaxTemp in 10..19) {
             context.getColor(R.color.l6)
         } else if (maxMaxTemp >= 30) {
@@ -65,13 +63,9 @@ class DailyItemView : View {
             context.getColor(R.color.l3)
         }
         progressShader = null
-        invalidate()
+        postDraw()
     }
 
-    private val expandAnim = ValueAnimator.ofFloat().setDuration(225)
-
-    fun expand(expand: Boolean) {
-    }
 
     private var startColor = Color.TRANSPARENT
 
@@ -79,12 +73,12 @@ class DailyItemView : View {
 
     private var progressShader: LinearGradient? = null
 
-    private val progressPaint = Paint( ).apply {
+    private val progressPaint = Paint().apply {
         strokeWidth = 8.dp
         strokeCap = Paint.Cap.ROUND
     }
 
-    private val textPaint = Paint( ).apply {
+    private val textPaint = Paint().apply {
         textSize = 12.dp
         textAlign = Paint.Align.LEFT
     }
@@ -98,10 +92,9 @@ class DailyItemView : View {
         setPadding(14.dp.toInt(), 0, 14.dp.toInt(), 0)
     }
 
-    private val iconPaint = Paint( )
+    private val iconPaint = Paint()
 
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
+    override fun drawBuffering(canvas: Canvas) {
         dailyWeatherBean?.let { dailyWeatherBean ->
             val dateText = if (isFirst) {
                 "今天"
@@ -202,6 +195,10 @@ class DailyItemView : View {
 
             canvas.drawBitmap(bitmap, startX / 2f + endX / 2f - 12.dp, height / 2f - 12.dp, iconPaint)
         }
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

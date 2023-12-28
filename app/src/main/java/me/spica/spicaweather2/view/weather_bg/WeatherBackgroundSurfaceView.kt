@@ -3,7 +3,6 @@ package me.spica.spicaweather2.view.weather_bg
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.os.Handler
 import android.os.HandlerThread
@@ -46,11 +45,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     private val bgPaint = Paint(Paint.DITHER_FLAG)
 
-    var bgShader: LinearGradient? = null
-        set(value) {
-            field = value
-            bgPaint.shader = value
-        }
+
 
     var bgBitmap: Bitmap? = null
 
@@ -242,12 +237,12 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     private fun drawBackground(canvas: Canvas) {
         canvas.drawColor(bgColor)
-        bgBitmap?.let { bgBitmap ->
-            canvas.drawBitmap(
-                bgBitmap,
-                0f, 0f, bgPaint
-            )
-        }
+//        bgBitmap?.let { bgBitmap ->
+//            canvas.drawBitmap(
+//                bgBitmap,
+//                0f, 0f, bgPaint
+//            )
+//        }
 
     }
 }

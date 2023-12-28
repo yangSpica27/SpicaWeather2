@@ -12,17 +12,15 @@ import android.graphics.SweepGradient
 import android.graphics.Typeface
 import android.text.TextPaint
 import android.util.AttributeSet
-import android.view.View
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
 
 // 空气质量指数view
 private val VIEW_MARGIN = 14.dp
 
-class AirCircleProgressView : View {
+class AirCircleProgressView : BufferingView {
 
     private var mCenterX = 0
     private var mCenterY = 0
@@ -33,23 +31,23 @@ class AirCircleProgressView : View {
 
     private val mRectF: RectF = RectF()
 
-    private val textPaint = TextPaint( ).apply {
+    private val textPaint = TextPaint().apply {
         textSize = 50.dp
         color = ContextCompat.getColor(context, R.color.textColorPrimary)
     }
 
-    private val secondTextPaint = TextPaint( ).apply {
+    private val secondTextPaint = TextPaint().apply {
         textSize = 16.dp
         color = ContextCompat.getColor(context, R.color.white)
         typeface = Typeface.DEFAULT_BOLD
     }
 
-    private val secondTextBackgroundPaint = TextPaint( ).apply {
+    private val secondTextBackgroundPaint = TextPaint().apply {
         color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
         style = Paint.Style.FILL
     }
 
-    private val linePaint = Paint( ).apply {
+    private val linePaint = Paint().apply {
         strokeWidth = 12.dp
         style = Paint.Style.STROKE
         color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
@@ -85,8 +83,9 @@ class AirCircleProgressView : View {
         secondTextBackgroundPaint.color = textPaint.color
         this.lv = lv
         this.category = category
-        ViewCompat.postInvalidateOnAnimation(this)
+        postDraw()
     }
+
 
     fun startAnim() {
         val animator = ValueAnimator.ofFloat(0f, lv * 1f / maxLv)
@@ -94,7 +93,7 @@ class AirCircleProgressView : View {
         animator.addUpdateListener {
             progress = it.animatedValue as Float
             progress = Math.min(progress, 1f)
-            ViewCompat.postInvalidateOnAnimation(this)
+            postDraw()
         }
         animator.doOnEnd {
             it.removeAllListeners()
@@ -131,12 +130,7 @@ class AirCircleProgressView : View {
         setProgressColourAsGradient()
     }
 
-
-    private val textBound = Rect()
-
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
+    override fun drawBuffering(canvas: Canvas) {
         // 背景弧
         drawBack(canvas)
 
@@ -169,6 +163,10 @@ class AirCircleProgressView : View {
             secondTextPaint
         )
     }
+
+
+    private val textBound = Rect()
+
 
     private val bgColors = listOf(
         ContextCompat.getColor(context, R.color.l1),
