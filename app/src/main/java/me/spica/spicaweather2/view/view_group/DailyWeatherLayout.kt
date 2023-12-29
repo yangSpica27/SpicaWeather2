@@ -63,8 +63,8 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
             )
             val dailyItemView = DailyItemView(context)
             dailyItemView.layoutParams = lp
-            dailyItemView.setData(it, index == 0, maxMaxTemp, minMinTemp)
             addView(dailyItemView)
+            dailyItemView.setData(it, index == 0, maxMaxTemp, minMinTemp)
         }
     }
 

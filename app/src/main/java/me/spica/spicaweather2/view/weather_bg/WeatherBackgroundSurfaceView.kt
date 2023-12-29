@@ -17,7 +17,9 @@ import me.spica.spicaweather2.view.weather_drawable.HazeDrawable
 import me.spica.spicaweather2.view.weather_drawable.RainDrawable
 import me.spica.spicaweather2.view.weather_drawable.SnowDrawable
 import me.spica.spicaweather2.view.weather_drawable.SunnyDrawable
+import timber.log.Timber
 import java.util.UUID
+import kotlin.system.measureTimeMillis
 
 class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
@@ -44,7 +46,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     var bgColor = ContextCompat.getColor(context, android.R.color.transparent)
 
     private val bgPaint = Paint(Paint.DITHER_FLAG)
-
 
 
     var bgBitmap: Bitmap? = null
@@ -145,19 +146,23 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
             this, background,
             { copyResult ->
                 val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-                val canvas = Canvas(result)
-                if (PixelCopy.SUCCESS == copyResult) {
-                    canvas.drawBitmap(background, 0f, 0f, null)
-                    canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
-                } else {
-                    canvas.drawColor(bgColor)
-                    canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
+
+                val count = measureTimeMillis {
+                    val canvas = Canvas(result)
+                    if (PixelCopy.SUCCESS == copyResult) {
+                        canvas.drawBitmap(background, 0f, 0f, null)
+                        canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
+                    } else {
+                        canvas.drawColor(bgColor)
+                        canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
+                    }
+                    canvas.save()
+                    canvas.restore()
                 }
-                canvas.save()
-                canvas.restore()
+                Timber.tag("图层合成耗时").e("${count}ms")
                 callbacks(result)
             },
-            handler
+            drawHandler
         )
     }
 

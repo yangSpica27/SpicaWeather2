@@ -36,6 +36,8 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import rikka.material.app.MaterialActivity
+import timber.log.Timber
+import kotlin.system.measureTimeMillis
 
 @AndroidEntryPoint
 class ActivityMain : MaterialActivity() {
@@ -136,13 +138,19 @@ class ActivityMain : MaterialActivity() {
         manger2HomeView.attachToRootView()
         lifecycleScope.launch(Dispatchers.Default) {
             if (screenBitmap?.isRecycled == false) {
-                screenBitmap?.recycle()
-                screenBitmap = null
+                val countRecycler = measureTimeMillis {
+                    screenBitmap?.recycle()
+                    screenBitmap = null
+                }
+                Timber.tag("销毁位图耗时").e("${countRecycler}ms")
             }
+            val count1 = System.currentTimeMillis()
             layout.weatherBackgroundSurfaceView.getScreenCopy(
                 window.decorView.drawToBitmap()
             ) {
                 screenBitmap = it
+                val count2 = System.currentTimeMillis()
+                Timber.tag("获取位图耗时").e("${count2 - count1}ms")
                 startActivityWithAnimation<ActivityManagerCity> {
                     putExtra(ActivityManagerCity.ARG_CITY_NAME, currentCurrentCity?.cityName)
                 }
