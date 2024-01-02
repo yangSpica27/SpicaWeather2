@@ -12,6 +12,7 @@ import android.graphics.SweepGradient
 import android.graphics.Typeface
 import android.text.TextPaint
 import android.util.AttributeSet
+import android.view.View
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
@@ -20,16 +21,18 @@ import me.spica.spicaweather2.tools.dp
 // 空气质量指数view
 private val VIEW_MARGIN = 14.dp
 
-class AirCircleProgressView : BufferingView {
+class AirCircleProgressView : View {
 
     private var mCenterX = 0
     private var mCenterY = 0
+
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     private val mRectF: RectF = RectF()
+
 
     private val textPaint = TextPaint().apply {
         textSize = 50.dp
@@ -83,7 +86,7 @@ class AirCircleProgressView : BufferingView {
         secondTextBackgroundPaint.color = textPaint.color
         this.lv = lv
         this.category = category
-        postDraw()
+        postInvalidateOnAnimation()
     }
 
 
@@ -93,7 +96,7 @@ class AirCircleProgressView : BufferingView {
         animator.addUpdateListener {
             progress = it.animatedValue as Float
             progress = Math.min(progress, 1f)
-            postDraw()
+            postInvalidateOnAnimation()
         }
         animator.doOnEnd {
             it.removeAllListeners()
@@ -130,7 +133,11 @@ class AirCircleProgressView : BufferingView {
         setProgressColourAsGradient()
     }
 
-    override fun drawBuffering(canvas: Canvas) {
+
+    private val textBound = Rect()
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
         // 背景弧
         drawBack(canvas)
 
@@ -163,9 +170,6 @@ class AirCircleProgressView : BufferingView {
             secondTextPaint
         )
     }
-
-
-    private val textBound = Rect()
 
 
     private val bgColors = listOf(

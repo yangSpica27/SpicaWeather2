@@ -9,6 +9,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Shader
 import android.util.AttributeSet
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -17,11 +18,10 @@ import me.spica.spicaweather2.common.WeatherCodeUtils
 import me.spica.spicaweather2.common.getIconRes
 import me.spica.spicaweather2.persistence.entity.weather.DailyWeatherBean
 import me.spica.spicaweather2.tools.dp
-import me.spica.spicaweather2.view.BufferingView
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class DailyItemView : BufferingView {
+class DailyItemView : View {
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -63,7 +63,7 @@ class DailyItemView : BufferingView {
             context.getColor(R.color.l3)
         }
         progressShader = null
-        postDraw()
+        invalidate()
     }
 
 
@@ -94,7 +94,9 @@ class DailyItemView : BufferingView {
 
     private val iconPaint = Paint()
 
-    override fun drawBuffering(canvas: Canvas) {
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
         dailyWeatherBean?.let { dailyWeatherBean ->
             val dateText = if (isFirst) {
                 "今天"
@@ -196,7 +198,6 @@ class DailyItemView : BufferingView {
             canvas.drawBitmap(bitmap, startX / 2f + endX / 2f - 12.dp, height / 2f - 12.dp, iconPaint)
         }
     }
-
 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

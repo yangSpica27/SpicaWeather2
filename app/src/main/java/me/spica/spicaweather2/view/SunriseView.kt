@@ -6,6 +6,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.view.View
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
@@ -16,9 +17,9 @@ import java.util.*
 private val mMargin = 14.dp
 private const val ARC_ANGLE = 135
 
-class SunriseView : BufferingView {
+class SunriseView : View {
 
-    private val drawablePaint = Paint( ).apply {
+    private val drawablePaint = Paint().apply {
         isDither = true
         style = Paint.Style.FILL_AND_STROKE
         color = ContextCompat.getColor(context, R.color.material_yellow_600)
@@ -48,22 +49,22 @@ class SunriseView : BufferingView {
             )
             dottedLinePaint.color = getColorWithAlpha(.5f, value)
             linePaint.color = value
-            postDraw()
+            invalidate()
         }
 
     // 区域绘制
-    private val pathPaint = Paint( ).apply {
+    private val pathPaint = Paint().apply {
         style = Paint.Style.FILL
     }
 
-    private val dottedLinePaint = Paint( ).apply {
+    private val dottedLinePaint = Paint().apply {
         pathEffect = DashPathEffect(floatArrayOf(5.dp, 2.dp), 0F)
         strokeWidth = 2.dp
         style = Paint.Style.STROKE
         color = ContextCompat.getColor(context, R.color.dottedLineColor)
     }
 
-    private val linePaint = Paint( ).apply {
+    private val linePaint = Paint().apply {
         strokeWidth = 4.dp
         style = Paint.Style.STROKE
         strokeCap = Paint.Cap.ROUND
@@ -128,7 +129,7 @@ class SunriseView : BufferingView {
         this.endTime = decodeTime(endTime)
         this.currentTime = decodeTime(currentTime)
         ensureProgress()
-       postDraw()
+        invalidate()
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -144,7 +145,9 @@ class SunriseView : BufferingView {
         )
     }
 
-    override fun drawBuffering(canvas: Canvas) {
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
         val startAngle: Float = 270f - ARC_ANGLE / 2f
 
         var progressSweepAngle = (progress.toFloat() / max.toFloat() * ARC_ANGLE)
@@ -252,7 +255,7 @@ class SunriseView : BufferingView {
         animator.duration = 1500
         animator.addUpdateListener {
             progress = it.animatedValue as Int
-            postDraw()
+            postInvalidateOnAnimation()
         }
         animator.start()
     }
@@ -267,7 +270,6 @@ class SunriseView : BufferingView {
         progress = Math.max(0, progress)
         progress = Math.min(max, progress)
     }
-
 
 
     @Suppress("DEPRECATION")
