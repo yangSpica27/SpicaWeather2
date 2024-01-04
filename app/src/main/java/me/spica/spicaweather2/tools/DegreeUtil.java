@@ -10,7 +10,6 @@ public class DegreeUtil {
   /**
    * 角度转换成弧度
    *
-   * @param angle
    * @return
    */
   public static double toRadians(double angle) {

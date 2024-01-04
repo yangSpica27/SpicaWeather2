@@ -8,7 +8,14 @@ import me.spica.spicaweather2.persistence.entity.CityWeatherRelation
 import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 
-@Database(entities = [CityBean::class, Weather::class, CityWeatherRelation::class], version = 3, exportSchema = false)
+@Database(
+    entities =
+    [CityBean::class,
+        Weather::class,
+        CityWeatherRelation::class],
+    version = 3,
+    exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun cityDao(): CityDao
