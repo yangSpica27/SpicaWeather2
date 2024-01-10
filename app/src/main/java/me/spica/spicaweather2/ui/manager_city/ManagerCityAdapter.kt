@@ -10,6 +10,9 @@ import me.spica.spicaweather2.persistence.entity.CityWithWeather
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.view.view_group.ItemCityManagerLayout
 
+/**
+ * 城市管理界面的Adapter
+ */
 class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>() {
 
     private val items: MutableList<CityWithWeather> = arrayListOf()

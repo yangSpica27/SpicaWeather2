@@ -39,6 +39,7 @@ class RainEffectCounter : Closeable {
 
     private var isInitOK = false
 
+    // 初始化
     fun init(width: Int, height: Int) {
         this.mWorldWidth = width
         this.mWorldHeight = height
@@ -66,7 +67,7 @@ class RainEffectCounter : Closeable {
         fixtureDef.filter.maskBits = 0b01
         fixtureDef.filter.groupIndex = 0b01
         bodyDef.position[boxWidth + mappingView2Body(16.dp)] =
-            mappingView2Body(mWorldHeight * 1f)  + boxHeight
+            mappingView2Body(mWorldHeight * 1f) + boxHeight
         val bottomBody: Body = world.createBody(bodyDef) // 创建一个真实的下边 body
         val fixture = bottomBody.createFixture(fixtureDef)
         val body = fixture.body
@@ -74,6 +75,7 @@ class RainEffectCounter : Closeable {
         backgroundBody?.userData = -1
     }
 
+    // 创建粒子
     fun createParticle(view: BaseParticle) {
         synchronized(world) {
             val bodyDef = BodyDef()
@@ -99,6 +101,7 @@ class RainEffectCounter : Closeable {
         }
     }
 
+    // 更新粒子的位置
     fun run() {
         if (!isInitOK) return
         synchronized(world) {
@@ -107,6 +110,7 @@ class RainEffectCounter : Closeable {
     }
 
 
+    // 设置背景刚体的y坐标
     fun setBackgroundY(y: Int) {
         if (!isInitOK) return
         synchronized(world) {
@@ -120,6 +124,7 @@ class RainEffectCounter : Closeable {
         }
     }
 
+    // 获取粒子的x,y坐标
     fun getXy(view: BaseParticle) {
         view.x = getViewX(view)
         val newY = getViewY(view)
@@ -143,6 +148,7 @@ class RainEffectCounter : Closeable {
         }
     }
 
+    // 获取粒子在view坐标系的x坐标
     private fun getViewX(view: BaseParticle): Float {
         val body = view.body
         return if (body != null) {
@@ -150,6 +156,7 @@ class RainEffectCounter : Closeable {
         } else 0f
     }
 
+    // 获取粒子在view坐标系的y坐标
     private fun getViewY(view: BaseParticle): Float {
         val body = view.body
         return if (body != null) {
@@ -157,16 +164,18 @@ class RainEffectCounter : Closeable {
         } else 0f
     }
 
+    // view坐标系转化为模拟世界坐标系
     private fun mappingView2Body(view: Float): Float {
         return view / mProportion
     }
 
+    // 模拟世界坐标系转化为view坐标系
     private fun mappingBody2View(body: Float): Float {
         return body * mProportion
     }
 
 
-
+    // 销毁粒子
     override fun close() {
         world.dispose()
     }

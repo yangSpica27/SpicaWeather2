@@ -21,6 +21,9 @@ import me.spica.spicaweather2.tools.dp
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+/**
+ * 每日天气itemView
+ */
 class DailyItemView : View {
 
     constructor(context: Context?) : super(context)

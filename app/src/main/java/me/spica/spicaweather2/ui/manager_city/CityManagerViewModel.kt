@@ -14,8 +14,10 @@ class CityManagerViewModel @Inject constructor(
     private val cityRepository: CityRepository,
 ) : ViewModel() {
 
+    // 通过Flow获取所有的城市
     val allCityWithWeather = cityRepository.allCitiesWithWeatherFlow()
 
+    // 删除选择的城市
     fun deleteCity(cityBean: CityBean) {
         viewModelScope.launch(Dispatchers.IO) {
             cityRepository.deleteCity(cityBean)

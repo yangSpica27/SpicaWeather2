@@ -38,6 +38,9 @@ import me.spica.spicaweather2.view.view_group.ActivityManagerCityLayout
 import org.greenrobot.eventbus.EventBus
 import rikka.material.app.MaterialActivity
 
+/**
+ * 城市管理页面
+ */
 @AndroidEntryPoint
 class ActivityManagerCity : MaterialActivity() {
 

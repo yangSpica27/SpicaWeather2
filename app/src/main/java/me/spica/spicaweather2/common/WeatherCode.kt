@@ -2,6 +2,7 @@ package me.spica.spicaweather2.common
 
 object WeatherCodeUtils {
 
+    // https://dev.qweather.com/docs/start/icons/
     fun getWeatherCode(iconId: Int): WeatherType {
         when (iconId.toString()) {
 

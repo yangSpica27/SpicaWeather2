@@ -39,10 +39,14 @@ import rikka.material.app.MaterialActivity
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
 
+/**
+ * 主页面
+ */
 @AndroidEntryPoint
 class ActivityMain : MaterialActivity() {
 
     companion object {
+        // 当前页面的 截图
         var screenBitmap: Bitmap? = null
     }
 
@@ -81,6 +85,7 @@ class ActivityMain : MaterialActivity() {
     fun onMessageEvent(event: MessageEvent) {
         when (event.tag) {
             MessageType.Get2MainActivityAnim.tag -> {
+                // 从管理城市页面返回进行动画 切换到用户选择的城市上去
                 layout.viewPager2.setCurrentItem(event.extra as Int, false)
                 manger2HomeView.invalidate()
             }
@@ -89,6 +94,7 @@ class ActivityMain : MaterialActivity() {
 
     override fun onResume() {
         super.onResume()
+        // 从管理城市页面返回进行动画
         if (manger2HomeView.isAttached) {
             doOnMainThreadIdle({
                 manger2HomeView.startAnim()
@@ -108,6 +114,7 @@ class ActivityMain : MaterialActivity() {
         layout.viewPager2.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         layout.viewPager2.adapter = mainPagerAdapter
         layout.viewPager2.isUserInputEnabled = true
+        // 启动后台同步
         startService(Intent(this, DataSyncWorker::class.java))
         layout.mainTitleLayout.dotIndicator.setViewPager2(viewPager2 = layout.viewPager2)
         lifecycleScope.launch {
@@ -122,6 +129,7 @@ class ActivityMain : MaterialActivity() {
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                // 更新标题
                 updateTitleAndAnim(position)
             }
 
@@ -129,11 +137,13 @@ class ActivityMain : MaterialActivity() {
                 position: Int, positionOffset: Float, positionOffsetPixels: Int
             ) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                // 同步当前页面的滚动
                 updateOtherPageScroller()
             }
         })
     }
 
+    // 进入城市管理页面
     private fun enterManagerCity() {
         manger2HomeView.attachToRootView()
         lifecycleScope.launch(Dispatchers.Default) {
@@ -159,6 +169,7 @@ class ActivityMain : MaterialActivity() {
     }
 
 
+    // 更新标题
     private fun updateTitleBarColor(value: Pair<Int, Int>) {
         if (value.first == 0) {
             val progress = -value.second * 1f / (resources.displayMetrics.heightPixels / 3f)
@@ -174,6 +185,7 @@ class ActivityMain : MaterialActivity() {
         }
     }
 
+    // 更新其他页面的滚动
     private fun updateOtherPageScroller() {
         (layout.viewPager2.children.first() as RecyclerView).children.forEach {
             if (it is WeatherMainLayout && it.tag != currentCurrentCity?.cityName) {
@@ -187,6 +199,7 @@ class ActivityMain : MaterialActivity() {
         }
     }
 
+    // 更新标题和动画
     private fun updateTitleAndAnim(position: Int) {
         try {
             val currentWeather = data[position].weather
@@ -207,6 +220,7 @@ class ActivityMain : MaterialActivity() {
 
 
     private fun blendColors(color1: Int, color2: Int, ratio: Float): Int {
+
         val inverseRatio = 1f - ratio
         val a = (Color.alpha(color1) * inverseRatio) + (Color.alpha(color2) * ratio)
         val r = (Color.red(color1) * inverseRatio) + (Color.red(color2) * ratio)
@@ -216,6 +230,7 @@ class ActivityMain : MaterialActivity() {
     }
 
 
+    // 给引擎传入刚体进行碰撞计算
     fun setBox2dBackground(y: Int) {
         layout.weatherBackgroundSurfaceView.setBackgroundY(y)
     }

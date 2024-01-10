@@ -20,11 +20,11 @@ import me.spica.spicaweather2.network.HitokotoClient
 import me.spica.spicaweather2.persistence.dao.CityDao
 import me.spica.spicaweather2.persistence.dao.WeatherDao
 import me.spica.spicaweather2.persistence.entity.city.CityBean
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
 import javax.inject.Inject
 
+/**
+ * 数据更新服务
+ */
 @AndroidEntryPoint
 class DataSyncWorker : Service() {
     private val job: Job = SupervisorJob()
@@ -48,38 +48,49 @@ class DataSyncWorker : Service() {
     override fun onCreate() {
         super.onCreate()
         scope.launch {
-            val cityList = cityDao.getAllList()
+            // 获取到用户选择的城市列表
+            val cityList = cityDao.getAllList().toMutableList()
 
+            // 如果用户没有选择城市，则初始化城市列表
             if (cityList.isEmpty()) {
                 initCityList(context = this@DataSyncWorker)
+                cityList.addAll(cityDao.getAllList())
                 return@launch
             }
 
             val ds: ArrayList<Deferred<Boolean>> = arrayListOf()
-            cityDao.getAllList()
+
+            cityList
                 .forEach { cityBean ->
                     val res: Deferred<Boolean> = async(Dispatchers.IO, CoroutineStart.DEFAULT) {
+
+                        // 获取天气数据
                         val weatherResponse = heClient.getAllWeather(cityBean.lon, cityBean.lat).getOrNull()
 
+                        // 获取一言数据
                         val hitokotoResponse = hitokotoClient.getHitokoto().getOrNull()
 
+                        // 如果获取到了数据，则插入到数据库中
                         weatherResponse?.data?.let { weather ->
                             weather.cityName = cityBean.cityName
                             weather.welcomeText = hitokotoResponse?.hitokoto ?: "昭昭若日月之明，离离如星辰之行"
                             weatherDao.insertWeather(weather)
                             return@async true
                         }
-
+                        // 如果没有获取到数据，则返回 false
                         return@async false
                     }
                     ds.add(res)
                 }
 
+            // 等待所有的异步任务执行完毕
             ds.forEach { deferred ->
                 deferred.await()
             }
 
+            // 通知主线程，服务执行完毕
             withContext(Dispatchers.Main) {
+                // 停止服务
                 stopSelf()
             }
         }
@@ -87,36 +98,15 @@ class DataSyncWorker : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        // 取消所有的任务
         job.cancel()
     }
 
+    // 初始化城市列表
     private suspend fun initCityList(context: Context) {
         val cityList = CityBean.getAllCities(context)
         cityDao.insertCities(cityList.first())
         cityDao.insertCities(cityList[2])
     }
 
-    @Throws(IOException::class)
-    private fun getJsonString(context: Context): String {
-        var br: BufferedReader? = null
-        val sb = StringBuilder()
-        try {
-            val manager = context.assets
-            br = BufferedReader(InputStreamReader(manager.open("city.json")))
-            var line: String?
-            while (br.readLine().also { line = it } != null) {
-                sb.append(line)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            throw e
-        } finally {
-            try {
-                br?.close()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-        return sb.toString()
-    }
 }

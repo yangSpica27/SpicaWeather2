@@ -41,6 +41,7 @@ data class CityBean(
 
     companion object {
 
+        // 读取配置文件中的所有城市信息
         @JvmStatic
         @WorkerThread
         fun getAllCities(context: Context): List<CityBean> {

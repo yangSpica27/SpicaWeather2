@@ -9,6 +9,9 @@ import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.view_group.NoWeatherDataLayout
 import me.spica.spicaweather2.view.view_group.WeatherMainLayout
 
+/**
+ * 主页的adapter
+ */
 class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
 
     companion object {

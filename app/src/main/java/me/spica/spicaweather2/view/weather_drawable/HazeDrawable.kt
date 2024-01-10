@@ -20,6 +20,9 @@ private const val MAX_RADIUS = 20
 
 private const val MIN_RADIUS = 60
 
+/**
+ * 雾天的天气效果
+ */
 class HazeDrawable(private val context: Context) : WeatherDrawable() {
 
     private var width = 0

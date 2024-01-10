@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
+import androidx.annotation.NonNull;
 
 /**
  * @ClassName SunView
@@ -26,15 +27,18 @@ public class SunView extends View {
     private float mRayEndX;
     private float mRayEndY;
 
+
     public SunView(Context context) {
         super(context);
         init();
     }
 
+
     public SunView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
+
 
     private void init() {
         mSunPaint = new Paint();
@@ -50,8 +54,14 @@ public class SunView extends View {
         mSunRadius = 200;
     }
 
+
+    private final Path linePath = new Path();
+
+    private final float[] hsv = new float[3];
+
+
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
         // 绘制太阳
@@ -62,7 +72,6 @@ public class SunView extends View {
 
         float angle = calculateAngle(mSunX, mSunY, mRayEndX, mRayEndY); // 计算角度
 
-        float[] hsv = new float[3];
         Color.colorToHSV(Color.WHITE, hsv);
         hsv[1] *= distance / mSunRadius; // 根据距离调整颜色的饱和度
         hsv[2] *= Math.max(0, Math.cos(Math.toRadians(angle))); // 根据角度调整颜色的明度
@@ -72,20 +81,22 @@ public class SunView extends View {
         mRayPaint.setAlpha(alpha);
 
         // 绘制光线
-        Path path = new Path();
+        Path path = linePath;
+        linePath.reset();
         path.moveTo(mRayStartX, mRayStartY);
         path.quadTo((mRayStartX + mRayEndX) / 2, (mRayStartY + mRayEndY) / 2, mRayEndX, mRayEndY);
         canvas.drawPath(path, mRayPaint);
     }
+
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
         // 计算太阳的位置和半径
-        mSunX = w / 2;
-        mSunY = h / 3;
-        mSunRadius = Math.min(w, h) / 6;
+        mSunX = w / 2f;
+        mSunY = h / 3f;
+        mSunRadius = Math.min(w, h) / 6f;
 
         // 计算光线的位置和方向
         mRayStartX = mSunX;
@@ -94,10 +105,14 @@ public class SunView extends View {
         mRayEndY = mSunY - mSunRadius * 3;
     }
 
+
+    // 计算两点之间的距离
     private float calculateDistance(float startX, float startY, float endX, float endY) {
         return (float) Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
     }
 
+
+    // 计算两点之间的角度
     private float calculateAngle(float centerX, float centerY, float pointX, float pointY) {
         float angle = (float) Math.toDegrees(Math.atan2(pointY - centerY, pointX - centerX));
         if (angle < 0) {

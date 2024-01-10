@@ -8,6 +8,9 @@ import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.weather_anim_counter.RainOrSnowPoint
 import me.spica.spicaweather2.weather_anim_counter.SnowEffectCounter
 
+/**
+ * 雪天的天气效果
+ */
 class SnowDrawable : WeatherDrawable() {
 
     // 雪的集合

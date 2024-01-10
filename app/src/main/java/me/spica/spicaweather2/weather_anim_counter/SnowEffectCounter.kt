@@ -10,6 +10,9 @@ import com.badlogic.gdx.physics.box2d.World
 import me.spica.spicaweather2.tools.dp
 import java.io.Closeable
 
+/**
+ * 雪花效果粒子计数器
+ */
 class SnowEffectCounter : Closeable {
     private lateinit var world: World
 
@@ -38,6 +41,7 @@ class SnowEffectCounter : Closeable {
 
     private var isInitOK = false
 
+    // 初始化
     fun init(width: Int, height: Int) {
         this.mWorldWidth = width
         this.mWorldHeight = height
@@ -50,6 +54,7 @@ class SnowEffectCounter : Closeable {
 
     private var backgroundBody: Body? = null
 
+    // 创建刚体
     private fun updateHorizontalBounds() {
         val bodyDef = BodyDef()
         // 创建静止刚体
@@ -73,6 +78,7 @@ class SnowEffectCounter : Closeable {
         backgroundBody?.userData = -1
     }
 
+    // 创建雪花粒子
     fun createParticle(view: BaseParticle, isBg: Boolean = false) {
         synchronized(world) {
             val bodyDef = BodyDef()
@@ -87,11 +93,13 @@ class SnowEffectCounter : Closeable {
             def.density = .1f
             def.friction = mFrictionRatio
             def.restitution = 0f
+            // 0b00 为背景 0b01 为前景
             def.filter.maskBits = if (isBg){
                 0b00
             }else{
                 0b01
             }
+            // 0b00 为背景 0b01 为前景
             def.filter.groupIndex = if (isBg){
                 0b00
             }else{
@@ -105,6 +113,7 @@ class SnowEffectCounter : Closeable {
         }
     }
 
+    // 更新粒子位置
     fun run() {
         if (!isInitOK) return
         synchronized(world) {
@@ -113,6 +122,7 @@ class SnowEffectCounter : Closeable {
     }
 
 
+    // 设置碰撞刚体位置
     fun setBackgroundY(y: Int) {
         if (!isInitOK) return
         synchronized(world) {
@@ -126,6 +136,7 @@ class SnowEffectCounter : Closeable {
         }
     }
 
+    // 获取粒子在View坐标系下的位置
     fun getXy(view: BaseParticle) {
         view.x = getViewX(view)
         val newY = getViewY(view)
@@ -148,6 +159,7 @@ class SnowEffectCounter : Closeable {
         }
     }
 
+    // 获取粒子在View坐标系下的位置X
     private fun getViewX(view: BaseParticle): Float {
         val body = view.body
         return if (body != null) {
@@ -155,6 +167,7 @@ class SnowEffectCounter : Closeable {
         } else 0f
     }
 
+    // 获取粒子在View坐标系下的位置Y
     private fun getViewY(view: BaseParticle): Float {
         val body = view.body
         return if (body != null) {
@@ -162,15 +175,18 @@ class SnowEffectCounter : Closeable {
         } else 0f
     }
 
+    // 转成View坐标系下坐标
     private fun mappingView2Body(view: Float): Float {
         return view / mProportion
     }
 
+    // 转成引擎坐标系下坐标
     private fun mappingBody2View(body: Float): Float {
         return body * mProportion
     }
 
 
+    // 销毁粒子
     override fun close() {
         world.dispose()
     }

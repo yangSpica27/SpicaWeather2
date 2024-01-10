@@ -11,6 +11,10 @@ import androidx.core.widget.addTextChangedListener
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.view.view_group.AViewGroup
 
+/**
+ * 搜索框
+ * Created by Spica on 2021/2/23.
+ */
 class SearchBarLayout(context: Context) : AViewGroup(context) {
 
     val editText = AppCompatEditText(context).apply {

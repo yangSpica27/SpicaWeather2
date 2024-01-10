@@ -1,5 +1,10 @@
 package me.spica.spicaweather2.tools
 
+/**
+ * 获取对应的颜色的不同透明度的颜色
+ * @param alpha 透明度
+ * @param baseColor 基础颜色
+ */
 fun getColorWithAlpha(alpha: Float, baseColor: Int): Int {
     var alpha1 = alpha
     if (alpha1 < 0) {

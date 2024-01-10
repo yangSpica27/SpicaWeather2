@@ -11,6 +11,9 @@ import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
 
+/**
+ * 晴天的天气效果
+ */
 class SunnyDrawable(private val context: Context) : WeatherDrawable() {
 
     // 绘制太阳的paint

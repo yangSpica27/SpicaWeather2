@@ -9,6 +9,9 @@ import dagger.hilt.components.SingletonComponent
 import me.spica.spicaweather2.persistence.AppDatabase
 import javax.inject.Singleton
 
+/**
+ * 持久化模块
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object PersistenceModule {

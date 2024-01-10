@@ -12,12 +12,16 @@ import me.spica.spicaweather2.tools.dp
 
 interface SpicaWeatherCard {
 
+    // 卡片的View
     var animatorView: View
 
+    // 进入动画
     var enterAnim: AnimatorSet
 
+    // 卡片的索引
     var index: Int
 
+    // 开始进入动画
     fun startEnterAnim() {
         enterAnim.removeAllListeners()
         enterAnim.doOnEnd {
@@ -27,6 +31,7 @@ interface SpicaWeatherCard {
         enterAnim.start()
     }
 
+    // 重置动画
     fun resetAnim() {
         hasInScreen = false
         animatorView.alpha = 0f
@@ -57,6 +62,7 @@ interface SpicaWeatherCard {
 
     var hasInScreen: Boolean
 
+    // 检查是否进入屏幕
     fun checkEnterScreen(
         isIn: Boolean
     ) {

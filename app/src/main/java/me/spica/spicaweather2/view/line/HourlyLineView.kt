@@ -35,6 +35,9 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.math.abs
 
+/**
+ * 逐小时天气折线图
+ */
 class HourlyLineView : View {
 
     private val mScroller: OverScroller = OverScroller(context)

@@ -241,11 +241,12 @@ class SunriseView : View {
             measuredHeight - 8.dp,
             dottedLinePaint
         )
+        // 保存图层
         val restoreCount: Int = canvas.save()
-
+        // 绘制太阳
         canvas.translate(iconPositionX, iconPositionY)
         canvas.drawCircle(0f, 0f, sunSize / 2, drawablePaint)
-
+        // 恢复图层
         canvas.restoreToCount(restoreCount)
     }
 

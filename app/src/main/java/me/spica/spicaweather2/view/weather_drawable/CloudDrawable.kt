@@ -10,6 +10,9 @@ import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
 
+/**
+ * 多云动效
+ */
 class CloudDrawable(private val context: Context) : WeatherDrawable() {
 
     private val cloudAnim = ValueAnimator.ofFloat(

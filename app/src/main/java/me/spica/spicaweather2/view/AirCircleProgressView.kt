@@ -69,7 +69,9 @@ class AirCircleProgressView : View {
 
     private var category = "良"
 
+    // 设置进度
     fun bindProgress(lv: Int, category: String) {
+        // 根据空气质量等级设置颜色
         if (lv < 50) {
             textPaint.color = ContextCompat.getColor(context, R.color.l1)
         } else if (lv < 100) {
@@ -90,6 +92,7 @@ class AirCircleProgressView : View {
     }
 
 
+    // 开始动画
     fun startAnim() {
         val animator = ValueAnimator.ofFloat(0f, lv * 1f / maxLv)
         animator.duration = 1500
@@ -134,6 +137,7 @@ class AirCircleProgressView : View {
     }
 
 
+    // 中心文本 bound
     private val textBound = Rect()
 
     override fun onDraw(canvas: Canvas) {
@@ -172,6 +176,7 @@ class AirCircleProgressView : View {
     }
 
 
+    // 背景颜色
     private val bgColors = listOf(
         ContextCompat.getColor(context, R.color.l1),
         ContextCompat.getColor(context, R.color.l2),
@@ -183,20 +188,22 @@ class AirCircleProgressView : View {
         ContextCompat.getColor(context, R.color.l8),
     )
 
+    // 背景渐变
     private lateinit var progressShader: SweepGradient
 
+    // 设置背景渐变
     private fun setProgressColourAsGradient() {
         val sweepGradient = SweepGradient(
             mCenterX * 1f, mCenterY * 1f, bgColors.toIntArray(),
             floatArrayOf(.1f, 0.2f, .3f, .4f, .5f, .6f, .7f, .8f)
         )
-        //Make the gradient start from 90 degrees
         val matrix = Matrix()
         matrix.setRotate(90f, width / 2f, height / 2f)
         sweepGradient.setLocalMatrix(matrix)
         progressShader = sweepGradient
     }
 
+    // 绘制背景弧
     private fun drawBack(canvas: Canvas) {
         linePaint.strokeWidth = 8.dp
         linePaint.color = ContextCompat.getColor(context, R.color.material_grey_200)

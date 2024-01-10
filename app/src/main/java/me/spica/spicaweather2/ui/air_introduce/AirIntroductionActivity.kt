@@ -9,6 +9,9 @@ import me.spica.spicaweather2.R
 import me.spica.spicaweather2.view.view_group.AirIntroduceLayout
 import rikka.material.app.MaterialActivity
 
+/**
+ * 空气质量介绍页面
+ */
 class AirIntroductionActivity : MaterialActivity() {
 
     private val layout by lazy {

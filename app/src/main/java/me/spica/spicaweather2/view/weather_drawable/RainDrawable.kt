@@ -8,6 +8,9 @@ import me.spica.spicaweather2.view.weather_bg.RainFlake
 import me.spica.spicaweather2.weather_anim_counter.RainEffectCounter
 import me.spica.spicaweather2.weather_anim_counter.RainOrSnowPoint
 
+/**
+ * 雨天的天气效果
+ */
 class RainDrawable : WeatherDrawable() {
 
     // 绘制雨水的paint

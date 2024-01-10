@@ -20,8 +20,10 @@ class MainCardAdapter(
     private val recyclerView: RecyclerView
 ) : RecyclerView.Adapter<AbstractMainViewHolder>() {
 
+    // 卡片类型
     private val items = arrayListOf<HomeCardType>()
 
+    // 天气数据
     private var weather: Weather? = null
 
     init {
@@ -29,6 +31,7 @@ class MainCardAdapter(
         recyclerView.setItemViewCacheSize(WeatherType.values().size)
     }
 
+    // 设置卡片类型
     @SuppressLint("NotifyDataSetChanged")
     fun setItems(items: List<HomeCardType>) {
         this.items.clear()
@@ -93,19 +96,23 @@ class MainCardAdapter(
         }
     }
 
+
     override fun getItemViewType(position: Int): Int {
         return items[position].code
     }
 
     override fun onBindViewHolder(holder: AbstractMainViewHolder, position: Int) {
         weather?.let {
+            // 绑定数据
             holder.bindView(it)
+            // 内容宽高发生变化 重新测量
             holder.itemView.doOnPreDraw {
                 holder.itemView.requestLayout()
             }
         }
     }
 
+    // 更新数据
     @SuppressLint("NotifyDataSetChanged")
     fun notifyData(weather: Weather) {
         this.weather = weather
@@ -115,16 +122,13 @@ class MainCardAdapter(
         }
     }
 
+    // 滚动时检查是否进入屏幕
     fun onScroll() {
-        var holder: AbstractMainViewHolder
+        var holder: AbstractMainViewHolder?
         if (itemCount == 0) return
         for (i in 0 until itemCount) {
-            if (recyclerView.findViewHolderForAdapterPosition(i) != null) {
-                if (recyclerView.findViewHolderForAdapterPosition(i) is AbstractMainViewHolder) {
-                    holder = recyclerView.findViewHolderForAdapterPosition(i) as AbstractMainViewHolder
-                    holder.checkEnterScreen()
-                }
-            }
+            holder = recyclerView.findViewHolderForAdapterPosition(i) as AbstractMainViewHolder?
+            holder?.checkEnterScreen()
         }
     }
 

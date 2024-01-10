@@ -4,6 +4,9 @@ import com.badlogic.gdx.physics.box2d.Body
 import me.spica.spicaweather2.tools.dp
 import java.util.UUID
 
+/**
+ * 粒子基类
+ */
 abstract class BaseParticle(
     var id: String = UUID.randomUUID().toString(),
     var x: Float = 0f,

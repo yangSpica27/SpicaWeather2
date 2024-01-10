@@ -2,7 +2,6 @@ package me.spica.weather.view
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.Rect
 import android.text.TextPaint
 import android.util.AttributeSet
@@ -21,10 +20,13 @@ class RainImageView : LottieAnimationView {
             postInvalidate()
         }
 
+    // 文本 下雨概率
     private var text = ""
 
+    // 文本的bound
     private val textBound = Rect()
 
+    // 文本画笔
     private val textPaint = TextPaint( ).apply {
         color = ContextCompat.getColor(context, R.color.water_color)
         textSize = 10.dp

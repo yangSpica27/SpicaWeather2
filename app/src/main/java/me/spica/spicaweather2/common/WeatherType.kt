@@ -16,6 +16,7 @@ import me.spica.spicaweather2.tools.getScreenHeight
 import me.spica.spicaweather2.tools.getScreenWidth
 import me.spica.spicaweather2.view.weather_bg.NowWeatherView
 
+// 天气类型
 enum class WeatherType {
     WEATHER_SUNNY,
     WEATHER_CLOUDY,
@@ -49,6 +50,7 @@ fun WeatherType.getIconRes(): Int {
     }
 }
 
+// 拓展方法 用于获取对应类型的动画
 @RawRes
 fun WeatherType.getAnimRes(): Int {
     return when (this) {
@@ -66,6 +68,7 @@ fun WeatherType.getAnimRes(): Int {
     }
 }
 
+// 拓展方法 用于获取对应类型的颜色
 @ColorInt
 fun WeatherType.getThemeColor(): Int {
     return when (this) {
@@ -87,6 +90,7 @@ private val bitmapCache = lruCache<WeatherType, Bitmap>(
     20 * 1024 * 1024
 )
 
+// 获取天气主题背景色Bitmap
 fun WeatherType.getBackgroundBitmap(context: Context): Bitmap {
     val cache = bitmapCache[this]
     if (cache != null) return cache;
@@ -96,6 +100,7 @@ fun WeatherType.getBackgroundBitmap(context: Context): Bitmap {
     return bitmap
 }
 
+// 获取天气主题背景色Drawable
 fun WeatherType.getDrawable(): GradientDrawable {
     return when (this) {
         WeatherType.WEATHER_SUNNY -> GradientDrawable(
@@ -188,6 +193,7 @@ fun WeatherType.getDrawable(): GradientDrawable {
     }
 }
 
+// 获取天气主题背景色Shader
 fun WeatherType.getShader(context: Context): LinearGradient {
     return when (this) {
         WeatherType.WEATHER_SUNNY ->
@@ -256,6 +262,7 @@ fun WeatherType.getShader(context: Context): LinearGradient {
     }
 }
 
+// 获取天气主题动画类型
 fun WeatherType.getWeatherAnimType(): NowWeatherView.WeatherAnimType {
     return when (this) {
         WeatherType.WEATHER_SUNNY -> NowWeatherView.WeatherAnimType.SUNNY

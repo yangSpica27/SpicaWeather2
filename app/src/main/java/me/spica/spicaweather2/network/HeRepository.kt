@@ -19,6 +19,7 @@ import timber.log.Timber
 class HeRepository(private val heClient: HeClient) : Repository {
 
 
+    // 获取天气数据
     override fun fetchWeather(
         lon: String,
         lat: String,

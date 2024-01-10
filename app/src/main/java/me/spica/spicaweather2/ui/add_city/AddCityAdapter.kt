@@ -8,6 +8,9 @@ import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.tools.dp
 
+/**
+ * 添加城市的adapter
+ */
 class AddCityAdapter : RecyclerView.Adapter<AddCityAdapter.ViewHolder>() {
 
     private val items: MutableList<CityBean> = arrayListOf()

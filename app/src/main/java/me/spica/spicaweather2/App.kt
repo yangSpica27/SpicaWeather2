@@ -4,6 +4,12 @@ import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+
+/**
+ * 柠檬天气v2.0
+ * 佛祖保佑，永无bug
+ * 代码不规范，维护两行泪
+ */
 @HiltAndroidApp
 class App : Application() {
 
@@ -14,8 +20,9 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Timber.plant(Timber.DebugTree())
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
         instance = this
-
     }
 }

@@ -24,7 +24,9 @@ import me.spica.spicaweather2.tools.dp
 class Manger2HomeView : View {
 
     companion object {
+        // 用于保存背景图
         var mBackground: Bitmap? = null
+        // 用于保存起始位置
         var originRect = RectF()
 
         fun initFromViewRect(from: View, window: Window) {
@@ -64,6 +66,7 @@ class Manger2HomeView : View {
                 val widthExtra = (width - originRect.width()) / 2f * progress
                 val topExtra = (originRect.top) * progress
                 val bottomExtra = (height - originRect.bottom) * progress
+                // 设置清除区域
                 clearRect.set(
                     originRect.left - widthExtra,
                     originRect.top - topExtra,
@@ -73,7 +76,9 @@ class Manger2HomeView : View {
                 postInvalidateOnAnimation()
             }
             doOnEnd {
+                // 动画结束后，将自己从根布局中移除
                 detachFromRootView()
+                // 重置
                 clearRect.set(0f, 0f, 0f, 0f)
             }
         }
@@ -96,6 +101,7 @@ class Manger2HomeView : View {
     var isAttached = false
         private set
 
+    // 将自己添加到根布局中
     fun attachToRootView() {
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -106,6 +112,7 @@ class Manger2HomeView : View {
         invalidate()
     }
 
+    // 从根布局中移除
     private fun detachFromRootView() {
         mRootView.removeView(this)
         if (mBackground != null) {
@@ -121,10 +128,12 @@ class Manger2HomeView : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
+        // 保存图层
         val layer: Int = canvas.saveLayer(0f, 0f, width.toFloat(), height.toFloat(), null)
+        // 绘制背景
         clearPaint.xfermode = null
         mBackground?.let { canvas.drawBitmap(it, 0f, 0f, clearPaint) }
+        // 绘制清除区域
         clearPaint.xfermode = clearXfermode
         canvas.drawRoundRect(
             clearRect,
@@ -132,6 +141,7 @@ class Manger2HomeView : View {
             12.dp,
             clearPaint
         )
+        // 恢复图层
         canvas.restoreToCount(layer)
     }
 
