@@ -14,7 +14,7 @@ import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.view.weather_drawable.CloudDrawable
 import me.spica.spicaweather2.view.weather_drawable.FoggyDrawable
 import me.spica.spicaweather2.view.weather_drawable.HazeDrawable
-import me.spica.spicaweather2.view.weather_drawable.RainDrawable
+import me.spica.spicaweather2.view.weather_drawable.RainDrawable2
 import me.spica.spicaweather2.view.weather_drawable.SnowDrawable
 import me.spica.spicaweather2.view.weather_drawable.SunnyDrawable
 import timber.log.Timber
@@ -95,7 +95,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     private val foggyDrawable = FoggyDrawable(context)
 
-    private val rainDrawable = RainDrawable()
+    private var rainDrawable: RainDrawable2? = null
 
     private val snowDrawable = SnowDrawable()
 
@@ -110,7 +110,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
             synchronized(lock) {
                 when (currentWeatherAnimType) {
                     NowWeatherView.WeatherAnimType.RAIN -> {
-                        rainDrawable.calculate(width, height)
+                        rainDrawable?.calculate(width, height)
                     }
 
                     NowWeatherView.WeatherAnimType.SNOW -> {
@@ -168,7 +168,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     private fun initDrawableRect(width: Int, height: Int) {
         synchronized(lock) {
-            rainDrawable.ready(width, height)
             snowDrawable.ready(width, height)
             foggyDrawable.ready(width, height)
             hazeDrawable.ready(width, height)
@@ -193,7 +192,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
             when (currentWeatherAnimType) {
                 NowWeatherView.WeatherAnimType.SUNNY -> sunnyDrawable.doOnDraw(canvas, width, height)
                 NowWeatherView.WeatherAnimType.CLOUDY -> cloudDrawable.doOnDraw(canvas, width, height)
-                NowWeatherView.WeatherAnimType.RAIN -> rainDrawable.doOnDraw(canvas, width, height)
+                NowWeatherView.WeatherAnimType.RAIN -> rainDrawable?.doOnDraw(canvas, width, height)
                 NowWeatherView.WeatherAnimType.SNOW -> snowDrawable.doOnDraw(canvas, width, height)
                 NowWeatherView.WeatherAnimType.FOG -> foggyDrawable.doOnDraw(canvas, width, height)
                 NowWeatherView.WeatherAnimType.UNKNOWN -> cloudDrawable.doOnDraw(canvas, width, height)
@@ -205,6 +204,10 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     override fun surfaceCreated(holder: SurfaceHolder) {
         synchronized(lock) {
+            rainDrawable = RainDrawable2().apply {
+                ready(width, height)
+                setBackgroundY(bottomY)
+            }
             isWork = true
             drawThread = HandlerThread("draw-thread${UUID.randomUUID()}", Thread.NORM_PRIORITY)
             drawThread.start()
@@ -225,6 +228,8 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
             drawHandler.removeCallbacksAndMessages(null)
             drawThread.quitSafely()
             this.mholder = null
+            rainDrawable?.release()
+            rainDrawable = null
         }
     }
 
@@ -235,9 +240,11 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         foggyDrawable.cancelAnim()
     }
 
+    private var bottomY = 0
     fun setBackgroundY(y: Int) {
-        rainDrawable.setBackgroundY(y)
-        snowDrawable.setBackgroundY(y)
+        bottomY = y
+        rainDrawable?.setBackgroundY(bottomY)
+        snowDrawable.setBackgroundY(bottomY)
     }
 
     private fun drawBackground(canvas: Canvas) {

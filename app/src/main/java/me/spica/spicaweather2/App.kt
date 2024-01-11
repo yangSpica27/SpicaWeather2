@@ -18,6 +18,11 @@ class App : Application() {
         lateinit var instance: App
     }
 
+    init {
+        System.loadLibrary("liquidfun")
+        System.loadLibrary("liquidfun_jni")
+    }
+
     override fun onCreate() {
         super.onCreate()
         if (BuildConfig.DEBUG) {

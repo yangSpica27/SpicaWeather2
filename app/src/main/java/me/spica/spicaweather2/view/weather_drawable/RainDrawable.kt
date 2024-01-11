@@ -90,5 +90,8 @@ class RainDrawable : WeatherDrawable() {
         }
     }
 
+    fun destroy(){
+        rainEffectCounter.destroy()
+    }
 
 }

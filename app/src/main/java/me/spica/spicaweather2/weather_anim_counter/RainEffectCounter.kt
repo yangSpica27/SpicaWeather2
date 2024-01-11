@@ -1,16 +1,17 @@
 package me.spica.spicaweather2.weather_anim_counter
 
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.Body
-import com.badlogic.gdx.physics.box2d.BodyDef
-import com.badlogic.gdx.physics.box2d.CircleShape
-import com.badlogic.gdx.physics.box2d.FixtureDef
-import com.badlogic.gdx.physics.box2d.PolygonShape
-import com.badlogic.gdx.physics.box2d.World
-import me.spica.spicaweather2.tools.dp
-import java.io.Closeable
 
-class RainEffectCounter : Closeable {
+import com.google.fpl.liquidfun.Body
+import com.google.fpl.liquidfun.BodyDef
+import com.google.fpl.liquidfun.BodyType
+import com.google.fpl.liquidfun.CircleShape
+import com.google.fpl.liquidfun.FixtureDef
+import com.google.fpl.liquidfun.PolygonShape
+import com.google.fpl.liquidfun.Vec2
+import com.google.fpl.liquidfun.World
+import me.spica.spicaweather2.tools.dp
+
+class RainEffectCounter  {
 
     private lateinit var world: World
 
@@ -22,8 +23,9 @@ class RainEffectCounter : Closeable {
      * 迭代次数
      * */
     private val dt = 1f / 30f
-    private val velocityIterations = 5
-    private val positionIterations = 20
+    private val velocityIterations = 8
+    private val positionIterations = 3
+    private val particleIterations = 3
 
     private val mProportion = 60f // 模拟世界和view坐标的转化比例
     private var mDensity = .5f
@@ -45,7 +47,7 @@ class RainEffectCounter : Closeable {
         this.mWorldHeight = height
         boxWidth = mappingView2Body(mWorldWidth * 1f - 28.dp) / 2f
         boxHeight = mappingView2Body(mProportion * 1f)
-        world = World(Vector2(0f, 9.8f), true)
+        world = World(0f, 9.8f)
         updateHorizontalBounds()
         isInitOK = true
     }
@@ -55,7 +57,7 @@ class RainEffectCounter : Closeable {
     private fun updateHorizontalBounds() {
         val bodyDef = BodyDef()
         // 创建静止刚体
-        bodyDef.type = BodyDef.BodyType.StaticBody
+        bodyDef.type = BodyType.staticBody
         // 定义的形状
         val box = PolygonShape()
         box.setAsBox(boxWidth, boxHeight) // 确定为矩形
@@ -72,7 +74,9 @@ class RainEffectCounter : Closeable {
         val fixture = bottomBody.createFixture(fixtureDef)
         val body = fixture.body
         backgroundBody = body
-        backgroundBody?.userData = -1
+        fixtureDef.delete()
+        box.delete()
+        bodyDef.delete()
     }
 
     // 创建粒子
@@ -81,7 +85,7 @@ class RainEffectCounter : Closeable {
             val bodyDef = BodyDef()
             view.x = (0..mWorldWidth).random(random).toFloat()
             view.y = (-3 * mWorldHeight..0).random(random).toFloat()
-            bodyDef.type = BodyDef.BodyType.DynamicBody
+            bodyDef.type = BodyType.dynamicBody
             bodyDef.position[mappingView2Body(view.x + view.width / 2)] = mappingView2Body(view.y + view.height / 2)
             val shape = CircleShape()
             shape.radius = mappingView2Body(view.width / 2)
@@ -94,10 +98,12 @@ class RainEffectCounter : Closeable {
             def.filter.groupIndex = 0b01
             val body = world.createBody(bodyDef)
             view.body = body
-            body.linearVelocity = Vector2(random.nextFloat(), random.nextFloat())
+            body.linearVelocity = Vec2(random.nextFloat(), random.nextFloat())
             body.createFixture(def)
             body.linearDamping = 0.6f
-            body.userData = 0
+            def.delete()
+            shape.delete()
+            bodyDef.delete()
         }
     }
 
@@ -105,7 +111,7 @@ class RainEffectCounter : Closeable {
     fun run() {
         if (!isInitOK) return
         synchronized(world) {
-            world.step(dt, velocityIterations, positionIterations)
+            world.step(dt, velocityIterations, positionIterations, particleIterations)
         }
     }
 
@@ -115,7 +121,7 @@ class RainEffectCounter : Closeable {
         if (!isInitOK) return
         synchronized(world) {
             backgroundBody?.setTransform(
-                Vector2(
+                Vec2(
                     boxWidth + mappingView2Body(16.dp),
                     mappingView2Body(y * 1f + 10.dp)
                 ),
@@ -136,14 +142,13 @@ class RainEffectCounter : Closeable {
             view.y = (-mWorldHeight..0).random(random).toFloat()
 
             view.body?.setTransform(
-                Vector2(
+                Vec2(
                     mappingView2Body(view.x),
                     mappingView2Body(view.y)
                 ),
                 0f
             )
-            view.body?.linearVelocity = Vector2(random.nextFloat(), random.nextFloat())
-            view.body?.userData = 0
+            view.body?.linearVelocity = Vec2(random.nextFloat(), random.nextFloat())
             view.body?.isSleepingAllowed = false
         }
     }
@@ -175,8 +180,8 @@ class RainEffectCounter : Closeable {
     }
 
 
-    // 销毁粒子
-    override fun close() {
-        world.dispose()
+    fun destroy(){
+        world.delete()
     }
+
 }

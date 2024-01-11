@@ -1,12 +1,14 @@
 package me.spica.spicaweather2.weather_anim_counter
 
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.Body
-import com.badlogic.gdx.physics.box2d.BodyDef
-import com.badlogic.gdx.physics.box2d.CircleShape
-import com.badlogic.gdx.physics.box2d.FixtureDef
-import com.badlogic.gdx.physics.box2d.PolygonShape
-import com.badlogic.gdx.physics.box2d.World
+
+import com.google.fpl.liquidfun.Body
+import com.google.fpl.liquidfun.BodyDef
+import com.google.fpl.liquidfun.BodyType
+import com.google.fpl.liquidfun.CircleShape
+import com.google.fpl.liquidfun.FixtureDef
+import com.google.fpl.liquidfun.PolygonShape
+import com.google.fpl.liquidfun.Vec2
+import com.google.fpl.liquidfun.World
 import me.spica.spicaweather2.tools.dp
 import java.io.Closeable
 
@@ -24,8 +26,9 @@ class SnowEffectCounter : Closeable {
      * 迭代次数
      * */
     private val dt = 1f / 60f
-    private val velocityIterations = 5
-    private val positionIterations = 20
+    private val velocityIterations = 8
+    private val positionIterations = 3
+    private val particleIterations = 3
 
     private val mProportion = 60f // 模拟世界和view坐标的转化比例
     private var mDensity = .5f
@@ -47,7 +50,7 @@ class SnowEffectCounter : Closeable {
         this.mWorldHeight = height
         boxWidth = mappingView2Body(mWorldWidth * 1f - 28.dp) / 2f
         boxHeight = mappingView2Body(mProportion * 1f)
-        world = World(Vector2(0f, 8.8f), true)
+        world = World(0f, 8.8f)
         updateHorizontalBounds()
         isInitOK = true
     }
@@ -58,7 +61,7 @@ class SnowEffectCounter : Closeable {
     private fun updateHorizontalBounds() {
         val bodyDef = BodyDef()
         // 创建静止刚体
-        bodyDef.type = BodyDef.BodyType.StaticBody
+        bodyDef.type = BodyType.staticBody
         // 定义的形状
         val box = PolygonShape()
         box.setAsBox(boxWidth, boxHeight) // 确定为矩形
@@ -75,7 +78,6 @@ class SnowEffectCounter : Closeable {
         val fixture = bottomBody.createFixture(fixtureDef)
         val body = fixture.body
         backgroundBody = body
-        backgroundBody?.userData = -1
     }
 
     // 创建雪花粒子
@@ -84,7 +86,7 @@ class SnowEffectCounter : Closeable {
             val bodyDef = BodyDef()
             view.x = (-2 * mWorldWidth..mWorldWidth).random(random).toFloat()
             view.y = (-3 * mWorldHeight..0).random(random).toFloat()
-            bodyDef.type = BodyDef.BodyType.DynamicBody
+            bodyDef.type = BodyType.dynamicBody
             bodyDef.position[mappingView2Body(view.x + view.width / 2)] = mappingView2Body(view.y + view.height / 2)
             val shape = CircleShape()
             shape.radius = mappingView2Body(view.width / 2)
@@ -94,20 +96,20 @@ class SnowEffectCounter : Closeable {
             def.friction = mFrictionRatio
             def.restitution = 0f
             // 0b00 为背景 0b01 为前景
-            def.filter.maskBits = if (isBg){
+            def.filter.maskBits = if (isBg) {
                 0b00
-            }else{
+            } else {
                 0b01
             }
             // 0b00 为背景 0b01 为前景
-            def.filter.groupIndex = if (isBg){
+            def.filter.groupIndex = if (isBg) {
                 0b00
-            }else{
+            } else {
                 0b01
             }
             val body = world.createBody(bodyDef)
             view.body = body
-            body.linearVelocity = Vector2(random.nextFloat(), random.nextFloat())
+            body.linearVelocity = Vec2(random.nextFloat(), random.nextFloat())
             body.createFixture(def)
             body.linearDamping = 0.6f
         }
@@ -117,7 +119,7 @@ class SnowEffectCounter : Closeable {
     fun run() {
         if (!isInitOK) return
         synchronized(world) {
-            world.step(dt, velocityIterations, positionIterations)
+            world.step(dt, velocityIterations, positionIterations,particleIterations)
         }
     }
 
@@ -127,7 +129,7 @@ class SnowEffectCounter : Closeable {
         if (!isInitOK) return
         synchronized(world) {
             backgroundBody?.setTransform(
-                Vector2(
+                Vec2(
                     boxWidth + mappingView2Body(16.dp),
                     mappingView2Body(y * 1f + 10.dp)
                 ),
@@ -141,20 +143,19 @@ class SnowEffectCounter : Closeable {
         view.x = getViewX(view)
         val newY = getViewY(view)
         view.y = newY
-        if (view.y > mWorldHeight || view.x < 0 || view.x > mWorldWidth ) {
+        if (view.y > mWorldHeight || view.x < 0 || view.x > mWorldWidth) {
             view.x = (-mWorldWidth..mWorldWidth).random(random).toFloat()
 
             view.y = (-mWorldHeight..0).random(random).toFloat()
 
             view.body?.setTransform(
-                Vector2(
+                Vec2(
                     mappingView2Body(view.x),
                     mappingView2Body(view.y)
                 ),
                 0f
             )
-            view.body?.linearVelocity = Vector2(random.nextFloat(), random.nextFloat())
-            view.body?.userData = 0
+            view.body?.linearVelocity = Vec2(random.nextFloat(), random.nextFloat())
             view.body?.isSleepingAllowed = false
         }
     }
@@ -188,7 +189,7 @@ class SnowEffectCounter : Closeable {
 
     // 销毁粒子
     override fun close() {
-        world.dispose()
+        world.delete()
     }
 
 }
