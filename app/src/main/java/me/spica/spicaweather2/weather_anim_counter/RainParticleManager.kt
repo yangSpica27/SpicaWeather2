@@ -43,7 +43,8 @@ class RainParticleManager {
         boxWidth = mappingView2Body(mWorldWidth * 1f - 32.dp) / 2f
         boxHeight = mappingView2Body(mProportion * 1f)
         world = World(0f, 9.8f)
-        updateHorizontalBounds()
+        createCardBox()
+        createRainItemShapeAndDef()
         isInitOK = true
     }
 
@@ -71,7 +72,7 @@ class RainParticleManager {
 
     private var backgroundBody: Body? = null
 
-    private fun updateHorizontalBounds() {
+    private fun createCardBox() {
         val bodyDef = BodyDef()
         // 创建静止刚体
         bodyDef.type = BodyType.staticBody
@@ -110,15 +111,24 @@ class RainParticleManager {
     }
 
 
+    private val rainItemShape = PolygonShape()
+
+    private val rainItemDef = ParticleGroupDef()
+
+    private fun createRainItemShapeAndDef() {
+        rainItemDef.flags = 0
+        rainItemDef.groupFlags = 0
+        rainItemDef.shape = rainItemShape
+        rainItemDef.linearVelocity = Vec2(0f, 9f)
+    }
+
+
     // 创建雨点
     fun createRainItem() {
         val x = (0..mWorldWidth).random(random).toFloat()
         val y = (-3 * mWorldHeight..0).random(random).toFloat()
         val width = (1..2).random(random).dp
-
-        val shape = PolygonShape()
-
-        shape.set(
+        rainItemShape.set(
             arrayOf(
                 Vec2(mappingView2Body(x), mappingView2Body(y)),
                 Vec2(mappingView2Body(x + width), mappingView2Body(y)),
@@ -126,20 +136,7 @@ class RainParticleManager {
                 Vec2(mappingView2Body(x), mappingView2Body(y + 16.dp)),
             ), 4
         )
-
-
-        val pd = ParticleGroupDef()
-        pd.flags = 0
-        pd.groupFlags = 0
-        pd.shape = shape
-        pd.linearVelocity = Vec2(0f, 9f)
-
-
-
-        system.createParticleGroup(pd)
-        pd.delete()
-        shape.delete()
-
+        system.createParticleGroup(rainItemDef)
     }
 
     // view坐标系转化为模拟世界坐标系
@@ -155,6 +152,9 @@ class RainParticleManager {
 
     fun destroy() {
         try {
+            rainItemShape.delete()
+            rainItemDef.delete()
+            system.delete()
             world.delete()
         } catch (e: Exception) {
             e.printStackTrace()
