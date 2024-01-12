@@ -4,6 +4,7 @@ import com.google.fpl.liquidfun.Body
 import com.google.fpl.liquidfun.BodyDef
 import com.google.fpl.liquidfun.BodyType
 import com.google.fpl.liquidfun.FixtureDef
+import com.google.fpl.liquidfun.ParticleGroup
 import com.google.fpl.liquidfun.ParticleGroupDef
 import com.google.fpl.liquidfun.ParticleSystemDef
 import com.google.fpl.liquidfun.PolygonShape
@@ -23,6 +24,9 @@ class RainParticleManager {
     private val positionIterations = 3
     private val particleIterations = 3
 
+    companion object{
+        const val ParticleMaxCount = 2000
+    }
 
     private var mWorldWidth = 0
     private var mWorldHeight = 0
@@ -97,7 +101,7 @@ class RainParticleManager {
         val psd = ParticleSystemDef()
         psd.dampingStrength = 2.2f
         psd.density = 1f
-        psd.maxCount = 2000
+        psd.maxCount = ParticleMaxCount
         psd.radius = mappingView2Body(1.dp)
         psd.dampingStrength = 0.3f
         psd.pressureStrength = 0.05f
@@ -124,7 +128,7 @@ class RainParticleManager {
 
 
     // 创建雨点
-    fun createRainItem() {
+    fun createRainItem():ParticleGroup {
         val x = (0..mWorldWidth).random(random).toFloat()
         val y = (-3 * mWorldHeight..0).random(random).toFloat()
         val width = (1..2).random(random).dp
@@ -136,7 +140,7 @@ class RainParticleManager {
                 Vec2(mappingView2Body(x), mappingView2Body(y + 16.dp)),
             ), 4
         )
-        system.createParticleGroup(rainItemDef)
+       return system.createParticleGroup(rainItemDef)
     }
 
     // view坐标系转化为模拟世界坐标系

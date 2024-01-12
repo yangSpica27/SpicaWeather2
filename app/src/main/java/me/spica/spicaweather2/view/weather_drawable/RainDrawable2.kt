@@ -6,6 +6,9 @@ import android.graphics.Paint
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.view.weather_bg.RainFlake
 import me.spica.spicaweather2.weather_anim_counter.RainParticleManager
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+
 
 /**
  * 雨水的绘制
@@ -36,7 +39,7 @@ class RainDrawable2 : WeatherDrawable() {
 
     // 初始化
     fun ready(width: Int, height: Int) {
-        synchronized(this) {
+        synchronized(lock) {
             rainEffectCounter.init(width, height)
             for (i in 0..200) {
                 rainFlakes.add(
@@ -60,6 +63,7 @@ class RainDrawable2 : WeatherDrawable() {
     // 上一次添加雨滴的时间
     private var lastAddRainTime = 0L
 
+
     // 计算雨滴的位置
     fun calculate(width: Int, height: Int) {
         synchronized(lock) {
@@ -68,16 +72,24 @@ class RainDrawable2 : WeatherDrawable() {
             }
             rainEffectCounter.run()
             if ((System.currentTimeMillis() - lastAddRainTime > 50) &&
-                rainEffectCounter.system.particleCount <= 2000
+                rainEffectCounter.system.particleCount <= RainParticleManager.ParticleMaxCount
             ) {
                 lastAddRainTime = System.currentTimeMillis()
                 rainEffectCounter.createRainItem()
             }
         }
+
     }
 
-    // 用于绘制碰撞的水滴
-    private val listPoints = arrayListOf<Float>()
+
+    // 粒子的位置缓冲区
+    private val mParticlePositionBuffer: ByteBuffer =
+        ByteBuffer
+            .allocateDirect(2 * 4 * RainParticleManager.ParticleMaxCount)
+            .order(ByteOrder.nativeOrder())
+
+    // 粒子的位置数组
+    private val positionArray = FloatArray(RainParticleManager.ParticleMaxCount * 2)
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
         synchronized(lock) {
@@ -85,26 +97,23 @@ class RainDrawable2 : WeatherDrawable() {
             rainFlakes.forEach {
                 it.onlyDraw(canvas)
             }
-            // 绘制碰撞水滴
-            listPoints.clear()
-            for (i in 0..(rainEffectCounter.system.particleCount ?: 0)) {
-                val x = (rainEffectCounter.system.getParticlePositionX(i) ?: 0f) * 60
-                val y = (rainEffectCounter.system.getParticlePositionY(i) ?: 0f) * 60
-                listPoints.add(x)
-                listPoints.add(y)
-                if (x < 0 || x >= width) {
-                    rainEffectCounter.system.destroyParticle(i)
-                }
-                if (y >= height) {
-                    rainEffectCounter.system.destroyParticle(i)
-                }
+            mParticlePositionBuffer.rewind()
+            rainEffectCounter.system.copyPositionBuffer(
+                0,
+                rainEffectCounter.system.particleCount,
+                mParticlePositionBuffer
+            )
+            mParticlePositionBuffer.asFloatBuffer().get(positionArray)
+            for (i in positionArray.indices) {
+                positionArray[i] = positionArray[i] * 60
             }
-            canvas.drawPoints(listPoints.toFloatArray(), rainPaint)
+            canvas.drawPoints(positionArray, rainPaint)
         }
     }
 
     fun release() {
         rainEffectCounter.destroy()
+        mParticlePositionBuffer.clear()
     }
 
 }

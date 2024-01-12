@@ -16,9 +16,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.spica.spicaweather2.common.WeatherCodeUtils
-import me.spica.spicaweather2.common.WeatherType
 import me.spica.spicaweather2.common.getBackgroundBitmap
 import me.spica.spicaweather2.common.getThemeColor
+import me.spica.spicaweather2.common.getWeatherAnimType
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
 import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.tools.MessageEvent
@@ -30,7 +30,6 @@ import me.spica.spicaweather2.ui.test.TestActivity
 import me.spica.spicaweather2.view.Manger2HomeView
 import me.spica.spicaweather2.view.view_group.ActivityMainLayout
 import me.spica.spicaweather2.view.view_group.WeatherMainLayout
-import me.spica.spicaweather2.view.weather_bg.NowWeatherView
 import me.spica.spicaweather2.work.DataSyncWorker
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -208,8 +207,8 @@ class ActivityMain : MaterialActivity() {
             currentCurrentCity = currentCity
             WeatherCodeUtils.getWeatherCode(currentWeather?.todayWeather?.iconId ?: 100).let {
                 with(layout.weatherBackgroundSurfaceView) {
-                    bgColor = WeatherType.WEATHER_RAINY.getThemeColor()
-                    currentWeatherAnimType = NowWeatherView.WeatherAnimType.RAIN
+                    bgColor = it.getThemeColor()
+                    currentWeatherAnimType = it.getWeatherAnimType()
                     bgBitmap = it.getBackgroundBitmap(this@ActivityMain)
                 }
             }
