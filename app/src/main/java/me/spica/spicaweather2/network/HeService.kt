@@ -11,7 +11,7 @@ import retrofit2.http.Query
 interface HeService {
 
     // 聚合接口
-    @GET("http://43.248.185.248:24040/api/weather/all")
+    @GET("http://106.54.25.152:4040/api/weather/all")
     suspend fun getAllWeather(
         @Query("location")
         location: String,

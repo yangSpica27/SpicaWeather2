@@ -24,7 +24,7 @@ class RainParticleManager {
     private val positionIterations = 3
     private val particleIterations = 3
 
-    companion object{
+    companion object {
         const val ParticleMaxCount = 2000
     }
 
@@ -128,7 +128,7 @@ class RainParticleManager {
 
 
     // 创建雨点
-    fun createRainItem():ParticleGroup {
+    fun createRainItem(): ParticleGroup {
         val x = (0..mWorldWidth).random(random).toFloat()
         val y = (-3 * mWorldHeight..0).random(random).toFloat()
         val width = (1..2).random(random).dp
@@ -140,7 +140,7 @@ class RainParticleManager {
                 Vec2(mappingView2Body(x), mappingView2Body(y + 16.dp)),
             ), 4
         )
-       return system.createParticleGroup(rainItemDef)
+        return system.createParticleGroup(rainItemDef)
     }
 
     // view坐标系转化为模拟世界坐标系

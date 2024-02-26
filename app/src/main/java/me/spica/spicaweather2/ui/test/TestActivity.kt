@@ -2,7 +2,6 @@ package me.spica.spicaweather2.ui.test
 
 import android.graphics.Color
 import android.os.Bundle
-import android.os.HandlerThread
 import android.view.ViewGroup
 import me.spica.spicaweather2.view.SunView
 import rikka.material.app.MaterialActivity
@@ -19,15 +18,15 @@ class TestActivity : MaterialActivity() {
         }
     }
 
-    private val handlerThread = HandlerThread("test").apply {
-        start()
-    }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(openGLSurfaceView)
+
+        // 执行结果
+        // flow collect 0
+        // flow collect 1
+
     }
 
 
