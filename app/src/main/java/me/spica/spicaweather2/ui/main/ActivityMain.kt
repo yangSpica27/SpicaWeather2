@@ -35,6 +35,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import rikka.material.app.MaterialActivity
 import timber.log.Timber
+import kotlin.math.abs
 import kotlin.system.measureTimeMillis
 
 /**
@@ -65,13 +66,12 @@ class ActivityMain : MaterialActivity() {
         EventBus.getDefault().register(this)
     }
 
-    var positionAndOffset = Pair(0, 0)
+
+    var listScrollerY = 0
         set(value) {
             updateTitleBarColor(value)
             field = value
         }
-
-    var listScrollerY = 0
 
     var currentCurrentCity: CityBean? = null
 
@@ -170,29 +170,22 @@ class ActivityMain : MaterialActivity() {
 
 
     // 更新标题
-    private fun updateTitleBarColor(value: Pair<Int, Int>) {
-        if (value.first == 0) {
-            val progress = -value.second * 1f / (resources.displayMetrics.heightPixels / 3f)
-            layout.mainTitleLayout.setBackgroundWhiteColor(progress)
-            WindowCompat.getInsetsController(
-                window, window.decorView
-            ).isAppearanceLightStatusBars = progress > 0.5
-        } else {
-            layout.mainTitleLayout.setBackgroundWhiteColor(1f)
-            WindowCompat.getInsetsController(
-                window, window.decorView
-            ).isAppearanceLightStatusBars = true
-        }
+    private fun updateTitleBarColor(value: Int) {
+        val progress = Math.min(abs(value) / (resources.displayMetrics.heightPixels / 3f), 1f)
+        layout.mainTitleLayout.setBackgroundWhiteColor(progress)
+        WindowCompat.getInsetsController(
+            window, window.decorView
+        ).isAppearanceLightStatusBars = progress > 0.5
     }
 
     // 更新其他页面的滚动
     private fun updateOtherPageScroller() {
         (layout.viewPager2.children.first() as RecyclerView).children.forEach {
             if (it is WeatherMainLayout2) {
-                it.scrollTo(0,listScrollerY)
+                it.scrollTo(0, listScrollerY)
                 doOnMainThreadIdle({
                     it.checkItemInScreen()
-                },450)
+                }, 450)
             }
         }
     }

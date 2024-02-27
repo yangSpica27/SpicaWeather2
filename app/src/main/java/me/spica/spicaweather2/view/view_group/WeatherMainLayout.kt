@@ -70,12 +70,12 @@ class WeatherMainLayout(context: Context) : RecyclerViewAtViewPager2(context) {
                     return
                 }
                 if (activityMain.currentCurrentCity?.cityName == tag.toString()) {
-                    activityMain.positionAndOffset = getPositionAndOffset()
-                    layoutManager?.findViewByPosition(activityMain.positionAndOffset.first)?.let {
-                        if (it is NowWeatherLayout) {
-                            activityMain.setBox2dBackground(it.nowWeatherInfoCard.getNowCardTop())
-                        }
-                    }
+//                    activityMain.positionAndOffset = getPositionAndOffset()
+//                    layoutManager?.findViewByPosition(activityMain.positionAndOffset.first)?.let {
+//                        if (it is NowWeatherLayout) {
+//                            activityMain.setBox2dBackground(it.nowWeatherInfoCard.getNowCardTop())
+//                        }
+//                    }
                 }
                 mainCardAdapter.onScroll()
             }
