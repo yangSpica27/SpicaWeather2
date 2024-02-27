@@ -95,7 +95,7 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
 
     // 检查是否进入屏幕进行动画
     fun checkItemInScreen() {
-        contentView.children.toList().forEach { itemView ->
+        contentView.children.forEach { itemView ->
             if (itemView is SpicaWeatherCard) {
                 if (!itemView.hasInScreen) {
                     val isVisible = itemView.getGlobalVisibleRect(itemVisibleRect)

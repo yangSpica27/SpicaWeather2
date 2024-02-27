@@ -188,11 +188,11 @@ class ActivityMain : MaterialActivity() {
     // 更新其他页面的滚动
     private fun updateOtherPageScroller() {
         (layout.viewPager2.children.first() as RecyclerView).children.forEach {
-            if (it is WeatherMainLayout2 && it.tag != currentCurrentCity?.cityName) {
+            if (it is WeatherMainLayout2) {
                 it.scrollTo(0,listScrollerY)
                 doOnMainThreadIdle({
                     it.checkItemInScreen()
-                })
+                },450)
             }
         }
     }
