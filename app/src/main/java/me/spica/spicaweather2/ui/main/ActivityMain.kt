@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.WindowCompat
 import androidx.core.view.children
 import androidx.core.view.drawToBitmap
@@ -15,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.spica.spicaweather2.common.WeatherCodeUtils
+import me.spica.spicaweather2.common.WeatherType
 import me.spica.spicaweather2.common.getBackgroundBitmap
 import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.common.getWeatherAnimType
@@ -25,8 +27,7 @@ import me.spica.spicaweather2.tools.MessageType
 import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.tools.startActivityWithAnimation
 import me.spica.spicaweather2.ui.manager_city.ActivityManagerCity
-import me.spica.spicaweather2.ui.test.TestActivity
-import me.spica.spicaweather2.view.Manger2HomeView
+import me.spica.spicaweather2.view.Manager2HomeView
 import me.spica.spicaweather2.view.view_group.ActivityMainLayout
 import me.spica.spicaweather2.view.view_group.WeatherMainLayout2
 import me.spica.spicaweather2.work.DataSyncWorker
@@ -67,6 +68,7 @@ class ActivityMain : MaterialActivity() {
     }
 
 
+    // 用于同步滑动的变量
     var listScrollerY = 0
         set(value) {
             updateTitleBarColor(value)
@@ -77,8 +79,8 @@ class ActivityMain : MaterialActivity() {
 
     private var data = listOf<CityWithWeather>()
 
-    private val manger2HomeView by lazy {
-        Manger2HomeView(this)
+    private val manager2HomeView by lazy {
+        Manager2HomeView(this)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -87,7 +89,7 @@ class ActivityMain : MaterialActivity() {
             MessageType.Get2MainActivityAnim.tag -> {
                 // 从管理城市页面返回进行动画 切换到用户选择的城市上去
                 layout.viewPager2.setCurrentItem(event.extra as Int, false)
-                manger2HomeView.invalidate()
+                manager2HomeView.invalidate()
             }
         }
     }
@@ -95,9 +97,9 @@ class ActivityMain : MaterialActivity() {
     override fun onResume() {
         super.onResume()
         // 从管理城市页面返回进行动画
-        if (manger2HomeView.isAttached) {
+        if (manager2HomeView.isAttached) {
             doOnMainThreadIdle({
-                manger2HomeView.startAnim()
+                manager2HomeView.startAnim()
             })
         }
     }
@@ -109,7 +111,23 @@ class ActivityMain : MaterialActivity() {
         }
 
         layout.mainTitleLayout.titleTextView.setOnClickListener {
-            startActivityWithAnimation<TestActivity> { }
+            AlertDialog.Builder(this)
+                .setTitle("选择天气动画类型").setItems(
+                    arrayOf(
+                        "晴天", "多云", "雨天"
+                    )
+                ) { _, which ->
+                    val type = when (which) {
+                        0 -> WeatherType.WEATHER_SUNNY
+                        1 -> WeatherType.WEATHER_CLOUDY
+                        else -> WeatherType.WEATHER_RAINY
+                    }
+                    with(layout.weatherBackgroundSurfaceView) {
+                        bgColor = type.getThemeColor()
+                        currentWeatherAnimType = type.getWeatherAnimType()
+                        bgBitmap = type.getBackgroundBitmap(this@ActivityMain)
+                    }
+                }.show()
         }
         layout.viewPager2.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         layout.viewPager2.adapter = mainPagerAdapter
@@ -145,7 +163,7 @@ class ActivityMain : MaterialActivity() {
 
     // 进入城市管理页面
     private fun enterManagerCity() {
-        manger2HomeView.attachToRootView()
+        manager2HomeView.attachToRootView()
         lifecycleScope.launch(Dispatchers.Default) {
             if (screenBitmap?.isRecycled == false) {
                 val countRecycler = measureTimeMillis {

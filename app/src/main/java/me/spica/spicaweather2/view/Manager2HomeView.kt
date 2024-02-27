@@ -21,11 +21,12 @@ import androidx.core.animation.doOnEnd
 import androidx.core.view.drawToBitmap
 import me.spica.spicaweather2.tools.dp
 
-class Manger2HomeView : View {
+class Manager2HomeView : View {
 
     companion object {
         // 用于保存背景图
         var mBackground: Bitmap? = null
+
         // 用于保存起始位置
         var originRect = RectF()
 
@@ -38,7 +39,12 @@ class Manger2HomeView : View {
                 intArray[0] + from.width * 1f,
                 intArray[1] + from.height * 1f,
             )
-            mBackground = window.decorView.drawToBitmap()
+            try {
+                mBackground = window.decorView.drawToBitmap()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
         }
     }
 

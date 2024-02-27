@@ -33,7 +33,7 @@ import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.tools.startActivityWithAnimation
 import me.spica.spicaweather2.ui.add_city.ActivityAddCity
 import me.spica.spicaweather2.ui.main.ActivityMain
-import me.spica.spicaweather2.view.Manger2HomeView
+import me.spica.spicaweather2.view.Manager2HomeView
 import me.spica.spicaweather2.view.view_group.ActivityManagerCityLayout
 import org.greenrobot.eventbus.EventBus
 import rikka.material.app.MaterialActivity
@@ -92,7 +92,7 @@ class ActivityManagerCity : MaterialActivity() {
 
         adapter.itemClickListener = { position, view ->
             lifecycleScope.launch(Dispatchers.Default) {
-                Manger2HomeView.initFromViewRect(view, window)
+                Manager2HomeView.initFromViewRect(view, window)
                 EventBus.getDefault().post(MessageEvent.create(MessageType.Get2MainActivityAnim, position))
                 withContext(Dispatchers.Main) {
                     if (Build.VERSION.SDK_INT >= 34) {
