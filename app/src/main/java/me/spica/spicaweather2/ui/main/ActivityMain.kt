@@ -8,7 +8,6 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.children
 import androidx.core.view.drawToBitmap
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +28,7 @@ import me.spica.spicaweather2.ui.manager_city.ActivityManagerCity
 import me.spica.spicaweather2.ui.test.TestActivity
 import me.spica.spicaweather2.view.Manger2HomeView
 import me.spica.spicaweather2.view.view_group.ActivityMainLayout
-import me.spica.spicaweather2.view.view_group.WeatherMainLayout
+import me.spica.spicaweather2.view.view_group.WeatherMainLayout2
 import me.spica.spicaweather2.work.DataSyncWorker
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -71,6 +70,8 @@ class ActivityMain : MaterialActivity() {
             updateTitleBarColor(value)
             field = value
         }
+
+    var listScrollerY = 0
 
     var currentCurrentCity: CityBean? = null
 
@@ -187,12 +188,10 @@ class ActivityMain : MaterialActivity() {
     // 更新其他页面的滚动
     private fun updateOtherPageScroller() {
         (layout.viewPager2.children.first() as RecyclerView).children.forEach {
-            if (it is WeatherMainLayout && it.tag != currentCurrentCity?.cityName) {
-                (it.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(
-                    positionAndOffset.first, positionAndOffset.second
-                )
+            if (it is WeatherMainLayout2 && it.tag != currentCurrentCity?.cityName) {
+                it.scrollTo(0,listScrollerY)
                 doOnMainThreadIdle({
-                    it.checkEnterScreen()
+                    it.checkItemInScreen()
                 })
             }
         }

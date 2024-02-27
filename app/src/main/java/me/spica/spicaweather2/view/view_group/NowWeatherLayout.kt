@@ -11,6 +11,7 @@ import android.text.format.DateUtils
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
 import androidx.core.view.marginTop
@@ -107,9 +108,12 @@ class NowWeatherLayout(context: Context) : AViewGroup(context = context), SpicaW
 
     override fun bindData(weather: Weather) {
         nowWeatherInfoCard.bindData(weather)
-        helloText.text = if (TextUtils.isEmpty(weather.descriptionForToday)){
+        nowWeatherInfoCard.doOnPreDraw {
+            nowWeatherInfoCard.requestLayout()
+        }
+        helloText.text = if (TextUtils.isEmpty(weather.descriptionForToday)) {
             weather.welcomeText
-        }else{
+        } else {
             weather.descriptionForToday
         }
     }

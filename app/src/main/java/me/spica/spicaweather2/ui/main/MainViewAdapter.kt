@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.view_group.NoWeatherDataLayout
-import me.spica.spicaweather2.view.view_group.WeatherMainLayout
+import me.spica.spicaweather2.view.view_group.WeatherMainLayout2
 
 /**
  * 主页的adapter
@@ -35,7 +35,7 @@ class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun setWeather(weather: Weather) {
-            (itemView as WeatherMainLayout).initData(weather)
+            (itemView as WeatherMainLayout2).initData(weather)
         }
     }
 
@@ -43,7 +43,7 @@ class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
         if (viewType == TYPE_EMPTY) {
             return ViewHolder(NoWeatherDataLayout(parent.context))
         }
-        return ViewHolder(WeatherMainLayout(parent.context))
+        return ViewHolder(WeatherMainLayout2(parent.context))
     }
 
     override fun getItemCount(): Int = items.size

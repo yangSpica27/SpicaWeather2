@@ -106,6 +106,9 @@ class WeatherMainLayout(context: Context) : RecyclerViewAtViewPager2(context) {
         mainCardAdapter.onScroll()
     }
 
+
+
+
     private fun getActivityFromContext(context: Context?): Activity? {
         if (context == null) {
             return null
