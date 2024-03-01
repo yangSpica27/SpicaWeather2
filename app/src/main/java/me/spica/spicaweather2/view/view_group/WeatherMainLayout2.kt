@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.children
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.tools.dp
@@ -28,9 +29,12 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
     private val items = HomeCardType.values().toMutableList()
 
     private val contentView = LinearLayout(context).apply {
-        layoutParams = MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-            bottomMargin = 40.dp.toInt()
+        layoutParams = MarginLayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).apply {
         }
+        updatePadding(bottom = 40.dp.toInt())
         orientation = LinearLayout.VERTICAL
     }
 

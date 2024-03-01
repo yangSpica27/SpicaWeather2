@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.marginTop
 import androidx.core.view.updateMargins
@@ -69,6 +70,7 @@ class TodayExtraLayout(context: Context) : AViewGroup(context), SpicaWeatherCard
         addView(windSpeedTitleText)
         updatePadding(14.dp, 12.dp, 14.dp, 12.dp)
         setBackgroundResource(R.drawable.bg_card)
+        ViewCompat.setElevation(this, 4.dp.toFloat())
         val lp = ViewGroup.MarginLayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT,

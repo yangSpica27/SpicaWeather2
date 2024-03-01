@@ -3,9 +3,11 @@ package me.spica.spicaweather2.view.view_group
 import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.ViewCompat
 import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.getThemeColor
@@ -48,6 +50,7 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+        setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
     }
 
     private val sunsetText = AppCompatTextView(context).apply {
@@ -56,6 +59,7 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+        setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
     }
 
     init {
@@ -73,6 +77,7 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
             )
         }
         setBackgroundResource(R.drawable.bg_card)
+        ViewCompat.setElevation(this, 4.dp.toFloat())
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

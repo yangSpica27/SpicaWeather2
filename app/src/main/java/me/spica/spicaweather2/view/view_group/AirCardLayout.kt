@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.ViewCompat
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
 import androidx.core.view.marginTop
@@ -123,6 +124,7 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         isFocusable = false
         isClickable = false
         setBackgroundResource(R.drawable.bg_card)
+        ViewCompat.setElevation(this, 4.dp.toFloat())
         setPadding(0, 0, 0, 12.dp)
         addView(titleText)
         addView(airCircleProgressView)

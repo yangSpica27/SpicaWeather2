@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.marginTop
 import androidx.core.view.updateMargins
 import com.airbnb.lottie.LottieAnimationView
@@ -24,6 +25,7 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
 
     init {
         setBackgroundResource(R.drawable.bg_card)
+        ViewCompat.setElevation(this, 4.dp.toFloat())
     }
 
     private val lottieAnimationView = LottieAnimationView(context).apply {
@@ -67,7 +69,7 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
     private val divider = View(context).apply {
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
-            1.dp
+            2.dp
         ).apply {
             topMargin = 20.dp
         }
