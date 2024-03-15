@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.WindowCompat
 import androidx.core.view.children
 import androidx.core.view.drawToBitmap
 import androidx.lifecycle.lifecycleScope
@@ -27,6 +26,7 @@ import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.tools.MessageEvent
 import me.spica.spicaweather2.tools.MessageType
 import me.spica.spicaweather2.tools.doOnMainThreadIdle
+import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.tools.startActivityWithAnimation
 import me.spica.spicaweather2.ui.manager_city.ActivityManagerCity
 import me.spica.spicaweather2.view.Manager2HomeView
@@ -38,7 +38,6 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import rikka.material.app.MaterialActivity
 import timber.log.Timber
-import kotlin.math.abs
 import kotlin.system.measureTimeMillis
 
 /**
@@ -73,7 +72,7 @@ class ActivityMain : MaterialActivity() {
     // 用于同步滑动的变量
     var listScrollerY = 0
         set(value) {
-            updateTitleBarColor(value)
+            updateTitleBarUI(value)
             field = value
         }
 
@@ -190,12 +189,13 @@ class ActivityMain : MaterialActivity() {
 
 
     // 更新标题
-    private fun updateTitleBarColor(value: Int) {
-        val progress = Math.min(abs(value) / (resources.displayMetrics.heightPixels / 3f), 1f)
-        layout.mainTitleLayout.setBackgroundWhiteColor(progress)
-        WindowCompat.getInsetsController(
-            window, window.decorView
-        ).isAppearanceLightStatusBars = progress > 0.5
+    private fun updateTitleBarUI(scrollY: Int) {
+//        val ty = if (scrollY < 80.dp) {
+//            0f
+//        } else {
+//            -(scrollY - 80.dp)
+//        }
+        layout.mainTitleLayout.translationY = -scrollY*1f
     }
 
     // 更新其他页面的滚动

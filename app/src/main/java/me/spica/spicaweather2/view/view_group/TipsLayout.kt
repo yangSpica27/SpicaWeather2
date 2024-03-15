@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.marginTop
 import androidx.core.view.updateMargins
@@ -57,6 +58,7 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             12.dp
         )
         setBackgroundResource(R.drawable.bg_card)
+        ViewCompat.setElevation(this, 4.dp.toFloat())
         isFocusable = false
         isClickable = false
         sptIcon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.icon_sport))

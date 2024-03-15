@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.weather.Weather
@@ -25,6 +26,7 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
 
     init {
         setBackgroundResource(R.drawable.bg_card)
+        ViewCompat.setElevation(this, 4.dp.toFloat())
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT

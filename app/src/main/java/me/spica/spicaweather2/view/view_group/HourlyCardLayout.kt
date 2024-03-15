@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.line.HourlyLineView
@@ -22,6 +23,7 @@ class HourlyCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard
     init {
         setPadding(0, 12.dp, 0, 12.dp)
         setBackgroundResource(R.drawable.bg_card)
+        ViewCompat.setElevation(this, 4.dp.toFloat())
         addView(hourlyLineView)
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
