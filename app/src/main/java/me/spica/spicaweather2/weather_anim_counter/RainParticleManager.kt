@@ -68,7 +68,7 @@ class RainParticleManager {
         synchronized(world) {
             backgroundBody?.setTransform(
                 Vec2(
-                    boxWidth + mappingView2Body(16.dp), mappingView2Body(y * 1f + 9.dp)
+                    boxWidth + mappingView2Body(16.dp), mappingView2Body(y * 1f + 16.dp)
                 ), 0f
             )
         }
@@ -103,11 +103,11 @@ class RainParticleManager {
         psd.density = 1f
         psd.maxCount = ParticleMaxCount
         psd.radius = mappingView2Body(1.dp)
-        psd.dampingStrength = 0.3f
-        psd.pressureStrength = 0.05f
+        psd.dampingStrength = 1.3f
+        psd.pressureStrength = 0.03f
         psd.gravityScale = 1.4f
         psd.repulsiveStrength = 0f
-        psd.surfaceTensionPressureStrength = 1.55f
+        psd.surfaceTensionPressureStrength = 10.55f
         psd.viscousStrength = 20f
         val ps = world.createParticleSystem(psd)
         psd.delete()

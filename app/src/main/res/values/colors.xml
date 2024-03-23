@@ -30,6 +30,11 @@
 
     <color name="sun_light_color">#0DFFFFFF</color>
 
+    <color name="wind_speed_color">#4CAF50</color>
+    <color name="humidness_color">#2196F3</color>
+    <color name="pressure_color">#FF5722</color>
+    <color name="feel_temp_color">#FF9800</color>
+
     <color name="l8">#f5222d</color>
     <color name="l7">#ff7875</color>
     <color name="l6">#fa8c16</color>

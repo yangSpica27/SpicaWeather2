@@ -131,7 +131,7 @@ class SnowEffectCounter : Closeable {
             backgroundBody?.setTransform(
                 Vec2(
                     boxWidth + mappingView2Body(16.dp),
-                    mappingView2Body(y * 1f + 10.dp)
+                    mappingView2Body(y * 1f + 16.dp)
                 ),
                 0f
             )

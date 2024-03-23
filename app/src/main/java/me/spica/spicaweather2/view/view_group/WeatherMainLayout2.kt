@@ -15,7 +15,9 @@ import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.tools.dp
+import me.spica.spicaweather2.tools.getScreenHeight
 import me.spica.spicaweather2.ui.main.ActivityMain
+import me.spica.spicaweather2.view.NowWeatherInfoCard
 import me.spica.spicaweather2.view.scroller_view.ScrollViewAtViewPager
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
@@ -40,7 +42,10 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
 
     init {
         val activityMain = getActivityFromContext(context) as ActivityMain
-        layoutParams = RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        layoutParams = RecyclerView.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         // 载入item数据
         items.forEachIndexed { index, item ->
             val itemView = item.getViewType(context)
@@ -49,9 +54,9 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
-                topMargin = if (index == 0) 100.dp.toInt() else 8.dp.toInt()
-                leftMargin = if (index == 0) 0 else 14.dp.toInt()
-                rightMargin = if (index == 0) 0 else 14.dp.toInt()
+                topMargin = if (index == 0) context.getScreenHeight() / 3 else 10.dp.toInt()
+                leftMargin = 14.dp.toInt()
+                rightMargin = 14.dp.toInt()
             }
             if (itemView is SpicaWeatherCard) {
                 itemView.resetAnim()
@@ -69,10 +74,8 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
             }
             if (activityMain.currentCurrentCity?.cityName == tag.toString()) {
                 activityMain.listScrollerY = scrollY
-                contentView.children.firstOrNull().let {
-                    if (it is NowWeatherLayout) {
-                        activityMain.setBox2dBackground(it.nowWeatherInfoCard.getNowCardTop())
-                    }
+                contentView.children.find { it is NowWeatherInfoCard }?.let {
+                    activityMain.setBox2dBackground((it as NowWeatherInfoCard).getNowCardTop())
                 }
             }
             checkItemInScreen()

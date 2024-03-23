@@ -11,7 +11,7 @@ import me.spica.spicaweather2.ui.air_introduce.AirIntroductionActivity
 import me.spica.spicaweather2.view.view_group.AirCardLayout
 import me.spica.spicaweather2.view.view_group.DailyWeatherLayout
 import me.spica.spicaweather2.view.view_group.HourlyCardLayout
-import me.spica.spicaweather2.view.view_group.NowWeatherLayout
+import me.spica.spicaweather2.view.view_group.TodayDescLayout
 import me.spica.spicaweather2.view.view_group.SunriseCardLayout
 import me.spica.spicaweather2.view.view_group.TipsLayout
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
@@ -63,7 +63,7 @@ class MainCardAdapter(
             }
 
             HomeCardType.NOW_WEATHER.code -> {
-                val itemView = NowWeatherLayout(parent.context)
+                val itemView = TodayDescLayout(parent.context)
                 return AbstractMainViewHolder(itemView, itemView).apply {
                     reset()
                 }

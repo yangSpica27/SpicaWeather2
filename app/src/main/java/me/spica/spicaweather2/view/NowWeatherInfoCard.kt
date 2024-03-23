@@ -3,24 +3,25 @@ package me.spica.spicaweather2.view
 import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.Gravity
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.AbsoluteSizeSpan
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.marginTop
 import androidx.core.view.updateMargins
-import com.airbnb.lottie.LottieAnimationView
-import com.airbnb.lottie.LottieDrawable
+import androidx.core.view.updatePadding
 import me.spica.spicaweather2.R
-import me.spica.spicaweather2.common.WeatherCodeUtils
-import me.spica.spicaweather2.common.getAnimRes
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.view_group.AViewGroup
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 
+
+// 当前天气信息卡片
 class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), SpicaWeatherCard {
 
     init {
@@ -28,198 +29,257 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
         ViewCompat.setElevation(this, 4.dp.toFloat())
     }
 
-    private val lottieAnimationView = LottieAnimationView(context).apply {
-        layoutParams = LayoutParams(
-            100.dp,
-            100.dp
-        )
-        setAnimation(R.raw.windy)
-        repeatCount = LottieDrawable.INFINITE
-        repeatMode = LottieDrawable.RESTART
-    }
 
-    private val currentTemperature = AppCompatTextView(context).apply {
-        layoutParams = LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        ).apply {
-            updateMargins(
-                top = 8.dp
-            )
-        }
-        setTextAppearance(R.style.TextAppearance_Material3_DisplayLarge)
-        setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
-        text = "0℃"
-    }
-
-    private val temperatureDescText = AppCompatTextView(context).apply {
-        layoutParams = LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        ).apply {
-            updateMargins(
-                top = 12.dp
-            )
-        }
-        setTextAppearance(R.style.TextAppearance_Material3_TitleMedium)
-        setTextColor(ContextCompat.getColor(context, R.color.textColorPrimaryLight))
-        text = "多云 体感--°C -℃ | -℃"
-    }
-
-    private val divider = View(context).apply {
-        layoutParams = LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            2.dp
-        ).apply {
-            topMargin = 20.dp
-        }
-        setBackgroundColor(ContextCompat.getColor(context, R.color.line_divider))
-    }
-
+    // 湿度
     private val waterText = AppCompatTextView(context).apply {
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
-        ).apply {
-            updateMargins(
-                top = 20.dp
-            )
-        }
-        gravity = Gravity.CENTER
-        setCompoundDrawables(
-            ContextCompat.getDrawable(context, R.drawable.ic_water)?.apply {
-                setBounds(0, 0, 20.dp, 20.dp)
-            },
-            null, null, null
         )
-        setTextAppearance(R.style.TextAppearance_Material3_TitleLarge)
-        text = "-%"
+        setTextColor(ContextCompat.getColor(context, R.color.humidness_color))
+        updatePadding(bottom = 4.dp)
+        text = "--"
     }
 
+
+    private val bottomTextWater = AppCompatTextView(context).apply {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        setTextColor(ContextCompat.getColor(context, R.color.humidness_color))
+        text = "湿度"
+    }
+
+    // 风速
+    private val windSpeedText = AppCompatTextView(context).apply {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        setTextColor(ContextCompat.getColor(context, R.color.wind_speed_color))
+        updatePadding(bottom = 4.dp)
+        text = "--"
+    }
+
+
+    private val bottomTextWindSpeed = AppCompatTextView(context).apply {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        setTextColor(ContextCompat.getColor(context, R.color.wind_speed_color))
+        text = "风速"
+    }
+
+    // 气压
     private val pressureText = AppCompatTextView(context).apply {
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
-        ).apply {
-            updateMargins(
-                top = 20.dp
-            )
-        }
-        setTextAppearance(R.style.TextAppearance_Material3_TitleLarge)
-        setCompoundDrawables(
-            ContextCompat.getDrawable(context, R.drawable.ic_pressure)?.apply {
-                setBounds(0, 0, 20.dp, 20.dp)
-            },
-            null, null, null
         )
-        gravity = Gravity.CENTER
-        text = "--pa"
+        updatePadding(bottom = 4.dp)
+        setTextColor(ContextCompat.getColor(context, R.color.pressure_color))
+        text = "--"
     }
 
-    private val windSpeed = AppCompatTextView(context).apply {
+    private val bottomTextPressure = AppCompatTextView(context).apply {
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
-        ).apply {
-            updateMargins(
-                top = 20.dp
-            )
-        }
-        setTextAppearance(R.style.TextAppearance_Material3_TitleLarge)
-        setCompoundDrawables(
-            ContextCompat.getDrawable(context, R.drawable.ic_wind2)?.apply {
-                setBounds(0, 0, 20.dp, 20.dp)
-            },
-            null, null, null
         )
-        gravity = Gravity.CENTER
-        text = "--m/s"
+        setTextColor(ContextCompat.getColor(context, R.color.pressure_color))
+        text = "气压"
     }
 
+    //   体感温度
+    private val feelTemp = AppCompatTextView(context).apply {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        updatePadding(bottom = 4.dp)
+        setTextColor(ContextCompat.getColor(context, R.color.feel_temp_color))
+        text = "--"
+    }
+
+    private val bottomTextFeelTemp = AppCompatTextView(context).apply {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        setTextColor(ContextCompat.getColor(context, R.color.feel_temp_color))
+        text = "体感温度"
+    }
+
+    // 描述文本
+    private val descText = AppCompatTextView(context).apply {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        setTextAppearance(R.style.TextAppearance_Material3_LabelLarge)
+        setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14f)
+        setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
+        text = "--"
+        updatePadding(0, 0, 0, 12.dp)
+    }
+
+
     init {
-        setPadding(14.dp, 0, 14.dp, 20.dp)
-        addView(currentTemperature)
-        addView(temperatureDescText)
-        addView(windSpeed)
+        setPadding(14.dp, 14.dp, 14.dp, 20.dp)
+        addView(windSpeedText)
         addView(waterText)
         addView(pressureText)
-        addView(lottieAnimationView)
-        addView(divider)
+        addView(descText)
+        addView(feelTemp)
+        addView(bottomTextWater)
+        addView(bottomTextWindSpeed)
+        addView(bottomTextPressure)
+        addView(bottomTextFeelTemp)
     }
 
     private val nowCardXY = intArrayOf(0, 0)
+
     fun getNowCardTop(): Int {
-        currentTemperature.getLocationOnScreen(nowCardXY)
+        getLocationOnScreen(nowCardXY)
         return nowCardXY[1]
     }
 
     @SuppressLint("SetTextI18n")
     override fun bindData(weather: Weather) {
-        lottieAnimationView.setAnimation(WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId).getAnimRes())
-        lottieAnimationView.playAnimation()
-        currentTemperature.text = "${weather.todayWeather.temp}℃"
-        temperatureDescText.text = "${weather.todayWeather.weatherName} 体感${weather.todayWeather.feelTemp}℃"
-        waterText.text = "${weather.todayWeather.water}%"
-        windSpeed.text = "${weather.todayWeather.windSpeed}m/s"
-        pressureText.text = "${weather.todayWeather.windPa}pa"
+        descText.text = weather.descriptionForToday
+        // 带入体感温度
+        val feelTempText = SpannableString("${weather.todayWeather.feelTemp}℃")
+        feelTempText.setSpan(
+            AbsoluteSizeSpan(28.dp),
+            0,
+            feelTempText.length,
+            Spanned.SPAN_INCLUSIVE_INCLUSIVE
+        )
+        feelTempText.setSpan(
+            AbsoluteSizeSpan(16.dp),
+            Math.max(feelTempText.length - 1, 0),
+            feelTempText.length,
+            Spanned.SPAN_INCLUSIVE_INCLUSIVE
+        )
+        feelTemp.text = feelTempText
+        // 带入湿度
+        val waterText = SpannableString("${weather.todayWeather.water}%")
+        waterText.setSpan(
+            AbsoluteSizeSpan(28.dp),
+            0,
+            waterText.length,
+            Spanned.SPAN_INCLUSIVE_INCLUSIVE
+        )
+        waterText.setSpan(
+            AbsoluteSizeSpan(16.dp),
+            Math.max(waterText.length - 1, 0),
+            waterText.length,
+            Spanned.SPAN_INCLUSIVE_INCLUSIVE
+        )
+        this.waterText.text = waterText
+        // 带入风速
+        val windSpeedText = SpannableString("${weather.todayWeather.windSpeed}m/s")
+        windSpeedText.setSpan(
+            AbsoluteSizeSpan(28.dp),
+            0,
+            windSpeedText.length - 3,
+            Spanned.SPAN_INCLUSIVE_INCLUSIVE
+        )
+        windSpeedText.setSpan(
+            AbsoluteSizeSpan(16.dp),
+            Math.max(windSpeedText.length - 3, 0),
+            windSpeedText.length,
+            Spanned.SPAN_INCLUSIVE_INCLUSIVE
+        )
+        this.windSpeedText.text = windSpeedText
+        //  带入气压
+        val pressureText = SpannableString("${weather.todayWeather.windPa}Pa")
+        pressureText.setSpan(
+            AbsoluteSizeSpan(28.dp),
+            0,
+            pressureText.length - 2,
+            Spanned.SPAN_INCLUSIVE_INCLUSIVE
+        )
+        pressureText.setSpan(
+            AbsoluteSizeSpan(16.dp),
+            Math.max(pressureText.length - 2, 0),
+            pressureText.length,
+            Spanned.SPAN_INCLUSIVE_INCLUSIVE
+        )
+        this.pressureText.text = pressureText
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        currentTemperature.autoMeasure()
-        temperatureDescText.autoMeasure()
-        lottieAnimationView.autoMeasure()
-        divider.measure(
+        descText.measure(
             (measuredWidth - paddingLeft - paddingRight).toExactlyMeasureSpec(),
-            divider.defaultHeightMeasureSpec(this)
+            descText.defaultHeightMeasureSpec(this)
         )
+        feelTemp.autoMeasure()
         waterText.autoMeasure()
+        windSpeedText.autoMeasure()
         pressureText.autoMeasure()
-        windSpeed.autoMeasure()
+        bottomTextWater.autoMeasure()
+        bottomTextWindSpeed.autoMeasure()
+        bottomTextPressure.autoMeasure()
+        bottomTextFeelTemp.autoMeasure()
         setMeasuredDimension(
             measuredWidth,
-            currentTemperature.measuredHeightWithMargins +
-                temperatureDescText.measuredHeightWithMargins +
-                divider.measuredHeightWithMargins +
-                waterText.measuredHeightWithMargins +
-                paddingBottom + paddingTop
+            paddingTop
+                    + paddingBottom
+                    + descText.measuredHeightWithMargins
+                    + windSpeedText.measuredHeightWithMargins
+                    + bottomTextWindSpeed.measuredHeightWithMargins
         )
     }
 
     override fun onLayout(change: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        currentTemperature.layout(
-            paddingRight,
-            paddingTop + currentTemperature.marginTop,
-            true
-        )
-        temperatureDescText.layout(
-            paddingRight,
-            currentTemperature.bottom + temperatureDescText.marginTop,
-            true
+        descText.layout(
+            paddingLeft,
+            paddingTop
         )
 
-        divider.layout(
-            paddingLeft,
-            temperatureDescText.bottom + divider.marginTop,
+        val itemWidth = (measuredWidth - paddingLeft - paddingRight) / 4f
+        windSpeedText.layout(
+            (itemWidth / 2f + paddingLeft - windSpeedText.width / 2f).toInt(),
+            descText.bottom,
         )
-        lottieAnimationView.layout(
-            paddingLeft,
-            ((divider.top + currentTemperature.top) / 2f - lottieAnimationView.height / 2f).toInt()
+        bottomTextWindSpeed.layout(
+            bottomTextWindSpeed.toViewHorizontalCenter(windSpeedText),
+            windSpeedText.bottom
         )
 
         waterText.layout(
-            paddingLeft,
-            divider.bottom + waterText.marginTop
+            (itemWidth / 2f + paddingLeft + itemWidth - waterText.width / 2f).toInt(),
+            descText.bottom,
         )
+        bottomTextWater.layout(
+            bottomTextWater.toViewHorizontalCenter(waterText),
+            waterText.bottom
+        )
+
+
+        feelTemp.layout(
+            (itemWidth / 2f + paddingLeft + itemWidth * 2 - feelTemp.width / 2f).toInt(),
+            descText.bottom,
+        )
+        bottomTextFeelTemp.layout(
+            bottomTextFeelTemp.toViewHorizontalCenter(feelTemp),
+            feelTemp.bottom
+        )
+
         pressureText.layout(
-            pressureText.toHorizontalCenter(this),
-            divider.bottom + pressureText.marginTop
+            (itemWidth / 2f + paddingLeft + itemWidth * 3 - pressureText.width / 2f).toInt(),
+            descText.bottom,
         )
-        windSpeed.layout(
-            paddingRight,
-            divider.bottom + windSpeed.marginTop,
-            true
+
+        bottomTextPressure.layout(
+            bottomTextPressure.toViewHorizontalCenter(pressureText),
+            pressureText.bottom
         )
+
     }
 
     override var animatorView: View = this
