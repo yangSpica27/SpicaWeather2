@@ -130,9 +130,13 @@ class ActivityMain : MaterialActivity() {
                     }
                 }.show()
         }
-        layout.viewPager2.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        layout.viewPager2.adapter = mainPagerAdapter
-        layout.viewPager2.isUserInputEnabled = true
+        with(layout.viewPager2) {
+            orientation = ViewPager2.ORIENTATION_HORIZONTAL
+            offscreenPageLimit = 10
+            adapter = mainPagerAdapter
+            isUserInputEnabled = true
+        }
+
         // 启动后台同步
         startService(Intent(this, DataSyncWorker::class.java))
         layout.mainTitleLayout.dotIndicator.setViewPager2(viewPager2 = layout.viewPager2)
@@ -195,7 +199,7 @@ class ActivityMain : MaterialActivity() {
 //        } else {
 //            -(scrollY - 80.dp)
 //        }
-        layout.mainTitleLayout.translationY = -scrollY*1f
+        layout.mainTitleLayout.translationY = -scrollY * 1f
     }
 
     // 更新其他页面的滚动
@@ -203,9 +207,9 @@ class ActivityMain : MaterialActivity() {
         (layout.viewPager2.children.first() as RecyclerView).children.forEach {
             if (it is WeatherMainLayout2) {
                 it.scrollTo(0, listScrollerY)
-                doOnMainThreadIdle({
+                lifecycleScope.launch(Dispatchers.Default) {
                     it.checkItemInScreen()
-                }, 450)
+                }
             }
         }
     }

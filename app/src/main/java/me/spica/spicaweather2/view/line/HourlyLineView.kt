@@ -291,10 +291,14 @@ class HourlyLineView : View {
         val currentX =
             (offset / scrollMaxWidth) * (width - paddingLeft - paddingRight - itemWidth) + itemWidth / 2f + paddingLeft
 
-        val currentIndex = Math.min(Math.abs((currentX+offset-itemWidth / 2f - paddingLeft) / itemWidth), data.size - 1f)
+        val currentIndex = Math.min(
+            Math.abs((currentX + offset - itemWidth / 2f - paddingLeft) / itemWidth),
+            data.size - 1f
+        )
 
 
-        cursorPaint.color = ColorUtils.setAlphaComponent(colors[currentIndex.toInt()], 25)
+        cursorPaint.color =
+            ColorUtils.setAlphaComponent(colors[Math.min(currentIndex.toInt(), colors.size - 1)], 25)
 
         canvas.drawRoundRect(
             currentX - itemWidth / 2f,

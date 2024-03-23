@@ -90,7 +90,8 @@ class RainParticleManager {
         fixtureDef.restitution = 0.3f // 补偿系数
         fixtureDef.filter.maskBits = 0b01
         fixtureDef.filter.groupIndex = 0b01
-        bodyDef.position[boxWidth + mappingView2Body(16.dp)] = mappingView2Body(mWorldHeight * 1f) + boxHeight
+        bodyDef.position[boxWidth + mappingView2Body(16.dp)] =
+            mappingView2Body(mWorldHeight * 1f) + boxHeight
         val bottomBody: Body = world.createBody(bodyDef) // 创建一个真实的下边 body
         val fixture = bottomBody.createFixture(fixtureDef)
         val body = fixture.body

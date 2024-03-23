@@ -101,7 +101,8 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
     }
 
     // 检查是否进入屏幕进行动画
-    fun checkItemInScreen() {
+    @Synchronized
+    fun checkItemInScreen()  {
         contentView.children.forEach { itemView ->
             if (itemView is SpicaWeatherCard) {
                 if (!itemView.hasInScreen) {

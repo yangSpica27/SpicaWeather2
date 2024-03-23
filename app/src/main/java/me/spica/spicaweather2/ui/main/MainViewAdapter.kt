@@ -25,6 +25,8 @@ class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
 //        setHasStableIds(true)
     }
 
+
+
     @SuppressLint("NotifyDataSetChanged")
     fun updateCities(cities: List<CityWithWeather>) {
         this.items.clear()
