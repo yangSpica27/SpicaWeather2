@@ -60,6 +60,7 @@ interface SpicaWeatherCard {
         enterAnim.duration = 450
     }
 
+
     var hasInScreen: Boolean
 
     // 检查是否进入屏幕

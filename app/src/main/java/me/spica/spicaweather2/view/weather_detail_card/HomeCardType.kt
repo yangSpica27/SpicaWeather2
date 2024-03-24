@@ -11,15 +11,13 @@ import me.spica.spicaweather2.view.view_group.SunriseCardLayout
 import me.spica.spicaweather2.view.view_group.TipsLayout
 
 enum class HomeCardType(val code: Int) {
-    TODAY_DESC(-1),
-    NOW_WEATHER(0), // 现在的天气
-//    TODAY_EXTRA(1),// 生活指数
-    HOUR_WEATHER(2), // 小时天气
-    DAY_WEATHER(3), // 日级天气
-    SUNRISE(4), // 日出日落
-    AIR(5),
-    TIPS(6); // 生活指数
-
+    TODAY_DESC(1), // 今天的描述
+    NOW_WEATHER(2), // 现在的天气
+    HOUR_WEATHER(3), // 小时天气
+    DAY_WEATHER(4), // 日级天气
+    SUNRISE(5), // 日出日落
+    AIR(6),
+    TIPS(7); // 生活指数
 
 
     fun getViewType(context: Context): View {

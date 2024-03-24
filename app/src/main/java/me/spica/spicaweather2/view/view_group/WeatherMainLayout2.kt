@@ -52,9 +52,13 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
             itemView.tag = item.name
             itemView.layoutParams = MarginLayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                if (item == HomeCardType.TODAY_DESC) {
+                    context.getScreenHeight()/7*4
+                } else {
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                }
             ).apply {
-                topMargin = if (index == 0) context.getScreenHeight() / 3 else 10.dp.toInt()
+                topMargin =10.dp.toInt()
                 leftMargin = 14.dp.toInt()
                 rightMargin = 14.dp.toInt()
             }
