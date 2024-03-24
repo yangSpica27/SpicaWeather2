@@ -1,15 +1,12 @@
 package me.spica.spicaweather2.view.weather_drawable
 
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.view.animation.Animation
-import android.view.animation.LinearInterpolator
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
+import timber.log.Timber
 
 /**
  * 晴天的天气效果
@@ -21,22 +18,22 @@ class SunnyDrawable(private val context: Context) : WeatherDrawable() {
         color = ContextCompat.getColor(context, R.color.l8)
     }
 
-    private val sunnyAnim = ObjectAnimator.ofFloat(0f, 1f).apply {
-        duration = 20 * 1000L
-        repeatCount = Animation.INFINITE
-        repeatMode = ValueAnimator.RESTART
-        interpolator = LinearInterpolator()
-    }
+
+
+    private var rotation = 0f
 
     fun startAnim() {
-        sunnyAnim.start()
+        // NOTHING
     }
 
     fun cancelAnim() {
-        sunnyAnim.cancel()
+        // NOTHING
     }
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
+        rotation +=.004f
+        rotation /= 1
+        Timber.tag("角度").e("$rotation°")
         sunnyPaint.alpha = 20
         sunnyPaint.color = ContextCompat.getColor(context, R.color.sun_light_color)
         val centerX = width - 50.dp
@@ -48,7 +45,7 @@ class SunnyDrawable(private val context: Context) : WeatherDrawable() {
         for (index in 1..4) {
             canvas.translate(centerX, centerY)
             // 将画布旋转三次 每次30度（正方形旋转90度看上去一致）+动画进度x90度（用于旋转）
-            canvas.rotate(index * (30) + 90 * (sunnyAnim.animatedValue as Float))
+            canvas.rotate(index * (30) + 90 * (rotation))
             // 绘制内外三层矩形
             val smallSize = 100.dp
             val midSize = 180.dp
