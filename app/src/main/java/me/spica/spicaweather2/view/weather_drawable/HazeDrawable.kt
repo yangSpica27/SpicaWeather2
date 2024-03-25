@@ -3,6 +3,7 @@ package me.spica.spicaweather2.view.weather_drawable
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.view.animation.AccelerateInterpolator
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
@@ -35,6 +36,17 @@ class HazeDrawable(private val context: Context) : WeatherDrawable() {
 
     private val points: MutableList<Particle> = arrayListOf()
 
+    private var enterProgress = 0f
+
+    private val interpolator = AccelerateInterpolator()
+
+
+    fun cancelAnim() {
+        if (enterProgress == 1f) {
+            enterProgress = 0f
+        }
+    }
+
     fun ready(width: Int, height: Int) {
         this.width = width
         this.height = height
@@ -53,6 +65,8 @@ class HazeDrawable(private val context: Context) : WeatherDrawable() {
     }
 
     fun calculate() {
+        enterProgress += .02f
+        enterProgress = Math.min(1f, enterProgress)
         points.forEach {
             it.calculate()
         }
@@ -119,7 +133,7 @@ class HazeDrawable(private val context: Context) : WeatherDrawable() {
             paint.color = color
             paint.style = Paint.Style.FILL
             paint.strokeCap = Paint.Cap.ROUND
-            paint.strokeWidth = currentMaxRadius * 1f
+            paint.strokeWidth = currentMaxRadius * 1f*interpolator.getInterpolation(enterProgress)
             canvas.drawPoint(
                 currentX, currentY, paint
             )

@@ -23,13 +23,16 @@ class CityViewModel @Inject constructor(
     private val citySearchKeyword = MutableStateFlow<String>("")
 
     val searchFlow = citySearchKeyword.map { keyword ->
-        allCity.filter { it.cityName.contains(keyword) || it.sortName.contains(keyword) }
+        if (keyword.isEmpty()) return@map allCity
+        return@map allCity.filter { it.cityName.contains(keyword) || it.sortName.contains(keyword) }
     }.flowOn(Dispatchers.IO)
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             allCity.addAll(CityBean.getAllCities(App.instance))
+            citySearchKeyword.emit("")
         }
+
     }
 
     fun updateSearchKeyword(keyword: String) {

@@ -63,6 +63,7 @@ class SearchBarLayout(context: Context) : AViewGroup(context) {
         iconClear.setOnClickListener {
             editText.text = null
         }
+        editText.setHint("请输入您所在的城市名称")
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -71,12 +72,12 @@ class SearchBarLayout(context: Context) : AViewGroup(context) {
         iconClear.autoMeasure()
         editText.measure(
             (
-                measuredWidth -
-                    iconLeft.measuredWidth -
-                    iconClear.measuredWidth -
-                    editText.marginLeft -
-                    editText.marginRight
-                ).toExactlyMeasureSpec(),
+                    measuredWidth -
+                            iconLeft.measuredWidth -
+                            iconClear.measuredWidth -
+                            editText.marginLeft -
+                            editText.marginRight
+                    ).toExactlyMeasureSpec(),
             defaultHeightMeasureSpec(this)
         )
         setMeasuredDimension(

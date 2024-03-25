@@ -8,9 +8,11 @@ import android.graphics.CornerPathEffect
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PointF
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.view.animation.OvershootInterpolator
 import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
@@ -23,6 +25,11 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
 
     // 锚点
     private val circles = arrayListOf<Circle>()
+
+
+    private var enterProgress = 0f
+
+    private val interpolator = AccelerateInterpolator()
 
     private val anim = ObjectAnimator.ofFloat(0f, 1f)
         .apply {
@@ -48,6 +55,9 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
     fun cancelAnim() {
         anim.cancel()
         anim2.cancel()
+        if (enterProgress == 1f) {
+            enterProgress = 0f
+        }
     }
 
     fun ready(viewWidth: Int, viewHeight: Int) {
@@ -179,11 +189,14 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
         synchronized(circles) {
             circles.forEachIndexed { index, circle ->
                 if (index % 3 == 0) {
-                    circle.currentRadius = circle.defaultRadius - (anim.animatedValue as Float) * circle.variableRadius
+                    circle.currentRadius =
+                        circle.defaultRadius - (anim.animatedValue as Float) * circle.variableRadius
                 } else if (index % 3 == 1) {
-                    circle.currentRadius = circle.defaultRadius - (anim2.animatedValue as Float) * circle.variableRadius
+                    circle.currentRadius =
+                        circle.defaultRadius - (anim2.animatedValue as Float) * circle.variableRadius
                 } else {
-                    circle.currentRadius = circle.defaultRadius - (anim.animatedValue as Float) * circle.variableRadius
+                    circle.currentRadius =
+                        circle.defaultRadius - (anim.animatedValue as Float) * circle.variableRadius
                 }
             }
         }
@@ -197,11 +210,14 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
         synchronized(circles) {
+            enterProgress += .02f
+            enterProgress = Math.min(1f, enterProgress)
+            val animProgressValue = interpolator.getInterpolation(enterProgress)
             circles.forEach {
                 canvas.drawCircle(
                     it.centerPoint.x,
                     it.centerPoint.y,
-                    it.currentRadius,
+                    it.currentRadius * animProgressValue,
                     fogPaint
                 )
                 canvas.drawPath(path, fogPaint)

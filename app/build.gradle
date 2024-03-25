@@ -156,7 +156,7 @@ dependencies {
     implementation 'no.danielzeller.blurbehindlib:blurbehindlib:1.0.0'
     implementation 'com.airbnb.android:lottie:5.2.0'
     implementation("io.coil-kt:coil:2.5.0")
-    implementation 'com.tbuonomo:dotsindicator:4.2'
+    implementation 'com.tbuonomo:dotsindicator:5.0'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     implementation("org.greenrobot:eventbus:3.3.1")

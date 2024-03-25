@@ -116,12 +116,14 @@ class ActivityMain : MaterialActivity() {
             AlertDialog.Builder(this)
                 .setTitle("选择天气动画类型").setItems(
                     arrayOf(
-                        "晴天", "多云", "雨天"
+                        "晴天", "多云", "雨天","霾","雾天"
                     )
                 ) { _, which ->
                     val type = when (which) {
                         0 -> WeatherType.WEATHER_SUNNY
                         1 -> WeatherType.WEATHER_CLOUDY
+                        3 -> WeatherType.WEATHER_HAZE
+                        4 -> WeatherType.WEATHER_FOG
                         else -> WeatherType.WEATHER_RAINY
                     }
                     with(layout.weatherBackgroundSurfaceView) {

@@ -242,6 +242,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         sunnyDrawable.cancelAnim()
         cloudDrawable.cancelAnim()
         foggyDrawable.cancelAnim()
+        hazeDrawable.cancelAnim()
     }
 
     private var bottomY = 0
