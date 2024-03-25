@@ -24,7 +24,7 @@ class CityRepository @Inject constructor(
      */
     fun allCityList() = cityDao.getAllList()
 
-    fun allCitiesWithWeatherFlow() = cityDao.getCitiesWithWeather().flowOn(Dispatchers.IO)
+    fun allCitiesWithWeatherFlow() = cityDao.getCitiesWithWeatherDistinctUntilChanged().flowOn(Dispatchers.IO)
 
     /**
      * 选择城市

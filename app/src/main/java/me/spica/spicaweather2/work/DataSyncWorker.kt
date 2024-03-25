@@ -4,7 +4,9 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
+import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.getOrNull
+import com.skydoves.sandwich.getOrThrow
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -17,9 +19,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.spica.spicaweather2.network.HeClient
 import me.spica.spicaweather2.network.HitokotoClient
+import me.spica.spicaweather2.network.model.BaseResponse
 import me.spica.spicaweather2.persistence.dao.CityDao
 import me.spica.spicaweather2.persistence.dao.WeatherDao
 import me.spica.spicaweather2.persistence.entity.city.CityBean
+import me.spica.spicaweather2.persistence.entity.weather.Weather
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -65,15 +70,23 @@ class DataSyncWorker : Service() {
                     val res: Deferred<Boolean> = async(Dispatchers.IO, CoroutineStart.DEFAULT) {
 
                         // 获取天气数据
-                        val weatherResponse = heClient.getAllWeather(cityBean.lon, cityBean.lat).getOrNull()
+                        val weatherResponse: BaseResponse<Weather>? =
+                            try {
+                                heClient.getAllWeather(cityBean.lon, cityBean.lat).getOrThrow()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                null
+                            }
 
                         // 获取一言数据
                         val hitokotoResponse = hitokotoClient.getHitokoto().getOrNull()
 
+
                         // 如果获取到了数据，则插入到数据库中
                         weatherResponse?.data?.let { weather ->
                             weather.cityName = cityBean.cityName
-                            weather.welcomeText = hitokotoResponse?.hitokoto ?: "昭昭若日月之明，离离如星辰之行"
+                            weather.welcomeText =
+                                hitokotoResponse?.hitokoto ?: "昭昭若日月之明，离离如星辰之行"
                             weatherDao.insertWeather(weather)
                             return@async true
                         }

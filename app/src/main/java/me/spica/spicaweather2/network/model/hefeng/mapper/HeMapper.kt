@@ -102,24 +102,24 @@ object SuccessAirMapper : ApiSuccessModelMapper<Air, AirBean> {
     }
 }
 
-object SuccessMinutelyMapper : ApiSuccessModelMapper<CaiyunBean, CaiyunExtendBean> {
-
-    @Throws(RuntimeException::class)
-    override fun map(apiSuccessResponse: ApiResponse.Success<CaiyunBean>): CaiyunExtendBean {
-        if (apiSuccessResponse.data.status == "ok") {
-
-            return CaiyunExtendBean(
-                alerts = apiSuccessResponse.data.result.alert.content.map {
-                    AlertBean(title = it.title, description = it.description, status = it.status, code = it.code, source = it.source)
-                }.toList(),
-                description = apiSuccessResponse.data.result.hourly.description,
-                forecastKeypoint = apiSuccessResponse.data.result.forecastKeypoint
-            )
-        } else {
-            throw java.lang.RuntimeException(apiSuccessResponse.apiMessage)
-        }
-    }
-}
+//object SuccessMinutelyMapper : ApiSuccessModelMapper<CaiyunBean, CaiyunExtendBean> {
+//
+//    @Throws(RuntimeException::class)
+//    override fun map(apiSuccessResponse: ApiResponse.Success<CaiyunBean>): CaiyunExtendBean {
+//        if (apiSuccessResponse.data.status == "ok") {
+//
+//            return CaiyunExtendBean(
+//                alerts = apiSuccessResponse.data.result.alert.content.map {
+//                    AlertBean(title = it.title, text = it.description, sender = it.sender, startTime = it.startTime)
+//                }.toList(),
+//                description = apiSuccessResponse.data.result.hourly.description,
+//                forecastKeypoint = apiSuccessResponse.data.result.forecastKeypoint
+//            )
+//        } else {
+//            throw java.lang.RuntimeException(apiSuccessResponse.apiMessage)
+//        }
+//    }
+//}
 
 object SuccessWeatherMapper : ApiSuccessModelMapper<BaseResponse<Weather>, Weather> {
     override fun map(apiSuccessResponse: ApiResponse.Success<BaseResponse<Weather>>): Weather {

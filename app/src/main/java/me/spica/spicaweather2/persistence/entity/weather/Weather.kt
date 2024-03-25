@@ -4,7 +4,9 @@ import androidx.annotation.DrawableRes
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.squareup.moshi.JsonQualifier
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.WeatherType
 
@@ -21,8 +23,11 @@ data class Weather(
     var cityName: String = "",
     var descriptionForToday: String? = "", // 今天的气象描述
     var descriptionForToWeek: String? = "", // 一周的气象描述
-    var alerts: List<AlertBean> = listOf(),
-    var welcomeText:String = ""
+    @Json(name = "warnings")
+    var alerts: List<AlertBean> = arrayListOf(),
+    @Json(name = "minutely")
+    var minutelies: List<Minutely> = arrayListOf(),
+    var welcomeText: String = ""
 ) {
 
     fun getWeatherType(): WeatherType {
@@ -30,9 +35,11 @@ data class Weather(
             "100" -> {
                 return WeatherType.WEATHER_SUNNY
             }
+
             "101", "151", "153", "103" -> {
                 return WeatherType.WEATHER_CLOUDY
             }
+
             "102", "104", "152", "154" -> {
                 return WeatherType.WEATHER_CLOUD
             }
@@ -49,20 +56,25 @@ data class Weather(
             -> {
                 return WeatherType.WEATHER_SNOW
             }
+
             "404", "405", "406", "456", "457", "499" -> {
                 return WeatherType.WEATHER_SLEET
             }
+
             "500", "501", "502" -> {
                 return WeatherType.WEATHER_FOG
             }
+
             "503", "504", "505", "506", "507", "508", "509", "510",
 
             "511", "512", "513", "514", "515" -> {
                 WeatherType.WEATHER_HAZE
             }
+
             "313" -> {
                 WeatherType.WEATHER_HAIL
             }
+
             "" -> {
                 WeatherType.WEATHER_THUNDER
             }

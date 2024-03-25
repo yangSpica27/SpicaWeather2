@@ -84,6 +84,7 @@ android {
         //        useK2 = true
     }
     lintOptions {
+        checkReleaseBuilds false
         abortOnError false
     }
 }

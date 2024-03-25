@@ -32,8 +32,16 @@ class WeatherBeanConverter {
         List::class.java, DailyWeatherBean::class.java
     )
 
+
     private val dailyWeatherAdapter =
         moshi.adapter<List<DailyWeatherBean>>(listOfDailyType)
+
+
+    private val minuteliesType = Types.newParameterizedType(
+        List::class.java, Minutely::class.java
+    )
+
+    private val minutelyAdapter = moshi.adapter<List<Minutely>>(minuteliesType)
 
     private val listOfLifeIndexType = Types.newParameterizedType(
         List::class.java, LifeIndexBean::class.java
@@ -62,6 +70,18 @@ class WeatherBeanConverter {
     fun stringToHourly(string: String): List<HourlyWeatherBean> {
         return hourlyWeatherAdapter.fromJson(string) ?: listOf()
     }
+
+
+    @TypeConverter
+    fun minutiesToString(list: List<Minutely>): String {
+        return minutelyAdapter.toJson(list)
+    }
+
+    @TypeConverter
+    fun stringToMinuties(string: String): List<Minutely> {
+        return minutelyAdapter.fromJson(string) ?: listOf()
+    }
+
 
     @TypeConverter
     fun stringToDaily(json: String): List<DailyWeatherBean> {

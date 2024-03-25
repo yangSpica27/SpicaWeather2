@@ -78,7 +78,7 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context), SpicaWe
         )
         headerText.layout(
             headerText.marginLeft,
-            -welcomeText.marginTop + welcomeText.top-headerText.measuredHeight,
+            -welcomeText.marginTop + welcomeText.top - headerText.measuredHeight,
         )
     }
 
@@ -104,7 +104,7 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context), SpicaWe
             )
         val mLinearGradient = LinearGradient(
             0f, 0f, 0f,
-            headerText.height * 1F,
+            headerText.height * 1.5F,
             Color.WHITE,
             Color.parseColor("#80ffffff"),
             Shader.TileMode.CLAMP
@@ -117,10 +117,10 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context), SpicaWe
         bottomText.append("降水概率")
         bottomText.append(weather.hourlyWeather[0].pop)
         bottomText.append("%")
-        if (weather.alerts.isNotEmpty()) {
-            bottomText.append("\n")
-            bottomText.append(weather.alerts[0].description)
-        }
+//        if (weather.alerts.isNotEmpty()) {
+//            bottomText.append("\n")
+//            bottomText.append(weather.alerts[0].title)
+//        }
         welcomeText.text = bottomText
 
     }

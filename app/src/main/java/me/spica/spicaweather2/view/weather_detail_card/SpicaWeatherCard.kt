@@ -75,7 +75,8 @@ interface SpicaWeatherCard {
             hasInScreen = true
             doOnMainThreadIdle({
                 startEnterAnim()
-            },150)
+            },50)
+
         }
     }
 

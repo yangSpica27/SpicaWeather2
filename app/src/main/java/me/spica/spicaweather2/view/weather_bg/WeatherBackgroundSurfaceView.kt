@@ -39,7 +39,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     init {
-        holder.setFormat(PixelFormat.TRANSLUCENT) // 设置为透明
         holder.addCallback(this)
     }
 

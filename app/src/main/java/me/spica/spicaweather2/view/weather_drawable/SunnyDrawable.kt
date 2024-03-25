@@ -44,7 +44,7 @@ class SunnyDrawable(private val context: Context) : WeatherDrawable() {
 
         val enterAnimaValue  = overshootInterpolator.getInterpolation(enterProgress)
         
-        Timber.tag("角度").e("$rotation°")
+
         sunnyPaint.color = ContextCompat.getColor(context, R.color.sun_light_color)
         val centerX = width - 50.dp + 150.dp * (1f - enterAnimaValue)
         val centerY = 0 + 50.dp - 150.dp * (1f -  enterAnimaValue)

@@ -142,7 +142,7 @@ class ActivityMain : MaterialActivity() {
 
         // 启动后台同步
         startService(Intent(this, DataSyncWorker::class.java))
-        layout.mainTitleLayout.dotIndicator.setViewPager2(viewPager2 = layout.viewPager2)
+        layout.mainTitleLayout.dotIndicator.attachTo(viewPager2 = layout.viewPager2)
         lifecycleScope.launch {
             viewModel.allCityWithWeather.collectLatest {
                 mainPagerAdapter.updateCities(it)
@@ -181,8 +181,15 @@ class ActivityMain : MaterialActivity() {
                 Timber.tag("销毁位图耗时").e("${countRecycler}ms")
             }
             val count1 = System.currentTimeMillis()
-            layout.weatherBackgroundSurfaceView.getScreenCopy(
+            val bgBitmap: Bitmap = try {
                 window.decorView.drawToBitmap()
+            }catch (e:Exception){
+                e.printStackTrace()
+                Bitmap.createBitmap(window.decorView.width, window.decorView.height, Bitmap.Config.ARGB_8888)
+            }
+
+            layout.weatherBackgroundSurfaceView.getScreenCopy(
+                bgBitmap
             ) {
                 screenBitmap = it
                 val count2 = System.currentTimeMillis()
@@ -219,6 +226,7 @@ class ActivityMain : MaterialActivity() {
 
     // 更新标题和动画
     private fun updateTitleAndAnim(position: Int) {
+        if (data.isEmpty())return
         try {
             val currentWeather = data[position].weather
             val currentCity = data[position].city

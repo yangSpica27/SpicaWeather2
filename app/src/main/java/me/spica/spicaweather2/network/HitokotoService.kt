@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface HitokotoService {
 
-    @GET("https://v1.hitokoto.cn/?c=i")
+    @GET("https://v1.hitokoto.cn")
     suspend fun getHitokoto(): ApiResponse<HitokotoBean>
 }

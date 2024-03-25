@@ -10,7 +10,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val cityRepository: CityRepository,
+    cityRepository: CityRepository,
 ) : ViewModel() {
 
     // 获取所有城市的天气

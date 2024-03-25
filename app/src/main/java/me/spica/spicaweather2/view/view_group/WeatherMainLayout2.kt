@@ -28,7 +28,7 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
 
-    private val items = HomeCardType.values().toMutableList()
+    private val items = HomeCardType.entries.toMutableList()
 
     private val contentView = LinearLayout(context).apply {
         layoutParams = MarginLayoutParams(
@@ -47,18 +47,18 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
             ViewGroup.LayoutParams.MATCH_PARENT
         )
         // 载入item数据
-        items.forEachIndexed { index, item ->
+        items.forEachIndexed { _, item ->
             val itemView = item.getViewType(context)
             itemView.tag = item.name
             itemView.layoutParams = MarginLayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 if (item == HomeCardType.TODAY_DESC) {
-                    context.getScreenHeight()/7*4
+                    context.getScreenHeight() / 7 * 4
                 } else {
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 }
             ).apply {
-                topMargin =10.dp.toInt()
+                topMargin = 10.dp.toInt()
                 leftMargin = 14.dp.toInt()
                 rightMargin = 14.dp.toInt()
             }
@@ -101,12 +101,14 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
             }
         }
         tag = weather.cityName
-        checkItemInScreen()
+        contentView.post {
+            checkItemInScreen()
+        }
     }
 
     // 检查是否进入屏幕进行动画
     @Synchronized
-    fun checkItemInScreen()  {
+    fun checkItemInScreen() {
         contentView.children.forEach { itemView ->
             if (itemView is SpicaWeatherCard) {
                 if (!itemView.hasInScreen) {
