@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
+import android.view.animation.OvershootInterpolator
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
@@ -32,6 +33,9 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
         interpolator = LinearInterpolator()
     }
 
+    private var enterProgress = 0f
+
+    private val overshootInterpolator = OvershootInterpolator(1.2f)
     fun startAnim() {
         cloudAnim.start()
         cloudAnim2.start()
@@ -40,6 +44,9 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
     fun cancelAnim() {
         cloudAnim.cancel()
         cloudAnim2.cancel()
+        if (enterProgress == 1f) {
+            enterProgress = 0f
+        }
     }
 
     // 画笔
@@ -49,6 +56,12 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
     }
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
+        enterProgress += .02f
+        enterProgress = Math.min(1f, enterProgress)
+
+        val animProgressValue = overshootInterpolator.getInterpolation(enterProgress)
+
+        canvas.translate(0f, (-40).dp + 40.dp * animProgressValue)
         canvas.save()
         val centerX = width / 8f * 7f
         val centerY = 0f
@@ -56,14 +69,14 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
         cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color)
         canvas.drawCircle(
             0f, 0f,
-            width / 5f + (cloudAnim2.animatedValue as Float) * 16.dp,
+            width / 5f * animProgressValue + (cloudAnim2.animatedValue as Float) * 16.dp,
             cloudPaint
         )
         canvas.translate(40.dp, 0f)
         cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color2)
         canvas.drawCircle(
             0f, 0f,
-            width / 3f + (cloudAnim.animatedValue as Float) * 8.dp,
+            width / 3f * animProgressValue + (cloudAnim.animatedValue as Float) * 8.dp,
             cloudPaint
         )
         canvas.restore()
@@ -73,14 +86,14 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
         cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color)
         canvas.drawCircle(
             0f, 0f,
-            width / 5f + (cloudAnim.animatedValue as Float) * 5.dp,
+            width / 5f * animProgressValue + (cloudAnim.animatedValue as Float) * 5.dp,
             cloudPaint
         )
         canvas.translate(40f, -18f)
         cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color2)
         canvas.drawCircle(
             0f, 0f,
-            width / 3f + (cloudAnim2.animatedValue as Float) * 8.dp,
+            width / 3f * animProgressValue + (cloudAnim2.animatedValue as Float) * 8.dp * enterProgress,
             cloudPaint
         )
         canvas.restore()
@@ -90,14 +103,14 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
         cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color)
         canvas.drawCircle(
             0f, 0f,
-            width / 5f + (cloudAnim2.animatedValue as Float) * 5.dp,
+            width / 5f * animProgressValue + (cloudAnim2.animatedValue as Float) * 5.dp * enterProgress,
             cloudPaint
         )
         canvas.translate((-40).dp, 8f)
         cloudPaint.color = ContextCompat.getColor(context, R.color.cloud_color2)
         canvas.drawCircle(
             0f, 0f,
-            width / 3f + (cloudAnim.animatedValue as Float) * 20.dp,
+            width / 3f * animProgressValue + (cloudAnim.animatedValue as Float) * 20.dp * enterProgress,
             cloudPaint
         )
         canvas.restore()

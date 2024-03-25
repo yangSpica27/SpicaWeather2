@@ -3,7 +3,10 @@ package me.spica.spicaweather2.view.weather_bg
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PixelFormat
+import android.graphics.PorterDuff
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.AttributeSet
@@ -36,6 +39,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     init {
+        holder.setFormat(PixelFormat.TRANSLUCENT) // 设置为透明
         holder.addCallback(this)
     }
 
@@ -209,7 +213,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
                 setBackgroundY(bottomY)
             }
             isWork = true
-            drawThread = HandlerThread("draw-thread${UUID.randomUUID()}", Thread.NORM_PRIORITY)
+            drawThread = HandlerThread("draw-thread${UUID.randomUUID()}")
             drawThread.start()
             drawHandler = Handler(drawThread.looper)
             // 渲染线程
