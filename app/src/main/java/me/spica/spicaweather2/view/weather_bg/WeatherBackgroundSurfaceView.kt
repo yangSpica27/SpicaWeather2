@@ -1,5 +1,7 @@
 package me.spica.spicaweather2.view.weather_bg
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -7,6 +9,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PixelFormat
 import android.graphics.PorterDuff
+import android.os.Build.VERSION_CODES.P
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.AttributeSet
@@ -14,6 +17,7 @@ import android.view.PixelCopy
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
+import me.spica.spicaweather2.R
 import me.spica.spicaweather2.view.weather_drawable.CloudDrawable
 import me.spica.spicaweather2.view.weather_drawable.FoggyDrawable
 import me.spica.spicaweather2.view.weather_drawable.HazeDrawable
@@ -36,7 +40,9 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context, attrs, defStyleAttr
+    )
 
     init {
         holder.addCallback(this)
@@ -46,9 +52,26 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     private lateinit var drawHandler: Handler
 
-    var bgColor = ContextCompat.getColor(context, android.R.color.transparent)
+    var bgColor = ContextCompat.getColor(context, R.color.light_blue_600)
+        set(value) {
+            if (backgroundColorAnim.isRunning) {
+                backgroundColorAnim.cancel()
+            }
+            backgroundColorAnim.setIntValues(backgroundColorAnim.animatedValue as Int, value)
+            field = value
+            backgroundColorAnim.start()
+        }
 
     private val bgPaint = Paint(Paint.DITHER_FLAG)
+
+    private val backgroundColorAnim = ValueAnimator.ofArgb(
+        ContextCompat.getColor(context, R.color.white),
+        ContextCompat.getColor(context, R.color.white)
+    ).apply {
+        duration = 250
+        setEvaluator(ArgbEvaluator())
+        start()
+    }
 
 
     var bgBitmap: Bitmap? = null
@@ -134,8 +157,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
                 doOnDraw()
                 if (drawThread.isAlive) {
                     drawHandler.postDelayed(
-                        this, (16 - (System.currentTimeMillis() - lastDrawTime))
-                            .coerceAtLeast(0)
+                        this, (16 - (System.currentTimeMillis() - lastDrawTime)).coerceAtLeast(0)
                     )
                 }
                 lastDrawTime = System.currentTimeMillis()
@@ -146,8 +168,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     fun getScreenCopy(foregroundBitmap: Bitmap, callbacks: (Bitmap) -> Unit) {
         val background = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         PixelCopy.request(
-            this, background,
-            { copyResult ->
+            this, background, { copyResult ->
                 val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 
                 val count = measureTimeMillis {
@@ -164,8 +185,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
                 }
                 Timber.tag("图层合成耗时").e("${count}ms")
                 callbacks(result)
-            },
-            drawHandler
+            }, drawHandler
         )
     }
 
@@ -193,12 +213,21 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
                 return
             }
             when (currentWeatherAnimType) {
-                NowWeatherView.WeatherAnimType.SUNNY -> sunnyDrawable.doOnDraw(canvas, width, height)
-                NowWeatherView.WeatherAnimType.CLOUDY -> cloudDrawable.doOnDraw(canvas, width, height)
+                NowWeatherView.WeatherAnimType.SUNNY -> sunnyDrawable.doOnDraw(
+                    canvas, width, height
+                )
+
+                NowWeatherView.WeatherAnimType.CLOUDY -> cloudDrawable.doOnDraw(
+                    canvas, width, height
+                )
+
                 NowWeatherView.WeatherAnimType.RAIN -> rainDrawable?.doOnDraw(canvas, width, height)
                 NowWeatherView.WeatherAnimType.SNOW -> snowDrawable.doOnDraw(canvas, width, height)
                 NowWeatherView.WeatherAnimType.FOG -> foggyDrawable.doOnDraw(canvas, width, height)
-                NowWeatherView.WeatherAnimType.UNKNOWN -> cloudDrawable.doOnDraw(canvas, width, height)
+                NowWeatherView.WeatherAnimType.UNKNOWN -> cloudDrawable.doOnDraw(
+                    canvas, width, height
+                )
+
                 NowWeatherView.WeatherAnimType.HAZE -> hazeDrawable.doOnDraw(canvas, width, height)
             }
             mholder?.unlockCanvasAndPost(canvas)
@@ -252,7 +281,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
     private fun drawBackground(canvas: Canvas) {
-        canvas.drawColor(bgColor)
+        canvas.drawColor(backgroundColorAnim.animatedValue as Int)
 //        bgBitmap?.let { bgBitmap ->
 //            canvas.drawBitmap(
 //                bgBitmap,
