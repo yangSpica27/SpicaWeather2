@@ -3,6 +3,7 @@ package me.spica.spicaweather2.ui.add_city
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.city.CityBean
@@ -41,13 +42,13 @@ class AddCityAdapter : RecyclerView.Adapter<AddCityAdapter.ViewHolder>() {
                     RecyclerView.LayoutParams.MATCH_PARENT,
                     RecyclerView.LayoutParams.WRAP_CONTENT,
                 )
-                setPadding(
-                    14.dp.toInt(),
-                    12.dp.toInt(),
-                    14.dp.toInt(),
-                    12.dp.toInt()
+                updatePadding(
+                    24.dp.toInt(),
+                    20.dp.toInt(),
+                    24.dp.toInt(),
+                    20.dp.toInt()
                 )
-                setTextAppearance(R.style.TextAppearance_Material3_HeadlineSmall)
+                setTextAppearance(R.style.TextAppearance_Material3_BodyLarge)
             }
         )
     }
@@ -60,7 +61,7 @@ class AddCityAdapter : RecyclerView.Adapter<AddCityAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.setTextView(item.cityName)
+        holder.setTextView("${item.cityName.trim()}, 经度:${item.lon}° 纬度:${item.lat}°")
         holder.itemView.setOnClickListener {
             selectCityListener?.invoke(item)
         }

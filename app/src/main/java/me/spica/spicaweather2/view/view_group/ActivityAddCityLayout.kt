@@ -20,8 +20,8 @@ class ActivityAddCityLayout(context: Context) : AViewGroup(context) {
             this.topMargin = 12.dp +
                 context.getStatusBarHeight()
             this.bottomMargin = 12.dp
-            leftMargin = 14.dp
-            rightMargin = 14.dp
+            leftMargin = 20.dp
+            rightMargin = 20.dp
         }
     }
 

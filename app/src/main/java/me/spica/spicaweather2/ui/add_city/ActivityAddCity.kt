@@ -46,7 +46,8 @@ class ActivityAddCity : MaterialActivity() {
 
     private fun init() {
         // handleBack()
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
+            true
         layout.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         dividerBuilder()
             .color(getColor(R.color.line_divider))
@@ -54,6 +55,7 @@ class ActivityAddCity : MaterialActivity() {
             .build()
             .addTo(layout.recyclerView)
         layout.recyclerView.adapter = addCityAdapter
+        cityViewModel.updateSearchKeyword("")
         layout.searchBarLayout.editText.addTextChangedListener {
             cityViewModel.updateSearchKeyword(it.toString())
         }
@@ -73,28 +75,4 @@ class ActivityAddCity : MaterialActivity() {
         }
     }
 
-    private fun handleBack() {
-        val box = layout
-        val screenWidth = Resources.getSystem().displayMetrics.widthPixels
-        val maxXShift = (screenWidth / 20)
-        val callback = object : OnBackPressedCallback(enabled = true) {
-            override fun handleOnBackProgressed(backEvent: BackEventCompat) {
-                super.handleOnBackProgressed(backEvent)
-                when (backEvent.swipeEdge) {
-                    BackEvent.EDGE_LEFT -> box.translationX = backEvent.progress * maxXShift
-
-                    BackEvent.EDGE_RIGHT -> box.translationX = -(backEvent.progress * maxXShift)
-                }
-                box.scaleX = 1F - (0.1F * backEvent.progress)
-                box.scaleY = 1F - (0.1F * backEvent.progress)
-            }
-
-            override fun handleOnBackPressed() {
-            }
-
-            override fun handleOnBackCancelled() {
-            }
-        }
-        this.onBackPressedDispatcher.addCallback(callback)
-    }
 }

@@ -30,7 +30,6 @@ class CityViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             allCity.addAll(CityBean.getAllCities(App.instance))
-            citySearchKeyword.emit("")
         }
 
     }

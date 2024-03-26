@@ -3,11 +3,14 @@ package me.spica.spicaweather2.ui.manager_city
 import android.annotation.SuppressLint
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.updateMargins
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
+import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
 import me.spica.spicaweather2.tools.dp
+import me.spica.spicaweather2.tools.getScreenWidth
 import me.spica.spicaweather2.view.view_group.ItemCityManagerLayout
 
 /**
@@ -47,8 +50,9 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
                         RecyclerView.LayoutParams.MATCH_PARENT,
                         RecyclerView.LayoutParams.WRAP_CONTENT
                     ).apply {
-                        updateMargins(left = 14.dp.toInt(), right = 14.dp.toInt())
+                        updateMargins(left = 14.dp.toInt()+context.getScreenWidth()/5, right = 14.dp.toInt()+context.getScreenWidth()/5)
                     }
+                    setBackgroundColor(ContextCompat.getColor(context, R.color.light_blue_600))
                     cornerRadius = 16.dp.toInt()
                     text = "新增城市"
                 }
