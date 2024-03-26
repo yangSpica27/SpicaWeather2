@@ -15,11 +15,14 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.marginLeft
 import androidx.core.view.marginTop
 import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.weather.Weather
+import me.spica.spicaweather2.tools.blendColors
+import me.spica.spicaweather2.tools.getColorWithAlpha
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.lang.StringBuilder
@@ -102,15 +105,6 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context), SpicaWe
                 "℃", AbsoluteSizeSpan(22.dp),
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
-        val mLinearGradient = LinearGradient(
-            0f, 0f, 0f,
-            headerText.height * 1.5F,
-            Color.WHITE,
-            Color.parseColor("#80ffffff"),
-            Shader.TileMode.CLAMP
-        )
-        headerText.paint.setShader(mLinearGradient)
-        headerText.invalidate()
         val bottomText = StringBuilder()
         bottomText.append(weather.todayWeather.weatherName)
         bottomText.append("，")
@@ -122,6 +116,22 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context), SpicaWe
 //            bottomText.append(weather.alerts[0].title)
 //        }
         welcomeText.text = bottomText
-
+        headerText.post {
+            val mLinearGradient = LinearGradient(
+                0f, 0f, 0f,
+                headerText.height * 1f,
+                intArrayOf(
+                    Color.WHITE,
+                    getColorWithAlpha(0.9f, Color.WHITE),
+                    getColorWithAlpha(0.5f, Color.WHITE),
+                ),
+                floatArrayOf(
+                    0f, 0.5f, 1f
+                ),
+                Shader.TileMode.CLAMP
+            )
+            headerText.paint.setShader(mLinearGradient)
+            headerText.invalidate()
+        }
     }
 }

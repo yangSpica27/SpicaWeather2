@@ -53,7 +53,7 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
                         updateMargins(left = 14.dp.toInt()+context.getScreenWidth()/5, right = 14.dp.toInt()+context.getScreenWidth()/5)
                     }
                     setBackgroundColor(ContextCompat.getColor(context, R.color.light_blue_600))
-                    cornerRadius = 16.dp.toInt()
+                    cornerRadius = 24.dp.toInt()
                     text = "新增城市"
                 }
             )

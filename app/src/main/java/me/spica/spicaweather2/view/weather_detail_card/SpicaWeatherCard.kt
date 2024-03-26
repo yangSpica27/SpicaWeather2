@@ -73,10 +73,9 @@ interface SpicaWeatherCard {
 
         if (isIn) {
             hasInScreen = true
-            doOnMainThreadIdle({
+            animatorView.post {
                 startEnterAnim()
-            },50)
-
+            }
         }
     }
 

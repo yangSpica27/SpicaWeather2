@@ -46,8 +46,7 @@ class ActivityAddCity : MaterialActivity() {
 
     private fun init() {
         // handleBack()
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
-            true
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
         layout.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         dividerBuilder()
             .color(getColor(R.color.line_divider))
@@ -55,7 +54,6 @@ class ActivityAddCity : MaterialActivity() {
             .build()
             .addTo(layout.recyclerView)
         layout.recyclerView.adapter = addCityAdapter
-        cityViewModel.updateSearchKeyword("")
         layout.searchBarLayout.editText.addTextChangedListener {
             cityViewModel.updateSearchKeyword(it.toString())
         }

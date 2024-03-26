@@ -20,7 +20,7 @@ class CityViewModel @Inject constructor(
 
     private val allCity = arrayListOf<CityBean>()
 
-    private val citySearchKeyword = MutableStateFlow<String>("")
+    private val citySearchKeyword = MutableStateFlow("")
 
     val searchFlow = citySearchKeyword.map { keyword ->
         if (keyword.isEmpty()) return@map allCity
