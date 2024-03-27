@@ -115,4 +115,8 @@
     <color name="md_theme_dark_outlineVariant">#42474D</color>
     <color name="md_theme_dark_scrim">#000000</color>
 
+
+    <color name="rain_line_view_baseline_color2">#B3CACACA</color>
+    <color name="rain_line_view_line_color">#66515151</color>
+    <color name="rain_line_view_text_color">#99434343</color>
 </resources>

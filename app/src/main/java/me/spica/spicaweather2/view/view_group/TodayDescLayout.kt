@@ -65,7 +65,6 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context), SpicaWe
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        overScrollMode = View.OVER_SCROLL_NEVER
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -75,13 +74,13 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context), SpicaWe
     }
 
     override fun onLayout(p0: Boolean, p1: Int, p2: Int, p3: Int, p4: Int) {
-        welcomeText.layout(
-            welcomeText.marginLeft,
-            measuredHeight - welcomeText.measuredHeight,
-        )
         headerText.layout(
-            headerText.marginLeft,
-            -welcomeText.marginTop + welcomeText.top - headerText.measuredHeight,
+            paddingLeft,
+            paddingTop+120.dp,
+        )
+        welcomeText.layout(
+            paddingLeft+welcomeText.marginLeft,
+            headerText.bottom,
         )
     }
 
@@ -89,7 +88,7 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context), SpicaWe
 
     override var enterAnim: AnimatorSet = AnimatorSet()
 
-    override var index: Int = HomeCardType.NOW_WEATHER.code
+    override var index: Int = HomeCardType.TODAY_DESC.code
 
     override var hasInScreen: Boolean = false
 
@@ -98,11 +97,11 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context), SpicaWe
         headerText.text = SpannableStringBuilder()
             .append(
                 "${weather.hourlyWeather[0].temp}",
-                AbsoluteSizeSpan(100.dp),
+                AbsoluteSizeSpan(170.dp),
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
             .append(
-                "℃", AbsoluteSizeSpan(22.dp),
+                "℃", AbsoluteSizeSpan(30.dp),
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
         val bottomText = StringBuilder()
