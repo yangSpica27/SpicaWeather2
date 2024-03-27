@@ -2,11 +2,17 @@ package me.spica.spicaweather2.view.weather_drawable
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.LinearGradient
 import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.Shader
 import android.view.animation.AccelerateInterpolator
+import android.view.animation.OvershootInterpolator
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
+import me.spica.spicaweather2.tools.getColorWithAlpha
 import kotlin.random.Random
 
 private const val ALPHA_MAX = 200
@@ -30,15 +36,11 @@ class HazeDrawable(private val context: Context) : WeatherDrawable() {
 
     private var height = 0
 
-    private val random: Random = Random.Default
 
-    private val pointPaint = Paint()
-
-    private val points: MutableList<Particle> = arrayListOf()
 
     private var enterProgress = 0f
 
-    private val interpolator = AccelerateInterpolator()
+    private val interpolator = OvershootInterpolator(1.2f)
 
 
     fun cancelAnim() {
@@ -50,93 +52,86 @@ class HazeDrawable(private val context: Context) : WeatherDrawable() {
     fun ready(width: Int, height: Int) {
         this.width = width
         this.height = height
-        points.clear()
-        for (index in 0..60) {
-            points.add(
-                Particle(
-                    if (index % 2 == 0) {
-                        ContextCompat.getColor(context, R.color.fog_color)
-                    } else {
-                        ContextCompat.getColor(context, R.color.fog_color2)
-                    }
-                )
-            )
-        }
+        bgShader = LinearGradient(
+            0F,
+            0F,
+            width * 1f,
+            0f,
+            getColorWithAlpha(.1f, Color.WHITE),
+            getColorWithAlpha(.4f, Color.WHITE),
+            Shader.TileMode.CLAMP
+        )
+        pathPaint.shader = bgShader
     }
 
     fun calculate() {
         enterProgress += .02f
         enterProgress = Math.min(1f, enterProgress)
-        points.forEach {
-            it.calculate()
-        }
+        val animProgress = interpolator.getInterpolation(enterProgress)
+
+
+        path1.reset()
+        path1.moveTo(0f, 0f)
+        path1.lineTo(width * 1f, 1f)
+        path1.lineTo(width * 1f, height / 7f*animProgress)
+        path1.cubicTo(
+            width / 10f * 8f,
+            height / 7f / 10f * 15f*animProgress,
+            width / 10f * 3f,
+            height / 7f / 10f * 5f*animProgress,
+            0f,
+            height / 7f / 10f * 4f*animProgress
+        )
+
+        path2.reset()
+        path2.moveTo(0f, 0f)
+        path2.lineTo(width * 1f, 1f)
+        path2.lineTo(width * 1f, height / 6f*animProgress)
+        path2.cubicTo(
+            width / 10f * 8f,
+            height / 6f / 10f * 20f*animProgress,
+            width / 10f * 3f,
+            height / 6f / 10f * 5f*animProgress,
+            0f,
+            height / 7f / 10f * 4f*animProgress
+        )
+
+        path3.reset()
+        path3.moveTo(0f, 0f)
+        path3.lineTo(width * 1f, 1f)
+        path3.lineTo(width * 1f, height / 5f*animProgress)
+        path3.cubicTo(
+            width / 10f * 8f,
+            height / 6f / 10f * 25f*animProgress,
+            width / 10f * 3f,
+            height / 5f / 10f * 5f*animProgress,
+            0f,
+            height / 7f / 10f * 4f*animProgress
+        )
+
+
     }
+
+    private val path1 = Path()
+
+    private val path2 = Path()
+
+    private val path3 = Path()
+
+    private val pathPaint = Paint(Paint.DITHER_FLAG).apply {
+        style = Paint.Style.FILL
+        color = ContextCompat.getColor(context, R.color.fog_color)
+    }
+
+    private lateinit var bgShader: LinearGradient
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
-        points.forEach {
-            it.draw(canvas)
-        }
+
+        canvas.drawPath(path1, pathPaint)
+        canvas.drawPath(path2, pathPaint)
+        canvas.drawPath(path3, pathPaint)
+
     }
 
-    private inner class Particle(
-        @ColorInt private val color: Int,
-        private val paint: Paint = pointPaint,
-    ) {
 
-        private var alpha = 0
-
-        private var currentX: Float = 0f
-
-        private var currentMaxRadius = 0
-
-        private var radius = 0
-
-        private var currentY: Float = 0f
-
-        private var speedX: Float = 0f
-
-        private var speedY: Float = 0f
-
-        init {
-            init()
-        }
-
-        private fun init() {
-            currentX = (Math.random() * width).toFloat()
-            currentY = (Math.random() * height).toFloat()
-            alpha = (Math.random() * (ALPHA_MAX - ALPHA_MIN) + ALPHA_MIN).toInt()
-            speedX = if (random.nextBoolean()) (
-                -(Math.random() * (MAX_SPEED - MIN_SPEED) + MAX_SPEED).toFloat()
-                ) else ((Math.random() * (MAX_SPEED - MIN_SPEED) + MAX_SPEED).toFloat())
-            speedY = if (random.nextBoolean()) {
-                -(Math.random() * (MAX_SPEED - MIN_SPEED) + MAX_SPEED).toFloat()
-            } else {
-                (Math.random() * (MAX_SPEED - MIN_SPEED) + MAX_SPEED).toFloat()
-            }
-            currentMaxRadius = (Math.random() * (MAX_RADIUS - MIN_RADIUS) + MIN_RADIUS).toInt()
-            radius = 0
-        }
-
-        fun calculate() {
-            currentY += speedY
-            currentX += speedX
-            if (radius < currentMaxRadius) {
-                radius += (currentMaxRadius / 120f).toInt()
-            }
-            if ((currentX + currentMaxRadius > width || currentX - currentMaxRadius < 0) && (currentY + currentMaxRadius > height || currentY - currentMaxRadius < 0)) {
-                init()
-            }
-        }
-
-        fun draw(canvas: Canvas) {
-            paint.alpha = alpha
-            paint.color = color
-            paint.style = Paint.Style.FILL
-            paint.strokeCap = Paint.Cap.ROUND
-            paint.strokeWidth = currentMaxRadius * 1f*interpolator.getInterpolation(enterProgress)
-            canvas.drawPoint(
-                currentX, currentY, paint
-            )
-        }
-    }
 }

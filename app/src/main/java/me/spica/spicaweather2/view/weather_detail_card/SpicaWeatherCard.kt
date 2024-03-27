@@ -42,9 +42,9 @@ interface SpicaWeatherCard {
                 "alpha", 0f, 1f
             ),
             ObjectAnimator.ofFloat(
-                animatorView, "translationY", 120.dp, 0f
+                animatorView, "translationY", 60.dp, 0f
             ).apply {
-                interpolator = OvershootInterpolator(.3f * (index / 2f + 1))
+                interpolator = OvershootInterpolator(.2f * (index / 2f + 1))
             },
             ObjectAnimator.ofFloat(
                 animatorView, "scaleY", 1.025f, 1f
