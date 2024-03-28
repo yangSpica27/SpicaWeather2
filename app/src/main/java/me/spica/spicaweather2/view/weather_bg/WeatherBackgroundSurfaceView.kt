@@ -112,6 +112,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
                     NowWeatherView.WeatherAnimType.HAZE -> {
                         stopAllAnim()
+                        hazeDrawable.startAnim()
                     }
                 }
             }
