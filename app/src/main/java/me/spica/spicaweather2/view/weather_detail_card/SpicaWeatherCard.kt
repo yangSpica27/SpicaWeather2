@@ -9,6 +9,9 @@ import androidx.core.animation.doOnEnd
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.tools.dp
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.locks.ReentrantReadWriteLock
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock
 
 interface SpicaWeatherCard {
 
@@ -33,7 +36,7 @@ interface SpicaWeatherCard {
 
     // 重置动画
     fun resetAnim() {
-        hasInScreen = false
+        hasInScreen.set(false)
         animatorView.alpha = 0f
 
         enterAnim.playTogether(
@@ -61,18 +64,19 @@ interface SpicaWeatherCard {
     }
 
 
-    var hasInScreen: Boolean
+    var hasInScreen: AtomicBoolean
+
 
     // 检查是否进入屏幕
     fun checkEnterScreen(
         isIn: Boolean
     ) {
-        if (hasInScreen) {
+        if (hasInScreen.get()) {
             return
         }
 
         if (isIn) {
-            hasInScreen = true
+            hasInScreen.set(true)
             animatorView.post {
                 startEnterAnim()
             }

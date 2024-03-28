@@ -9,6 +9,7 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.OverScroller
 import androidx.core.view.children
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.updatePadding
@@ -41,7 +42,6 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
     }
 
     init {
-        val activityMain = getActivityFromContext(context) as ActivityMain
         layoutParams = RecyclerView.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
@@ -73,22 +73,28 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
         addView(contentView)
         setOnScrollChangeListener { _, _, _, _, _ ->
             // 屏幕外不做检测
-            if (activityMain.currentCurrentCity?.cityName != tag.toString()) {
-                return@setOnScrollChangeListener
-            }
-            if (activityMain.currentCurrentCity?.cityName == tag.toString()) {
-                activityMain.listScrollerY = scrollY
-                contentView.children.find { it is NowWeatherInfoCard }?.let {
-                    activityMain.setBox2dBackground((it as NowWeatherInfoCard).getNowCardTop())
-                }
-            }
+            updateBackgroundY()
             checkItemInScreen()
         }
-
         checkItemInScreen()
         isVerticalScrollBarEnabled = false
+        overScrollMode = OVER_SCROLL_NEVER
     }
 
+
+    @Synchronized
+    fun updateBackgroundY() {
+        val activityMain = getActivityFromContext(context) as ActivityMain
+        if (activityMain.currentCurrentCity?.cityName != tag.toString()) {
+            return
+        }
+        if (activityMain.currentCurrentCity?.cityName == tag.toString()) {
+            activityMain.listScrollerY = scrollY
+            contentView.children.find { it is MinuteWeatherCard }?.let {
+                activityMain.setBox2dBackground((it as MinuteWeatherCard).getNowCardTop())
+            }
+        }
+    }
 
     // 复用的rect 防止内存抖动
     private val itemVisibleRect = Rect()
@@ -107,11 +113,10 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
     }
 
     // 检查是否进入屏幕进行动画
-    @Synchronized
     fun checkItemInScreen() {
         contentView.children.forEach { itemView ->
             if (itemView is SpicaWeatherCard) {
-                if (!itemView.hasInScreen) {
+                if (!itemView.hasInScreen.get()) {
                     val isVisible = itemView.getGlobalVisibleRect(itemVisibleRect)
                     itemView.checkEnterScreen(isVisible && itemVisibleRect.bottom - itemVisibleRect.top >= itemView.height / 10f)
                 }

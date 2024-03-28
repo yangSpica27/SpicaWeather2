@@ -10,6 +10,7 @@ import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.line.HourlyLineView
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
+import java.util.concurrent.atomic.AtomicBoolean
 
 class HourlyCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
@@ -55,7 +56,7 @@ class HourlyCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard
 
     override var enterAnim: AnimatorSet = AnimatorSet()
     override var index: Int = HomeCardType.HOUR_WEATHER.code
-    override var hasInScreen: Boolean = false
+    override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
     override fun bindData(weather: Weather) {
         hourlyLineView.setData(weather.hourlyWeather)
     }

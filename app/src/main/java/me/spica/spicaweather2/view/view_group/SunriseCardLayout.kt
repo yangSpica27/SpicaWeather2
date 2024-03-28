@@ -18,6 +18,7 @@ import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicBoolean
 
 class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
@@ -125,9 +126,9 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
 
     override var enterAnim: AnimatorSet = AnimatorSet()
 
-    override var index: Int = HomeCardType.SUNRISE.code
+    override var index: Int = 6
 
-    override var hasInScreen: Boolean = false
+    override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
 
     private val sdf = SimpleDateFormat("HH:mm", Locale.CHINA)
 

@@ -11,6 +11,7 @@ import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.dailyItem.DailyItemView
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
+import java.util.concurrent.atomic.AtomicBoolean
 
 class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
@@ -48,7 +49,7 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
 
     override var enterAnim: AnimatorSet = AnimatorSet()
     override var index: Int = HomeCardType.DAY_WEATHER.code
-    override var hasInScreen: Boolean = false
+    override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
     override fun bindData(weather: Weather) {
         removeAllViews()
         if (weather.dailyWeather.isEmpty())return

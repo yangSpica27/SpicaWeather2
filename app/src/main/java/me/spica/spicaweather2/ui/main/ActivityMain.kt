@@ -116,7 +116,7 @@ class ActivityMain : MaterialActivity() {
             AlertDialog.Builder(this)
                 .setTitle("选择天气动画类型").setItems(
                     arrayOf(
-                        "晴天", "多云", "雨天","霾","雾天"
+                        "晴天", "多云", "雨天", "霾", "雾天"
                     )
                 ) { _, which ->
                     val type = when (which) {
@@ -183,9 +183,13 @@ class ActivityMain : MaterialActivity() {
             val count1 = System.currentTimeMillis()
             val bgBitmap: Bitmap = try {
                 window.decorView.drawToBitmap()
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
-                Bitmap.createBitmap(window.decorView.width, window.decorView.height, Bitmap.Config.ARGB_8888)
+                Bitmap.createBitmap(
+                    window.decorView.width,
+                    window.decorView.height,
+                    Bitmap.Config.ARGB_8888
+                )
             }
 
             layout.weatherBackgroundSurfaceView.getScreenCopy(
@@ -219,6 +223,7 @@ class ActivityMain : MaterialActivity() {
                 it.scrollTo(0, listScrollerY)
                 lifecycleScope.launch(Dispatchers.Default) {
                     it.checkItemInScreen()
+                    it.updateBackgroundY()
                 }
             }
         }
@@ -226,7 +231,7 @@ class ActivityMain : MaterialActivity() {
 
     // 更新标题和动画
     private fun updateTitleAndAnim(position: Int) {
-        if (data.isEmpty())return
+        if (data.isEmpty()) return
         try {
             val currentWeather = data[position].weather
             val currentCity = data[position].city

@@ -26,6 +26,7 @@ import me.spica.spicaweather2.tools.getColorWithAlpha
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.lang.StringBuilder
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 class TodayDescLayout(context: Context) : AViewGroup(context = context), SpicaWeatherCard {
@@ -90,7 +91,7 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context), SpicaWe
 
     override var index: Int = HomeCardType.TODAY_DESC.code
 
-    override var hasInScreen: Boolean = false
+    override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
 
     override fun bindData(weather: Weather) {
 

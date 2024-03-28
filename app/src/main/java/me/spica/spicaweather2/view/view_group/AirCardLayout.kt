@@ -18,6 +18,7 @@ import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.view.AirCircleProgressView
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
+import java.util.concurrent.atomic.AtomicBoolean
 
 class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
@@ -235,7 +236,7 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
     override var enterAnim: AnimatorSet = AnimatorSet()
     override var index: Int = HomeCardType.AIR.code
-    override var hasInScreen: Boolean = false
+    override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
 
     override fun bindData(weather: Weather) {
         val themeColor = weather.getWeatherType().getThemeColor()

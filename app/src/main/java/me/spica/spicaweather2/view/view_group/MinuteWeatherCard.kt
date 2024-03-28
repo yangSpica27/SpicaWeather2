@@ -18,6 +18,7 @@ import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.minute_rain.MinuteRainView
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
+import java.util.concurrent.atomic.AtomicBoolean
 
 class MinuteWeatherCard(
     context: Context
@@ -57,6 +58,19 @@ class MinuteWeatherCard(
         addView(this)
     }
 
+
+    private val nowCardXY = intArrayOf(0, 0)
+
+    fun getNowCardTop(): Int {
+        getLocationOnScreen(nowCardXY)
+        return nowCardXY[1] + if (visibility == View.VISIBLE) {
+            0
+        } else {
+            height+8.dp
+        }
+    }
+
+
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         titleText.layout(paddingLeft, paddingTop)
         rainView.layout(paddingLeft, titleText.bottom + titleText.marginBottom)
@@ -78,9 +92,9 @@ class MinuteWeatherCard(
 
     override var index: Int = HomeCardType.MINUTE_WEATHER.code
 
-    override var hasInScreen: Boolean = false
+    override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
     override fun bindData(weather: Weather) {
-        rainView.setData(weather.minutelies.map { (it.precip.toFloatOrNull() ?: 0f)*5f })
+        rainView.setData(weather.minutelies.map { (it.precip.toFloatOrNull() ?: 0f) * 5f })
         rainView.startAnim(600)
         visibility =
             if (WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId) == WeatherType.WEATHER_RAINY) {

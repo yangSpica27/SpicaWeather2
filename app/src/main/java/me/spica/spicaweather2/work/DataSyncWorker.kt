@@ -60,7 +60,6 @@ class DataSyncWorker : Service() {
             if (cityList.isEmpty()) {
                 initCityList(context = this@DataSyncWorker)
                 cityList.addAll(cityDao.getAllList())
-                return@launch
             }
 
             val ds: ArrayList<Deferred<Boolean>> = arrayListOf()
@@ -118,8 +117,7 @@ class DataSyncWorker : Service() {
     // 初始化城市列表
     private suspend fun initCityList(context: Context) {
         val cityList = CityBean.getAllCities(context)
-        cityDao.insertCities(cityList.first())
-        cityDao.insertCities(cityList[2])
+        cityList.findLast { it.cityName == "南京" }?.let { cityDao.insertCities(it) }
     }
 
 }

@@ -19,6 +19,7 @@ import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.view_group.AViewGroup
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 // 当前天气信息卡片
@@ -137,13 +138,6 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
         addView(bottomTextWindSpeed)
         addView(bottomTextPressure)
         addView(bottomTextFeelTemp)
-    }
-
-    private val nowCardXY = intArrayOf(0, 0)
-
-    fun getNowCardTop(): Int {
-        getLocationOnScreen(nowCardXY)
-        return nowCardXY[1]
     }
 
     @SuppressLint("SetTextI18n")
@@ -288,5 +282,5 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
 
     override var index: Int = HomeCardType.NOW_WEATHER.code
 
-    override var hasInScreen: Boolean = false
+    override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
 }

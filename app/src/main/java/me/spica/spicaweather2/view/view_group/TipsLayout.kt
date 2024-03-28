@@ -19,6 +19,7 @@ import me.spica.spicaweather2.persistence.entity.weather.LifeIndexBean
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
+import java.util.concurrent.atomic.AtomicBoolean
 
 class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
@@ -225,5 +226,5 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
     override var index: Int = HomeCardType.TIPS.code
 
-    override var hasInScreen: Boolean = false
+    override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
 }
