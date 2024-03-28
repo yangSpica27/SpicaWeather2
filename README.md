@@ -5,8 +5,10 @@
 
 ## Screenshots
 <p align="center">
-<img src="/pic/1.png" width="32%"/>
-<img src="/pic/2.png" width="32%"/>
+<img src="/pic/1.png" width="20%"/>
+<img src="/pic/2.png" width="20%"/>
+<img src="/pic/3.png" width="20%"/>
+<img src="/pic/4.png" width="20%"/>
 </p>
 
 
