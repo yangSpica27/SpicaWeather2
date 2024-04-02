@@ -163,6 +163,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
     fun getScreenCopy(foregroundBitmap: Bitmap, callbacks: (Bitmap) -> Unit) {
+
         val background = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         PixelCopy.request(
             this, background, { copyResult ->

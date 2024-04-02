@@ -12,7 +12,7 @@ class NoWeatherDataLayout(context: Context) : AViewGroup(context) {
 
     private val loadingFailImageView = AppCompatImageView(context).apply {
         setImageResource(R.drawable.img_loading_fail)
-        background = ContextCompat.getDrawable(context,R.drawable.bg_card)
+        background = ContextCompat.getDrawable(context, R.drawable.bg_card)
         updatePadding(
             20.dp,
             20.dp,
@@ -42,7 +42,7 @@ class NoWeatherDataLayout(context: Context) : AViewGroup(context) {
 
         loadingFailImageView.layout(
             paddingLeft,
-            measuredHeight / 2 - loadingFailImageView.height/2 - reloadBtn.height
+            measuredHeight / 2 - loadingFailImageView.height / 2 - reloadBtn.height
         )
 
         reloadBtn.layout(
@@ -61,6 +61,9 @@ class NoWeatherDataLayout(context: Context) : AViewGroup(context) {
             (measuredWidth - paddingLeft - paddingRight).toExactlyMeasureSpec(),
             reloadBtn.defaultHeightMeasureSpec(this)
         )
-        setMeasuredDimension(measuredWidth, measuredHeight)
+        setMeasuredDimension(
+            resolveSize(measuredWidth, widthMeasureSpec),
+            resolveSize(measuredHeight, heightMeasureSpec)
+        )
     }
 }

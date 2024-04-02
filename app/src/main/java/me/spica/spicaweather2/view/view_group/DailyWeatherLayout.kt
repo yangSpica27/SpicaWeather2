@@ -22,7 +22,10 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
             it.autoMeasure()
             allHeight += 45.dp
         }
-        setMeasuredDimension(widthMeasureSpec, allHeight.toInt())
+        setMeasuredDimension(
+            resolveSize(widthMeasureSpec, widthMeasureSpec),
+            resolveSize(allHeight.toInt(), heightMeasureSpec)
+        )
     }
 
     init {
@@ -52,7 +55,7 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
     override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
     override fun bindData(weather: Weather) {
         removeAllViews()
-        if (weather.dailyWeather.isEmpty())return
+        if (weather.dailyWeather.isEmpty()) return
         var minMinTemp = weather.dailyWeather[0].minTemp
         var maxMaxTemp = weather.dailyWeather[0].maxTemp
         weather.dailyWeather.forEach {

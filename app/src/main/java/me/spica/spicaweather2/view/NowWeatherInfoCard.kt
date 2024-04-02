@@ -220,12 +220,15 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
         bottomTextPressure.autoMeasure()
         bottomTextFeelTemp.autoMeasure()
         setMeasuredDimension(
-            measuredWidth,
-            paddingTop
-                    + paddingBottom
-                    + descText.measuredHeightWithMargins
-                    + windSpeedText.measuredHeightWithMargins
-                    + bottomTextWindSpeed.measuredHeightWithMargins
+            resolveSize(measuredWidth, widthMeasureSpec),
+            resolveSize(
+                paddingTop
+                        + paddingBottom
+                        + descText.measuredHeightWithMargins
+                        + windSpeedText.measuredHeightWithMargins
+                        + bottomTextWindSpeed.measuredHeightWithMargins,
+                heightMeasureSpec
+            )
         )
     }
 

@@ -38,7 +38,10 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
     // 进度条
     private val airCircleProgressView = AirCircleProgressView(context).apply {
-        layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).also {
             it.updateMargins(
                 left = 14.dp, top = 12.dp
             )
@@ -46,7 +49,10 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
     }
 
     private val tvC0Title = AppCompatTextView(context).apply {
-        layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).also {
             it.updateMargins(
                 left = 12.dp, top = 12.dp
             )
@@ -55,7 +61,10 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         text = "二氧化碳"
     }
     private val tvC0Value = AppCompatTextView(context).apply {
-        layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).also {
             it.updateMargins(
                 right = 14.dp
             )
@@ -65,7 +74,10 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
     }
 
     private val tvSo2Title = AppCompatTextView(context).apply {
-        layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).also {
             it.updateMargins(
                 left = 12.dp
             )
@@ -74,7 +86,10 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         text = "二氧化硫"
     }
     private val tvSo2Value = AppCompatTextView(context).apply {
-        layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).also {
             it.updateMargins(
                 right = 14.dp
             )
@@ -84,7 +99,10 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
     }
 
     private val tvNo2Title = AppCompatTextView(context).apply {
-        layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).also {
             it.updateMargins(
                 left = 12.dp
             )
@@ -93,7 +111,10 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         text = "二氧化氮"
     }
     private val tvNo2Value = AppCompatTextView(context).apply {
-        layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).also {
             it.updateMargins(
                 right = 14.dp
             )
@@ -103,7 +124,10 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
     }
 
     private val tvPm25Title = AppCompatTextView(context).apply {
-        layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).also {
             it.updateMargins(
                 left = 12.dp
             )
@@ -112,7 +136,10 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         text = "PM2.5"
     }
     private val tvPm25Value = AppCompatTextView(context).apply {
-        layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).also {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).also {
             it.updateMargins(
                 right = 14.dp
             )
@@ -150,7 +177,8 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         titleText.autoMeasure()
         airCircleProgressView.measure(
-            (measuredWidth / 2 - airCircleProgressView.marginLeft).toExactlyMeasureSpec(), airCircleProgressView.defaultHeightMeasureSpec(this)
+            (measuredWidth / 2 - airCircleProgressView.marginLeft).toExactlyMeasureSpec(),
+            airCircleProgressView.defaultHeightMeasureSpec(this)
         )
         tvC0Title.autoMeasure()
         tvC0Value.autoMeasure()
@@ -161,16 +189,18 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         tvPm25Title.autoMeasure()
         tvPm25Value.autoMeasure()
         setMeasuredDimension(
-            measuredWidth,
-            Math.max(
-                airCircleProgressView.measuredHeightWithMargins +
-                    titleText.measuredHeightWithMargins,
-                tvNo2Title.measuredHeightWithMargins +
-                    tvC0Title.measuredHeightWithMargins +
-                    tvPm25Title.measuredHeightWithMargins +
-                    tvSo2Title.measuredHeightWithMargins +
-                    titleText.measuredHeightWithMargins +
-                    paddingBottom + paddingTop
+            resolveSize(measuredWidth, widthMeasureSpec),
+            resolveSize(
+                Math.max(
+                    airCircleProgressView.measuredHeightWithMargins +
+                            titleText.measuredHeightWithMargins,
+                    tvNo2Title.measuredHeightWithMargins +
+                            tvC0Title.measuredHeightWithMargins +
+                            tvPm25Title.measuredHeightWithMargins +
+                            tvSo2Title.measuredHeightWithMargins +
+                            titleText.measuredHeightWithMargins +
+                            paddingBottom + paddingTop
+                ), heightMeasureSpec
             )
         )
     }
@@ -183,9 +213,9 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
 
         val titleHeight =
             tvC0Title.height +
-                tvPm25Title.height +
-                tvSo2Title.height +
-                titleText.height
+                    tvPm25Title.height +
+                    tvSo2Title.height +
+                    titleText.height
 
         val progressHeight = airCircleProgressView.height
 

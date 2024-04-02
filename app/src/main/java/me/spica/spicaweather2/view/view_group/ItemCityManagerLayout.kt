@@ -112,8 +112,8 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
             weatherName.defaultHeightMeasureSpec(this)
         )
         setMeasuredDimension(
-            measuredWidth,
-            cityName.measuredHeightWithMargins + weatherName.measuredHeightWithMargins + paddingTop + paddingBottom
+            resolveSize(measuredWidth,widthMeasureSpec),
+            resolveSize(cityName.measuredHeightWithMargins + weatherName.measuredHeightWithMargins + paddingTop + paddingBottom, heightMeasureSpec)
         )
     }
 

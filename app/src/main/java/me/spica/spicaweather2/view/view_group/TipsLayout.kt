@@ -152,14 +152,16 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             childView.autoMeasure()
         }
         setMeasuredDimension(
-            measuredWidth,
-            (
-                carIcon.measuredHeightWithMargins +
-                    carTitle.measuredHeightWithMargins +
-                    carDesc.measuredHeightWithMargins
-                ) * 2 +
-                paddingTop +
-                paddingBottom
+            resolveSize(measuredWidth, widthMeasureSpec),
+            resolveSize(
+                (
+                        carIcon.measuredHeightWithMargins +
+                                carTitle.measuredHeightWithMargins +
+                                carDesc.measuredHeightWithMargins
+                        ) * 2 +
+                        paddingTop +
+                        paddingBottom, heightMeasureSpec
+            )
         )
     }
 

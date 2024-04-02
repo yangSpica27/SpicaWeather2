@@ -101,13 +101,17 @@ class SunriseView : View {
         val radius = (width / 2 / Math.cos(deltaRadians)).toInt()
         val height = (radius - width / 2 * Math.tan(deltaRadians)).toInt()
         setMeasuredDimension(
-            MeasureSpec.makeMeasureSpec(
-                (width + 2 * mMargin).toInt(),
-                MeasureSpec.EXACTLY
+            resolveSize(
+                MeasureSpec.makeMeasureSpec(
+                    (width + 2 * mMargin).toInt(),
+                    MeasureSpec.EXACTLY
+                ), widthMeasureSpec
             ),
-            MeasureSpec.makeMeasureSpec(
-                ((height + 2 * 8.dp).toInt() + 12.dp).toInt(),
-                MeasureSpec.EXACTLY
+            resolveSize(
+                MeasureSpec.makeMeasureSpec(
+                    ((height + 2 * 8.dp).toInt() + 12.dp).toInt(),
+                    MeasureSpec.EXACTLY
+                ), heightMeasureSpec
             )
         )
 
@@ -162,7 +166,7 @@ class SunriseView : View {
 
         val deltaWidth = Math.abs(
             mRectF.width() / 2f *
-                Math.cos(Math.toRadians(deltaAngle.toDouble()))
+                    Math.cos(Math.toRadians(deltaAngle.toDouble()))
         ).toFloat()
 
         val deltaHeight =
@@ -198,14 +202,14 @@ class SunriseView : View {
         pathPaint.shader = null
         canvas.drawRect(
             (
-                (
-                    mRectF.centerX() + mRectF.width() / 2 *
-                        Math.cos(
-                            (360 - progressEndAngle) *
-                                Math.PI / 180
-                        )
-                    ).toFloat()
-                ),
+                    (
+                            mRectF.centerX() + mRectF.width() / 2 *
+                                    Math.cos(
+                                        (360 - progressEndAngle) *
+                                                Math.PI / 180
+                                    )
+                            ).toFloat()
+                    ),
             mRectF.top,
             mRectF.right,
             mRectF.top + mRectF.height() / 2,

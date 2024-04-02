@@ -72,11 +72,11 @@ class MainTitleLayout(context: Context, attributeSet: AttributeSet? = null) : AV
         plusBtn.measure(24.dp.toExactlyMeasureSpec(), 24.dp.toExactlyMeasureSpec())
         dotIndicator.autoMeasure()
         setMeasuredDimension(
-            measuredWidth,
-            titleTextView.measuredHeightWithMargins +
-                dotIndicator.measuredHeightWithMargins +
-                paddingBottom +
-                paddingTop
+            resolveSize(measuredWidth,widthMeasureSpec),
+            resolveSize(titleTextView.measuredHeightWithMargins +
+                    dotIndicator.measuredHeightWithMargins +
+                    paddingBottom +
+                    paddingTop,heightMeasureSpec)
         )
     }
 

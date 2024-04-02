@@ -19,7 +19,7 @@ class SearchBarLayout(context: Context) : AViewGroup(context) {
 
     val editText = AppCompatEditText(context).apply {
         layoutParams = LayoutParams(
-            24.dp,
+            ViewGroup.LayoutParams.MATCH_PARENT,
             24.dp
         )
         setPadding(12.dp, 4.dp, 12.dp, 4.dp)
@@ -81,8 +81,8 @@ class SearchBarLayout(context: Context) : AViewGroup(context) {
             defaultHeightMeasureSpec(this)
         )
         setMeasuredDimension(
-            measuredWidth - marginLeft - marginRight,
-            editText.measuredHeight + paddingTop + paddingBottom
+            (measuredWidth - marginLeft - marginRight),
+            resolveSize(editText.measuredHeight + paddingTop + paddingBottom, heightMeasureSpec)
         )
     }
 

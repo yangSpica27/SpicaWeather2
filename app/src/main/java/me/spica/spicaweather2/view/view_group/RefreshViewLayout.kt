@@ -47,8 +47,11 @@ class RefreshViewLayout(context: Context) : AViewGroup(context) {
         loadingImageView.autoMeasure()
         tipText.autoMeasure()
         setMeasuredDimension(
-            measuredWidth,
-            loadingImageView.measuredHeightWithMargins + tipText.measuredHeightWithMargins
+            resolveSize(measuredWidth, widthMeasureSpec),
+            resolveSize(
+                loadingImageView.measuredHeightWithMargins + tipText.measuredHeightWithMargins,
+                heightMeasureSpec
+            )
         )
     }
 

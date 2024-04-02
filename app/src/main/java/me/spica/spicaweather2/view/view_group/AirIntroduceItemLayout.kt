@@ -43,7 +43,8 @@ class AirIntroduceItemLayout(context: Context) : AViewGroup(context) {
         }
         setTextAppearance(R.style.TextAppearance_Material3_BodyLarge)
         setTextColor(ContextCompat.getColor(context, R.color.textColorPrimaryLight))
-        text = "儿童、老年人及心脏病、呼吸系统疾病患者应避免长时间、高强度的户外锻炼，一般人群适量减少户外运动"
+        text =
+            "儿童、老年人及心脏病、呼吸系统疾病患者应避免长时间、高强度的户外锻炼，一般人群适量减少户外运动"
     }
 
     private var leftColor = ContextCompat.getColor(context, R.color.light_blue_600)
@@ -51,7 +52,13 @@ class AirIntroduceItemLayout(context: Context) : AViewGroup(context) {
     private var rightColor = ContextCompat.getColor(context, R.color.light_blue_200)
 
 
-    fun setData(leftText: String, rightText1: String, rightText2: String, leftColor: Int, rightColor: Int) {
+    fun setData(
+        leftText: String,
+        rightText1: String,
+        rightText2: String,
+        leftColor: Int,
+        rightColor: Int
+    ) {
         leftTextView.text = leftText
         rightText1View.text = rightText1
         rightText2View.text = rightText2
@@ -77,7 +84,16 @@ class AirIntroduceItemLayout(context: Context) : AViewGroup(context) {
         clipPath.addRoundRect(
             0f, 0f, w.toFloat(),
             h.toFloat(),
-            floatArrayOf(8.dp.toFloat(), 8.dp.toFloat(), 8.dp.toFloat(), 8.dp.toFloat(), 8.dp.toFloat(), 8.dp.toFloat(), 8.dp.toFloat(), 8.dp.toFloat()),
+            floatArrayOf(
+                8.dp.toFloat(),
+                8.dp.toFloat(),
+                8.dp.toFloat(),
+                8.dp.toFloat(),
+                8.dp.toFloat(),
+                8.dp.toFloat(),
+                8.dp.toFloat(),
+                8.dp.toFloat()
+            ),
             Path.Direction.CW
         )
     }
@@ -94,10 +110,12 @@ class AirIntroduceItemLayout(context: Context) : AViewGroup(context) {
             rightText2View.defaultHeightMeasureSpec(this),
         )
         setMeasuredDimension(
-            measuredWidth,
-            paddingTop + paddingBottom +
-                rightText1View.measuredHeightWithMargins +
-                rightText2View.measuredHeightWithMargins
+            resolveSize(measuredWidth, widthMeasureSpec),
+            resolveSize(
+                paddingTop + paddingBottom +
+                        rightText1View.measuredHeightWithMargins +
+                        rightText2View.measuredHeightWithMargins, heightMeasureSpec
+            )
         )
     }
 
@@ -113,7 +131,13 @@ class AirIntroduceItemLayout(context: Context) : AViewGroup(context) {
         backGroundPaint.color = leftColor
         canvas.drawRect(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), backGroundPaint)
         backGroundPaint.color = rightColor
-        canvas.drawRect(width * 1f, 0f, .3f * measuredWidth, measuredHeight.toFloat(), backGroundPaint)
+        canvas.drawRect(
+            width * 1f,
+            0f,
+            .3f * measuredWidth,
+            measuredHeight.toFloat(),
+            backGroundPaint
+        )
         super.dispatchDraw(canvas)
     }
 

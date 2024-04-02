@@ -298,7 +298,10 @@ class HourlyLineView : View {
 
 
         cursorPaint.color =
-            ColorUtils.setAlphaComponent(colors[Math.min(currentIndex.toInt(), colors.size - 1)], 25)
+            ColorUtils.setAlphaComponent(
+                colors[Math.min(currentIndex.toInt(), colors.size - 1)],
+                25
+            )
 
         canvas.drawRoundRect(
             currentX - itemWidth / 2f,
@@ -435,8 +438,11 @@ class HourlyLineView : View {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         setMeasuredDimension(
-            measuredWidth,
-            (paddingTop + paddingBottom + topIconHeight + tempTextHeight + lineHeight + popHeight + weatherNameHeight + timeHeight).toInt()
+            resolveSize(measuredWidth, widthMeasureSpec),
+            resolveSize(
+                (paddingTop + paddingBottom + topIconHeight + tempTextHeight + lineHeight + popHeight + weatherNameHeight + timeHeight).toInt(),
+                heightMeasureSpec
+            )
         )
     }
 

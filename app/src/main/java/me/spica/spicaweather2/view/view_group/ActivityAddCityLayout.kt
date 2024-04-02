@@ -46,7 +46,8 @@ class ActivityAddCityLayout(context: Context) : AViewGroup(context) {
             measuredWidth.toExactlyMeasureSpec(),
             (measuredHeight - searchBarLayout.measuredHeightWithMargins).toExactlyMeasureSpec()
         )
-        setMeasuredDimension(measuredWidth, measuredHeight)
+        setMeasuredDimension(resolveSize(measuredWidth,widthMeasureSpec),
+            resolveSize(measuredHeight, heightMeasureSpec))
     }
 
     override fun onLayout(changed: Boolean, p1: Int, p2: Int, p3: Int, p4: Int) {

@@ -81,8 +81,8 @@ class MinuteWeatherCard(
         rainView.autoMeasure()
         titleText.autoMeasure()
         setMeasuredDimension(
-            measuredWidth,
-            paddingTop + paddingBottom + rainView.measuredHeightWithMargins + titleText.measuredHeightWithMargins
+           resolveSize( measuredWidth, widthMeasureSpec),
+            resolveSize(paddingTop + paddingBottom + rainView.measuredHeightWithMargins + titleText.measuredHeightWithMargins, heightMeasureSpec)
         )
     }
 

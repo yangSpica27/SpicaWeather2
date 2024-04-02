@@ -147,8 +147,8 @@ class MinuteRainView : View {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         setMeasuredDimension(
-            measuredWidth,
-            ((mHeight * 1f.toInt()).toInt() + textRect.height() + 12.dp.toInt())
+            resolveSize(measuredWidth,widthMeasureSpec),
+            resolveSize((mHeight * 1f.toInt()).toInt() + textRect.height() + 12.dp.toInt(),heightMeasureSpec)
         )
     }
 

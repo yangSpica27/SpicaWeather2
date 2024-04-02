@@ -94,11 +94,12 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
             sunriseView.defaultHeightMeasureSpec(this)
         )
         setMeasuredDimension(
-            measuredWidth,
-            cardTypeText.measuredHeightWithMargins +
+            resolveSize(measuredWidth, widthMeasureSpec),
+            resolveSize(cardTypeText.measuredHeightWithMargins +
                     sunriseView.measuredHeightWithMargins +
                     sunriseText.measuredHeightWithMargins +
-                    paddingTop + paddingBottom
+                    paddingTop + paddingBottom, heightMeasureSpec
+        )
         )
     }
 

@@ -38,7 +38,7 @@ class ActivityMainLayout(context: Context) : AViewGroup(context) {
         children.forEach {
             it.autoMeasure()
         }
-        setMeasuredDimension(measuredWidth, measuredHeight)
+        setMeasuredDimension(resolveSize(measuredWidth,widthMeasureSpec), resolveSize(measuredHeight, heightMeasureSpec))
     }
 
     override fun onLayout(p0: Boolean, p1: Int, p2: Int, p3: Int, p4: Int) {

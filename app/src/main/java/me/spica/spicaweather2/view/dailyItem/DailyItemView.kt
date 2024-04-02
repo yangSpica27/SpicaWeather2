@@ -205,6 +205,6 @@ class DailyItemView : View {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        setMeasuredDimension(measuredWidth, 45.dp.toInt())
+        setMeasuredDimension(resolveSize(measuredWidth,widthMeasureSpec), resolveSize(45.dp.toInt(), heightMeasureSpec))
     }
 }
