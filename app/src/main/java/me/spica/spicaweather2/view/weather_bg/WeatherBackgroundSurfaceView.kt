@@ -26,17 +26,13 @@ import me.spica.spicaweather2.view.weather_drawable.SnowDrawable
 import me.spica.spicaweather2.view.weather_drawable.SunnyDrawable
 import timber.log.Timber
 import java.util.UUID
+import java.util.concurrent.locks.ReentrantLock
 import kotlin.system.measureTimeMillis
 
 class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
-    @Volatile
-    private var isWork = false // 是否预备绘制
 
-    @Volatile
-    private var isPause = false
-
-    private val lock = Any()
+    private val lock = ReentrantLock()
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -134,35 +130,35 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     private val drawRunnable = object : Runnable {
         override fun run() {
-            synchronized(lock) {
-                when (currentWeatherAnimType) {
-                    NowWeatherView.WeatherAnimType.RAIN -> {
-                        rainDrawable?.calculate(width, height)
-                    }
-
-                    NowWeatherView.WeatherAnimType.SNOW -> {
-                        snowDrawable.calculate(width, height)
-                    }
-
-                    NowWeatherView.WeatherAnimType.FOG -> {
-                        foggyDrawable.calculate(width, height)
-                    }
-
-                    NowWeatherView.WeatherAnimType.HAZE -> {
-                        hazeDrawable.calculate()
-                    }
-
-                    else -> {}
+            lock.lock()
+            when (currentWeatherAnimType) {
+                NowWeatherView.WeatherAnimType.RAIN -> {
+                    rainDrawable?.calculate(width, height)
                 }
-                // 执行渲染
-                doOnDraw()
-                if (drawThread.isAlive) {
-                    drawHandler.postDelayed(
-                        this, (16 - (System.currentTimeMillis() - lastDrawTime)).coerceAtLeast(0)
-                    )
+
+                NowWeatherView.WeatherAnimType.SNOW -> {
+                    snowDrawable.calculate(width, height)
                 }
-                lastDrawTime = System.currentTimeMillis()
+
+                NowWeatherView.WeatherAnimType.FOG -> {
+                    foggyDrawable.calculate(width, height)
+                }
+
+                NowWeatherView.WeatherAnimType.HAZE -> {
+                    hazeDrawable.calculate()
+                }
+
+                else -> {}
             }
+            // 执行渲染
+            doOnDraw()
+            if (drawThread.looper != null) {
+                drawHandler.postDelayed(
+                    this, (16 - (System.currentTimeMillis() - lastDrawTime)).coerceAtLeast(0)
+                )
+            }
+            lastDrawTime = System.currentTimeMillis()
+            lock.unlock()
         }
     }
 
@@ -191,11 +187,9 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
     private fun initDrawableRect(width: Int, height: Int) {
-        synchronized(lock) {
-            snowDrawable.ready(width, height)
-            foggyDrawable.ready(width, height)
-            hazeDrawable.ready(width, height)
-        }
+        snowDrawable.ready(width, height)
+        foggyDrawable.ready(width, height)
+        hazeDrawable.ready(width, height)
     }
 
     private var mCanvas: Canvas? = null
@@ -208,11 +202,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         // ================进行绘制==============
         mCanvas?.let { canvas ->
             drawBackground(canvas)
-
-            if (isPause) {
-                mholder?.unlockCanvasAndPost(canvas)
-                return
-            }
             when (currentWeatherAnimType) {
                 NowWeatherView.WeatherAnimType.SUNNY -> sunnyDrawable.doOnDraw(
                     canvas, width, height
@@ -236,34 +225,34 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
-        synchronized(lock) {
-            rainDrawable = RainDrawable2().apply {
-                ready(width, height)
-                setBackgroundY(bottomY)
-            }
-            isWork = true
-            drawThread = HandlerThread("draw-thread${UUID.randomUUID()}")
-            drawThread.start()
-            drawHandler = Handler(drawThread.looper)
-            // 渲染线程
-            drawHandler.post(drawRunnable)
-            this.mholder = holder
+        lock.lock()
+        rainDrawable = RainDrawable2().apply {
+            ready(width, height)
+            setBackgroundY(bottomY)
         }
+        drawThread = HandlerThread("draw-thread${UUID.randomUUID()}")
+        drawThread.start()
+        drawHandler = Handler(drawThread.looper)
+        // 渲染线程
+        drawHandler.post(drawRunnable)
+        this.mholder = holder
+        lock.unlock()
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
+        lock.lock()
         initDrawableRect(width, height)
+        lock.unlock()
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
-        synchronized(lock) {
-            isWork = false
-            drawHandler.removeCallbacksAndMessages(null)
-            drawThread.quitSafely()
-            this.mholder = null
-            rainDrawable?.release()
-            rainDrawable = null
-        }
+        lock.lock()
+        drawHandler.removeCallbacksAndMessages(null)
+        drawThread.quitSafely()
+        this.mholder = null
+        rainDrawable?.release()
+        rainDrawable = null
+        lock.unlock()
     }
 
     // 停止所有的动画

@@ -14,7 +14,6 @@ import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.view.SunriseView
-import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -71,7 +70,10 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
         addView(sunriseText)
         addView(sunsetText)
 
-        layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).apply {
             updateMargins(
                 left = 14.dp,
                 right = 14.dp
@@ -94,9 +96,9 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
         setMeasuredDimension(
             measuredWidth,
             cardTypeText.measuredHeightWithMargins +
-                sunriseView.measuredHeightWithMargins +
-                sunriseText.measuredHeightWithMargins +
-                paddingTop + paddingBottom
+                    sunriseView.measuredHeightWithMargins +
+                    sunriseText.measuredHeightWithMargins +
+                    paddingTop + paddingBottom
         )
     }
 
@@ -132,8 +134,11 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
 
     private val sdf = SimpleDateFormat("HH:mm", Locale.CHINA)
 
+
     @SuppressLint("SetTextI18n")
     override fun bindData(weather: Weather) {
+
+
         cardTypeText.text = "日出日落"
         val startTime = weather.dailyWeather[0].sunriseDate()
         val endTime = weather.dailyWeather[0].sunsetDate()
