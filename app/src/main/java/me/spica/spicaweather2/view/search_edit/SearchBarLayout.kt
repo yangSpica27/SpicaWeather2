@@ -9,6 +9,7 @@ import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
 import androidx.core.widget.addTextChangedListener
 import me.spica.spicaweather2.R
+import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.view.view_group.AViewGroup
 
 /**
@@ -64,10 +65,16 @@ class SearchBarLayout(context: Context) : AViewGroup(context) {
             editText.text = null
         }
         editText.setHint("请输入您所在的城市名称")
+
+
+
+
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+
         iconLeft.autoMeasure()
         iconClear.autoMeasure()
         editText.measure(

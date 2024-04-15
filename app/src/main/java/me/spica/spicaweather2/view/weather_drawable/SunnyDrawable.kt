@@ -12,6 +12,7 @@ import android.view.animation.OvershootInterpolator
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
+import timber.log.Timber
 
 /**
  * 晴天的天气效果
@@ -50,18 +51,22 @@ class SunnyDrawable(private val context: Context) : WeatherDrawable() {
     }
 
 
-    fun startAnim() {
+    override fun startAnim() {
+        Timber.tag("SunnyDrawable").d("startAnim")
         rippleAnim.start()
         rippleAnim2.start()
     }
 
-    fun cancelAnim() {
+    override fun cancelAnim() {
+        Timber.tag("SunnyDrawable").d("cancelAnim")
+        rippleAnim.cancel()
+        rippleAnim2.cancel()
         if (enterProgress == 1f) {
             enterProgress = 0f
         }
-        rippleAnim.start()
-        rippleAnim2.start()
     }
+
+    override fun ready(width: Int, height: Int) = Unit
 
     // 从里到外四层
     private val path1 = Path()
@@ -128,6 +133,12 @@ class SunnyDrawable(private val context: Context) : WeatherDrawable() {
 
         enterProgress += .02f
         enterProgress = Math.min(1f, enterProgress)
+
+
+        if (enterProgress != 1f) {
+            Timber.tag("SunnyDrawable").d("enterProgress: $enterProgress")
+        }
+
         val enterAnimaValue = enterInterpolator.getInterpolation(enterProgress)
         canvas.save()
         canvas.translate(width * 1f, 0f)

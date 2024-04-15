@@ -36,17 +36,21 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
     private var enterProgress = 0f
 
     private val overshootInterpolator = OvershootInterpolator(1.2f)
-    fun startAnim() {
+   override fun startAnim() {
         cloudAnim.start()
         cloudAnim2.start()
     }
 
-    fun cancelAnim() {
+   override fun cancelAnim() {
         cloudAnim.cancel()
         cloudAnim2.cancel()
         if (enterProgress == 1f) {
             enterProgress = 0f
         }
+    }
+
+    override fun ready(width: Int, height: Int){
+
     }
 
     // 画笔

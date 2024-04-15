@@ -6,8 +6,10 @@ import android.graphics.Paint
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.view.weather_bg.RainFlake
 import me.spica.spicaweather2.weather_anim_counter.RainParticleManager
+import timber.log.Timber
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.util.concurrent.CopyOnWriteArrayList
 
 
 /**
@@ -33,14 +35,32 @@ class RainDrawable2 : WeatherDrawable() {
 
     private val lock = Any()
 
-    private val rainEffectCounter = RainParticleManager()
+    private var rainEffectCounter = RainParticleManager()
 
     private val rainFlakes = arrayListOf<RainFlake>()
+    override fun startAnim() {
+        if (rainFlakes.isEmpty() && viewWidth != -1 && viewHeight != -1) {
+            release()
+            ready(viewWidth, viewHeight)
+        }
+    }
+
+    override fun cancelAnim() {
+        release()
+    }
+
+    private var viewWidth: Int = -1
+
+    private var viewHeight: Int = -1
 
     // 初始化
-    fun ready(width: Int, height: Int) {
+    override fun ready(width: Int, height: Int) {
         synchronized(lock) {
+            viewWidth = width
+            viewHeight = height
+            rainEffectCounter = RainParticleManager()
             rainEffectCounter.init(width, height)
+            rainFlakes.clear()
             for (i in 0..200) {
                 rainFlakes.add(
                     RainFlake.create(
@@ -55,7 +75,10 @@ class RainDrawable2 : WeatherDrawable() {
     }
 
     // 设置背景刚体的Y轴
-    fun setBackgroundY(y: Int) {
+    override fun setBackgroundY(y: Int) {
+        if (rainFlakes.isEmpty() || viewHeight == -1 || viewWidth == -1) {
+            return
+        }
         rainEffectCounter.setBackgroundY(y)
     }
 
@@ -65,10 +88,13 @@ class RainDrawable2 : WeatherDrawable() {
 
 
     // 计算雨滴的位置
-    fun calculate(width: Int, height: Int) {
+    override fun calculate(w: Int, h: Int) {
+        if (rainFlakes.isEmpty() || viewHeight == -1 || viewWidth == -1) {
+            return
+        }
         synchronized(lock) {
             rainFlakes.forEach {
-                it.calculation(width, height)
+                it.calculation(viewWidth, viewHeight)
             }
             rainEffectCounter.run()
             if ((System.currentTimeMillis() - lastAddRainTime > 50) &&
@@ -83,7 +109,7 @@ class RainDrawable2 : WeatherDrawable() {
 
 
     // 粒子的位置缓冲区
-    private val mParticlePositionBuffer: ByteBuffer =
+    private var mParticlePositionBuffer: ByteBuffer =
         ByteBuffer
             .allocateDirect(2 * 4 * RainParticleManager.ParticleMaxCount)
             .order(ByteOrder.nativeOrder())
@@ -92,11 +118,14 @@ class RainDrawable2 : WeatherDrawable() {
     private val positionArray = FloatArray(RainParticleManager.ParticleMaxCount * 2)
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
+        if (rainFlakes.isEmpty() || viewHeight == -1 || viewWidth == -1) {
+            return
+        }
         synchronized(lock) {
-            // 绘制无碰撞的前景
             rainFlakes.forEach {
                 it.onlyDraw(canvas)
             }
+            // 绘制无碰撞的前景
             mParticlePositionBuffer.rewind()
             rainEffectCounter.system.copyPositionBuffer(
                 0,
@@ -111,9 +140,17 @@ class RainDrawable2 : WeatherDrawable() {
         }
     }
 
-    fun release() {
-        rainEffectCounter.destroy()
-        mParticlePositionBuffer.clear()
+    private fun release() {
+        Timber.tag("RainDrawable2").e("release")
+        synchronized(lock) {
+            rainEffectCounter.destroy()
+            mParticlePositionBuffer.clear()
+            val zeroArray = ByteArray(mParticlePositionBuffer.capacity())
+            mParticlePositionBuffer.put(zeroArray)
+            mParticlePositionBuffer.rewind()
+            rainFlakes.clear()
+            positionArray.fill(0f)
+        }
     }
 
 }

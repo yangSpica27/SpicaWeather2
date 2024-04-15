@@ -27,6 +27,10 @@ data class CityBean(
     var isSelected: Boolean = false,
 ) : Parcelable {
 
+
+
+
+
     @Ignore
     @IgnoredOnParcel
     var iconId: Int = 100

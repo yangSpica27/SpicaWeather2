@@ -53,7 +53,7 @@ class HazeDrawable(private val context: Context) : WeatherDrawable() {
     }
 
 
-    fun cancelAnim() {
+    override fun cancelAnim() {
         if (enterProgress == 1f) {
             enterProgress = 0f
         }
@@ -62,7 +62,7 @@ class HazeDrawable(private val context: Context) : WeatherDrawable() {
         anim3.cancel()
     }
 
-    fun startAnim() {
+   override fun startAnim() {
         if (!anim1.isRunning) {
             anim1.start()
         }
@@ -74,7 +74,7 @@ class HazeDrawable(private val context: Context) : WeatherDrawable() {
         }
     }
 
-    fun ready(width: Int, height: Int) {
+    override  fun ready(width: Int, height: Int) {
         this.width = width
         this.height = height
         bgShader = LinearGradient(
@@ -89,7 +89,7 @@ class HazeDrawable(private val context: Context) : WeatherDrawable() {
         pathPaint.shader = bgShader
     }
 
-    fun calculate() {
+   override fun calculate(width: Int,height: Int) {
         enterProgress += .02f
         enterProgress = Math.min(1f, enterProgress)
         val animProgress = interpolator.getInterpolation(enterProgress)

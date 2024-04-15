@@ -12,7 +12,6 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.view.animation.OvershootInterpolator
 import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
@@ -47,12 +46,12 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
             repeatMode = ValueAnimator.REVERSE
         }
 
-    fun startAnim() {
+    override fun startAnim() {
         anim.start()
         anim2.start()
     }
 
-    fun cancelAnim() {
+    override  fun cancelAnim() {
         anim.cancel()
         anim2.cancel()
         if (enterProgress == 1f) {
@@ -60,17 +59,17 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
         }
     }
 
-    fun ready(viewWidth: Int, viewHeight: Int) {
+    override  fun ready(width: Int, height: Int) {
         synchronized(circles) {
             circles.clear()
             path.reset()
             circles.add(
                 Circle(
                     PointF(
-                        viewWidth / 4f,
-                        viewHeight / 4f,
+                        width / 4f,
+                        height / 4f,
                     ),
-                    viewHeight / 5f,
+                    height / 5f,
                     8.dp
                 )
             )
@@ -78,10 +77,10 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
             circles.add(
                 Circle(
                     PointF(
-                        viewHeight / 6f,
-                        viewHeight / 2f,
+                        height / 6f,
+                        height / 2f,
                     ),
-                    viewWidth / 5.5f,
+                    width / 5.5f,
                     10.dp
                 )
             )
@@ -89,10 +88,10 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
             circles.add(
                 Circle(
                     PointF(
-                        viewHeight / 4f,
-                        viewHeight - viewHeight / 4f,
+                        height / 4f,
+                        height - height / 4f,
                     ),
-                    viewHeight / 4f,
+                    height / 4f,
                     20.dp
                 )
             )
@@ -100,10 +99,10 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
             circles.add(
                 Circle(
                     PointF(
-                        viewHeight / 3f,
-                        viewHeight - viewHeight / 4f,
+                        height / 3f,
+                        height - height / 4f,
                     ),
-                    viewHeight / 4f,
+                    height / 4f,
                     12.dp
                 )
             )
@@ -111,10 +110,10 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
             circles.add(
                 Circle(
                     PointF(
-                        viewHeight / 2f,
-                        viewHeight - viewHeight / 4f,
+                        height / 2f,
+                        height - height / 4f,
                     ),
-                    viewHeight / 4f,
+                    height / 4f,
                     12.dp
                 )
             )
@@ -122,10 +121,10 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
             circles.add(
                 Circle(
                     PointF(
-                        viewWidth - viewWidth / 3f,
-                        viewHeight - viewHeight / 5f,
+                        width - width / 3f,
+                        height - height / 5f,
                     ),
-                    viewHeight / 5f,
+                    height / 5f,
                     10.dp
                 )
             )
@@ -133,10 +132,10 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
             circles.add(
                 Circle(
                     PointF(
-                        viewWidth - viewWidth / 6f,
-                        viewHeight - viewHeight / 4f,
+                        width - width / 6f,
+                        height - height / 4f,
                     ),
-                    viewHeight / 4.5f,
+                    height / 4.5f,
                     12.dp
                 )
             )
@@ -144,10 +143,10 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
             circles.add(
                 Circle(
                     PointF(
-                        viewWidth - viewWidth / 5f,
-                        viewHeight - viewHeight / 1.9f - 22.dp,
+                        width - width / 5f,
+                        height - height / 1.9f - 22.dp,
                     ),
-                    viewHeight / 5.5f,
+                    height / 5.5f,
                     6.dp
                 )
             )
@@ -155,10 +154,10 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
             circles.add(
                 Circle(
                     PointF(
-                        viewWidth - viewWidth / 3.6f + 6.dp,
-                        viewHeight / 5f,
+                        width - width / 3.6f + 6.dp,
+                        height / 5f,
                     ),
-                    viewHeight / 5f,
+                    height / 5f,
                     8.dp
                 )
             )
@@ -166,10 +165,10 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
             circles.add(
                 Circle(
                     PointF(
-                        viewWidth / 2f,
-                        viewHeight / 3.5f,
+                        width / 2f,
+                        height / 3.5f,
                     ),
-                    viewHeight / 4f,
+                    height / 4f,
                     10.dp
                 )
             )
@@ -184,8 +183,7 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
 
     private val path = Path()
 
-    @WorkerThread
-    fun calculate(viewWidth: Int, viewHeight: Int) {
+   override fun calculate(width: Int, height: Int) {
         synchronized(circles) {
             circles.forEachIndexed { index, circle ->
                 if (index % 3 == 0) {

@@ -1,8 +1,18 @@
 package me.spica.spicaweather2
 
 import android.app.Application
+import android.service.carrier.CarrierMessagingService.ResultCallback
 import dagger.hilt.android.HiltAndroidApp
+import okhttp3.Authenticator
+import okhttp3.Callback
+import okhttp3.OkHttp
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.Route
+import okhttp3.internal.connection.RealCall
 import timber.log.Timber
+import java.io.IOException
 
 
 /**
@@ -29,5 +39,9 @@ class App : Application() {
             Timber.plant(Timber.DebugTree())
         }
         instance = this
+
+
+
+
     }
 }

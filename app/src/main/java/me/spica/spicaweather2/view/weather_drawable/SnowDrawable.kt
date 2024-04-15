@@ -32,8 +32,12 @@ class SnowDrawable : WeatherDrawable() {
         Color.WHITE
     )
 
+    override fun startAnim() = Unit
 
-    fun ready(width: Int, height: Int) {
+    override fun cancelAnim() = Unit
+
+
+    override fun ready(width: Int, height: Int) {
         synchronized(this) {
             snows.clear()
             snowEffectCounter.init(width, height)
@@ -49,7 +53,7 @@ class SnowDrawable : WeatherDrawable() {
     }
 
     @WorkerThread
-    fun calculate(width: Int, height: Int) {
+    override fun calculate(width: Int, height: Int) {
         synchronized(this) {
             snowEffectCounter.run()
         }
@@ -69,7 +73,7 @@ class SnowDrawable : WeatherDrawable() {
         }
     }
 
-    fun setBackgroundY(y: Int) {
+    override fun setBackgroundY(y: Int) {
         snowEffectCounter.setBackgroundY(y)
     }
 

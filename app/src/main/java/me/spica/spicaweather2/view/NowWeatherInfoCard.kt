@@ -20,6 +20,7 @@ import me.spica.spicaweather2.view.view_group.AViewGroup
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 
 
 // 当前天气信息卡片
@@ -238,6 +239,8 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
             paddingTop
         )
 
+
+
         val itemWidth = (measuredWidth - paddingLeft - paddingRight) / 4f
         windSpeedText.layout(
             (itemWidth / 2f + paddingLeft - windSpeedText.width / 2f).toInt(),
@@ -286,4 +289,6 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
     override var index: Int = HomeCardType.NOW_WEATHER.code
 
     override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
+
+
 }

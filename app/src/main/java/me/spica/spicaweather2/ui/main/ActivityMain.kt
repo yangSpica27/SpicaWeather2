@@ -147,7 +147,7 @@ class ActivityMain : MaterialActivity() {
             viewModel.allCityWithWeather.collectLatest {
                 mainPagerAdapter.updateCities(it)
                 data = it
-                updateTitleAndAnim(0)
+                updateTitleAndAnim(layout.viewPager2.currentItem)
             }
         }
 
@@ -156,7 +156,8 @@ class ActivityMain : MaterialActivity() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 // 更新标题
-                updateTitleAndAnim(position)
+                viewModel.setCurrentPagerIndex(position)
+                layout.mainTitleLayout.dotIndicator.refreshDots()
             }
 
             override fun onPageScrolled(
@@ -167,6 +168,13 @@ class ActivityMain : MaterialActivity() {
                 updateOtherPageScroller()
             }
         })
+
+        lifecycleScope.launch {
+            viewModel.currentPagerIndex.collectLatest { position ->
+                updateTitleAndAnim(position)
+            }
+        }
+
     }
 
     // 进入城市管理页面
