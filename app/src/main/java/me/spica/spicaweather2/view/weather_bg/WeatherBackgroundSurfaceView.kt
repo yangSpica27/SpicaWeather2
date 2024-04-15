@@ -111,7 +111,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
 
-
     private var mCanvas: Canvas? = null
 
     private var mholder: SurfaceHolder? = null
@@ -154,8 +153,12 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
 
+    fun setMScrollY(y: Int) {
+        weatherDrawableManager.setScrollY(y)
+    }
+
     fun setBackgroundY(y: Int) {
-        weatherDrawableManager.setBackGroundY(y)
+        weatherDrawableManager.setBackgroundY(y)
     }
 
     private fun drawBackground(canvas: Canvas) {

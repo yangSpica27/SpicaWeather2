@@ -5,13 +5,13 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
-import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
+import me.spica.spicaweather2.tools.getScreenHeight
 import timber.log.Timber
 
 /**
@@ -52,13 +52,11 @@ class SunnyDrawable(private val context: Context) : WeatherDrawable() {
 
 
     override fun startAnim() {
-        Timber.tag("SunnyDrawable").d("startAnim")
         rippleAnim.start()
         rippleAnim2.start()
     }
 
     override fun cancelAnim() {
-        Timber.tag("SunnyDrawable").d("cancelAnim")
         rippleAnim.cancel()
         rippleAnim2.cancel()
         if (enterProgress == 1f) {
@@ -126,6 +124,11 @@ class SunnyDrawable(private val context: Context) : WeatherDrawable() {
         )
     }
 
+    private var scrollY = 0
+
+    override fun setScrollY(y: Int) {
+        scrollY = y
+    }
 
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
         rotation += .004f
@@ -135,14 +138,16 @@ class SunnyDrawable(private val context: Context) : WeatherDrawable() {
         enterProgress = Math.min(1f, enterProgress)
 
 
-        if (enterProgress != 1f) {
-            Timber.tag("SunnyDrawable").d("enterProgress: $enterProgress")
-        }
-
         val enterAnimaValue = enterInterpolator.getInterpolation(enterProgress)
+
+        val scrollAnimValue = Math.abs(scrollY) / height.toFloat()
+
         canvas.save()
         canvas.translate(width * 1f, 0f)
-        canvas.scale(enterAnimaValue, enterAnimaValue)
+        canvas.scale(
+            enterAnimaValue - .3f * scrollAnimValue,
+            enterAnimaValue - .3f * scrollAnimValue
+        )
         canvas.translate(-width * 1f, 0f)
         initPath(width, height)
 //        sunnyPaint.alpha = (100 * enterAnimaValue).toInt()

@@ -40,9 +40,13 @@ class WeatherDrawableManager(context: Context) {
     }
 
     private var cacheY = 0
-    fun setBackGroundY(y: Int) {
+    fun setBackgroundY(y: Int) {
         cacheY = y
         drawableMaps[currentAnimType]?.setBackgroundY(y)
+    }
+
+    fun setScrollY(y: Int) {
+        drawableMaps[currentAnimType]?.setScrollY(y)
     }
 
     // 设置当前的天气动画
@@ -51,7 +55,7 @@ class WeatherDrawableManager(context: Context) {
             currentAnimType = weatherAnimType
             release()
             getCurrentDrawable().startAnim()
-            setBackGroundY(cacheY)
+            setBackgroundY(cacheY)
         }
     }
 
@@ -59,6 +63,8 @@ class WeatherDrawableManager(context: Context) {
     fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
         getCurrentDrawable().doOnDraw(canvas, width, height)
     }
+
+
 
 
     // 销毁

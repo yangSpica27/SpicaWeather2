@@ -222,6 +222,7 @@ class ActivityMain : MaterialActivity() {
 //            -(scrollY - 80.dp)
 //        }
         layout.mainTitleLayout.translationY = -scrollY * 1f
+        layout.weatherBackgroundSurfaceView.setMScrollY(scrollY)
     }
 
     // 更新其他页面的滚动

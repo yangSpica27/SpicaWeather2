@@ -21,4 +21,6 @@ abstract class WeatherDrawable {
     open fun calculate(width: Int, height: Int) = Unit
 
     open fun setBackgroundY(y: Int) = Unit
+
+    open fun setScrollY(y: Int) = Unit
 }

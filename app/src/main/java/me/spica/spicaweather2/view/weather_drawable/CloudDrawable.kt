@@ -36,12 +36,12 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
     private var enterProgress = 0f
 
     private val overshootInterpolator = OvershootInterpolator(1.2f)
-   override fun startAnim() {
+    override fun startAnim() {
         cloudAnim.start()
         cloudAnim2.start()
     }
 
-   override fun cancelAnim() {
+    override fun cancelAnim() {
         cloudAnim.cancel()
         cloudAnim2.cancel()
         if (enterProgress == 1f) {
@@ -49,7 +49,7 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
         }
     }
 
-    override fun ready(width: Int, height: Int){
+    override fun ready(width: Int, height: Int) {
 
     }
 
@@ -59,13 +59,21 @@ class CloudDrawable(private val context: Context) : WeatherDrawable() {
         style = Paint.Style.FILL
     }
 
+    private var scrollY = 0
+
+    override fun setScrollY(y: Int) {
+        scrollY = y
+    }
+
+
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
         enterProgress += .02f
         enterProgress = Math.min(1f, enterProgress)
 
         val animProgressValue = overshootInterpolator.getInterpolation(enterProgress)
+        val scrollYAnimValue = scrollY / height.toFloat()
 
-        canvas.translate(0f, (-40).dp + 40.dp * animProgressValue)
+        canvas.translate(0f, (-40).dp + 40.dp * animProgressValue- 80.dp * scrollYAnimValue)
         canvas.save()
         val centerX = width / 8f * 7f
         val centerY = 0f
