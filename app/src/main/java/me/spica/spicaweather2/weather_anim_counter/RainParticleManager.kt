@@ -124,7 +124,7 @@ class RainParticleManager {
         rainItemDef.flags = 0
         rainItemDef.groupFlags = 0
         rainItemDef.shape = rainItemShape
-        rainItemDef.linearVelocity = Vec2(0f, 9f)
+//        rainItemDef.linearVelocity = Vec2(0f, 9f)
     }
 
 

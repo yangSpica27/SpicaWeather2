@@ -17,8 +17,8 @@ android {
         applicationId "me.spica.weather2"
         minSdk 26
         targetSdk 33
-        versionCode 1
-        versionName "0.1"
+        versionCode 3
+        versionName "0.51"
 
         renderscriptTargetApi 24
         renderscriptSupportModeEnabled true

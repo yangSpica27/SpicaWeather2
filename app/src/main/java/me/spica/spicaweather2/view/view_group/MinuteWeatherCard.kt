@@ -94,7 +94,7 @@ class MinuteWeatherCard(
 
     override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
     override fun bindData(weather: Weather) {
-        rainView.setData(weather.minutelies.map { (it.precip.toFloatOrNull() ?: 0f) * 5f })
+        rainView.setData(weather.minutelies.map { (it.precip.toFloatOrNull() ?: 0f) })
         rainView.startAnim(600)
         visibility =
             if (WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId) == WeatherType.WEATHER_RAINY) {

@@ -76,7 +76,7 @@ class MinuteRainView : View {
         data.addAll(list)
     }
 
-    fun startAnim(delay:Int) {
+    fun startAnim(delay: Int) {
         anim.startDelay = delay.toLong()
         anim.start()
     }
@@ -84,6 +84,14 @@ class MinuteRainView : View {
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         lineWidth = w / 24f - 3.dp
+    }
+
+    private val rightTextRect = Rect()
+
+    private val rightTextPaint = TextPaint().apply {
+        textSize = 14.dp
+        color = ContextCompat.getColor(context, R.color.rain_line_view_text_color)
+        textAlign = Paint.Align.CENTER
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -106,13 +114,41 @@ class MinuteRainView : View {
             mHeight / 3f * 2,
             baseLinePaint
         )
+
+        val minText = "小"
+        rightTextPaint.getTextBounds(minText, 0, minText.length, rightTextRect)
+        canvas.drawText(
+            minText,
+            width - paddingRight - 30.dp - 15.dp,
+            mHeight - mHeight / 6f + textRect.height() / 2f,
+            rightTextPaint
+        )
+        val maxText = "大"
+        rightTextPaint.getTextBounds(maxText, 0, maxText.length, rightTextRect)
+        canvas.drawText(
+            maxText,
+            width - paddingRight - 30.dp -  15.dp,
+            mHeight / 3f - mHeight / 6f + textRect.height() / 2f,
+            rightTextPaint
+        )
+        val midText = "中"
+        rightTextPaint.getTextBounds(midText, 0, midText.length, rightTextRect)
+
+        canvas.drawText(
+            midText,
+            width - paddingRight - 30.dp -  15.dp,
+            mHeight / 3f + mHeight / 6f + textRect.height() / 2f,
+            rightTextPaint
+        )
+
+        setLayerType(LAYER_TYPE_HARDWARE, null)
         data.forEachIndexed { index, item ->
 
             val x = index * lineWidth + lineWidth / 2f + 3.dp * index + 6.dp
             val baseline = mHeight - baseLinePaint.strokeWidth / 2f
             val y = Math.min(
                 mHeight,
-                (item * 1f / 5) * (baseline)
+                (item * 1f) * (baseline)
             ).absoluteValue * anim.animatedValue as Float
 
             path.reset()
@@ -122,17 +158,21 @@ class MinuteRainView : View {
                 x * 1f + lineWidth / 2f,
                 baseline
             )
-            path.addRoundRect(
-                rectF,
-                floatArrayOf(
-                    lineWidth / 4f, lineWidth / 4f, // 左上角的圆角半径
-                    lineWidth / 4f, lineWidth / 4f, // 右上角的圆角半径
-                    0f, 0f, // 右下角的圆角半径
-                    0f, 0f
-                ), // 左下角的圆角半径
-                Path.Direction.CW
-            )
-            canvas.drawPath(path, linePaint)
+            if (rectF.right < width - paddingRight - 60.dp) {
+                path.addRoundRect(
+                    rectF,
+                    floatArrayOf(
+                        lineWidth / 4f, lineWidth / 4f, // 左上角的圆角半径
+                        lineWidth / 4f, lineWidth / 4f, // 右上角的圆角半径
+                        0f, 0f, // 右下角的圆角半径
+                        0f, 0f
+                    ), // 左下角的圆角半径
+                    Path.Direction.CW
+                )
+                linePaint.alpha = (255 * (y / mHeight)).toInt()
+                canvas.drawPath(path, linePaint)
+            }
+
         }
 
         canvas.drawText(
@@ -141,14 +181,18 @@ class MinuteRainView : View {
             mHeight + textRect.height() + 6.dp,
             textPaint
         )
+        setLayerType(LAYER_TYPE_NONE, null)
     }
 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         setMeasuredDimension(
-            resolveSize(measuredWidth,widthMeasureSpec),
-            resolveSize((mHeight * 1f.toInt()).toInt() + textRect.height() + 12.dp.toInt(),heightMeasureSpec)
+            resolveSize(measuredWidth, widthMeasureSpec),
+            resolveSize(
+                (mHeight * 1f.toInt()).toInt() + textRect.height() + 12.dp.toInt(),
+                heightMeasureSpec
+            )
         )
     }
 
