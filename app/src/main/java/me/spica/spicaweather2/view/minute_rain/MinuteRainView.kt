@@ -141,7 +141,6 @@ class MinuteRainView : View {
             rightTextPaint
         )
 
-        setLayerType(LAYER_TYPE_HARDWARE, null)
         data.forEachIndexed { index, item ->
 
             val x = index * lineWidth + lineWidth / 2f + 3.dp * index + 6.dp
@@ -181,7 +180,6 @@ class MinuteRainView : View {
             mHeight + textRect.height() + 6.dp,
             textPaint
         )
-        setLayerType(LAYER_TYPE_NONE, null)
     }
 
 
