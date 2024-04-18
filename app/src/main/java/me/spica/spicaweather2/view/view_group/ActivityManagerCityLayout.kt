@@ -3,10 +3,16 @@ package me.spica.spicaweather2.view.view_group
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
+import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
+import androidx.core.widget.TextViewCompat.setCompoundDrawablesRelative
+import androidx.core.widget.TextViewCompat.setTextAppearance
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
@@ -49,6 +55,28 @@ class ActivityManagerCityLayout(context: Context) : AViewGroup(context) {
         )
     }
 
+  val deleteBtn = AppCompatButton(context).apply {
+
+        setTextAppearance(R.style.TextAppearance_MaterialComponents_Button)
+        setCompoundDrawablesRelative(
+            null,
+            ContextCompat.getDrawable(context, R.drawable.ic_delete).apply {
+                this?.setBounds(0, 0, 24.dp, 24.dp)
+            },
+            null,
+            null
+        )
+        setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+        updatePadding(top = 14.dp, bottom = 14.dp)
+        gravity = Gravity.CENTER
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        text = "删除"
+      visibility = GONE
+    }
+
     init {
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -57,6 +85,7 @@ class ActivityManagerCityLayout(context: Context) : AViewGroup(context) {
         addView(recyclerView)
         addView(titleBar)
         addView(transformerImageView)
+        addView(deleteBtn)
         setBackgroundColor(Color.WHITE)
     }
 
@@ -68,12 +97,17 @@ class ActivityManagerCityLayout(context: Context) : AViewGroup(context) {
             (measuredHeight - titleBar.height).toExactlyMeasureSpec()
         )
         transformerImageView.autoMeasure()
-        setMeasuredDimension(resolveSize(measuredWidth,widthMeasureSpec), resolveSize(measuredHeight, heightMeasureSpec))
+        deleteBtn.autoMeasure()
+        setMeasuredDimension(
+            resolveSize(measuredWidth, widthMeasureSpec),
+            resolveSize(measuredHeight, heightMeasureSpec)
+        )
     }
 
     override fun onLayout(p0: Boolean, p1: Int, p2: Int, p3: Int, p4: Int) {
         titleBar.layout(0, 0)
         recyclerView.layout(0, titleBar.height)
         transformerImageView.layout(0, 0)
+        deleteBtn.layout(left, bottom - deleteBtn.measuredHeight)
     }
 }

@@ -30,13 +30,17 @@ import me.spica.spicaweather2.tools.MessageEvent
 import me.spica.spicaweather2.tools.MessageType
 import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.tools.dp
+import me.spica.spicaweather2.tools.hide
+import me.spica.spicaweather2.tools.show
 import me.spica.spicaweather2.tools.startActivityWithAnimation
+import me.spica.spicaweather2.tools.toast
 import me.spica.spicaweather2.ui.add_city.ActivityAddCity
 import me.spica.spicaweather2.ui.main.ActivityMain
 import me.spica.spicaweather2.view.Manager2HomeView
 import me.spica.spicaweather2.view.view_group.ActivityManagerCityLayout
 import org.greenrobot.eventbus.EventBus
 import rikka.material.app.MaterialActivity
+import timber.log.Timber
 
 /**
  * 城市管理页面
@@ -86,14 +90,11 @@ class ActivityManagerCity : MaterialActivity() {
 
         layout.recyclerView.adapter = adapter
 
-        adapter.deleteCityClickListener = { cityWithWeather ->
-            viewModel.deleteCity(cityWithWeather.city)
-        }
-
         adapter.itemClickListener = { position, view ->
             lifecycleScope.launch(Dispatchers.Default) {
                 Manager2HomeView.initFromViewRect(view, window)
-                EventBus.getDefault().post(MessageEvent.create(MessageType.Get2MainActivityAnim, position))
+                EventBus.getDefault()
+                    .post(MessageEvent.create(MessageType.Get2MainActivityAnim, position))
                 withContext(Dispatchers.Main) {
                     if (Build.VERSION.SDK_INT >= 34) {
                         overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, 0, 0)
@@ -103,6 +104,10 @@ class ActivityManagerCity : MaterialActivity() {
                     finish()
                 }
             }
+        }
+
+        adapter.itemLongClickListener = { _, _ ->
+            viewModel.setSelectable(isSelectable = true)
         }
 
         adapter.addCityClickListener = {
@@ -128,17 +133,48 @@ class ActivityManagerCity : MaterialActivity() {
                 override fun onChildViewDetachedFromWindow(view: View) = Unit
             })
 
+        layout.deleteBtn.setOnClickListener {
+            if (adapter.getSelectCityNames().size == adapter.items.size) {
+                toast("至少保留一个城市")
+                return@setOnClickListener
+            }
+            viewModel.deleteCities(adapter.getSelectCityNames())
+        }
+
         lifecycleScope.launch {
             viewModel.allCityWithWeather.collectLatest {
                 adapter.setItems(it)
             }
         }
 
+        lifecycleScope.launch {
+            viewModel.topTitle.collectLatest {
+                layout.titleBar.title = it
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isSelectable.collectLatest {
+                adapter.isSelectMode = it
+                if (it) {
+                    Timber.tag("ManagerCity").d("show delete button")
+                    layout.deleteBtn.show()
+                } else {
+                    Timber.tag("ManagerCity").d("hide delete button")
+                    layout.deleteBtn.hide()
+                }
+            }
+        }
         onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                if (adapter.isSelectMode) {
+                    viewModel.setSelectable(false)
+                    return
+                }
                 backToMain()
             }
         })
+
     }
 
 

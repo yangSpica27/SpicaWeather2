@@ -51,4 +51,8 @@ interface CityDao {
 
     @Delete
     fun deleteCity(cityBean: CityBean)
+
+    @Query("DELETE FROM t_city WHERE cityName IN (:names)")
+    fun deleteCitiesWithNames(names:List<String>)
+
 }

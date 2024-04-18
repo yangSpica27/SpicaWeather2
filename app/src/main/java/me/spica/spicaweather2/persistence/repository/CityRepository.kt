@@ -17,14 +17,16 @@ class CityRepository @Inject constructor(
     /**
      * 获取所有城市的flow
      */
-    fun allCityFlow() = cityDao.getAllDistinctUntilChanged().distinctUntilChanged().flowOn(Dispatchers.IO)
+    fun allCityFlow() =
+        cityDao.getAllDistinctUntilChanged().distinctUntilChanged().flowOn(Dispatchers.IO)
 
     /**
      * 获取所有城市的列表
      */
     fun allCityList() = cityDao.getAllList()
 
-    fun allCitiesWithWeatherFlow() = cityDao.getCitiesWithWeatherDistinctUntilChanged().flowOn(Dispatchers.IO)
+    fun allCitiesWithWeatherFlow() =
+        cityDao.getCitiesWithWeatherDistinctUntilChanged().flowOn(Dispatchers.IO)
 
     /**
      * 选择城市
@@ -51,6 +53,11 @@ class CityRepository @Inject constructor(
     @WorkerThread
     fun deleteCity(cityBean: CityBean) {
         cityDao.deleteCity(cityBean = cityBean)
+    }
+
+    @WorkerThread
+    fun deleteCitiesWithNames(citiesNames: List<String>) {
+        cityDao.deleteCitiesWithNames(citiesNames)
     }
 
     // 选择的城市

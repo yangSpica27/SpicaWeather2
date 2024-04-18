@@ -18,12 +18,26 @@ import me.spica.spicaweather2.view.view_group.ItemCityManagerLayout
  */
 class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>() {
 
-    private val items: MutableList<CityWithWeather> = arrayListOf()
+    val items: MutableList<CityWithWeather> = arrayListOf()
+
+
 
     companion object {
         const val ITEM_TYPE_NORMAL = 0
         const val ITEM_TYPE_ADD = 1
     }
+
+    // 是否是选择模式
+    var isSelectMode = false
+        @SuppressLint("NotifyDataSetChanged")
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+            if (!value) {
+                selectedCitiesSet.clear()
+            }
+        }
+
 
     init {
         setHasStableIds(true)
@@ -36,9 +50,13 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
         notifyDataSetChanged()
     }
 
+    fun getSelectCityNames() = selectedCitiesSet.toList()
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun itemLayout() = itemView as ItemCityManagerLayout
     }
+
+    private val selectedCitiesSet = mutableSetOf<String>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         if (ITEM_TYPE_NORMAL == viewType) {
@@ -50,7 +68,10 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
                         RecyclerView.LayoutParams.MATCH_PARENT,
                         RecyclerView.LayoutParams.WRAP_CONTENT
                     ).apply {
-                        updateMargins(left = 14.dp.toInt()+context.getScreenWidth()/5, right = 14.dp.toInt()+context.getScreenWidth()/5)
+                        updateMargins(
+                            left = 14.dp.toInt() + context.getScreenWidth() / 5,
+                            right = 14.dp.toInt() + context.getScreenWidth() / 5
+                        )
                     }
                     setBackgroundColor(ContextCompat.getColor(context, R.color.light_blue_600))
                     cornerRadius = 24.dp.toInt()
@@ -73,9 +94,10 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
         return items[position].city.cityName.hashCode().toLong()
     }
 
-    var deleteCityClickListener: ((CityWithWeather) -> Unit)? = null
 
     var itemClickListener: ((Int, View) -> Unit)? = null
+
+    var itemLongClickListener: ((Int, View) -> Unit)? = null
 
     var addCityClickListener: (() -> Unit)? = null
 
@@ -83,12 +105,31 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
         if (holder.itemViewType == ITEM_TYPE_NORMAL) {
             holder.itemLayout().tag = items[position].city.cityName
             holder.itemLayout().setData(items[position])
+            holder.itemLayout().isSelect = selectedCitiesSet.contains(items[position].city.cityName)
             holder.itemView.setOnClickListener {
-                itemClickListener?.invoke(position, holder.itemLayout())
+                if (!isSelectMode) {
+                    itemClickListener?.invoke(position, holder.itemLayout())
+                } else {
+                    holder.itemLayout().isSelect = !holder.itemLayout().isSelect
+                    if (holder.itemLayout().isSelect) {
+                        selectedCitiesSet.add(items[position].city.cityName)
+                    } else {
+                        selectedCitiesSet.remove(items[position].city.cityName)
+                    }
+                }
             }
-            holder.itemLayout().iconDelete.setOnClickListener {
-                deleteCityClickListener?.invoke(items[position])
+            holder.itemView.setOnLongClickListener {
+                if (!isSelectMode) {
+                    itemLongClickListener?.invoke(position, holder.itemLayout())
+                    return@setOnLongClickListener true
+                } else {
+                    return@setOnLongClickListener false
+                }
             }
+            holder.itemLayout().isSelectable = isSelectMode
+//            holder.itemLayout().iconDelete.setOnClickListener {
+//                deleteCityClickListener?.invoke(items[position])
+//            }
         } else if (holder.itemViewType == ITEM_TYPE_ADD) {
             holder.itemView.setOnClickListener {
                 addCityClickListener?.invoke()

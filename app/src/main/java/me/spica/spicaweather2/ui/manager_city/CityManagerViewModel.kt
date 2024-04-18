@@ -4,6 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.persistence.repository.CityRepository
@@ -17,10 +22,28 @@ class CityManagerViewModel @Inject constructor(
     // 通过Flow获取所有的城市
     val allCityWithWeather = cityRepository.allCitiesWithWeatherFlow()
 
+    // 是否是选择模式
+    private val _isSelectMode = MutableSharedFlow<Boolean>(1)
+
+    val isSelectable: Flow<Boolean>
+        get() = _isSelectMode
+
+    val topTitle = _isSelectMode.map {
+        return@map if (it) {
+            "请选择城市"
+        } else {
+            "管理城市"
+        }
+    }.distinctUntilChanged()
+
+    fun setSelectable(isSelectable: Boolean) {
+        _isSelectMode.tryEmit(isSelectable)
+    }
+
     // 删除选择的城市
-    fun deleteCity(cityBean: CityBean) {
+    fun deleteCities(citiesNames: List<String>) {
         viewModelScope.launch(Dispatchers.IO) {
-            cityRepository.deleteCity(cityBean)
+            cityRepository.deleteCitiesWithNames(citiesNames)
         }
     }
 }

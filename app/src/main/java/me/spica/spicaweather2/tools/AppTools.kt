@@ -200,11 +200,8 @@ val Int.dp: Float
         Resources.getSystem().displayMetrics
     )
 
-fun View.show(anim: Boolean = true) {
+fun View.show() {
     this.visibility = View.VISIBLE
-    if (anim) {
-        startAnimation(AnimationUtils.loadAnimation(context, R.anim.in_bottom))
-    }
 }
 
 fun View.hide() {
