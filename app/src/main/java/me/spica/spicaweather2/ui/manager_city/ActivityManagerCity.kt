@@ -1,5 +1,6 @@
 package me.spica.spicaweather2.ui.manager_city
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -111,10 +112,7 @@ class ActivityManagerCity : MaterialActivity() {
         }
 
         adapter.addCityClickListener = {
-            startActivityWithAnimation<ActivityAddCity>(
-                enterResId = android.R.anim.fade_in,
-                exitResId = android.R.anim.fade_out
-            ) { }
+           startActivity(Intent(this@ActivityManagerCity,ActivityAddCity::class.java))
         }
 
         if (ActivityMain.screenBitmap != null) {
@@ -228,10 +226,7 @@ class ActivityManagerCity : MaterialActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.add_city) {
-            startActivityWithAnimation<ActivityAddCity>(
-                enterResId = android.R.anim.fade_in,
-                exitResId = android.R.anim.fade_out
-            ) { }
+            startActivity(Intent(this@ActivityManagerCity,ActivityAddCity::class.java))
         }
         return super.onOptionsItemSelected(item)
     }

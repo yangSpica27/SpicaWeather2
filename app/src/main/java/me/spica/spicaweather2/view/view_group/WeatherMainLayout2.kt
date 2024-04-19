@@ -22,6 +22,7 @@ import me.spica.spicaweather2.view.NowWeatherInfoCard
 import me.spica.spicaweather2.view.scroller_view.ScrollViewAtViewPager
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
+import timber.log.Timber
 
 class WeatherMainLayout2 : ScrollViewAtViewPager {
 
@@ -35,8 +36,7 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
         layoutParams = MarginLayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
-        ).apply {
-        }
+        )
         updatePadding(bottom = 40.dp.toInt())
         orientation = LinearLayout.VERTICAL
     }
@@ -113,11 +113,14 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
     }
 
     // 检查是否进入屏幕进行动画
+    @Synchronized
     fun checkItemInScreen() {
+        Timber.tag("检查是否进入屏幕").e("检查是否进入屏幕")
         contentView.children.forEach { itemView ->
             if (itemView is SpicaWeatherCard) {
                 if (!itemView.hasInScreen.get()) {
                     val isVisible = itemView.getGlobalVisibleRect(itemVisibleRect)
+                    Timber.tag(itemView.javaClass.name).e("是否可见:$isVisible")
                     itemView.checkEnterScreen(isVisible && itemVisibleRect.bottom - itemVisibleRect.top >= itemView.height / 10f)
                 }
             }

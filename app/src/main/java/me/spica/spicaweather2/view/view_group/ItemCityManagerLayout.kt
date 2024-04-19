@@ -35,7 +35,7 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
         layoutParams = LayoutParams(
             26.dp, 26.dp
         ).apply {
-            updateMargins(left = 14.dp, right = 20.dp)
+            updateMargins(right = 20.dp)
         }
         alpha = 0f
     }
@@ -75,7 +75,7 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
     init {
         isClickable = true
         setPadding(
-            0, 20.dp, 14.dp, 20.dp
+            20.dp, 20.dp, 14.dp, 20.dp
         )
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -99,19 +99,18 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
                 if (value) {
                     iconSort.animate().alpha(1f).start()
                     iconSelect.animate().alpha(1f).start()
-                    weatherName.animate().translationX(0f).start()
-                    cityName.animate().translationX(0f).start()
+                    weatherName.animate()
+                        .translationX((iconSort.marginRight + iconSort.width).toFloat()).start()
+                    cityName.animate()
+                        .translationX((iconSort.marginRight + iconSort.width).toFloat()).start()
                 } else {
-                    iconSort.animate().alpha(0f)
-                        .setDuration(255)
-                        .withEndAction {
-                            weatherName.animate()
-                                .translationX(-iconSort.measuredWidthWithMargins.toFloat() + 14.dp)
-                                .start()
-                            cityName.animate()
-                                .translationX(-iconSort.measuredWidthWithMargins.toFloat() + 14.dp)
-                                .start()
-                        }.start()
+                    iconSort.animate().alpha(0f).start()
+                    weatherName.animate()
+                        .translationX(0f)
+                        .start()
+                    cityName.animate()
+                        .translationX(0f)
+                        .start()
                     iconSelect.animate().alpha(0f).start()
                 }
             }
@@ -172,11 +171,11 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
             paddingLeft + iconSort.marginLeft, iconSort.toVerticalCenter(this)
         )
         cityName.layout(
-            iconSort.right + cityName.marginLeft + iconSort.marginRight,
+            cityName.marginLeft + paddingLeft,
             paddingTop + cityName.marginTop
         )
         weatherName.layout(
-            iconSort.right + cityName.marginLeft + iconSort.marginRight,
+            cityName.marginLeft + paddingLeft,
             cityName.bottom + weatherName.marginTop
         )
         iconSelect.layout(

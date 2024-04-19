@@ -67,8 +67,6 @@ class SearchBarLayout(context: Context) : AViewGroup(context) {
         editText.setHint("请输入您所在的城市名称")
 
 
-
-
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

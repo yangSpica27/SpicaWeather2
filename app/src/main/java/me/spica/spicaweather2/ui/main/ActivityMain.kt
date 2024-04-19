@@ -6,20 +6,18 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.children
+import androidx.core.view.doOnDetach
 import androidx.core.view.drawToBitmap
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.spica.spicaweather2.common.WeatherCodeUtils
 import me.spica.spicaweather2.common.WeatherType
 import me.spica.spicaweather2.common.getBackgroundBitmap
-import me.spica.spicaweather2.common.getDrawable
 import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.common.getWeatherAnimType
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
@@ -27,7 +25,6 @@ import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.tools.MessageEvent
 import me.spica.spicaweather2.tools.MessageType
 import me.spica.spicaweather2.tools.doOnMainThreadIdle
-import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.tools.startActivityWithAnimation
 import me.spica.spicaweather2.ui.manager_city.ActivityManagerCity
 import me.spica.spicaweather2.view.Manager2HomeView
@@ -102,6 +99,10 @@ class ActivityMain : MaterialActivity() {
         if (manager2HomeView.isAttached) {
             doOnMainThreadIdle({
                 manager2HomeView.startAnim()
+                manager2HomeView.doOnDetach {
+                    layout.mainTitleLayout.dotIndicator.refreshDots()
+                    updateOtherPageScroller()
+                }
             })
         }
     }
@@ -165,6 +166,8 @@ class ActivityMain : MaterialActivity() {
             ) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
                 // 同步当前页面的滚动
+                Timber.tag("滚动")
+                    .e("position:$position positionOffset:$positionOffset positionOffsetPixels:$positionOffsetPixels")
                 updateOtherPageScroller()
             }
         })
@@ -216,23 +219,19 @@ class ActivityMain : MaterialActivity() {
 
     // 更新标题
     private fun updateTitleBarUI(scrollY: Int) {
-//        val ty = if (scrollY < 80.dp) {
-//            0f
-//        } else {
-//            -(scrollY - 80.dp)
-//        }
         layout.mainTitleLayout.translationY = -scrollY * 1f
         layout.weatherBackgroundSurfaceView.setMScrollY(scrollY)
     }
 
     // 更新其他页面的滚动
     private fun updateOtherPageScroller() {
-        (layout.viewPager2.children.first() as RecyclerView).children.forEach {
-            if (it is WeatherMainLayout2) {
-                it.scrollTo(0, listScrollerY)
+        (layout.viewPager2.children.first() as RecyclerView).children.forEachIndexed { index, view ->
+            Timber.tag("滚动").e("index:$index")
+            if (view is WeatherMainLayout2) {
+                view.scrollTo(0, listScrollerY)
                 lifecycleScope.launch(Dispatchers.Default) {
-                    it.checkItemInScreen()
-                    it.updateBackgroundY()
+                    view.updateBackgroundY()
+                    view.checkItemInScreen()
                 }
             }
         }

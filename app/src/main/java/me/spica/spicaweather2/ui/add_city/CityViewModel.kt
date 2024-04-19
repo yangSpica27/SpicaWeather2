@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -20,18 +21,20 @@ class CityViewModel @Inject constructor(
 
     private val allCity = arrayListOf<CityBean>()
 
-    private val citySearchKeyword = MutableStateFlow("")
+    private val citySearchKeyword = MutableSharedFlow<String>()
 
     val searchFlow = citySearchKeyword.map { keyword ->
         if (keyword.isEmpty()) return@map allCity
         return@map allCity.filter { it.cityName.contains(keyword) || it.sortName.contains(keyword) }
-    }.flowOn(Dispatchers.IO)
+    }
+        .flowOn(Dispatchers.IO)
+
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             allCity.addAll(CityBean.getAllCities(App.instance))
+            citySearchKeyword.emit("")
         }
-
     }
 
     fun updateSearchKeyword(keyword: String) {
