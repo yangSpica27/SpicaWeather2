@@ -24,17 +24,13 @@ interface CityDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCities(cityBean: List<CityBean>)
 
-    @Query("SELECT * FROM t_city WHERE isSelected =:isSelect LIMIT 0,1")
-    fun getSelectCity(isSelect: Boolean = true): Flow<CityBean?>
 
-    @Query("SELECT * FROM t_city ORDER BY isSelected DESC , cityName DESC")
+    @Query("SELECT * FROM t_city ORDER BY sort ASC , cityName DESC")
     fun getCities(): Flow<List<CityBean>>
 
     @Query("SELECT * FROM t_city ORDER  by cityName")
     fun getAllList(): List<CityBean>
 
-    @Query("SELECT * FROM t_city WHERE isSelected == 1 LIMIT 1")
-    fun getSelectedCity(): CityBean?
 
     @Transaction
     @Query("SELECT * FROM t_city")
@@ -53,6 +49,6 @@ interface CityDao {
     fun deleteCity(cityBean: CityBean)
 
     @Query("DELETE FROM t_city WHERE cityName IN (:names)")
-    fun deleteCitiesWithNames(names:List<String>)
+    fun deleteCitiesWithNames(names: List<String>)
 
 }

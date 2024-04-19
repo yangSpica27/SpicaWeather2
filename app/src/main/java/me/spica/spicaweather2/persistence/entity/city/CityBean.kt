@@ -24,11 +24,8 @@ data class CityBean(
     var sortName: String, // 拼音
     var lon: String, // 经度
     var lat: String, // 纬度
-    var isSelected: Boolean = false,
+    var sort: Int = 0
 ) : Parcelable {
-
-
-
 
 
     @Ignore
@@ -68,7 +65,7 @@ data class CityBean(
                     CityBean(
                         cityName = it.name,
                         sortName = PinyinHelper.convertToPinyinString
-                        (it.name, "", PinyinFormat.WITHOUT_TONE),
+                            (it.name, "", PinyinFormat.WITHOUT_TONE),
                         lon = it.log,
                         lat = it.lat
                     )
@@ -83,7 +80,7 @@ data class CityBean(
                         CityBean(
                             cityName = city.name,
                             sortName = PinyinHelper.convertToPinyinString
-                            (city.name, "", PinyinFormat.WITHOUT_TONE),
+                                (city.name, "", PinyinFormat.WITHOUT_TONE),
                             lon = city.log,
                             lat = city.lat
                         )

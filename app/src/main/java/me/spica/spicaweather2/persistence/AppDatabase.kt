@@ -13,7 +13,7 @@ import me.spica.spicaweather2.persistence.entity.weather.Weather
     [CityBean::class,
         Weather::class,
         CityWeatherRelation::class],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

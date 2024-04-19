@@ -245,7 +245,9 @@ class ActivityMain : MaterialActivity() {
             val currentCity = data[position].city
             layout.mainTitleLayout.titleTextView.text = currentCity.cityName
             currentCurrentCity = currentCity
-            WeatherCodeUtils.getWeatherCode(currentWeather?.todayWeather?.iconId ?: 100).let {
+            currentWeather?.getWeatherType()?.let {
+                Timber.tag("iconId").e(currentWeather.todayWeather.iconId.toString())
+                Timber.tag("天气").e(it.toString())
                 with(layout.weatherBackgroundSurfaceView) {
                     bgColor = it.getThemeColor()
                     currentWeatherAnimType = it.getWeatherAnimType()

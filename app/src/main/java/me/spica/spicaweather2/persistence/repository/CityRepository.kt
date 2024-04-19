@@ -28,22 +28,9 @@ class CityRepository @Inject constructor(
     fun allCitiesWithWeatherFlow() =
         cityDao.getCitiesWithWeatherDistinctUntilChanged().flowOn(Dispatchers.IO)
 
-    /**
-     * 选择城市
-     */
-    @WorkerThread
-    suspend fun selected(cityBean: CityBean) = withContext(Dispatchers.IO) {
-        cityDao.getSelectedCity()?.let {
-            it.isSelected = false
-            cityDao.update(it)
-        }
-        cityBean.isSelected = true
-        cityDao.insertCities(cityBean)
-    }
 
     @WorkerThread
     suspend fun add(cityBean: CityBean) = withContext(Dispatchers.IO) {
-        cityBean.isSelected = false
         cityDao.insertCities(cityBean)
     }
 
@@ -60,6 +47,4 @@ class CityRepository @Inject constructor(
         cityDao.deleteCitiesWithNames(citiesNames)
     }
 
-    // 选择的城市
-    fun selectedCityFlow() = cityDao.getSelectCity()
 }

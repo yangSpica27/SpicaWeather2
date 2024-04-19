@@ -5,7 +5,6 @@ object WeatherCodeUtils {
     // https://dev.qweather.com/docs/start/icons/
     fun getWeatherCode(iconId: Int): WeatherType {
         when (iconId.toString()) {
-
             "100" -> {
                 return WeatherType.WEATHER_SUNNY
             }
@@ -37,17 +36,17 @@ object WeatherCodeUtils {
             "503", "504", "505", "506", "507", "508", "509", "510",
 
             "511", "512", "513", "514", "515" -> {
-                WeatherType.WEATHER_HAZE
+               return WeatherType.WEATHER_HAZE
             }
             "313" -> {
-                WeatherType.WEATHER_HAIL
+                return WeatherType.WEATHER_HAIL
             }
             "" -> {
-                WeatherType.WEATHER_THUNDER
+                return  WeatherType.WEATHER_THUNDER
             }
 
             "302", "304" -> {
-                WeatherType.WEATHER_THUNDERSTORM
+                return  WeatherType.WEATHER_THUNDERSTORM
             }
         }
 

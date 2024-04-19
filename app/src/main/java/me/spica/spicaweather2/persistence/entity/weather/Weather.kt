@@ -9,6 +9,7 @@ import com.squareup.moshi.JsonClass
 import com.squareup.moshi.JsonQualifier
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.WeatherType
+import timber.log.Timber
 
 @Entity
 @TypeConverters(WeatherBeanConverter::class)
@@ -31,58 +32,58 @@ data class Weather(
 ) {
 
     fun getWeatherType(): WeatherType {
-        when (todayWeather.iconId.toString()) {
-            "100" -> {
+        when (todayWeather.iconId) {
+            302, 304 -> {
+                return WeatherType.WEATHER_THUNDERSTORM
+            }
+
+            100 -> {
                 return WeatherType.WEATHER_SUNNY
             }
 
-            "101", "151", "153", "103" -> {
+            101, 151, 153, 103 -> {
                 return WeatherType.WEATHER_CLOUDY
             }
 
-            "102", "104", "152", "154" -> {
+            102, 104, 152, 154 -> {
                 return WeatherType.WEATHER_CLOUD
             }
 
-            "300", "301", "303", "305", "306",
-            "307", "308", "309", "310", "311", "312",
-            "314", "315", "316", "317", "318", "350", "351",
-            "399"
+            300, 301, 303, 305, 306,
+            307, 308, 309, 310, 311, 312,
+            314, 315, 316, 317, 318, 350, 351,
+            399
             -> {
                 return WeatherType.WEATHER_RAINY
             }
 
-            "400", "401", "402", "403", "408", "409", "410",
+            400, 401, 402, 403, 408, 409, 410,
             -> {
                 return WeatherType.WEATHER_SNOW
             }
 
-            "404", "405", "406", "456", "457", "499" -> {
+            404, 405, 406, 456, 457, 499 -> {
                 return WeatherType.WEATHER_SLEET
             }
 
-            "500", "501", "502" -> {
+            500, 501, 502 -> {
                 return WeatherType.WEATHER_FOG
             }
 
-            "503", "504", "505", "506", "507", "508", "509", "510",
-
-            "511", "512", "513", "514", "515" -> {
-                WeatherType.WEATHER_HAZE
+            503, 504, 505, 506, 507, 508, 509, 510,
+            511, 512, 513, 514, 515 -> {
+                return WeatherType.WEATHER_HAZE
             }
 
-            "313" -> {
-                WeatherType.WEATHER_HAIL
+            313 -> {
+                return WeatherType.WEATHER_HAIL
             }
 
-            "" -> {
-                WeatherType.WEATHER_THUNDER
-            }
-
-            "302", "304" -> {
-                WeatherType.WEATHER_THUNDERSTORM
+            0 -> {
+                return WeatherType.WEATHER_THUNDER
             }
         }
+        Timber.tag("Weather").e("未知天气类型${todayWeather.iconId}")
         return WeatherType.WEATHER_SUNNY
     }
 

@@ -82,7 +82,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
             doOnDraw()
             if (!Thread.interrupted()) {
                 drawHandler.postDelayed(
-                    this, (20- (System.currentTimeMillis() - lastDrawTime)).coerceAtLeast(0)
+                    this, (16 - (System.currentTimeMillis() - lastDrawTime)).coerceAtLeast(0)
                 )
             }
             lastDrawTime = System.currentTimeMillis()
