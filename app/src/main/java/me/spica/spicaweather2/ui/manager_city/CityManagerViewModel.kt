@@ -40,6 +40,13 @@ class CityManagerViewModel @Inject constructor(
         _isSelectMode.tryEmit(isSelectable)
     }
 
+
+    fun moveCity(from: CityBean, to: CityBean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            cityRepository.exchangeSort(from, to)
+        }
+    }
+
     // 删除选择的城市
     fun deleteCities(citiesNames: List<String>) {
         viewModelScope.launch(Dispatchers.IO) {

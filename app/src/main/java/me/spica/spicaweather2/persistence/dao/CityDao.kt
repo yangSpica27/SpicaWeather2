@@ -25,15 +25,15 @@ interface CityDao {
     suspend fun insertCities(cityBean: List<CityBean>)
 
 
-    @Query("SELECT * FROM t_city ORDER BY sort ASC , cityName DESC")
+    @Query("SELECT * FROM t_city ORDER BY sort ASC")
     fun getCities(): Flow<List<CityBean>>
 
-    @Query("SELECT * FROM t_city ORDER  by cityName")
+    @Query("SELECT * FROM t_city ORDER  by sort ASC")
     fun getAllList(): List<CityBean>
 
 
     @Transaction
-    @Query("SELECT * FROM t_city")
+    @Query("SELECT * FROM t_city ORDER BY sort ASC")
     fun getCitiesWithWeather(): Flow<List<CityWithWeather>>
 
     @ExperimentalCoroutinesApi
@@ -41,6 +41,17 @@ interface CityDao {
 
     @ExperimentalCoroutinesApi
     fun getCitiesWithWeatherDistinctUntilChanged() = getCitiesWithWeather().distinctUntilChanged()
+
+    // 交换顺序
+    @Transaction
+    fun exchangeSort(cityBean: CityBean, cityBean1: CityBean) {
+        val temp = cityBean.sort
+        cityBean.sort = cityBean1.sort
+        cityBean1.sort = temp
+        update(cityBean)
+        update(cityBean1)
+    }
+
 
     @Update
     fun update(cityBean: CityBean)

@@ -66,7 +66,7 @@ class MinuteWeatherCard(
         return nowCardXY[1] + if (visibility == View.VISIBLE) {
             0
         } else {
-            height+8.dp
+            height + 8.dp
         }
     }
 
@@ -81,8 +81,11 @@ class MinuteWeatherCard(
         rainView.autoMeasure()
         titleText.autoMeasure()
         setMeasuredDimension(
-           resolveSize( measuredWidth, widthMeasureSpec),
-            resolveSize(paddingTop + paddingBottom + rainView.measuredHeightWithMargins + titleText.measuredHeightWithMargins, heightMeasureSpec)
+            resolveSize(measuredWidth, widthMeasureSpec),
+            resolveSize(
+                paddingTop + paddingBottom + rainView.measuredHeightWithMargins + titleText.measuredHeightWithMargins,
+                heightMeasureSpec
+            )
         )
     }
 
@@ -97,7 +100,7 @@ class MinuteWeatherCard(
         rainView.setData(weather.minutelies.map { (it.precip.toFloatOrNull() ?: 0f) })
         rainView.startAnim(600)
         visibility =
-            if (WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId) == WeatherType.WEATHER_RAINY) {
+            if (weather.getWeatherType() == WeatherType.WEATHER_RAINY || weather.getWeatherType() == WeatherType.WEATHER_THUNDERSTORM) {
                 View.VISIBLE
             } else {
                 View.INVISIBLE

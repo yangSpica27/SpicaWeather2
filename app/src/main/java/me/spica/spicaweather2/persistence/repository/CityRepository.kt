@@ -43,6 +43,11 @@ class CityRepository @Inject constructor(
     }
 
     @WorkerThread
+    fun exchangeSort(cityBean: CityBean, cityBean1: CityBean) {
+        cityDao.exchangeSort(cityBean, cityBean1)
+    }
+
+    @WorkerThread
     fun deleteCitiesWithNames(citiesNames: List<String>) {
         cityDao.deleteCitiesWithNames(citiesNames)
     }

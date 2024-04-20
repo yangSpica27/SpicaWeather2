@@ -16,6 +16,7 @@ import androidx.core.transition.doOnEnd
 import androidx.core.transition.doOnStart
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fondesa.recyclerviewdivider.dividerBuilder
@@ -42,6 +43,7 @@ import me.spica.spicaweather2.view.view_group.ActivityManagerCityLayout
 import org.greenrobot.eventbus.EventBus
 import rikka.material.app.MaterialActivity
 import timber.log.Timber
+import java.util.Collections
 
 /**
  * 城市管理页面
@@ -60,6 +62,25 @@ class ActivityManagerCity : MaterialActivity() {
     private val adapter = ManagerCityAdapter()
 
     private val viewModel by viewModels<CityManagerViewModel>()
+
+    private val itemTouchHelper = CityItemTouchHelper(
+        isDrag = false,
+        onMove = { viewHolder, target ->
+            viewModel.moveCity(
+                adapter.items[viewHolder.absoluteAdapterPosition].city,
+                adapter.items[target.absoluteAdapterPosition].city
+            )
+            Collections.swap(
+                adapter.items,
+                viewHolder.absoluteAdapterPosition,
+                target.absoluteAdapterPosition
+            )
+            adapter.notifyItemMoved(
+                viewHolder.absoluteAdapterPosition,
+                target.absoluteAdapterPosition
+            )
+        },
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
@@ -89,7 +110,9 @@ class ActivityManagerCity : MaterialActivity() {
             .build()
             .addTo(layout.recyclerView)
 
+
         layout.recyclerView.adapter = adapter
+        itemTouchHelper.attachToRecyclerView(layout.recyclerView)
 
         adapter.itemClickListener = { position, view ->
             lifecycleScope.launch(Dispatchers.Default) {
@@ -112,7 +135,7 @@ class ActivityManagerCity : MaterialActivity() {
         }
 
         adapter.addCityClickListener = {
-           startActivity(Intent(this@ActivityManagerCity,ActivityAddCity::class.java))
+            startActivity(Intent(this@ActivityManagerCity, ActivityAddCity::class.java))
         }
 
         if (ActivityMain.screenBitmap != null) {
@@ -154,6 +177,7 @@ class ActivityManagerCity : MaterialActivity() {
         lifecycleScope.launch {
             viewModel.isSelectable.collectLatest {
                 adapter.isSelectMode = it
+                itemTouchHelper.isDrag = it
                 if (it) {
                     Timber.tag("ManagerCity").d("show delete button")
                     layout.deleteBtn.show()
@@ -226,7 +250,7 @@ class ActivityManagerCity : MaterialActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.add_city) {
-            startActivity(Intent(this@ActivityManagerCity,ActivityAddCity::class.java))
+            startActivity(Intent(this@ActivityManagerCity, ActivityAddCity::class.java))
         }
         return super.onOptionsItemSelected(item)
     }

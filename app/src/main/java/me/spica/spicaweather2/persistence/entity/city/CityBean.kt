@@ -15,6 +15,7 @@ import kotlinx.parcelize.Parcelize
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.util.Calendar
 
 @Parcelize
 @Entity(tableName = "t_city")
@@ -24,7 +25,7 @@ data class CityBean(
     var sortName: String, // 拼音
     var lon: String, // 经度
     var lat: String, // 纬度
-    var sort: Int = 0
+    var sort: Long = Calendar.getInstance().timeInMillis
 ) : Parcelable {
 
 

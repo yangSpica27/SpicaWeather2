@@ -127,9 +127,7 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
                 }
             }
             holder.itemLayout().isSelectable = isSelectMode
-//            holder.itemLayout().iconDelete.setOnClickListener {
-//                deleteCityClickListener?.invoke(items[position])
-//            }
+
         } else if (holder.itemViewType == ITEM_TYPE_ADD) {
             holder.itemView.setOnClickListener {
                 addCityClickListener?.invoke()
