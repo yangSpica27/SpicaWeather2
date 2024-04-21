@@ -131,8 +131,8 @@ dependencies {
     api 'com.drakeet.multitype:multitype:4.3.0'
 
     //Json解析
-    implementation 'com.squareup.moshi:moshi-kotlin:1.15.0'
-    ksp 'com.squareup.moshi:moshi-kotlin-codegen:1.15.0'
+    implementation 'com.squareup.moshi:moshi-kotlin:1.15.1'
+    ksp 'com.squareup.moshi:moshi-kotlin-codegen:1.15.1'
 
     //network 网络请求相关
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
@@ -155,7 +155,7 @@ dependencies {
     ksp 'com.google.dagger:hilt-compiler:2.48'
 
     implementation 'no.danielzeller.blurbehindlib:blurbehindlib:1.0.0'
-    implementation 'com.airbnb.android:lottie:5.2.0'
+    implementation 'com.airbnb.android:lottie:6.0.0'
     implementation("io.coil-kt:coil:2.5.0")
     implementation 'com.tbuonomo:dotsindicator:5.0'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
