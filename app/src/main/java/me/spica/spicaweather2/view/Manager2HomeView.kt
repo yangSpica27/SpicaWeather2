@@ -19,7 +19,9 @@ import android.view.Window
 import android.view.animation.DecelerateInterpolator
 import androidx.core.animation.doOnEnd
 import androidx.core.view.drawToBitmap
+import me.spica.spicaweather2.tools.BitmapUtils
 import me.spica.spicaweather2.tools.dp
+import timber.log.Timber
 
 class Manager2HomeView : View {
 
@@ -40,6 +42,10 @@ class Manager2HomeView : View {
                 intArray[1] + from.height * 1f,
             )
             try {
+//                mBackground = BitmapUtils.blur(
+//                    context = from.context,
+//                    image = window.decorView.drawToBitmap()
+//                )
                 mBackground = window.decorView.drawToBitmap()
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -64,6 +70,8 @@ class Manager2HomeView : View {
         defStyleAttr
     )
 
+    var endAction: (() -> Unit)? = null
+
     private val progressAnimation =
         ValueAnimator.ofFloat(0f, 1f).setDuration(550).apply {
             interpolator = DecelerateInterpolator(1.2f)
@@ -86,6 +94,9 @@ class Manager2HomeView : View {
                 detachFromRootView()
                 // 重置
                 clearRect.set(0f, 0f, 0f, 0f)
+                endAction?.invoke()
+                endAction = null
+                Timber.tag("回复动画").e("END")
             }
         }
 

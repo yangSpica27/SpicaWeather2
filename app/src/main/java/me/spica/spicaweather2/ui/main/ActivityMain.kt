@@ -82,6 +82,8 @@ class ActivityMain : MaterialActivity() {
         Manager2HomeView(this)
     }
 
+
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: MessageEvent) {
         when (event.tag) {
@@ -98,11 +100,11 @@ class ActivityMain : MaterialActivity() {
         // 从管理城市页面返回进行动画
         if (manager2HomeView.isAttached) {
             doOnMainThreadIdle({
-                manager2HomeView.startAnim()
-                manager2HomeView.doOnDetach {
+                manager2HomeView.endAction = {
                     layout.mainTitleLayout.dotIndicator.refreshDots()
                     updateOtherPageScroller()
                 }
+                manager2HomeView.startAnim()
             })
         }
     }
@@ -166,8 +168,6 @@ class ActivityMain : MaterialActivity() {
             ) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels)
                 // 同步当前页面的滚动
-                Timber.tag("滚动")
-                    .e("position:$position positionOffset:$positionOffset positionOffsetPixels:$positionOffsetPixels")
                 updateOtherPageScroller()
             }
         })
@@ -229,10 +229,8 @@ class ActivityMain : MaterialActivity() {
             Timber.tag("滚动").e("index:$index")
             if (view is WeatherMainLayout2) {
                 view.scrollTo(0, listScrollerY)
-                lifecycleScope.launch(Dispatchers.Default) {
-                    view.updateBackgroundY()
-                    view.checkItemInScreen()
-                }
+                view.updateBackgroundY()
+                view.checkItemInScreen()
             }
         }
     }

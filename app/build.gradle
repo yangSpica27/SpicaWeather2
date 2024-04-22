@@ -17,8 +17,8 @@ android {
         applicationId "me.spica.weather2"
         minSdk 26
         targetSdk 33
-        versionCode 5
-        versionName "1.0"
+        versionCode 6
+        versionName "1.01"
 
         renderscriptTargetApi 24
         renderscriptSupportModeEnabled true
@@ -154,7 +154,7 @@ dependencies {
     implementation 'com.google.dagger:hilt-android:2.48'
     ksp 'com.google.dagger:hilt-compiler:2.48'
 
-    implementation 'no.danielzeller.blurbehindlib:blurbehindlib:1.0.0'
+
     implementation 'com.airbnb.android:lottie:6.0.0'
     implementation("io.coil-kt:coil:2.5.0")
     implementation 'com.tbuonomo:dotsindicator:5.0'

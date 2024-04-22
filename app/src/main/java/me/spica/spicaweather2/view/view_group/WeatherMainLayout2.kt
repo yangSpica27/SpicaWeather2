@@ -115,13 +115,12 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
     // 检查是否进入屏幕进行动画
     @Synchronized
     fun checkItemInScreen() {
-        Timber.tag("检查是否进入屏幕").e("检查是否进入屏幕")
         contentView.children.forEach { itemView ->
             if (itemView is SpicaWeatherCard) {
                 if (!itemView.hasInScreen.get()) {
-                    val isVisible = itemView.getGlobalVisibleRect(itemVisibleRect)
-                    Timber.tag(itemView.javaClass.name).e("是否可见:$isVisible")
-                    itemView.checkEnterScreen(isVisible && itemVisibleRect.bottom - itemVisibleRect.top >= itemView.height / 10f)
+                        val isVisible = itemView.getGlobalVisibleRect(itemVisibleRect)
+                        Timber.tag(tag = tag?.toString()?:"未知").e("是否可见:$isVisible")
+                        itemView.checkEnterScreen(isVisible && itemVisibleRect.bottom - itemVisibleRect.top >= itemView.height / 10f)
                 }
             }
         }
