@@ -1,7 +1,7 @@
 
 # SpicaWeatherⅡ
 
-## 查看[基于XML布局开发的旧版本](https://github.com/yangSpica27/SpicaWeather) 
+## 查看[上个UI版本](https://github.com/yangSpica27/SpicaWeather) 
 
 ## Screenshots
 <p align="center">
