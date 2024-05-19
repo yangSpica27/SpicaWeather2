@@ -31,6 +31,7 @@ import me.spica.spicaweather2.view.Manager2HomeView
 import me.spica.spicaweather2.view.view_group.ActivityMainLayout
 import me.spica.spicaweather2.view.view_group.WeatherMainLayout2
 import me.spica.spicaweather2.work.DataSyncWorker
+import okhttp3.internal.connection.ConnectInterceptor
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode

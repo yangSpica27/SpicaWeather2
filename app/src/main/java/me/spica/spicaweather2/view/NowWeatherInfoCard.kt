@@ -129,7 +129,7 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
 
 
     init {
-        setPadding(14.dp, 14.dp, 14.dp, 20.dp)
+        setPadding(15.dp, 15.dp, 15.dp, 20.dp)
         addView(windSpeedText)
         addView(waterText)
         addView(pressureText)

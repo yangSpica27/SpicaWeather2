@@ -49,7 +49,7 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context), SpicaWe
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         ).also {
-            it.updateMargins(left = 14.dp)
+            it.updateMargins(left = 15.dp)
         }
         text = "--"
         setTextColor(Color.WHITE)

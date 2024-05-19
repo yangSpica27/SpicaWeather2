@@ -9,7 +9,6 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.OverScroller
 import androidx.core.view.children
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.updatePadding
@@ -18,7 +17,6 @@ import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.tools.getScreenHeight
 import me.spica.spicaweather2.ui.main.ActivityMain
-import me.spica.spicaweather2.view.NowWeatherInfoCard
 import me.spica.spicaweather2.view.scroller_view.ScrollViewAtViewPager
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
@@ -58,9 +56,9 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 }
             ).apply {
-                topMargin = 10.dp.toInt()
-                leftMargin = 14.dp.toInt()
-                rightMargin = 14.dp.toInt()
+                topMargin = 16.dp.toInt()
+                leftMargin = 24.dp.toInt()
+                rightMargin = 24.dp.toInt()
             }
             if (itemView is SpicaWeatherCard) {
                 itemView.resetAnim()

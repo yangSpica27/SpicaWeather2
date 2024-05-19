@@ -18,13 +18,13 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         var allHeight = 0f
-        children.forEach {
-            it.autoMeasure()
-            allHeight += 45.dp
+        children.forEach { item ->
+            measureChildren(widthMeasureSpec, heightMeasureSpec)
+            allHeight += item.measuredHeight
         }
         setMeasuredDimension(
-            resolveSize(widthMeasureSpec, widthMeasureSpec),
-            resolveSize(allHeight.toInt(), heightMeasureSpec)
+            resolveSize(measuredWidth, widthMeasureSpec),
+            resolveSize(allHeight.toInt() + paddingTop + paddingBottom, heightMeasureSpec)
         )
     }
 
@@ -35,15 +35,16 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply {
-            leftMargin = 14.dp
-            rightMargin = 14.dp
+            leftMargin = 15.dp
+            rightMargin = 15.dp
         }
+        setPadding(12.dp, 8.dp, 12.dp, 8.dp)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         var lastBottom = 0
         children.forEach {
-            it.layout(paddingLeft, paddingTop + lastBottom)
+            it.layout(paddingLeft, lastBottom + it.paddingTop)
             lastBottom += it.height
         }
     }
@@ -70,6 +71,9 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
             val dailyItemView = DailyItemView(context)
             dailyItemView.layoutParams = lp
             addView(dailyItemView)
+            if (index == 0) {
+                dailyItemView.currentTemp = weather.todayWeather.temp
+            }
             dailyItemView.setData(it, index == 0, maxMaxTemp, minMinTemp)
         }
     }
