@@ -1,7 +1,7 @@
 
 # SpicaWeatherⅡ
 
-## 基于[SPICaWeather](https://github.com/yangSpica27/SpicaWeather) 迭代
+## 查看[上个UI版本](https://github.com/yangSpica27/SpicaWeather) 
 
 ## Screenshots
 <p align="center">
