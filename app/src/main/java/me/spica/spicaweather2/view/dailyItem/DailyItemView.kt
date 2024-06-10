@@ -10,6 +10,7 @@ import android.graphics.Rect
 import android.graphics.Shader
 import android.graphics.Typeface
 import android.util.AttributeSet
+import android.util.LruCache
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -17,9 +18,9 @@ import androidx.core.graphics.drawable.toBitmap
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.WeatherCodeUtils
 import me.spica.spicaweather2.common.getIconRes
+import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.weather.DailyWeatherBean
 import me.spica.spicaweather2.tools.dp
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -114,13 +115,18 @@ class DailyItemView : View {
         super.onDraw(canvas)
         dailyWeatherBean?.let { dailyWeatherBean ->
             textPaint.setTypeface(Typeface.DEFAULT)
+            textPaint.isFakeBoldText = true
             val dateText = if (isFirst) {
                 "今天"
             } else {
                 sdfWeek.format(dailyWeatherBean.fxTime())
             }
-            textPaint.color = ContextCompat.getColor(context, R.color.textColorPrimary)
-            textPaint.textSize = 18.dp
+            textPaint.color = if (isFirst) {
+                WeatherCodeUtils.getWeatherCode(dailyWeatherBean.iconId).getThemeColor()
+            } else {
+                ContextCompat.getColor(context, R.color.textColorPrimary)
+            }
+            textPaint.textSize = 16.dp
             textPaint.getTextBounds(dateText, 0, dateText.length, textBound)
             canvas.drawText(
                 dateText, paddingStart * 1f, height / 2f + textBound.height() / 2f, textPaint
@@ -135,7 +141,7 @@ class DailyItemView : View {
             endX += 60.dp
 
             textPaint.textSize = 16.dp
-            textPaint.setTypeface(Typeface.DEFAULT_BOLD)
+            textPaint.setTypeface(Typeface.DEFAULT)
             val maxTempText = "${dailyWeatherBean.maxTemp}℃"
             textPaint.getTextBounds(maxTempText, 0, maxTempText.length, textBound)
             canvas.drawText(
@@ -182,7 +188,8 @@ class DailyItemView : View {
 
             progressPaint.shader = null
             if (currentTemp != null) {
-                val currentX = (right-left)*(currentTemp!!-minMinTemp)/(maxMaxTemp-minMinTemp)+left
+                val currentX =
+                    (right - left) * (currentTemp!! - minMinTemp) / (maxMaxTemp - minMinTemp) + left
                 progressPaint.color = Color.WHITE
                 canvas.drawCircle(currentX, height / 2f, 10.dp, progressPaint);
                 progressPaint.color = endColor
@@ -203,16 +210,29 @@ class DailyItemView : View {
             )
             startX -= 30.dp + 8.dp
 
-            val bitmap = ContextCompat.getDrawable(
-                context, WeatherCodeUtils.getWeatherCode(dailyWeatherBean.iconId).getIconRes()
-            )!!.toBitmap(
-                width = 24.dp.toInt(), height = 24.dp.toInt(), config = Bitmap.Config.ARGB_8888
-            )
+            val bitmap = getOrCreateBitmap(WeatherCodeUtils.getWeatherCode(dailyWeatherBean.iconId).getIconRes())
 
             canvas.drawBitmap(
-                bitmap, startX / 2f + endX / 2f - 16.dp, height / 2f - 8.dp, iconPaint
+                bitmap, startX / 2f + endX / 2f - 16.dp, height / 2f - bitmap.height / 2, iconPaint
             )
         }
+    }
+
+    companion object {
+        private val bitmapPool = LruCache<Int, Bitmap>(4 * 1024 * 1024)
+    }
+
+    private fun getOrCreateBitmap(iconRes: Int): Bitmap {
+        if (bitmapPool[iconRes] != null) {
+            return bitmapPool[iconRes]
+        }
+        val bitmap = ContextCompat.getDrawable(
+            context, iconRes
+        )!!.toBitmap(
+            width = 28.dp.toInt(), height = 28.dp.toInt(), config = Bitmap.Config.ARGB_8888
+        )
+        bitmapPool.put(iconRes, bitmap)
+        return bitmap
     }
 
 

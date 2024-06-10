@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.os.Build.VERSION_CODES.P
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.AttributeSet
@@ -116,7 +117,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     private var mholder: SurfaceHolder? = null
 
     private fun doOnDraw() {
-        mCanvas = mholder?.lockCanvas()
+        mCanvas = mholder?.lockHardwareCanvas() ?: mholder?.lockCanvas()
 
         // ================进行绘制==============
         mCanvas?.let { canvas ->

@@ -17,6 +17,7 @@ import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
+import java.util.Collections
 
 // 空气质量指数view
 private val VIEW_MARGIN = 14.dp
