@@ -55,6 +55,7 @@ class AirCircleProgressView : View {
         strokeWidth = 12.dp
         style = Paint.Style.STROKE
         color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
+        strokeCap = Paint.Cap.ROUND
     }
 
 
@@ -216,7 +217,7 @@ class AirCircleProgressView : View {
             false,
             linePaint
         )
-        linePaint.strokeWidth = 15.dp
+        linePaint.strokeWidth = 12.dp
         linePaint.color = Color.WHITE
         linePaint.shader = progressShader
         canvas.drawArc(

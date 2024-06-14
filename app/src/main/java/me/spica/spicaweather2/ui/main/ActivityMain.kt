@@ -3,10 +3,10 @@ package me.spica.spicaweather2.ui.main
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.children
-import androidx.core.view.doOnDetach
 import androidx.core.view.drawToBitmap
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import me.spica.spicaweather2.common.WeatherCodeUtils
 import me.spica.spicaweather2.common.WeatherType
 import me.spica.spicaweather2.common.getBackgroundBitmap
 import me.spica.spicaweather2.common.getThemeColor
@@ -31,7 +30,6 @@ import me.spica.spicaweather2.view.Manager2HomeView
 import me.spica.spicaweather2.view.view_group.ActivityMainLayout
 import me.spica.spicaweather2.view.view_group.WeatherMainLayout2
 import me.spica.spicaweather2.work.DataSyncWorker
-import okhttp3.internal.connection.ConnectInterceptor
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -84,7 +82,6 @@ class ActivityMain : MaterialActivity() {
     }
 
 
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: MessageEvent) {
         when (event.tag) {
@@ -111,7 +108,7 @@ class ActivityMain : MaterialActivity() {
     }
 
     private fun initializer() {
-//        handleBack()
+        handleBack()
         layout.mainTitleLayout.plusBtn.setOnClickListener {
             enterManagerCity()
         }
@@ -179,6 +176,22 @@ class ActivityMain : MaterialActivity() {
             }
         }
 
+    }
+
+    // 返回拦截
+    private fun handleBack() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                AlertDialog.Builder(this@ActivityMain)
+                    .setTitle("退出应用")
+                    .setMessage("是否退出应用")
+                    .setPositiveButton("退出") { _, _ ->
+                        finish()
+                    }
+                    .setNegativeButton("取消") { _, _ -> }
+                    .show()
+            }
+        })
     }
 
     // 进入城市管理页面

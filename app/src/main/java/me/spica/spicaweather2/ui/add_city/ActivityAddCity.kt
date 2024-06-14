@@ -1,12 +1,8 @@
 package me.spica.spicaweather2.ui.add_city
 
 import android.content.Intent
-import android.content.res.Resources
 import android.os.Bundle
 import android.util.TypedValue
-import android.window.BackEvent
-import androidx.activity.BackEventCompat
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import androidx.core.widget.addTextChangedListener

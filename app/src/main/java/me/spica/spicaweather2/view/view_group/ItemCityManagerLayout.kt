@@ -190,7 +190,7 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        val roundedCorner = 24.dp * 1f
+        val roundedCorner = 8.dp * 1f
         clipPath.reset()
         clipPath.moveTo(roundedCorner, 0f);
         clipPath.lineTo(width - roundedCorner, 0f);
