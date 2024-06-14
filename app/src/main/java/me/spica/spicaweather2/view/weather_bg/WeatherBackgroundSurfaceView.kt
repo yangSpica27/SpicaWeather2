@@ -117,7 +117,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     private var mholder: SurfaceHolder? = null
 
     private fun doOnDraw() {
-        mCanvas = mholder?.lockHardwareCanvas() ?: mholder?.lockCanvas()
+        mCanvas = mholder?.lockCanvas()
 
         // ================进行绘制==============
         mCanvas?.let { canvas ->

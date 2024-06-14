@@ -13,19 +13,20 @@ import androidx.core.view.setPadding
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
 import me.spica.spicaweather2.tools.getColorWithAlpha
 import me.spica.spicaweather2.tools.getStatusBarHeight
+import me.spica.spicaweather2.R;
 
 class MainTitleLayout(context: Context, attributeSet: AttributeSet? = null) : AViewGroup(context, attributeSet) {
 
     val titleTextView = AppCompatTextView(context).apply {
         layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        setTextAppearance(me.spica.spicaweather2.R.style.TextAppearance_Material3_TitleLarge)
+        setTextAppearance(R.style.TextAppearance_Material3_TitleLarge)
         text = "城市名称"
         setTextColor(Color.WHITE)
     }
 
     val plusBtn = AppCompatImageView(context).apply {
         layoutParams = LayoutParams(24.dp, 24.dp)
-        setImageDrawable(ContextCompat.getDrawable(context, me.spica.spicaweather2.R.drawable.ic_plus))
+        setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_plus))
     }
 
     val dotIndicator = WormDotsIndicator(context).apply {
@@ -33,27 +34,27 @@ class MainTitleLayout(context: Context, attributeSet: AttributeSet? = null) : AV
             it.topMargin = 12.dp
         }
         this.setPadding(0)
-        this.setDotIndicatorColor(ContextCompat.getColor(context, me.spica.spicaweather2.R.color.white))
-        this.setStrokeDotsIndicatorColor(ContextCompat.getColor(context, me.spica.spicaweather2.R.color.white))
+        this.setDotIndicatorColor(ContextCompat.getColor(context, R.color.white))
+        this.setStrokeDotsIndicatorColor(ContextCompat.getColor(context, R.color.white))
     }
 
     fun setBackgroundWhiteColor(progress: Float) {
         setBackgroundColor(getColorWithAlpha(progress, Color.WHITE))
         if (progress > 0.5) {
-            val up = ContextCompat.getDrawable(context, me.spica.spicaweather2.R.drawable.ic_plus)!!
+            val up = ContextCompat.getDrawable(context, R.drawable.ic_plus)!!
             val drawableUp = DrawableCompat.wrap(up)
-            DrawableCompat.setTint(drawableUp, ContextCompat.getColor(context, me.spica.spicaweather2.R.color.textColorPrimary))
+            DrawableCompat.setTint(drawableUp, ContextCompat.getColor(context, R.color.textColorPrimary))
             plusBtn.setImageDrawable(drawableUp)
-            dotIndicator.setDotIndicatorColor(ContextCompat.getColor(context, me.spica.spicaweather2.R.color.textColorPrimary))
-            dotIndicator.setStrokeDotsIndicatorColor(ContextCompat.getColor(context, me.spica.spicaweather2.R.color.textColorPrimaryHint))
-            titleTextView.setTextColor(ContextCompat.getColor(context, me.spica.spicaweather2.R.color.textColorPrimary))
+            dotIndicator.setDotIndicatorColor(ContextCompat.getColor(context, R.color.textColorPrimary))
+            dotIndicator.setStrokeDotsIndicatorColor(ContextCompat.getColor(context, R.color.textColorPrimaryHint))
+            titleTextView.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
         } else {
-            val up = ContextCompat.getDrawable(context, me.spica.spicaweather2.R.drawable.ic_plus)!!
+            val up = ContextCompat.getDrawable(context, R.drawable.ic_plus)!!
             val drawableUp = DrawableCompat.wrap(up)
-            DrawableCompat.setTint(drawableUp, ContextCompat.getColor(context, me.spica.spicaweather2.R.color.white))
+            DrawableCompat.setTint(drawableUp, ContextCompat.getColor(context, R.color.white))
             plusBtn.setImageDrawable(drawableUp)
-            dotIndicator.setDotIndicatorColor(ContextCompat.getColor(context, me.spica.spicaweather2.R.color.white))
-            dotIndicator.setStrokeDotsIndicatorColor(ContextCompat.getColor(context, me.spica.spicaweather2.R.color.white))
+            dotIndicator.setDotIndicatorColor(ContextCompat.getColor(context, R.color.white))
+            dotIndicator.setStrokeDotsIndicatorColor(ContextCompat.getColor(context, R.color.white))
             titleTextView.setTextColor(Color.WHITE)
         }
     }
