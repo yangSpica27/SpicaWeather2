@@ -54,7 +54,7 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             ViewGroup.LayoutParams.WRAP_CONTENT
         ).also {
             it.updateMargins(
-                left = 12.dp, top = 12.dp
+                left = 12.dp, top = 16.dp
             )
         }
         setTextAppearance(context, R.style.TextAppearance_Material3_LabelMedium)

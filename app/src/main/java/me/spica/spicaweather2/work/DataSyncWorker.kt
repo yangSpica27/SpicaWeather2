@@ -4,7 +4,6 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.getOrNull
 import com.skydoves.sandwich.getOrThrow
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +23,6 @@ import me.spica.spicaweather2.persistence.dao.CityDao
 import me.spica.spicaweather2.persistence.dao.WeatherDao
 import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.persistence.entity.weather.Weather
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
