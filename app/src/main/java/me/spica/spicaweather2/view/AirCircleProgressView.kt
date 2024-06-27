@@ -122,13 +122,6 @@ class AirCircleProgressView : View {
                 MeasureSpec.EXACTLY
             )
         )
-        mRectF.set(
-            VIEW_MARGIN * 1f,
-            VIEW_MARGIN,
-            measuredWidth - VIEW_MARGIN,
-            measuredHeight - VIEW_MARGIN
-        )
-
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -136,6 +129,12 @@ class AirCircleProgressView : View {
         mCenterX = width / 2
         mCenterY = height / 2
         setProgressColourAsGradient()
+        mRectF.set(
+            VIEW_MARGIN * 1f,
+            VIEW_MARGIN,
+            measuredWidth - VIEW_MARGIN,
+            measuredHeight - VIEW_MARGIN
+        )
     }
 
 

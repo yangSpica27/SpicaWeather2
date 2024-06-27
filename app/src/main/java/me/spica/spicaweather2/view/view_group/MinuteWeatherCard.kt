@@ -47,7 +47,7 @@ class MinuteWeatherCard(
         )
         setPadding(14.dp, 12.dp, 14.dp, 12.dp)
         setBackgroundResource(R.drawable.bg_card)
-        ViewCompat.setElevation(this, 4.dp.toFloat())
+        ViewCompat.setElevation(this, 2.dp.toFloat())
     }
 
     private val rainView = MinuteRainView(context).apply {
@@ -66,7 +66,7 @@ class MinuteWeatherCard(
         return nowCardXY[1] + if (visibility == View.VISIBLE) {
             0
         } else {
-            height + 8.dp
+            height + 16.dp
         }
     }
 

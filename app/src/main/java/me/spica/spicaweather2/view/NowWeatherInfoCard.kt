@@ -28,7 +28,7 @@ class NowWeatherInfoCard(context: Context) : AViewGroup(context = context), Spic
 
     init {
         setBackgroundResource(R.drawable.bg_card)
-        ViewCompat.setElevation(this, 4.dp.toFloat())
+        ViewCompat.setElevation(this, 2.dp.toFloat())
     }
 
 

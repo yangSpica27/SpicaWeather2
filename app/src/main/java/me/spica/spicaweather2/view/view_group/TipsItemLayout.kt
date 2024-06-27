@@ -14,12 +14,10 @@ class TipsItemLayout(context: Context) : AViewGroup(context) {
 
     private val titleText = AppCompatTextView(context).apply {
         setTextAppearance(R.style.TextAppearance_Material3_TitleMedium)
-        setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
     }
 
     private val descText = AppCompatTextView(context).apply {
         setTextAppearance(R.style.TextAppearance_Material3_BodyMedium)
-        setTextColor(ContextCompat.getColor(context, R.color.textColorPrimaryHint))
         layoutParams = MarginLayoutParams(
             MarginLayoutParams.WRAP_CONTENT,
             MarginLayoutParams.WRAP_CONTENT

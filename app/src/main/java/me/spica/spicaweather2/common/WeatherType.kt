@@ -72,17 +72,17 @@ fun WeatherType.getAnimRes(): Int {
 @ColorInt
 fun WeatherType.getThemeColor(): Int {
     return when (this) {
-        WeatherType.WEATHER_SUNNY -> Color.parseColor("#fdbc4c")
+        WeatherType.WEATHER_SUNNY -> Color.parseColor("#FFfdbc4c")
         WeatherType.WEATHER_CLOUDY -> Color.parseColor("#4297e7")
         WeatherType.WEATHER_CLOUD -> Color.parseColor("#68baff")
         WeatherType.WEATHER_RAINY -> Color.parseColor("#4297e7")
         WeatherType.WEATHER_THUNDER -> Color.parseColor("#B296BD")
         WeatherType.WEATHER_FOG -> Color.parseColor("#757F9A")
         WeatherType.WEATHER_HAZE -> Color.parseColor("#E1C899")
-        WeatherType.WEATHER_SNOW -> Color.parseColor("#4297e7")
-        WeatherType.WEATHER_SLEET -> Color.parseColor("#00a5d9")
-        WeatherType.WEATHER_HAIL -> Color.parseColor("#E1C899")
-        WeatherType.WEATHER_THUNDERSTORM -> Color.parseColor("#B296BD")
+        WeatherType.WEATHER_SNOW -> Color.parseColor("#FF4297e7")
+        WeatherType.WEATHER_SLEET -> Color.parseColor("#FF00a5d9")
+        WeatherType.WEATHER_HAIL -> Color.parseColor("#FFE1C899")
+        WeatherType.WEATHER_THUNDERSTORM -> Color.parseColor("#FF4A4646")
     }
 }
 

@@ -45,7 +45,7 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
             ViewGroup.LayoutParams.MATCH_PARENT
         )
         // 载入item数据
-        items.forEachIndexed { _, item ->
+        items.forEachIndexed { index, item ->
             val itemView = item.getViewType(context)
             itemView.tag = item.name
             itemView.layoutParams = MarginLayoutParams(
@@ -59,6 +59,9 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
                 topMargin = 16.dp.toInt()
                 leftMargin = 24.dp.toInt()
                 rightMargin = 24.dp.toInt()
+                if (index == items.size - 1) {
+                    bottomMargin = 16.dp.toInt()
+                }
             }
             if (itemView is SpicaWeatherCard) {
                 itemView.resetAnim()
