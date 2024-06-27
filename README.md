@@ -5,7 +5,7 @@
  查看[Flutter版本](https://github.com/yangSpica27/spica_weather_flutter.git)
 
 ## Screenshots
-<p align="center">
+<p>
 <img src="/pic/1.png" width="20%"/>
 <img src="/pic/2.png" width="20%"/>
 <img src="/pic/3.png" width="20%"/>
