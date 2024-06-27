@@ -1,8 +1,8 @@
 
 # SpicaWeatherⅡ
 
-## 查看[上个UI版本](https://github.com/yangSpica27/SpicaWeather) 
-## Flutter版本[SpicaWeather-Flutter](https://github.com/yangSpica27/spica_weather_flutter.git）
+## 查看[旧UI版本](https://github.com/yangSpica27/SpicaWeather) 
+## 查看[Flutter版本](https://github.com/yangSpica27/spica_weather_flutter.git)
 
 ## Screenshots
 <p align="center">
