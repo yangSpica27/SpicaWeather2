@@ -12,6 +12,7 @@ import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
+import java.util.Date
 import java.util.concurrent.atomic.AtomicBoolean
 
 // 描述卡片组
@@ -162,15 +163,26 @@ class DetailsCardsLayout(
                 (((it.uv.toIntOrNull() ?: 0) / 12.0).coerceAtMost(1.0).coerceAtLeast(0.0)),
                 1
             )
+            if (weather.dailyWeather.isEmpty()) return
+            val startTime = decodeTime(weather.dailyWeather[0].sunriseDate())
+            val endTime = decodeTime(weather.dailyWeather[0].sunsetDate())
+            val currentTime = decodeTime(Date())
             sunRiseDescCard.setShowData(
                 R.drawable.ic_round_mask,
                 "日出日落",
                 "",
                 "日出：${it.sunriseDate}\n日落：${it.sunsetDate}",
-                0.7,
+                ((currentTime - startTime).toDouble() / (endTime - startTime)).coerceAtMost(1.0)
+                    .coerceAtLeast(0.0),
                 4
             )
         }
+    }
+
+
+    @Suppress("DEPRECATION")
+    private fun decodeTime(time: Date): Int {
+        return time.hours * 60 + time.minutes
     }
 
 }

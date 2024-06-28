@@ -177,7 +177,7 @@ class DescProgressLineView : View {
                 if (progress < 0.3f) Color.parseColor("#FFFFEB3B") else
                     if (progress < 0.6f) Color.parseColor("#FFFFAB40") else
                         if (progress < 0.85f) Color.parseColor("#FFEF5350") else
-                            Color.parseColor("FFAB47BC")
+                            Color.parseColor("#FFAB47BC")
             uvPointPaint.strokeWidth = 12.dp
             canvas.drawPoint(
                 (width.toFloat() - paddingRight) * progress,
@@ -278,6 +278,10 @@ class DescProgressLineView : View {
 
                     pathMeasure.setPath(path, false)
 
+                    if (progress == 0f || progress == 1f) {
+                        return
+                    }
+
                     // 绘制日出日落的点
                     pathMeasure.getPosTan(
                         pathMeasure.length,
@@ -293,7 +297,6 @@ class DescProgressLineView : View {
 
                 }
     }
-
 
 
 }
