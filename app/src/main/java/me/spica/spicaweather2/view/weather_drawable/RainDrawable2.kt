@@ -9,7 +9,6 @@ import me.spica.spicaweather2.weather_anim_counter.RainParticleManager
 import timber.log.Timber
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.util.concurrent.CopyOnWriteArrayList
 
 
 /**

@@ -12,7 +12,7 @@ import me.spica.spicaweather2.view.view_group.TipsLayout
 import me.spica.spicaweather2.view.view_group.TodayDescLayout
 
 enum class HomeCardType(val code: Int) {
-    TODAY_DESC(1), // 今天的描述
+//    TODAY_DESC(1), // 今天的描述
     MINUTE_WEATHER(2), // 分钟级天气
     NOW_WEATHER(3), // 现在的天气
     HOUR_WEATHER(4), // 小时天气
@@ -25,7 +25,7 @@ enum class HomeCardType(val code: Int) {
 
     fun getViewType(context: Context): View {
         return when (this) {
-            TODAY_DESC -> TodayDescLayout(context)
+//            TODAY_DESC -> TodayDescLayout(context)
             MINUTE_WEATHER -> MinuteWeatherCard(context)
             NOW_WEATHER -> NowWeatherInfoCard(context)
             HOUR_WEATHER -> HourlyCardLayout(context)

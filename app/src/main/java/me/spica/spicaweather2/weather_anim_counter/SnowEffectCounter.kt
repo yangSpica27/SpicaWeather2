@@ -48,7 +48,7 @@ class SnowEffectCounter : Closeable {
     fun init(width: Int, height: Int) {
         this.mWorldWidth = width
         this.mWorldHeight = height
-        boxWidth = mappingView2Body(mWorldWidth * 1f - 28.dp) / 2f
+        boxWidth = mappingView2Body(mWorldWidth * 1f - 48.dp) / 2f
         boxHeight = mappingView2Body(mProportion * 1f)
         world = World(0f, 8.8f)
         updateHorizontalBounds()
@@ -72,7 +72,7 @@ class SnowEffectCounter : Closeable {
         fixtureDef.restitution = 0.3f // 补偿系数
         fixtureDef.filter.maskBits = 0b01
         fixtureDef.filter.groupIndex = 0b01
-        bodyDef.position[boxWidth + mappingView2Body(16.dp)] =
+        bodyDef.position[boxWidth + mappingView2Body(24.dp)] =
             mappingView2Body(mWorldHeight * 1f) + boxHeight
         val bottomBody: Body = world.createBody(bodyDef) // 创建一个真实的下边 body
         val fixture = bottomBody.createFixture(fixtureDef)
@@ -130,7 +130,7 @@ class SnowEffectCounter : Closeable {
         synchronized(world) {
             backgroundBody?.setTransform(
                 Vec2(
-                    boxWidth + mappingView2Body(16.dp),
+                    boxWidth + mappingView2Body(24.dp),
                     mappingView2Body(y * 1f + 16.dp)
                 ),
                 0f

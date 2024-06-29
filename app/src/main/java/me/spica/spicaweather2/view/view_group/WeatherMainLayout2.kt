@@ -50,13 +50,10 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
             itemView.tag = item.name
             itemView.layoutParams = MarginLayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                if (item == HomeCardType.TODAY_DESC) {
-                    context.getScreenHeight() / 7 * 4
-                } else {
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                }
+                ViewGroup.LayoutParams.WRAP_CONTENT
             ).apply {
-                topMargin = 16.dp.toInt()
+                topMargin =
+                    if (index == 0) (context.getScreenHeight() * .6f).toInt() else 16.dp.toInt()
                 leftMargin = 24.dp.toInt()
                 rightMargin = 24.dp.toInt()
                 if (index == items.size - 1) {
@@ -76,10 +73,24 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
             // 屏幕外不做检测
             updateBackgroundY()
             checkItemInScreen()
+            // 用于监听滑动停止
+            removeCallbacks(doOnScrollStop)
+            postDelayed(doOnScrollStop, 100)
         }
+
         checkItemInScreen()
         isVerticalScrollBarEnabled = false
         overScrollMode = OVER_SCROLL_NEVER
+    }
+
+
+    //  滑动停止后的操作
+    private val doOnScrollStop = Runnable {
+        if (scrollY >= context.getScreenHeight()) return@Runnable
+        if (scrollY < context.getScreenHeight() / 3f ) {
+            // 滑动不满一半 回复到最顶
+            smoothScrollTo(0, 0)
+        }
     }
 
 
@@ -119,9 +130,9 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
         contentView.children.forEach { itemView ->
             if (itemView is SpicaWeatherCard) {
                 if (!itemView.hasInScreen.get()) {
-                        val isVisible = itemView.getGlobalVisibleRect(itemVisibleRect)
-                        Timber.tag(tag = tag?.toString()?:"未知").e("是否可见:$isVisible")
-                        itemView.checkEnterScreen(isVisible && itemVisibleRect.bottom - itemVisibleRect.top >= itemView.height / 10f)
+                    val isVisible = itemView.getGlobalVisibleRect(itemVisibleRect)
+                    Timber.tag(tag = tag?.toString() ?: "未知").e("是否可见:$isVisible")
+                    itemView.checkEnterScreen(isVisible && itemVisibleRect.bottom - itemVisibleRect.top >= itemView.height / 10f)
                 }
             }
         }

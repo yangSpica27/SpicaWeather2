@@ -77,6 +77,7 @@ class ActivityMain : MaterialActivity() {
 
     private var data = listOf<CityWithWeather>()
 
+    // 用于播放动画的覆盖物
     private val manager2HomeView by lazy {
         Manager2HomeView(this)
     }
@@ -231,10 +232,20 @@ class ActivityMain : MaterialActivity() {
     }
 
 
+
     // 更新标题
     private fun updateTitleBarUI(scrollY: Int) {
         layout.mainTitleLayout.translationY = -scrollY * 1f
         layout.weatherBackgroundSurfaceView.setMScrollY(scrollY)
+        layout.currentWeatherLayout.alpha = (1 - scrollY / 1350f)
+            .coerceAtLeast(0f)
+            .coerceAtMost(1f)
+        layout.currentWeatherLayout.scaleX = (1 - scrollY / 3000f)
+            .coerceAtLeast(.85f)
+            .coerceAtMost(1f)
+        layout.currentWeatherLayout.scaleY = (1 - scrollY / 3000f)
+            .coerceAtLeast(0.85f)
+            .coerceAtMost(1f)
     }
 
     // 更新其他页面的滚动
@@ -262,6 +273,7 @@ class ActivityMain : MaterialActivity() {
                     bgColor = it.getThemeColor()
                     currentWeatherAnimType = it.getWeatherAnimType()
                     bgBitmap = it.getBackgroundBitmap(this@ActivityMain)
+                    layout.currentWeatherLayout.bindData(currentWeather)
                 }
             }
         } catch (e: Exception) {
