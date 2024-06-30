@@ -74,7 +74,7 @@ class TipsLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
             14.dp, 12.dp, 14.dp, 12.dp
         )
         setBackgroundResource(R.drawable.bg_card)
-        ViewCompat.setElevation(this, 2.dp.toFloat())
+        
         isFocusable = false
         isClickable = false
         val lp = LayoutParams(

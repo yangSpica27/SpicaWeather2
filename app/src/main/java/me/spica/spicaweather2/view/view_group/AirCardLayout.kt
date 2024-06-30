@@ -103,7 +103,7 @@ class AirCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard {
         isFocusable = false
         isClickable = false
         setBackgroundResource(R.drawable.bg_card)
-        ViewCompat.setElevation(this, 2.dp.toFloat())
+        
         setPadding(0, 0, 0, 12.dp)
         addView(titleText)
         addView(airCircleProgressView)

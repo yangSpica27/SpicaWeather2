@@ -30,7 +30,7 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
 
     init {
         setBackgroundResource(R.drawable.bg_card)
-        ViewCompat.setElevation(this, 2.dp.toFloat())
+        
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT

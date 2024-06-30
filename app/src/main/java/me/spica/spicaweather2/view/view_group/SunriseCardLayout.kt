@@ -80,7 +80,7 @@ class SunriseCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCar
             )
         }
         setBackgroundResource(R.drawable.bg_card)
-        ViewCompat.setElevation(this, 2.dp.toFloat())
+        
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

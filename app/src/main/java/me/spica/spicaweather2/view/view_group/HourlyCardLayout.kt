@@ -24,7 +24,7 @@ class HourlyCardLayout(context: Context) : AViewGroup(context), SpicaWeatherCard
     init {
         setPadding(0, 12.dp, 0, 12.dp)
         setBackgroundResource(R.drawable.bg_card)
-        ViewCompat.setElevation(this, 2.dp.toFloat())
+        
         addView(hourlyLineView)
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
