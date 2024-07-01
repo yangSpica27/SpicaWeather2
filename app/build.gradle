@@ -15,7 +15,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "me.spica.weather2"
+        applicationId "me.spica.weather_android"
         minSdk 26
         targetSdk 34
         versionCode 6
@@ -162,6 +162,7 @@ dependencies {
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     implementation("org.greenrobot:eventbus:3.3.1")
+
 
 //    configurations { natives }
 //    implementation 'com.badoo.mobile:android-weak-handler:1.1'
