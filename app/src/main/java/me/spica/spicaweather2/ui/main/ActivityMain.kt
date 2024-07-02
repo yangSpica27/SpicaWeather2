@@ -2,7 +2,11 @@ package me.spica.spicaweather2.ui.main
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -36,6 +40,7 @@ import org.greenrobot.eventbus.ThreadMode
 import rikka.material.app.MaterialActivity
 import timber.log.Timber
 import kotlin.system.measureTimeMillis
+
 
 /**
  * 主页面
@@ -131,7 +136,6 @@ class ActivityMain : MaterialActivity() {
                     with(layout.weatherBackgroundSurfaceView) {
                         bgColor = type.getThemeColor()
                         currentWeatherAnimType = type.getWeatherAnimType()
-                        bgBitmap = type.getBackgroundBitmap(this@ActivityMain)
                     }
                 }.show()
         }
@@ -176,7 +180,32 @@ class ActivityMain : MaterialActivity() {
                 updateTitleAndAnim(position)
             }
         }
+        setHighRefreshRate()
+    }
 
+    private fun setHighRefreshRate() {
+        val display = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            display
+        } else {
+            (getSystemService(WINDOW_SERVICE) as WindowManager).defaultDisplay
+        }
+        val modes = display?.supportedModes
+
+        var mode = modes?.first()
+
+        if (mode != null) {
+            modes?.forEach {
+                if ((mode?.refreshRate ?: 0f) < it.refreshRate) {
+                    mode = it
+                }
+                if ((mode?.physicalWidth ?: 0) < it.physicalWidth) {
+                    mode = it
+                }
+            }
+        }
+        val window: Window = window
+        val params = window.attributes
+        params.preferredDisplayModeId = mode?.modeId ?: params.preferredDisplayModeId
     }
 
     // 返回拦截
@@ -232,7 +261,6 @@ class ActivityMain : MaterialActivity() {
     }
 
 
-
     // 更新标题
     private fun updateTitleBarUI(scrollY: Int) {
         layout.mainTitleLayout.translationY = -scrollY * 1f
@@ -272,7 +300,6 @@ class ActivityMain : MaterialActivity() {
                 with(layout.weatherBackgroundSurfaceView) {
                     bgColor = it.getThemeColor()
                     currentWeatherAnimType = it.getWeatherAnimType()
-                    bgBitmap = it.getBackgroundBitmap(this@ActivityMain)
                     layout.currentWeatherLayout.bindData(currentWeather)
                 }
             }

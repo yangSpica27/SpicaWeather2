@@ -2,7 +2,7 @@ package me.spica.spicaweather2
 
 import android.app.Activity
 import android.app.Application
-import android.os.MessageQueue
+import android.view.WindowManager
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -32,4 +32,5 @@ class App : Application() {
         }
         instance = this
     }
+
 }

@@ -47,6 +47,9 @@ class RainParticleManager {
         boxWidth = mappingView2Body(mWorldWidth * 1f - 48.dp) / 2f
         boxHeight = mappingView2Body(mProportion * 1f)
         world = World(0f, 9.8f)
+
+
+
         createCardBox()
         createRainItemShapeAndDef()
         isInitOK = true
@@ -108,7 +111,7 @@ class RainParticleManager {
         psd.pressureStrength = 0.03f
         psd.gravityScale = 1.4f
         psd.repulsiveStrength = 0f
-        psd.surfaceTensionPressureStrength = 10.55f
+//        psd.surfaceTensionPressureStrength = 10.55f
         psd.viscousStrength = 20f
         val ps = world.createParticleSystem(psd)
         psd.delete()
@@ -138,7 +141,7 @@ class RainParticleManager {
                 Vec2(mappingView2Body(x), mappingView2Body(y)),
                 Vec2(mappingView2Body(x + width), mappingView2Body(y)),
                 Vec2(mappingView2Body(x + width), mappingView2Body(y + 18.dp)),
-                Vec2(mappingView2Body(x), mappingView2Body(y + 16.dp)),
+                Vec2(mappingView2Body(x), mappingView2Body(y + 18.dp)),
             ), 4
         )
         return system.createParticleGroup(rainItemDef)

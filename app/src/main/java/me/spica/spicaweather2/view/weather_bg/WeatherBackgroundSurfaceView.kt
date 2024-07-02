@@ -5,9 +5,8 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.os.Build.VERSION_CODES.P
 import android.os.Handler
-import android.os.HandlerThread
+import android.os.Looper
 import android.util.AttributeSet
 import android.view.PixelCopy
 import android.view.SurfaceHolder
@@ -15,13 +14,9 @@ import android.view.SurfaceView
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.view.weather_drawable.WeatherDrawableManager
-import java.util.UUID
-import java.util.concurrent.locks.ReentrantLock
 
 class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
-
-    private val lock = ReentrantLock()
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -33,9 +28,22 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         holder.addCallback(this)
     }
 
-    private lateinit var drawThread: HandlerThread
+    // 通过 SimpleDrawTask 实现绘制逻辑
+    private val simpleDrawTask = object : SimpleDrawTask(16L, { canvas ->
+        weatherDrawableManager.calculate(width, height)
+        drawBackground(canvas)
+        weatherDrawableManager.doOnDraw(canvas, width, height)
+    }) {
 
-    private lateinit var drawHandler: Handler
+        override fun lockCanvas(): Canvas? = this@WeatherBackgroundSurfaceView.holder.lockCanvas()
+
+        override fun unlockCanvas(canvas: Canvas?) {
+            if (canvas != null) {
+                holder.unlockCanvasAndPost(canvas)
+            }
+        }
+    }
+
 
     var bgColor = ContextCompat.getColor(context, R.color.light_blue_600)
         set(value) {
@@ -58,7 +66,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
 
-    var bgBitmap: Bitmap? = null
+
 
     var currentWeatherAnimType = NowWeatherView.WeatherAnimType.UNKNOWN
         set(value) {
@@ -72,24 +80,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
     private val weatherDrawableManager = WeatherDrawableManager(context)
 
-
-    private var lastDrawTime = System.currentTimeMillis()
-
-    private val drawRunnable = object : Runnable {
-        override fun run() {
-            lock.lock()
-            weatherDrawableManager.calculate(width, height)
-            // 执行渲染
-            doOnDraw()
-            if (!Thread.interrupted()) {
-                drawHandler.postDelayed(
-                    this, (8 - (System.currentTimeMillis() - lastDrawTime)).coerceAtLeast(0)
-                )
-            }
-            lastDrawTime = System.currentTimeMillis()
-            lock.unlock()
-        }
-    }
 
     fun getScreenCopy(foregroundBitmap: Bitmap, callbacks: (Bitmap) -> Unit) {
         val background = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -107,50 +97,22 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
                 canvas.save()
                 canvas.restore()
                 callbacks(result)
-            }, drawHandler
+            }, Handler(Looper.getMainLooper())
         )
     }
 
 
-    private var mCanvas: Canvas? = null
-
-    private var mholder: SurfaceHolder? = null
-
-    private fun doOnDraw() {
-        mCanvas = mholder?.lockCanvas()
-
-        // ================进行绘制==============
-        mCanvas?.let { canvas ->
-            drawBackground(canvas)
-            weatherDrawableManager.doOnDraw(canvas, width, height)
-            mholder?.unlockCanvasAndPost(canvas)
-        }
-    }
-
-
     override fun surfaceCreated(holder: SurfaceHolder) {
-        lock.lock()
-        drawThread = HandlerThread("draw-thread${UUID.randomUUID()}")
-        drawThread.start()
-        drawHandler = Handler(drawThread.looper)
         // 渲染线程
         weatherDrawableManager.ready(width, height)
-        drawHandler.post(drawRunnable)
-        this.mholder = holder
-        lock.unlock()
+        simpleDrawTask.ready()
     }
 
-    override fun surfaceChanged(holder: SurfaceHolder, p1: Int, p2: Int, p3: Int) {
-    }
+    override fun surfaceChanged(holder: SurfaceHolder, p1: Int, p2: Int, p3: Int) = Unit
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
-        lock.lock()
-        drawHandler.removeCallbacksAndMessages(null)
-        drawThread.interrupt()
-        drawThread.quitSafely()
-        this.mholder = null
+        simpleDrawTask.destroy()
         weatherDrawableManager.release()
-        lock.unlock()
     }
 
 
