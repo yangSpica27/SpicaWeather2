@@ -126,7 +126,9 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
                     return@setOnLongClickListener false
                 }
             }
-            holder.itemLayout().isSelectable = isSelectMode
+            holder.itemLayout().post {
+                holder.itemLayout().isSelectable = isSelectMode
+            }
 
         } else if (holder.itemViewType == ITEM_TYPE_ADD) {
             holder.itemView.setOnClickListener {

@@ -196,19 +196,9 @@ class HourlyLineView : View {
                 )
             )
         }
-
-        linePaint.shader = LinearGradient(
-            0f,
-            0f,
-            paddingLeft + paddingRight + itemWidth * data.size * 1f,
-            0f,
-            colors.toIntArray(),
-            List(data.size) { index ->
-                (1f / data.size) * index
-            }.toFloatArray(),
-            TileMode.CLAMP
-        )
-
+        val themeColor = WeatherCodeUtils.getWeatherCode(iconId = data.firstOrNull()?.iconId ?: 101)
+            .getThemeColor()
+        linePaint.color = themeColor
 
         lineBgPaint.shader = LinearGradient(
             0f,
@@ -293,12 +283,18 @@ class HourlyLineView : View {
             }
         }
         tempLineBgPath.addPath(tempLinePath)
-        tempLineBgPath.lineTo(mPointList.last().x.toFloat(), paddingTop + 12.dp + 24.dp +
-                tempTextHeight + 12.dp
-                + lineHeight - 12.dp,)
-        tempLineBgPath.lineTo(mPointList.first().x.toFloat(), paddingTop + 12.dp + 24.dp +
-                tempTextHeight + 12.dp
-                + lineHeight - 12.dp,)
+        tempLineBgPath.lineTo(
+            mPointList.last().x.toFloat(),
+            paddingTop + 12.dp + 24.dp +
+                    tempTextHeight + 12.dp
+                    + lineHeight - 12.dp,
+        )
+        tempLineBgPath.lineTo(
+            mPointList.first().x.toFloat(),
+            paddingTop + 12.dp + 24.dp +
+                    tempTextHeight + 12.dp
+                    + lineHeight - 12.dp,
+        )
         tempLineBgPath.close()
         invalidate()
     }

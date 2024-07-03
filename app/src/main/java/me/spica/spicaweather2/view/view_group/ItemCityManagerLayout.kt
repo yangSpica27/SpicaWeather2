@@ -1,32 +1,26 @@
 package me.spica.spicaweather2.view.view_group
 
-import android.animation.AnimatorSet
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Path
+import android.graphics.Typeface
+import android.os.Build
 import android.view.ViewGroup
-import android.widget.RadioButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
 import androidx.core.view.marginTop
 import androidx.core.view.updateMargins
 import androidx.core.widget.CompoundButtonCompat
-import com.google.android.material.animation.AnimatorSetCompat
-import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.radiobutton.MaterialRadioButton
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.WeatherCodeUtils
 import me.spica.spicaweather2.common.getDrawable
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
-import me.spica.spicaweather2.tools.hide
-import me.spica.spicaweather2.tools.show
 
 class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
 
@@ -46,7 +40,13 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        text = "城市"
+        text = "--"
+        typeface = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Typeface.create(Typeface.DEFAULT, 500, false)
+        } else {
+            Typeface.DEFAULT
+        }
+        textSize = 20f
     }
 
     private val weatherName = AppCompatTextView(context).apply {
@@ -55,9 +55,29 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
         ).apply {
-            updateMargins(top = 4.dp)
+            updateMargins(top = 12.dp)
+        }
+        textSize = 16f
+        typeface = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            Typeface.create(Typeface.DEFAULT, 400, false)
+        } else {
+            Typeface.DEFAULT
         }
         text = "天气"
+    }
+
+    private val tempTextView = AppCompatTextView(context).apply {
+        setTextAppearance(R.style.TextAppearance_Material3_TitleLarge)
+        setTextColor(ContextCompat.getColor(context, R.color.white))
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        text = "--"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            typeface = Typeface.create(Typeface.DEFAULT, 900, false)
+        }
+        textSize = 38f
+        setPadding(0, 0, 10.dp, 0)
     }
 
     private val iconSelect = MaterialRadioButton(context).apply {
@@ -89,6 +109,7 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
         addView(cityName)
         addView(weatherName)
         addView(iconSelect)
+        addView(tempTextView)
 //        setBackgroundResource(R.drawable.bg_manager_city_item)
     }
 
@@ -103,9 +124,15 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
                         .translationX((iconSort.marginRight + iconSort.width).toFloat()).start()
                     cityName.animate()
                         .translationX((iconSort.marginRight + iconSort.width).toFloat()).start()
+                    tempTextView.animate()
+                        .translationX(-iconSelect.width * 1f - 8.dp).start()
+
                 } else {
                     iconSort.animate().alpha(0f).start()
                     weatherName.animate()
+                        .translationX(0f)
+                        .start()
+                    tempTextView.animate()
                         .translationX(0f)
                         .start()
                     cityName.animate()
@@ -140,13 +167,15 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
 
         cityName.text = cityWithWeather.city.cityName
         weatherName.text =
-            "${cityWithWeather.weather?.todayWeather?.weatherName} ${cityWithWeather.weather?.todayWeather?.temp}℃"
+            "${cityWithWeather.weather?.todayWeather?.weatherName} 体感${cityWithWeather.weather?.todayWeather?.feelTemp}℃"
+        tempTextView.text = "${cityWithWeather.weather?.todayWeather?.temp}℃"
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         iconSort.autoMeasure()
         iconSelect.autoMeasure()
+        tempTextView.autoMeasure()
 //        backgroundView.autoMeasure()
         cityName.measure(
             (measuredWidth - iconSort.measuredWidthWithMargins - iconSelect.measuredWidthWithMargins).toExactlyMeasureSpec(),
@@ -182,30 +211,34 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
             paddingRight, iconSelect.toVerticalCenter(this),
             true
         )
+        tempTextView.layout(
+            width - tempTextView.measuredWidth - paddingRight,
+            height / 2 - tempTextView.measuredHeight / 2
+        )
     }
 
 
-    private val clipPath = Path()
+//    private val clipPath = Path()
 
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        val roundedCorner = 8.dp * 1f
-        clipPath.reset()
-        clipPath.moveTo(roundedCorner, 0f);
-        clipPath.lineTo(width - roundedCorner, 0f);
-        clipPath.quadTo(width * 1f, 0f, width * 1f, roundedCorner)
-        clipPath.lineTo(width * 1f, height - roundedCorner)
-        clipPath.quadTo(width * 1f, height * 1f, width - roundedCorner, height * 1f)
-        clipPath.lineTo(roundedCorner, height * 1f)
-        clipPath.quadTo(0f, height * 1f, 0f, height - roundedCorner)
-        clipPath.lineTo(0f, roundedCorner)
-        clipPath.quadTo(0f, 0f, roundedCorner, 0f)
+//        val roundedCorner = 2.dp * 1f
+//        clipPath.reset()
+//        clipPath.moveTo(roundedCorner, 0f);
+//        clipPath.lineTo(width - roundedCorner, 0f);
+//        clipPath.quadTo(width * 1f, 0f, width * 1f, roundedCorner)
+//        clipPath.lineTo(width * 1f, height - roundedCorner)
+//        clipPath.quadTo(width * 1f, height * 1f, width - roundedCorner, height * 1f)
+//        clipPath.lineTo(roundedCorner, height * 1f)
+//        clipPath.quadTo(0f, height * 1f, 0f, height - roundedCorner)
+//        clipPath.lineTo(0f, roundedCorner)
+//        clipPath.quadTo(0f, 0f, roundedCorner, 0f)
     }
 
 
     override fun dispatchDraw(canvas: Canvas) {
-        canvas.clipPath(clipPath)
+//        canvas.clipPath(clipPath)
         super.dispatchDraw(canvas)
     }
 }
