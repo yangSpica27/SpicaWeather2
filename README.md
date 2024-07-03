@@ -7,7 +7,7 @@
 
 <p>
 <img src="/pic/1.jpg" width="20%"/>
-<img src="/pic/2.png" width="20%"/>
+<img src="/pic/2.jpeg" width="20%"/>
 <img src="/pic/3.png" width="20%"/>
 
 </p>
