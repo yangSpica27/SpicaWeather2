@@ -2,11 +2,15 @@ package me.spica.spicaweather2.view.view_group
 
 import android.animation.AnimatorSet
 import android.content.Context
+import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.children
+import androidx.core.view.marginBottom
+import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
+import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.dailyItem.DailyItemView
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
@@ -18,19 +22,35 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         var allHeight = 0f
-        children.forEach { item ->
-            measureChildren(widthMeasureSpec, heightMeasureSpec)
-            allHeight += item.measuredHeight
+        children.forEach {
+            it.autoMeasure()
+            allHeight += it.measuredHeightWithMargins
         }
         setMeasuredDimension(
             resolveSize(measuredWidth, widthMeasureSpec),
-            resolveSize(allHeight.toInt() + paddingTop + paddingBottom, heightMeasureSpec)
+            resolveSize(
+                allHeight.toInt() + paddingTop + paddingBottom,
+                heightMeasureSpec
+            )
         )
+    }
+
+    private val titleTextView = AppCompatTextView(context).apply {
+        text = "天级别天气"
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        ).also {
+            it.updateMargins(
+                left = 14.dp, top = 12.dp, bottom = 8.dp
+            )
+        }
+        setTextAppearance(context, R.style.TextAppearance_Material3_TitleMedium)
+        typeface = Typeface.DEFAULT_BOLD
     }
 
     init {
         setBackgroundResource(R.drawable.bg_card)
-        
+
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
@@ -38,15 +58,26 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
             leftMargin = 15.dp
             rightMargin = 15.dp
         }
-        setPadding(12.dp, 8.dp, 12.dp, 8.dp)
+        setPadding(12.dp, 8.dp, 12.dp,0)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        var lastBottom = 0
-        children.forEach {
-            it.layout(paddingLeft, lastBottom + it.paddingTop)
-            lastBottom += it.height
+        titleTextView.layout(
+            paddingLeft,
+            paddingTop,
+        )
+        var top = titleTextView.bottom+titleTextView.marginBottom
+        children.forEach { item ->
+            if (item == titleTextView) return@forEach
+            item.layout(
+                item.left,
+                top,
+                item.measuredWidthWithMargins,
+                top + item.measuredHeightWithMargins
+            )
+            top += item.measuredHeightWithMargins
         }
+
     }
 
     override var animatorView: View = this
@@ -63,6 +94,9 @@ class DailyWeatherLayout(context: Context) : AViewGroup(context), SpicaWeatherCa
             minMinTemp = minOf(minMinTemp, it.minTemp)
             maxMaxTemp = maxOf(maxMaxTemp, it.maxTemp)
         }
+        val themeColor = weather.getWeatherType().getThemeColor()
+        titleTextView.setTextColor(themeColor)
+        addView(titleTextView)
         weather.dailyWeather.forEachIndexed { index, it ->
             val lp = LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
