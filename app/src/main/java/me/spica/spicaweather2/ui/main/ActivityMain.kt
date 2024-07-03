@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
+import android.view.Surface
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
@@ -198,14 +199,12 @@ class ActivityMain : MaterialActivity() {
                 if ((mode?.refreshRate ?: 0f) < it.refreshRate) {
                     mode = it
                 }
-                if ((mode?.physicalWidth ?: 0) < it.physicalWidth) {
-                    mode = it
-                }
             }
         }
         val window: Window = window
         val params = window.attributes
-        params.preferredDisplayModeId = mode?.modeId ?: params.preferredDisplayModeId
+        params.preferredRefreshRate = mode?.refreshRate ?: 60f
+        window.attributes = params
     }
 
     // 返回拦截

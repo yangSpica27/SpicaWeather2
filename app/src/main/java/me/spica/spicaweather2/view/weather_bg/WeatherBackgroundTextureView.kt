@@ -14,6 +14,7 @@ import me.spica.spicaweather2.view.weather_drawable.WeatherDrawableManager
 class WeatherBackgroundTextureView(context: Context) : HwTextureView(context),
     TextureView.SurfaceTextureListener {
 
+
     // 通过 SimpleDrawTask 实现绘制逻辑
     private val simpleDrawTask = object : SimpleDrawTask(8L, { canvas ->
         weatherDrawableManager.calculate(width, height)

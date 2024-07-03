@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.SurfaceTexture
+import android.os.Build
 import android.util.AttributeSet
 import android.view.Surface
 import android.view.TextureView
@@ -17,6 +18,9 @@ open class HwTextureView @JvmOverloads constructor(ctx: Context, attrs: Attribut
     private val innerImplListener: SurfaceTextureListener = object : SurfaceTextureListener {
         override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
             proxySurface = Surface(surface)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                proxySurface?.setFrameRate(120.0f, Surface.FRAME_RATE_COMPATIBILITY_DEFAULT)
+            }
             userListener?.onSurfaceTextureAvailable(surface, width, height)
         }
 

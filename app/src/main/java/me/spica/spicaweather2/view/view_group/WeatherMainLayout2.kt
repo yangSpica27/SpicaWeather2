@@ -74,8 +74,8 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
             updateBackgroundY()
             checkItemInScreen()
             // 用于监听滑动停止
-            removeCallbacks(doOnScrollStop)
-            postDelayed(doOnScrollStop, 100)
+//            removeCallbacks(doOnScrollStop)
+//            postDelayed(doOnScrollStop, 100)
         }
 
         checkItemInScreen()
