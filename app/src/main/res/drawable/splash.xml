@@ -11,7 +11,7 @@
     <item android:top="170.0dip" >
         <bitmap
             android:gravity="center|top"
-            android:src="@drawable/ic_sun" />
+            android:src="@drawable/ic_app" />
     </item>
 
 </layer-list>

@@ -68,6 +68,8 @@ class DailyItemView : View {
 
     private var mHight = 50.dp
 
+    private val itemH = 70.dp
+
     fun setData(
         dailyWeatherBean: DailyWeatherBean, isFirst: Boolean = false, maxTemp: Int, minTemp: Int
     ) {
@@ -130,7 +132,7 @@ class DailyItemView : View {
             if (isExpend) {
                 expendAnim.setFloatValues(mHight, 50.dp)
             } else {
-                expendAnim.setFloatValues(mHight, 135.dp)
+                expendAnim.setFloatValues(mHight, 50.dp + itemH * 3)
             }
             expendAnim.start()
         }
@@ -294,21 +296,129 @@ class DailyItemView : View {
         }
         if (!isExpend || (expendAnim.isRunning)) {
             // 绘制下半部分
-            canvas.drawRoundRect(
-                0f + paddingLeft,
-                45.dp + 12.dp,
-                width.toFloat() - paddingRight,
-                mHight,
-                12f,
-                12f,
-                rectPaint
+
+            drawItem(
+                canvas,
+                "湿度",
+                "${dailyWeatherBean?.water ?: "--"}%",
+                R.drawable.ic_water,
+                paddingLeft * 1f,
+                width / 2f - 2.dp,
+                45.dp + 5.dp
             )
-            canvas.drawText("开发中..", paddingLeft + 12.dp, 45.dp + 50.dp, textPaint)
+
+            drawItem(
+                canvas,
+                "降水量",
+                "${dailyWeatherBean?.precip ?: "--"}mm",
+                R.drawable.ic_heavy_rain_outline,
+                width / 2f + 2.dp,
+                width - paddingRight * 1f,
+                45.dp + 5.dp
+            )
+
+            drawItem(
+                canvas,
+                "日间风速",
+                "${dailyWeatherBean?.windSpeed ?: "--"}km/h",
+                R.drawable.ic_wind2,
+                paddingLeft * 1f,
+                width / 2f - 2.dp,
+                45.dp + 5.dp + itemH
+            )
+
+            drawItem(
+                canvas,
+                "紫外线强度",
+                dailyWeatherBean?.uv ?: "--",
+                R.drawable.ic_plastic_surgery,
+                width / 2f + 2.dp,
+                width - paddingRight * 1f,
+                45.dp + 5.dp + itemH
+            )
+
+            drawItem(
+                canvas,
+                "能见度",
+                "${dailyWeatherBean?.vis ?: "--"}km",
+                R.drawable.ic_texture,
+                paddingLeft * 1f,
+                width / 2f - 2.dp,
+                45.dp + 5.dp + itemH * 2
+            )
+
+            drawItem(
+                canvas,
+                "云层覆盖率",
+                "${dailyWeatherBean?.cloud ?: "--"}%",
+                R.drawable.ic_cloud_outline,
+                width / 2f + 2.dp,
+                width - paddingRight * 1f,
+                45.dp + 5.dp + itemH * 2
+            )
+
+
         }
     }
 
+
+    private val textRect = Rect()
+
+    private fun drawItem(
+        canvas: Canvas,
+        title: String,
+        text: String,
+        iconRes: Int,
+        left: Float,
+        right: Float,
+        top: Float
+    ) {
+        val bitmap = getOrCreateBitmap(iconRes, width = 24.dp.toInt(), height = 24.dp.toInt())
+        canvas.drawBitmap(
+            bitmap,
+            left + 8.dp,
+            top + 65.dp / 2f + -bitmap.height / 2,
+            iconPaint
+        )
+        canvas.drawRoundRect(
+            left,
+            top,
+            right,
+            top + 65.dp,
+            8.dp,
+            8.dp,
+            rectPaint
+        )
+
+        itemTextPaint.textSize = 17.dp
+        itemTextPaint.typeface = Typeface.DEFAULT_BOLD
+        itemTextPaint.color = ContextCompat.getColor(context, R.color.textColorPrimary)
+        itemTextPaint.getTextBounds(title, 0, title.length, textRect)
+        canvas.drawText(
+            title,
+            left + 8.dp + bitmap.width + 10.dp,
+            top + 12.dp + textRect.height(),
+            itemTextPaint
+        )
+        itemTextPaint.color = ContextCompat.getColor(context, R.color.textColorPrimaryHint)
+        itemTextPaint.typeface = Typeface.DEFAULT
+        itemTextPaint.textSize = 16.dp
+        itemTextPaint.getTextBounds(text, 0, text.length, textRect)
+        canvas.drawText(
+            text,
+            left + 8.dp + bitmap.width + 10.dp,
+            top + 65.dp - 12.dp,
+            itemTextPaint
+        )
+    }
+
+    private val itemTextPaint = Paint().apply {
+        textSize = 16.dp
+        textAlign = Paint.Align.LEFT
+    }
+
     private val rectPaint = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.rainRectColor)
+        color = Color.parseColor("#1a4a4a4a")
     }
 
     companion object {
