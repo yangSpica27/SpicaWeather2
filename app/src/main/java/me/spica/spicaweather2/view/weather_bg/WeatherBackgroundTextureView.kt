@@ -16,7 +16,7 @@ class WeatherBackgroundTextureView(context: Context) : HwTextureView(context),
 
 
     // 通过 SimpleDrawTask 实现绘制逻辑
-    private val simpleDrawTask = object : SimpleDrawTask(8L, { canvas ->
+    private val simpleDrawTask = object : SimpleDrawTask(16L, { canvas ->
         weatherDrawableManager.calculate(width, height)
         drawBackground(canvas)
         weatherDrawableManager.doOnDraw(canvas, width, height)

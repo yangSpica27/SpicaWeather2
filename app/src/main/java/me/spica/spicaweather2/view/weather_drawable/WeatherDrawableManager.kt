@@ -36,7 +36,9 @@ class WeatherDrawableManager(context: Context) {
 
 
     fun calculate(width: Int, height: Int) {
-        drawableMaps[currentAnimType]?.calculate(width, height)
+        synchronized(this) {
+            drawableMaps[currentAnimType]?.calculate(width, height)
+        }
     }
 
     private var cacheY = 0
@@ -61,10 +63,10 @@ class WeatherDrawableManager(context: Context) {
 
     // 绘制
     fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
-        getCurrentDrawable().doOnDraw(canvas, width, height)
+        synchronized(this) {
+            getCurrentDrawable().doOnDraw(canvas, width, height)
+        }
     }
-
-
 
 
     // 销毁

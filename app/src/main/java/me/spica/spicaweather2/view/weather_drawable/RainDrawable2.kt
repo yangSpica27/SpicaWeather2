@@ -21,14 +21,14 @@ class RainDrawable2 : WeatherDrawable() {
     private val rainPaint = Paint().apply {
         strokeCap = Paint.Cap.ROUND
         strokeWidth = 2.dp
-        color = Color.parseColor("#80E8E8E8")
+        color = Color.parseColor("#84b6e7")
         style = Paint.Style.FILL
     }
 
     private val rainPaint2 = Paint().apply {
         strokeCap = Paint.Cap.ROUND
         strokeWidth = 4.dp
-        color = Color.parseColor("#80E8E8E8")
+        color = Color.parseColor("#84b6e7")
         style = Paint.Style.FILL
     }
 
@@ -116,6 +116,10 @@ class RainDrawable2 : WeatherDrawable() {
     // 粒子的位置数组
     private val positionArray = FloatArray(RainParticleManager.ParticleMaxCount * 2)
 
+    // 过滤屏幕之外的点
+    private val positionArray2 = FloatArray(RainParticleManager.ParticleMaxCount * 2)
+
+
     override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
         if (rainFlakes.isEmpty() || viewHeight == -1 || viewWidth == -1) {
             return
@@ -132,10 +136,28 @@ class RainDrawable2 : WeatherDrawable() {
                 mParticlePositionBuffer
             )
             mParticlePositionBuffer.asFloatBuffer().get(positionArray)
-            for (i in positionArray.indices) {
-                positionArray[i] = positionArray[i] * 60
+
+            var index = 0
+
+            for (i in positionArray.indices step 2) {
+                // 去除超出屏幕范围外的点
+                positionArray[i] = positionArray[i] * RainParticleManager.mProportion
+                positionArray[i + 1] = positionArray[i + 1] * RainParticleManager.mProportion
+
+                if (positionArray[i] < 0 || positionArray[i] > width
+                    || positionArray[i + 1] < 0 ||
+                    positionArray[i + 1] > height
+                ) {
+                    // 超出屏幕范围的点不做绘制
+                } else {
+                    positionArray2[index] = positionArray[i]
+                    positionArray2[index + 1] = positionArray[i + 1]
+                    index += 2
+                }
             }
-            canvas.drawPoints(positionArray, rainPaint)
+
+            Timber.tag("RainDrawable2").e("绘制数量 = ${index/2}")
+            canvas.drawPoints(positionArray2, 0, index / 2, rainPaint)
         }
     }
 

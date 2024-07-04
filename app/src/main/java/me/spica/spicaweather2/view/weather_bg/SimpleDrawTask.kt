@@ -8,11 +8,13 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.SystemClock
 import java.util.concurrent.locks.ReentrantLock
+import kotlin.system.measureTimeMillis
 
 abstract class SimpleDrawTask(
     // 绘制间隔
-    val interval: Long = 8L,
+    val interval: Long = 16L,
     // 绘制逻辑
     val drawFunc: (Canvas) -> Unit
 ) : IDrawTask {
@@ -45,7 +47,7 @@ abstract class SimpleDrawTask(
         handlerThread = HandlerThread("SimpleDrawTask-${this.hashCode()}")
         handlerThread?.start()
         handler = Handler(handlerThread?.looper!!)
-        handler?.postDelayed(drawRunnable, interval)
+        handler?.post(drawRunnable)
         isRunning = true
         lock.unlock()
     }
@@ -55,20 +57,25 @@ abstract class SimpleDrawTask(
 
         override fun run() {
             // 未初始化或者在结束流程中
-            if (!isRunning || Thread.interrupted()) {
-                return
+            while (true) {
+                if (!isRunning || Thread.interrupted()) {
+                    return
+                }
+                val count = measureTimeMillis {
+                    lock.lock()
+                    val canvas = lockCanvas()
+                    if (canvas == null) {
+                        lock.unlock()
+                        handler?.postDelayed(this, interval)
+                        return
+                    }
+                    draw(canvas)
+                    unlockCanvas(canvas)
+                    lock.unlock()
+                }
+                val delay = interval - count
+                SystemClock.sleep(if (delay > 0) delay else 0)
             }
-            lock.lock()
-            val canvas = lockCanvas()
-            if (canvas == null) {
-                lock.unlock()
-                handler?.postDelayed(this, interval)
-                return
-            }
-            draw(canvas)
-            unlockCanvas(canvas)
-            handler?.postDelayed(this, interval)
-            lock.unlock()
         }
     }
 

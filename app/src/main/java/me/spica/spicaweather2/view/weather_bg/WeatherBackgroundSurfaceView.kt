@@ -5,15 +5,14 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.os.Handler
-import android.os.Looper
 import android.util.AttributeSet
-import android.view.PixelCopy
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.view.weather_drawable.WeatherDrawableManager
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
 
 class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
@@ -28,9 +27,10 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         holder.addCallback(this)
     }
 
+    private val weatherDrawableManager = WeatherDrawableManager(context)
+
     // 通过 SimpleDrawTask 实现绘制逻辑
-    private val simpleDrawTask = object : SimpleDrawTask(16L, { canvas ->
-        weatherDrawableManager.calculate(width, height)
+    private val simpleDrawTask = object : SimpleDrawTask(10L, { canvas ->
         drawBackground(canvas)
         weatherDrawableManager.doOnDraw(canvas, width, height)
     }) {
@@ -43,6 +43,9 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
             }
         }
     }
+
+    // 计算线程
+    private lateinit var executorService: ScheduledExecutorService
 
 
     var bgColor = ContextCompat.getColor(context, R.color.light_blue_600)
@@ -66,8 +69,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     }
 
 
-
-
     var currentWeatherAnimType = NowWeatherView.WeatherAnimType.UNKNOWN
         set(value) {
             if (value == field) return
@@ -78,27 +79,29 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         }
 
 
-    private val weatherDrawableManager = WeatherDrawableManager(context)
-
-
     fun getScreenCopy(foregroundBitmap: Bitmap, callbacks: (Bitmap) -> Unit) {
+        val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(result)
+        canvas.drawColor(backgroundColorAnim.animatedValue as Int)
+        canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
+        callbacks.invoke(result)
         val background = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        PixelCopy.request(
-            this, background, { copyResult ->
-                val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-                val canvas = Canvas(result)
-                if (PixelCopy.SUCCESS == copyResult) {
-                    canvas.drawBitmap(background, 0f, 0f, null)
-                    canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
-                } else {
-                    canvas.drawColor(bgColor)
-                    canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
-                }
-                canvas.save()
-                canvas.restore()
-                callbacks(result)
-            }, Handler(Looper.getMainLooper())
-        )
+//        PixelCopy.request(
+//            this, background, { copyResult ->
+//                val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+//                val canvas = Canvas(result)
+//                if (PixelCopy.SUCCESS == copyResult) {
+//                    canvas.drawBitmap(background, 0f, 0f, null)
+//                    canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
+//                } else {
+//                    canvas.drawColor(bgColor)
+//                    canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
+//                }
+//                canvas.save()
+//                canvas.restore()
+//                callbacks(result)
+//            }, Handler(Looper.getMainLooper())
+//        )
     }
 
 
@@ -106,12 +109,19 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         // 渲染线程
         weatherDrawableManager.ready(width, height)
         simpleDrawTask.ready()
+        executorService = Executors.newScheduledThreadPool(1)
+        executorService.scheduleWithFixedDelay(
+            {
+                weatherDrawableManager.calculate(width, height)
+            }, 0, 8, java.util.concurrent.TimeUnit.MILLISECONDS
+        )
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, p1: Int, p2: Int, p3: Int) = Unit
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         simpleDrawTask.destroy()
+        executorService.shutdown()
         weatherDrawableManager.release()
     }
 

@@ -10,6 +10,8 @@ import com.google.fpl.liquidfun.ParticleSystemDef
 import com.google.fpl.liquidfun.PolygonShape
 import com.google.fpl.liquidfun.Vec2
 import com.google.fpl.liquidfun.World
+import me.spica.spicaweather2.common.ParticleGroupType
+import me.spica.spicaweather2.common.ParticleType
 import me.spica.spicaweather2.tools.dp
 
 
@@ -18,14 +20,15 @@ import me.spica.spicaweather2.tools.dp
  */
 class RainParticleManager {
 
-    private val mProportion = 60f // 模拟世界和view坐标的转化比例
+    // 模拟世界和view坐标的转化比例
     private val dt = 1f / 30f
-    private val velocityIterations = 8
-    private val positionIterations = 3
-    private val particleIterations = 3
+    private val velocityIterations = 3
+    private val positionIterations = 1
+    private val particleIterations = 2
 
     companion object {
         const val ParticleMaxCount = 2000
+        const val mProportion = 60f
     }
 
     private var mWorldWidth = 0
@@ -55,12 +58,25 @@ class RainParticleManager {
         isInitOK = true
     }
 
+    private var lastStepTime = 0L
 
     // 更新粒子的位置
     fun run() {
         if (!isInitOK) return
         synchronized(world) {
-            world.step(dt, velocityIterations, positionIterations, particleIterations)
+            if (lastStepTime == 0L) {
+                world.step(dt, velocityIterations, positionIterations, particleIterations)
+            } else {
+                val now = System.currentTimeMillis()
+                val elapsed = now - lastStepTime
+                world.step(
+                    elapsed / 1000f * 2,
+                    velocityIterations,
+                    positionIterations,
+                    particleIterations
+                )
+            }
+            lastStepTime = System.currentTimeMillis()
         }
     }
 
@@ -103,14 +119,13 @@ class RainParticleManager {
 
     val system: com.google.fpl.liquidfun.ParticleSystem by lazy {
         val psd = ParticleSystemDef()
-        psd.dampingStrength = 2.2f
+        psd.dampingStrength = 1f
         psd.density = 1f
         psd.maxCount = ParticleMaxCount
         psd.radius = mappingView2Body(1.dp)
-        psd.dampingStrength = 1.3f
         psd.pressureStrength = 0.03f
         psd.gravityScale = 1.4f
-        psd.repulsiveStrength = 0f
+        psd.repulsiveStrength = 0.2f
 //        psd.surfaceTensionPressureStrength = 10.55f
         psd.viscousStrength = 20f
         val ps = world.createParticleSystem(psd)
@@ -124,8 +139,6 @@ class RainParticleManager {
     private val rainItemDef = ParticleGroupDef()
 
     private fun createRainItemShapeAndDef() {
-        rainItemDef.flags = 0
-        rainItemDef.groupFlags = 0
         rainItemDef.shape = rainItemShape
 //        rainItemDef.linearVelocity = Vec2(0f, 9f)
     }
@@ -144,6 +157,9 @@ class RainParticleManager {
                 Vec2(mappingView2Body(x), mappingView2Body(y + 18.dp)),
             ), 4
         )
+//        rainItemDef.lifetime = 12f
+        rainItemDef.flags = ParticleType.b2_waterParticle.toLong()
+        rainItemDef.groupFlags = ParticleGroupType.b2_solidParticleGroup.toLong()
         return system.createParticleGroup(rainItemDef)
     }
 

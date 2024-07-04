@@ -5,11 +5,12 @@ import android.graphics.Color
 import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.viewpager2.widget.ViewPager2
+import me.spica.spicaweather2.view.weather_bg.WeatherBackgroundSurfaceView
 import me.spica.spicaweather2.view.weather_bg.WeatherBackgroundTextureView
 
 class ActivityMainLayout(context: Context) : AViewGroup(context) {
 
-    val weatherBackgroundSurfaceView = WeatherBackgroundTextureView(context)
+    val weatherBackgroundSurfaceView = WeatherBackgroundSurfaceView(context)
         .apply {
             layoutParams = LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
