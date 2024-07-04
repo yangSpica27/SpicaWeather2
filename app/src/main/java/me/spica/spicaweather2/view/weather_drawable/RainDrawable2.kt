@@ -20,7 +20,7 @@ class RainDrawable2 : WeatherDrawable() {
     // 绘制雨水的paint
     private val rainPaint = Paint().apply {
         strokeCap = Paint.Cap.ROUND
-        strokeWidth = 2.dp
+        strokeWidth = 3.dp
         color = Color.parseColor("#84b6e7")
         style = Paint.Style.FILL
     }
