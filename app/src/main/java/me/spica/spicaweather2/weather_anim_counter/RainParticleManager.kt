@@ -20,14 +20,15 @@ import me.spica.spicaweather2.tools.dp
  */
 class RainParticleManager {
 
-    // 模拟世界和view坐标的转化比例
+
     private val dt = 1f / 30f
     private val velocityIterations = 3
     private val positionIterations = 1
-    private val particleIterations = 2
+    private val particleIterations = 3
 
     companion object {
-        const val ParticleMaxCount = 2000
+        const val ParticleMaxCount = 4000
+        // 模拟世界和view坐标的转化比例
         const val mProportion = 60f
     }
 
@@ -49,7 +50,7 @@ class RainParticleManager {
         this.mWorldHeight = height
         boxWidth = mappingView2Body(mWorldWidth * 1f - 48.dp) / 2f
         boxHeight = mappingView2Body(mProportion * 1f)
-        world = World(0f, 9.8f)
+        world = World(0f, 20f)
 
 
 
@@ -105,8 +106,8 @@ class RainParticleManager {
         val fixtureDef = FixtureDef()
         fixtureDef.shape = box
         fixtureDef.density = mDensity
-        fixtureDef.friction = 0.1f // 摩擦系数
-        fixtureDef.restitution = 0.3f // 补偿系数
+//        fixtureDef.friction = 0.1f // 摩擦系数
+//        fixtureDef.restitution = 0.3f // 补偿系数
         fixtureDef.filter.maskBits = 0b01
         fixtureDef.filter.groupIndex = 0b01
         bodyDef.position[boxWidth + mappingView2Body(24.dp)] =
@@ -124,8 +125,10 @@ class RainParticleManager {
         psd.maxCount = ParticleMaxCount
         psd.radius = mappingView2Body(1.dp)
         psd.pressureStrength = 0.03f
-        psd.gravityScale = 1.4f
-        psd.repulsiveStrength = 0.2f
+        psd.strictContactCheck = false
+        psd.springStrength = 0.1f
+//        psd.gravityScale = 1.4f
+//        psd.repulsiveStrength = 0.2f
 //        psd.surfaceTensionPressureStrength = 10.55f
         psd.viscousStrength = 20f
         val ps = world.createParticleSystem(psd)
@@ -148,7 +151,7 @@ class RainParticleManager {
     fun createRainItem(): ParticleGroup {
         val x = (0..mWorldWidth).random(random).toFloat()
         val y = (-3 * mWorldHeight..0).random(random).toFloat()
-        val width = (1..2).random(random).dp
+        val width = 1.dp
         rainItemShape.set(
             arrayOf(
                 Vec2(mappingView2Body(x), mappingView2Body(y)),
@@ -159,7 +162,8 @@ class RainParticleManager {
         )
 //        rainItemDef.lifetime = 12f
         rainItemDef.flags = ParticleType.b2_waterParticle.toLong()
-        rainItemDef.groupFlags = ParticleGroupType.b2_solidParticleGroup.toLong()
+//        rainItemDef.groupFlags = ParticleGroupType.b2_solidParticleGroup.toLong()
+        rainItemDef.lifetime = 20f
         return system.createParticleGroup(rainItemDef)
     }
 
