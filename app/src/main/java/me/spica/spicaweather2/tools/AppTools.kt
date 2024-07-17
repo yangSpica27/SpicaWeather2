@@ -13,6 +13,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.MessageQueue
 import android.util.DisplayMetrics
+import android.view.Display
 import android.view.MotionEvent
 import android.view.TouchDelegate
 import android.view.View
@@ -88,6 +89,17 @@ fun doOnMainThreadIdle(action: () -> Unit, timeout: Long? = null) {
         setupIdleHandler(Looper.myQueue())
     } else {
         setupIdleHandler(Looper.getMainLooper().queue)
+    }
+}
+
+fun getRefreshRate(context: Context): Float {
+    return try {
+        val displayManager = context.getSystemService(Context.DISPLAY_SERVICE) as android.hardware.display.DisplayManager
+        val display = displayManager.getDisplay(Display.DEFAULT_DISPLAY)
+        val displayMode = display?.mode
+        displayMode?.refreshRate ?: 60f
+    } catch (e: Exception) {
+        60f
     }
 }
 

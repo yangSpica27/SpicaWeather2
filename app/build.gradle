@@ -15,7 +15,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "me.spica.weather2"
+        applicationId "me.spica.weather"
         minSdk 26
         targetSdk 34
         versionCode 6
@@ -155,6 +155,7 @@ dependencies {
     implementation 'com.google.dagger:hilt-android:2.48'
     ksp 'com.google.dagger:hilt-compiler:2.48'
 
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.14'
 
     implementation 'com.airbnb.android:lottie:6.0.0'
     implementation("io.coil-kt:coil:2.5.0")

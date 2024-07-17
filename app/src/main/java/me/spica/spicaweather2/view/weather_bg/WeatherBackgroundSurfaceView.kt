@@ -10,9 +10,9 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
+import me.spica.spicaweather2.tools.getRefreshRate
 import me.spica.spicaweather2.view.weather_drawable.WeatherDrawableManager
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledExecutorService
+import kotlin.math.roundToLong
 
 class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 
@@ -30,11 +30,14 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     private val weatherDrawableManager = WeatherDrawableManager(context)
 
     // 通过 SimpleDrawTask 实现绘制逻辑
-    private val simpleDrawTask = object : SimpleDrawTask(8L, { canvas ->
-        weatherDrawableManager.calculate(width, height)
-        drawBackground(canvas)
-        weatherDrawableManager.doOnDraw(canvas, width, height)
-    }) {
+    private val simpleDrawTask = object :
+        SimpleDrawTask(
+            (1000 / getRefreshRate(this@WeatherBackgroundSurfaceView.context).roundToLong()),
+            { canvas ->
+                weatherDrawableManager.calculate(width, height)
+                drawBackground(canvas)
+                weatherDrawableManager.doOnDraw(canvas, width, height)
+            }) {
 
         override fun lockCanvas(): Canvas? = this@WeatherBackgroundSurfaceView.holder.lockCanvas()
 
@@ -44,7 +47,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
             }
         }
     }
-
 
 
     var bgColor = ContextCompat.getColor(context, R.color.light_blue_600)

@@ -3,9 +3,7 @@ package me.spica.spicaweather2.ui.main
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.view.Window
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
@@ -26,7 +24,6 @@ import me.spica.spicaweather2.persistence.entity.CityWithWeather
 import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.tools.MessageEvent
 import me.spica.spicaweather2.tools.MessageType
-import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.tools.startActivityWithAnimation
 import me.spica.spicaweather2.ui.manager_city.ActivityManagerCity
 import me.spica.spicaweather2.view.Manager2HomeView
@@ -38,7 +35,6 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import rikka.material.app.MaterialActivity
 import timber.log.Timber
-import kotlin.system.measureTimeMillis
 
 
 /**
@@ -50,7 +46,7 @@ class ActivityMain : MaterialActivity() {
     companion object {
         // 当前页面的 截图
         var screenBitmap: Bitmap? = null
-        var currentThemeColor:Int =  Color.parseColor("#4297e7")
+        var currentThemeColor: Int = Color.parseColor("#4297e7")
     }
 
     private val viewModel: MainViewModel by viewModels()
@@ -178,31 +174,9 @@ class ActivityMain : MaterialActivity() {
                 updateTitleAndAnim(position)
             }
         }
-        setHighRefreshRate()
     }
 
-    private fun setHighRefreshRate() {
-        val display = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            display
-        } else {
-            (getSystemService(WINDOW_SERVICE) as WindowManager).defaultDisplay
-        }
-        val modes = display?.supportedModes
 
-        var mode = modes?.first()
-
-        if (mode != null) {
-            modes?.forEach {
-                if ((mode?.refreshRate ?: 0f) < it.refreshRate) {
-                    mode = it
-                }
-            }
-        }
-        val window: Window = window
-        val params = window.attributes
-        params.preferredRefreshRate = mode?.refreshRate ?: 60f
-        window.attributes = params
-    }
 
     // 返回拦截
     private fun handleBack() {
