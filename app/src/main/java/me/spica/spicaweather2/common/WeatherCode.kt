@@ -12,7 +12,7 @@ object WeatherCodeUtils {
                 return WeatherType.WEATHER_CLOUDY
             }
             "102", "104", "152", "154" -> {
-                return WeatherType.WEATHER_CLOUD
+                return WeatherType.WEATHER_FORECAST
             }
 
             "300", "301", "303", "305", "306",

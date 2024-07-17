@@ -94,34 +94,33 @@ class DetailsCardsLayout(
 
     override fun startEnterAnim() {
         super.startEnterAnim()
-        uvDescCard.alpha = 1f
-        humidityDescCard.alpha = 1f
-        feelTempDescCard.alpha = 1f
-        sunRiseDescCard.alpha = 1f
-        AnimationUtils.loadAnimation(context, R.anim.card_in).apply {
-            duration = 450
-            interpolator = DecelerateInterpolator()
-            fillAfter = true
-            uvDescCard.startAnimation(this)
-        }
-        AnimationUtils.loadAnimation(context, R.anim.card_in).apply {
-            duration = 550
-            interpolator = OvershootInterpolator(1.2f)
-            fillAfter = true
-            humidityDescCard.startAnimation(this)
-        }
-        AnimationUtils.loadAnimation(context, R.anim.card_in).apply {
-            duration = 350
-            interpolator = AccelerateInterpolator(1.2f)
-            fillAfter = true
-            feelTempDescCard.startAnimation(this)
-        }
-        AnimationUtils.loadAnimation(context, R.anim.card_in).apply {
-            duration = 650
-            interpolator = AccelerateInterpolator()
-            fillAfter = true
-            sunRiseDescCard.startAnimation(this)
-        }
+//        uvDescCard.alpha = 1f
+//        humidityDescCard.alpha = 1f
+//        feelTempDescCard.alpha = 1f
+//        sunRiseDescCard.alpha = 1f
+
+        uvDescCard.animate()
+            .alpha(1f)
+            .setStartDelay(150)
+            .withLayer()
+            .start()
+        humidityDescCard.animate()
+            .alpha(1f)
+            .setStartDelay(250)
+            .withLayer()
+            .start()
+        feelTempDescCard.animate()
+            .alpha(1f)
+            .setStartDelay(350)
+            .withLayer()
+            .start()
+        sunRiseDescCard.animate()
+            .alpha(1f)
+            .setStartDelay(450)
+            .withLayer()
+            .start()
+
+
     }
 
     override fun resetAnim() {

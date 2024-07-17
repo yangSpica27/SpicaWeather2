@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.squareup.moshi.JsonQualifier
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.WeatherType
 import timber.log.Timber
@@ -46,7 +45,7 @@ data class Weather(
             }
 
             102, 104, 152, 154 -> {
-                return WeatherType.WEATHER_CLOUD
+                return WeatherType.WEATHER_FORECAST
             }
 
             300, 301, 303, 305, 306,
@@ -66,11 +65,16 @@ data class Weather(
                 return WeatherType.WEATHER_SLEET
             }
 
+
             500, 501, 502 -> {
                 return WeatherType.WEATHER_FOG
             }
 
-            503, 504, 505, 506, 507, 508, 509, 510,
+            503, 504, 505, 506, 507, 508 -> {
+                return WeatherType.WEATHER_SANDSTORM
+            }
+
+            509, 510,
             511, 512, 513, 514, 515 -> {
                 return WeatherType.WEATHER_HAZE
             }
@@ -92,7 +96,7 @@ data class Weather(
         return when (getWeatherType()) {
             WeatherType.WEATHER_SUNNY -> R.drawable.ic_sunny
             WeatherType.WEATHER_CLOUDY -> R.drawable.ic_cloudly
-            WeatherType.WEATHER_CLOUD -> R.drawable.ic_cloudly
+            WeatherType.WEATHER_FORECAST -> R.drawable.ic_cloudly
             WeatherType.WEATHER_RAINY -> R.drawable.ic_rain
             WeatherType.WEATHER_SNOW -> R.drawable.ic_snow
             WeatherType.WEATHER_SLEET -> R.drawable.ic_rain
@@ -100,7 +104,8 @@ data class Weather(
             WeatherType.WEATHER_HAZE -> R.drawable.ic_fog
             WeatherType.WEATHER_HAIL -> R.drawable.ic_rain
             WeatherType.WEATHER_THUNDER -> R.drawable.ic_thumb
-            WeatherType.WEATHER_THUNDERSTORM -> R.drawable.ic_rain_thumb
+            WeatherType.WEATHER_THUNDERSTORM -> R.drawable.ic_thumb
+            WeatherType.WEATHER_SANDSTORM -> R.drawable.ic_storm_icon
         }
     }
 }

@@ -43,6 +43,9 @@ open class HwTextureView @JvmOverloads constructor(ctx: Context, attrs: Attribut
     }
 
     override fun lockCanvas(): Canvas? {
+        if (proxySurface == null|| proxySurface?.isValid == false) {
+            return null
+        }
         return proxySurface?.lockHardwareCanvas()
     }
 

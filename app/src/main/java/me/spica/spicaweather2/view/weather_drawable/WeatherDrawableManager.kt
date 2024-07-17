@@ -23,6 +23,7 @@ class WeatherDrawableManager(context: Context) {
         register(NowWeatherView.WeatherAnimType.FOG, HazeDrawable(context))
         register(NowWeatherView.WeatherAnimType.HAZE, HazeDrawable(context))
         register(NowWeatherView.WeatherAnimType.UNKNOWN, CloudDrawable(context))
+        register(NowWeatherView.WeatherAnimType.SANDSTORM, SandStormDrawable(context))
         ready(context.getScreenWidth(), context.getScreenHeight())
         getCurrentDrawable().startAnim()
     }

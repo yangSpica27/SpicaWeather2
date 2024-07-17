@@ -15,6 +15,8 @@ import android.util.TypedValue
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import androidx.core.view.marginLeft
 import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
@@ -196,6 +198,7 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context) {
         set.play(set1).with(set2).with(progressAnim)// 两个动画同时开始
 
         set.setDuration(550) // 播放时长
+        set.startDelay = 130 // 延迟播放
         set.interpolator = DecelerateInterpolator() // 设置插值器
         return@lazy set
     }

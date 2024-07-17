@@ -234,7 +234,9 @@ class DailyItemView : View {
 
             // 绘制天气图标
             val bitmap = getOrCreateBitmap(
-                WeatherCodeUtils.getWeatherCode(dailyWeatherBean.iconId).getIconRes()
+                WeatherCodeUtils.getWeatherCode(dailyWeatherBean.iconId).getIconRes(),
+                width = 35.dp.toInt(),
+                height = 35.dp.toInt()
             )
 
             canvas.drawBitmap(

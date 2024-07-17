@@ -6,12 +6,11 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.tools.dp
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.locks.ReentrantReadWriteLock
-import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock
 
 interface SpicaWeatherCard {
 
@@ -27,8 +26,12 @@ interface SpicaWeatherCard {
     // 开始进入动画
     fun startEnterAnim() {
         enterAnim.removeAllListeners()
+        enterAnim.doOnStart {
+            animatorView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+        }
         enterAnim.doOnEnd {
             enterAnim = AnimatorSet()
+            animatorView.setLayerType(View.LAYER_TYPE_NONE, null)
         }
         enterAnim.startDelay = 150
         enterAnim.start()
@@ -78,7 +81,9 @@ interface SpicaWeatherCard {
         if (isIn) {
             hasInScreen.set(true)
             animatorView.post {
-                startEnterAnim()
+                doOnMainThreadIdle({
+                    startEnterAnim()
+                },550)
             }
         }
     }

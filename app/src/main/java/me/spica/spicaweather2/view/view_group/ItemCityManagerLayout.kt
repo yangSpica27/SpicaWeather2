@@ -5,12 +5,15 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.Typeface
 import android.os.Build
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
 import androidx.core.view.marginTop
@@ -20,6 +23,7 @@ import com.google.android.material.radiobutton.MaterialRadioButton
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.WeatherCodeUtils
 import me.spica.spicaweather2.common.getDrawable
+import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
 
 class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
@@ -42,7 +46,7 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
         )
         text = "--"
         typeface = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            Typeface.create(Typeface.DEFAULT, 500, false)
+            Typeface.create(Typeface.DEFAULT, 600, false)
         } else {
             Typeface.DEFAULT
         }
@@ -159,10 +163,15 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
         }
 
         cityWithWeather.weather?.let { weather ->
-            background =
-                WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId).getDrawable().apply {
-                    cornerRadius = 16.dp.toFloat()
-                }
+            background = ContextCompat.getDrawable(
+                context,
+                R.drawable.bg_manager_city_item
+            )?.apply {
+                colorFilter = PorterDuffColorFilter(
+                    WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId).getThemeColor(),
+                    PorterDuff.Mode.SRC_IN
+                )
+            }
         }
 
         cityName.text = cityWithWeather.city.cityName

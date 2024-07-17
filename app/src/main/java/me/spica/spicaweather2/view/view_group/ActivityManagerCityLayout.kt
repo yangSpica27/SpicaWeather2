@@ -48,12 +48,6 @@ class ActivityManagerCityLayout(context: Context) : AViewGroup(context) {
 //        setBackgroundColor(Color.BLACK)
     }
 
-    val transformerImageView = AppCompatImageView(context).apply {
-        layoutParams = LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
-    }
 
   val deleteBtn = AppCompatButton(context).apply {
 
@@ -84,7 +78,6 @@ class ActivityManagerCityLayout(context: Context) : AViewGroup(context) {
         )
         addView(recyclerView)
         addView(titleBar)
-        addView(transformerImageView)
         addView(deleteBtn)
         setBackgroundColor(Color.WHITE)
     }
@@ -96,7 +89,6 @@ class ActivityManagerCityLayout(context: Context) : AViewGroup(context) {
             widthMeasureSpec,
             (measuredHeight - titleBar.height).toExactlyMeasureSpec()
         )
-        transformerImageView.autoMeasure()
         deleteBtn.autoMeasure()
         setMeasuredDimension(
             resolveSize(measuredWidth, widthMeasureSpec),
@@ -107,7 +99,6 @@ class ActivityManagerCityLayout(context: Context) : AViewGroup(context) {
     override fun onLayout(p0: Boolean, p1: Int, p2: Int, p3: Int, p4: Int) {
         titleBar.layout(0, 0)
         recyclerView.layout(0, titleBar.height)
-        transformerImageView.layout(0, 0)
         deleteBtn.layout(left, bottom - deleteBtn.measuredHeight)
     }
 }

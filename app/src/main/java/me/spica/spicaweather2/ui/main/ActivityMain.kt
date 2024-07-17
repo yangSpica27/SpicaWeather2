@@ -2,12 +2,11 @@ package me.spica.spicaweather2.ui.main
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.view.Surface
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -21,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.spica.spicaweather2.common.WeatherType
-import me.spica.spicaweather2.common.getBackgroundBitmap
 import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.common.getWeatherAnimType
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
@@ -52,6 +50,7 @@ class ActivityMain : MaterialActivity() {
     companion object {
         // 当前页面的 截图
         var screenBitmap: Bitmap? = null
+        var currentThemeColor:Int =  Color.parseColor("#4297e7")
     }
 
     private val viewModel: MainViewModel by viewModels()
@@ -104,13 +103,11 @@ class ActivityMain : MaterialActivity() {
         super.onResume()
         // 从管理城市页面返回进行动画
         if (manager2HomeView.isAttached) {
-            doOnMainThreadIdle({
-                manager2HomeView.endAction = {
-                    layout.mainTitleLayout.dotIndicator.refreshDots()
-                    updateOtherPageScroller()
-                }
-                manager2HomeView.startAnim()
-            })
+            manager2HomeView.endAction = {
+                layout.mainTitleLayout.dotIndicator.refreshDots()
+                updateOtherPageScroller()
+            }
+            manager2HomeView.startAnim()
         }
     }
 
@@ -124,15 +121,15 @@ class ActivityMain : MaterialActivity() {
             AlertDialog.Builder(this)
                 .setTitle("选择天气动画类型").setItems(
                     arrayOf(
-                        "晴天", "多云", "雨天", "霾", "雾天"
+                        "晴天", "多云", "雨天", "霾", "沙尘暴"
                     )
                 ) { _, which ->
                     val type = when (which) {
                         0 -> WeatherType.WEATHER_SUNNY
                         1 -> WeatherType.WEATHER_CLOUDY
-                        3 -> WeatherType.WEATHER_HAZE
-                        4 -> WeatherType.WEATHER_FOG
-                        else -> WeatherType.WEATHER_RAINY
+                        2 -> WeatherType.WEATHER_RAINY
+                        3 -> WeatherType.WEATHER_FOG
+                        else -> WeatherType.WEATHER_SANDSTORM
                     }
                     with(layout.weatherBackgroundSurfaceView) {
                         bgColor = type.getThemeColor()
@@ -228,11 +225,8 @@ class ActivityMain : MaterialActivity() {
         manager2HomeView.attachToRootView()
         lifecycleScope.launch(Dispatchers.Default) {
             if (screenBitmap?.isRecycled == false) {
-                val countRecycler = measureTimeMillis {
-                    screenBitmap?.recycle()
-                    screenBitmap = null
-                }
-                Timber.tag("销毁位图耗时").e("${countRecycler}ms")
+                screenBitmap?.recycle()
+                screenBitmap = null
             }
             val count1 = System.currentTimeMillis()
             val bgBitmap: Bitmap = try {
@@ -298,6 +292,7 @@ class ActivityMain : MaterialActivity() {
             currentWeather?.getWeatherType()?.let {
                 with(layout.weatherBackgroundSurfaceView) {
                     bgColor = it.getThemeColor()
+                    currentThemeColor = bgColor
                     currentWeatherAnimType = it.getWeatherAnimType()
                     layout.currentWeatherLayout.bindData(currentWeather)
                 }

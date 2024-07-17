@@ -42,10 +42,6 @@ class Manager2HomeView : View {
                 intArray[1] + from.height * 1f,
             )
             try {
-//                mBackground = BitmapUtils.blur(
-//                    context = from.context,
-//                    image = window.decorView.drawToBitmap()
-//                )
                 mBackground = window.decorView.drawToBitmap()
             } catch (e: Exception) {
                 e.printStackTrace()

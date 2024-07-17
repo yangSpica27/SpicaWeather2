@@ -162,7 +162,7 @@ dependencies {
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     implementation("org.greenrobot:eventbus:3.3.1")
-
+    implementation("androidx.palette:palette:1.0.0")
 
 //    configurations { natives }
 //    implementation 'com.badoo.mobile:android-weak-handler:1.1'

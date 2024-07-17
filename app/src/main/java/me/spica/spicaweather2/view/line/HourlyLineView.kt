@@ -106,7 +106,6 @@ class HourlyLineView : View {
 
     init {
         setPadding(14.dp.toInt(), 12.dp.toInt(), 14.dp.toInt(), 12.dp.toInt())
-        this.setLayerType(View.LAYER_TYPE_HARDWARE, null)
     }
 
     fun setData(data: List<HourlyWeatherBean>) {

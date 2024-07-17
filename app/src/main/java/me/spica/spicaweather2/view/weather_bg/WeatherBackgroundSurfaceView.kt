@@ -30,7 +30,8 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     private val weatherDrawableManager = WeatherDrawableManager(context)
 
     // 通过 SimpleDrawTask 实现绘制逻辑
-    private val simpleDrawTask = object : SimpleDrawTask(10L, { canvas ->
+    private val simpleDrawTask = object : SimpleDrawTask(8L, { canvas ->
+        weatherDrawableManager.calculate(width, height)
         drawBackground(canvas)
         weatherDrawableManager.doOnDraw(canvas, width, height)
     }) {
@@ -44,8 +45,6 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         }
     }
 
-    // 计算线程
-    private lateinit var executorService: ScheduledExecutorService
 
 
     var bgColor = ContextCompat.getColor(context, R.color.light_blue_600)
@@ -85,7 +84,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         canvas.drawColor(backgroundColorAnim.animatedValue as Int)
         canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
         callbacks.invoke(result)
-        val background = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+//        val background = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 //        PixelCopy.request(
 //            this, background, { copyResult ->
 //                val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -109,19 +108,12 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
         // 渲染线程
         weatherDrawableManager.ready(width, height)
         simpleDrawTask.ready()
-        executorService = Executors.newScheduledThreadPool(1)
-        executorService.scheduleWithFixedDelay(
-            {
-                weatherDrawableManager.calculate(width, height)
-            }, 0, 8, java.util.concurrent.TimeUnit.MILLISECONDS
-        )
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, p1: Int, p2: Int, p3: Int) = Unit
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         simpleDrawTask.destroy()
-        executorService.shutdown()
         weatherDrawableManager.release()
     }
 

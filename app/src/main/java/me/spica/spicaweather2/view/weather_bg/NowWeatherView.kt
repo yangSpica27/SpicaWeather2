@@ -12,6 +12,7 @@ open class NowWeatherView {
         SNOW, // 下雪
         FOG, // 雾天
         HAZE, // 霾天
+        SANDSTORM, // 沙尘暴
         UNKNOWN, // 无效果
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.transition.PatternPathMotion
 import android.transition.TransitionManager
 import android.view.Menu
 import android.view.MenuItem
@@ -16,7 +17,6 @@ import androidx.core.transition.doOnEnd
 import androidx.core.transition.doOnStart
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fondesa.recyclerviewdivider.dividerBuilder
@@ -34,10 +34,10 @@ import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.tools.hide
 import me.spica.spicaweather2.tools.show
-import me.spica.spicaweather2.tools.startActivityWithAnimation
 import me.spica.spicaweather2.tools.toast
 import me.spica.spicaweather2.ui.add_city.ActivityAddCity
 import me.spica.spicaweather2.ui.main.ActivityMain
+import me.spica.spicaweather2.view.Home2ManagerView
 import me.spica.spicaweather2.view.Manager2HomeView
 import me.spica.spicaweather2.view.view_group.ActivityManagerCityLayout
 import org.greenrobot.eventbus.EventBus
@@ -57,6 +57,10 @@ class ActivityManagerCity : MaterialActivity() {
 
     private val layout by lazy {
         ActivityManagerCityLayout(this)
+    }
+
+    private val home2ManagerView by lazy {
+        Home2ManagerView(this)
     }
 
     private val adapter = ManagerCityAdapter()
@@ -110,15 +114,18 @@ class ActivityManagerCity : MaterialActivity() {
             .build()
             .addTo(layout.recyclerView)
 
+        home2ManagerView.attachToRootView()
 
         layout.recyclerView.adapter = adapter
         itemTouchHelper.attachToRecyclerView(layout.recyclerView)
 
         adapter.itemClickListener = { position, view ->
             lifecycleScope.launch(Dispatchers.Default) {
+
                 Manager2HomeView.initFromViewRect(view, window)
                 EventBus.getDefault()
                     .post(MessageEvent.create(MessageType.Get2MainActivityAnim, position))
+
                 withContext(Dispatchers.Main) {
                     if (Build.VERSION.SDK_INT >= 34) {
                         overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, 0, 0)
@@ -138,21 +145,19 @@ class ActivityManagerCity : MaterialActivity() {
             startActivity(Intent(this@ActivityManagerCity, ActivityAddCity::class.java))
         }
 
-        if (ActivityMain.screenBitmap != null) {
-            layout.transformerImageView.setImageBitmap(ActivityMain.screenBitmap)
-        }
 
         layout.recyclerView.addOnChildAttachStateChangeListener(
             object : RecyclerView.OnChildAttachStateChangeListener {
                 override fun onChildViewAttachedToWindow(view: View) {
                     if (view.tag?.toString() == intent.getStringExtra(ARG_CITY_NAME)) {
-                        startTransformerAnim(view)
+                        createInAnim(view)
                         layout.recyclerView.removeOnChildAttachStateChangeListener(this)
                     }
                 }
 
                 override fun onChildViewDetachedFromWindow(view: View) = Unit
             })
+
 
         layout.deleteBtn.setOnClickListener {
             if (adapter.getSelectCityNames().size == adapter.items.size) {
@@ -165,6 +170,7 @@ class ActivityManagerCity : MaterialActivity() {
         lifecycleScope.launch {
             viewModel.allCityWithWeather.collectLatest {
                 adapter.setItems(it)
+
             }
         }
 
@@ -215,32 +221,18 @@ class ActivityManagerCity : MaterialActivity() {
     }
 
 
-    private fun startTransformerAnim(toView: View) {
-        val container = findViewById<ViewGroup>(android.R.id.content)
-        toView.visibility = View.INVISIBLE
-        val transform = MaterialContainerTransform().apply {
-            startView = layout.transformerImageView
-            endView = toView
-            addTarget(endView)
-            scrimColor = Color.TRANSPARENT
-            containerColor = Color.TRANSPARENT
-            duration = 850
-//            interpolator = DecelerateInterpolator(1.2f)
-//            fadeMode = MaterialContainerTransform.FADE_MODE_THROUGH
+    private fun createInAnim(toView: View) {
+        toView.post {
+            home2ManagerView.bindEndView(toView)
+            doOnMainThreadIdle({
+                startInAnim()
+            }, 200)
         }
+    }
 
-        transform.doOnStart {
-            toView.visibility = View.INVISIBLE
-        }
-
-        transform.doOnEnd {
-            layout.removeView(layout.transformerImageView)
-            toView.visibility = View.VISIBLE
-        }
-
-        doOnMainThreadIdle({
-            TransitionManager.beginDelayedTransition(container, transform)
-        })
+    // 开始入场动画
+    private fun startInAnim() {
+        home2ManagerView.startAnim()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
