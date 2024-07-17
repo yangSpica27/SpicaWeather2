@@ -10,7 +10,6 @@ import com.google.fpl.liquidfun.ParticleSystemDef
 import com.google.fpl.liquidfun.PolygonShape
 import com.google.fpl.liquidfun.Vec2
 import com.google.fpl.liquidfun.World
-import me.spica.spicaweather2.common.ParticleGroupType
 import me.spica.spicaweather2.common.ParticleType
 import me.spica.spicaweather2.tools.dp
 
@@ -28,6 +27,7 @@ class RainParticleManager {
 
     companion object {
         const val ParticleMaxCount = 4000
+
         // 模拟世界和view坐标的转化比例
         const val mProportion = 60f
     }
@@ -39,7 +39,8 @@ class RainParticleManager {
     private var boxWidth: Float = 0f
     private var boxHeight: Float = 0f
 
-    private var isInitOK = false
+    var isInitOK = false
+        private set
     private lateinit var world: World
 
     private val random = kotlin.random.Random.Default
@@ -179,13 +180,16 @@ class RainParticleManager {
 
 
     fun destroy() {
-        try {
-            rainItemShape.delete()
-            rainItemDef.delete()
-            system.delete()
-            world.delete()
-        } catch (e: Exception) {
-            e.printStackTrace()
+        synchronized(world) {
+            try {
+                rainItemShape.delete()
+                rainItemDef.delete()
+                system.delete()
+                world.delete()
+                isInitOK = false
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

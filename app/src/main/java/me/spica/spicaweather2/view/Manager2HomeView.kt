@@ -17,9 +17,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.animation.DecelerateInterpolator
+import android.widget.FrameLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.view.drawToBitmap
-import me.spica.spicaweather2.tools.BitmapUtils
 import me.spica.spicaweather2.tools.dp
 import timber.log.Timber
 
@@ -108,6 +108,7 @@ class Manager2HomeView : View {
     }
 
     fun startAnim() {
+        if (progressAnimation.isRunning) progressAnimation.cancel()
         progressAnimation.start()
     }
 
@@ -116,13 +117,20 @@ class Manager2HomeView : View {
 
     // 将自己添加到根布局中
     fun attachToRootView() {
-        layoutParams = ViewGroup.LayoutParams(
+        layoutParams = FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         )
-        mRootView.addView(this)
+        if (parent == null) {
+            mRootView.addView(this)
+        }
         isAttached = true
         invalidate()
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        if (progressAnimation.isRunning) progressAnimation.cancel()
     }
 
     // 从根布局中移除

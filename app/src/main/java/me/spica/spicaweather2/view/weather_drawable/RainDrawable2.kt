@@ -20,7 +20,7 @@ class RainDrawable2 : WeatherDrawable() {
     // 绘制雨水的paint
     private val rainPaint = Paint().apply {
         strokeCap = Paint.Cap.ROUND
-        strokeWidth = 1.dp*2
+        strokeWidth = 1.dp * 2
         color = Color.parseColor("#A2CAF1")
         style = Paint.Style.FILL
     }
@@ -96,6 +96,7 @@ class RainDrawable2 : WeatherDrawable() {
                 it.calculation(viewWidth, viewHeight)
             }
             rainEffectCounter.run()
+            if (!rainEffectCounter.isInitOK) return
             if ((System.currentTimeMillis() - lastAddRainTime > 50) &&
                 rainEffectCounter.system.particleCount <= RainParticleManager.ParticleMaxCount
             ) {
@@ -156,7 +157,7 @@ class RainDrawable2 : WeatherDrawable() {
                 }
             }
 
-            Timber.tag("RainDrawable2").e("绘制数量 = ${index/2}")
+//            Timber.tag("RainDrawable2").e("绘制数量 = ${index / 2}")
             canvas.drawPoints(positionArray2, 0, index / 2, rainPaint)
         }
     }

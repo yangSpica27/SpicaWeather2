@@ -5,8 +5,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
@@ -16,8 +16,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import android.widget.FrameLayout
 import androidx.core.animation.doOnEnd
-import androidx.core.graphics.ColorUtils
+import androidx.core.view.drawToBitmap
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.ui.main.ActivityMain
 import timber.log.Timber
@@ -38,6 +39,7 @@ class Home2ManagerView : View {
 
 
     private var hasBind = false
+
 
     fun bindEndView(view: View) {
         if (hasBind) return
@@ -89,8 +91,9 @@ class Home2ManagerView : View {
                     height * 1f - (height - endRect.bottom) * progress
                 )
 
-                if (drawRect.bottom > lastB){
-                    Timber.tag("异常数据").e("height:${height} bottom:${drawRect.bottom} lastB:${lastB} progress:${progress}")
+                if (drawRect.bottom > lastB) {
+                    Timber.tag("异常数据")
+                        .e("height:${height} bottom:${drawRect.bottom} lastB:${lastB} progress:${progress}")
                 }
                 lastB = drawRect.bottom
                 postInvalidateOnAnimation()
@@ -105,20 +108,27 @@ class Home2ManagerView : View {
 
     // 将自己添加到根布局中
     fun attachToRootView() {
-        layoutParams = ViewGroup.LayoutParams(
+        layoutParams = FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         )
-        mRootView.addView(this)
+        if (parent == null) {
+            mRootView.addView(this)
+        }
 //        setBackgroundColor(ColorUtils.setAlphaComponent(Color.BLACK, 0x80))
         isAttached = true
         invalidate()
     }
 
     fun startAnim() {
-        if (progressAnimation.isRunning) return
+        if (progressAnimation.isRunning) progressAnimation.cancel()
         progressAnimation.start()
         Timber.tag("动画").e("开始")
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        if (progressAnimation.isRunning) progressAnimation.cancel()
     }
 
     private var isAttached = false
@@ -161,13 +171,13 @@ class Home2ManagerView : View {
         )
         // 绘制清除区域
         mPaint.xfermode = srcInXfermode
-        if (progressAnimation.animatedFraction > .905f) {
-            mPaint.alpha =
-                (255 - 200 * ((progressAnimation.animatedFraction - .905f) / .095f)).toInt()
-        } else {
-            mPaint.alpha = 255
-        }
-        if (ActivityMain.screenBitmap != null && progressAnimation.animatedFraction < .5f) {
+//        if (progressAnimation.animatedFraction > .905f) {
+//            mPaint.alpha =
+//                (255 - 50 * ((progressAnimation.animatedFraction - .905f) / .095f)).toInt()
+//        } else {
+//            mPaint.alpha = 255
+//        }
+        if (ActivityMain.screenBitmap != null && progressAnimation.animatedFraction < .6f) {
             canvas.drawBitmap(ActivityMain.screenBitmap!!, 0f, 0f, mPaint)
         } else {
             canvas.drawRect(0f, 0f, width * 1f, height * 1f, mPaint)

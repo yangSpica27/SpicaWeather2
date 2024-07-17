@@ -80,7 +80,7 @@ fun WeatherType.getThemeColor(): Int {
         WeatherType.WEATHER_HAZE -> Color.parseColor("#E1C899")
         WeatherType.WEATHER_SNOW -> Color.parseColor("#FF4297e7")
         WeatherType.WEATHER_SLEET -> Color.parseColor("#FF00a5d9")
-        WeatherType.WEATHER_SANDSTORM -> Color.parseColor("#FF00a5d9")
+        WeatherType.WEATHER_SANDSTORM -> Color.parseColor("#FFE1C899")
         WeatherType.WEATHER_HAIL -> Color.parseColor("#FFE1C899")
         WeatherType.WEATHER_THUNDERSTORM -> Color.parseColor("#FF4A4646")
     }
