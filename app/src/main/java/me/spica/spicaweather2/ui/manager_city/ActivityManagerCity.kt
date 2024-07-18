@@ -1,26 +1,19 @@
 package me.spica.spicaweather2.ui.manager_city
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.transition.PatternPathMotion
-import android.transition.TransitionManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.view.Window
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.core.transition.doOnEnd
-import androidx.core.transition.doOnStart
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fondesa.recyclerviewdivider.dividerBuilder
-import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +29,6 @@ import me.spica.spicaweather2.tools.hide
 import me.spica.spicaweather2.tools.show
 import me.spica.spicaweather2.tools.toast
 import me.spica.spicaweather2.ui.add_city.ActivityAddCity
-import me.spica.spicaweather2.ui.main.ActivityMain
 import me.spica.spicaweather2.view.Home2ManagerView
 import me.spica.spicaweather2.view.Manager2HomeView
 import me.spica.spicaweather2.view.view_group.ActivityManagerCityLayout
@@ -192,6 +184,9 @@ class ActivityManagerCity : MaterialActivity() {
                     layout.deleteBtn.hide()
                 }
             }
+        }
+        layout.titleBar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
         onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

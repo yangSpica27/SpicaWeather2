@@ -124,6 +124,7 @@ class Manager2HomeView : View {
         if (parent == null) {
             mRootView.addView(this)
         }
+        progressAnimation.cancel()
         isAttached = true
         invalidate()
     }
@@ -168,6 +169,6 @@ class Manager2HomeView : View {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        return true
+        return progressAnimation.animatedFraction != 1f
     }
 }

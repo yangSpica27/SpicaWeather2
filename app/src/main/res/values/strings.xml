@@ -75,5 +75,6 @@
     <string name="air_level4_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应避免长时间、高强度的户外锻炼，一般人群适量减少户外运动</string>
     <string name="air_level5_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应停留在室内，停止户外活动，一般人群应避免户外活动</string>
     <string name="air_level6_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应停留在室内，避免体力消耗，一般人群应避免户外活动</string>
+    <string name="add">新增</string>
 
 </resources>

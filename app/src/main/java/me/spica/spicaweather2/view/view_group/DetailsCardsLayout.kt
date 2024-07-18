@@ -101,7 +101,7 @@ class DetailsCardsLayout(
 
         uvDescCard.animate()
             .alpha(1f)
-            .setStartDelay(150)
+            .setStartDelay(200)
             .withLayer()
             .start()
         humidityDescCard.animate()
@@ -116,7 +116,7 @@ class DetailsCardsLayout(
             .start()
         sunRiseDescCard.animate()
             .alpha(1f)
-            .setStartDelay(450)
+            .setStartDelay(150)
             .withLayer()
             .start()
 

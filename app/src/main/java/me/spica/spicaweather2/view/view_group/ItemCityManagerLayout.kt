@@ -46,7 +46,7 @@ class ItemCityManagerLayout(context: Context) : AViewGroup(context) {
         )
         text = "--"
         typeface = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            Typeface.create(Typeface.DEFAULT, 600, false)
+            Typeface.create(Typeface.DEFAULT, 500, false)
         } else {
             Typeface.DEFAULT
         }

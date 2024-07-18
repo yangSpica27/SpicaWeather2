@@ -78,4 +78,9 @@ abstract class AViewGroup(context: Context, attributeSet: AttributeSet? = null) 
     protected val View.measuredHeightWithMargins get() = (measuredHeight + marginTop + marginBottom)
 
     protected class LayoutParams(width: Int, height: Int) : MarginLayoutParams(width, height)
+
+    protected val MATCH_PARENT: Int = ViewGroup.LayoutParams.MATCH_PARENT
+
+    protected val WRAP_CONTENT: Int = ViewGroup.LayoutParams.WRAP_CONTENT
+
 }

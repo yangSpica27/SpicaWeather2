@@ -40,6 +40,7 @@ class Home2ManagerView : View {
 
     private var hasBind = false
 
+    private var toViewBitmap: Bitmap? = null
 
     fun bindEndView(view: View) {
         if (hasBind) return
@@ -51,8 +52,8 @@ class Home2ManagerView : View {
             intArray[0] + view.width * 1f,
             intArray[1] + view.height * 1f,
         )
-        Timber.tag("坐标").e("x:${intArray[0]} y:${intArray[1]}")
         mPaint.color = ActivityMain.currentThemeColor
+        toViewBitmap = view.drawToBitmap()
         hasBind = true
     }
 
@@ -116,6 +117,7 @@ class Home2ManagerView : View {
             mRootView.addView(this)
         }
 //        setBackgroundColor(ColorUtils.setAlphaComponent(Color.BLACK, 0x80))
+        progressAnimation.cancel()
         isAttached = true
         invalidate()
     }
@@ -129,6 +131,9 @@ class Home2ManagerView : View {
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         if (progressAnimation.isRunning) progressAnimation.cancel()
+        if (toViewBitmap?.isRecycled == false) {
+            toViewBitmap?.recycle()
+        }
     }
 
     private var isAttached = false
@@ -150,33 +155,26 @@ class Home2ManagerView : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
+        mPaint.alpha = 255
+        // 如果动画未开始，直接绘制上一页面的bitmap作为占位防止闪烁
         if (!progressAnimation.isRunning) {
             if (ActivityMain.screenBitmap == null) return
             canvas.drawBitmap(ActivityMain.screenBitmap!!, 0f, 0f, mPaint)
             return
         }
-
-//        // 保存图层
+        // 保存图层
         val layer: Int = canvas.saveLayer(0f, 0f, width.toFloat(), height.toFloat(), null)
-//        // 绘制背景
+        // 绘制背景
         mPaint.xfermode = null
-
-
+        // 圈定保留区域
         canvas.drawRoundRect(
             drawRect,
             8.dp * progressAnimation.animatedFraction,
             8.dp * progressAnimation.animatedFraction,
             mPaint
         )
-        // 绘制清除区域
+        // 绘制过渡区域内容
         mPaint.xfermode = srcInXfermode
-//        if (progressAnimation.animatedFraction > .905f) {
-//            mPaint.alpha =
-//                (255 - 50 * ((progressAnimation.animatedFraction - .905f) / .095f)).toInt()
-//        } else {
-//            mPaint.alpha = 255
-//        }
         if (ActivityMain.screenBitmap != null && progressAnimation.animatedFraction < .6f) {
             canvas.drawBitmap(ActivityMain.screenBitmap!!, 0f, 0f, mPaint)
         } else {
@@ -184,10 +182,16 @@ class Home2ManagerView : View {
         }
         // 恢复图层
         canvas.restoreToCount(layer)
+        mPaint.xfermode = null
+        // 动画进度到90%时，渐显绘制下一页面的被遮挡的内容
+        if (toViewBitmap != null && progressAnimation.animatedFraction > .9f) {
+            mPaint.alpha = (255 * ((progressAnimation.animatedFraction - 0.9f) / (0.1))).toInt()
+            canvas.drawBitmap(toViewBitmap!!, endRect.left, endRect.top, mPaint)
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        return true
+        return progressAnimation.animatedFraction != 1f
     }
 }
