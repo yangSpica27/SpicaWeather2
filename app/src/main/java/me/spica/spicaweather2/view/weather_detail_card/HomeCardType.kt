@@ -9,7 +9,6 @@ import me.spica.spicaweather2.view.view_group.DetailsCardsLayout
 import me.spica.spicaweather2.view.view_group.HourlyCardLayout
 import me.spica.spicaweather2.view.view_group.MinuteWeatherCard
 import me.spica.spicaweather2.view.view_group.TipsLayout
-import me.spica.spicaweather2.view.view_group.TodayDescLayout
 
 enum class HomeCardType(val code: Int) {
 //    TODAY_DESC(1), // 今天的描述

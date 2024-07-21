@@ -37,6 +37,9 @@ class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun setWeather(weather: Weather) {
+            if (itemView !is WeatherMainLayout2) {
+                return
+            }
             (itemView as WeatherMainLayout2).initData(weather)
         }
     }

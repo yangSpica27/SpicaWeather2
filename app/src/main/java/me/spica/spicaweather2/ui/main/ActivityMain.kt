@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -100,7 +99,7 @@ class ActivityMain : MaterialActivity() {
         // 从管理城市页面返回进行动画
         if (manager2HomeView.isAttached) {
             manager2HomeView.endAction = {
-                layout.mainTitleLayout.dotIndicator.refreshDots()
+                layout.currentWeatherLayout.dotIndicator.refreshDots()
                 updateOtherPageScroller()
             }
             manager2HomeView.startAnim()
@@ -142,7 +141,7 @@ class ActivityMain : MaterialActivity() {
 
         // 启动后台同步
         startService(Intent(this, DataSyncWorker::class.java))
-        layout.mainTitleLayout.dotIndicator.attachTo(viewPager2 = layout.viewPager2)
+         layout.currentWeatherLayout.dotIndicator.attachTo(viewPager2 = layout.viewPager2)
         lifecycleScope.launch {
             viewModel.allCityWithWeather.collectLatest {
                 mainPagerAdapter.updateCities(it)
@@ -157,7 +156,7 @@ class ActivityMain : MaterialActivity() {
                 super.onPageSelected(position)
                 // 更新标题
                 viewModel.setCurrentPagerIndex(position)
-                layout.mainTitleLayout.dotIndicator.refreshDots()
+                 layout.currentWeatherLayout.dotIndicator.refreshDots()
             }
 
             override fun onPageScrolled(

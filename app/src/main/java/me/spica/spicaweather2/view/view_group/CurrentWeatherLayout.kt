@@ -15,16 +15,18 @@ import android.util.TypedValue
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.animation.doOnEnd
-import androidx.core.animation.doOnStart
+import androidx.core.content.ContextCompat
 import androidx.core.view.marginLeft
+import androidx.core.view.marginTop
+import androidx.core.view.setPadding
 import androidx.core.view.updateMargins
+import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.tools.getColorWithAlpha
 
 
-class TodayDescLayout(context: Context) : AViewGroup(context = context) {
+class CurrentWeatherLayout(context: Context) : AViewGroup(context = context) {
 
     @SuppressLint("SetTextI18n")
     private val tempTextView = AppCompatTextView(context).apply {
@@ -52,6 +54,18 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context) {
         includeFontPadding = false
     }
 
+    val dotIndicator = WormDotsIndicator(context).apply {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        ).also {
+            it.topMargin = 12.dp
+        }
+        this.setPadding(0)
+        this.setDotIndicatorColor(ContextCompat.getColor(context, R.color.white))
+        this.setStrokeDotsIndicatorColor(ContextCompat.getColor(context, R.color.white))
+    }
+
 
     init {
         isFocusable = false
@@ -61,6 +75,7 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context) {
         layoutParams = LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
         )
+        addView(dotIndicator)
         setPadding(24.dp, 24.dp, 24.dp, 24.dp)
     }
 
@@ -68,12 +83,13 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         tempTextView.autoMeasure()
         descTextView.autoMeasure()
+        dotIndicator.autoMeasure()
         setMeasuredDimension(
             resolveSize(
                 tempTextView.measuredWidth.coerceAtLeast(descTextView.measuredWidth),
                 widthMeasureSpec
             ),
-            tempTextView.measuredHeight + descTextView.measuredHeight + paddingTop + paddingBottom
+            tempTextView.measuredHeight + descTextView.measuredHeight + dotIndicator.measuredHeightWithMargins + paddingTop + paddingBottom
         )
     }
 
@@ -85,6 +101,10 @@ class TodayDescLayout(context: Context) : AViewGroup(context = context) {
         descTextView.layout(
             paddingLeft + descTextView.marginLeft,
             tempTextView.bottom,
+        )
+        dotIndicator.layout(
+            paddingLeft + descTextView.marginLeft,
+            descTextView.bottom + dotIndicator.marginTop
         )
     }
 

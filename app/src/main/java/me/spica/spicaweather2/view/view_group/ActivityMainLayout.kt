@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.viewpager2.widget.ViewPager2
 import me.spica.spicaweather2.view.weather_bg.WeatherBackgroundSurfaceView
-import me.spica.spicaweather2.view.weather_bg.WeatherBackgroundTextureView
 
 class ActivityMainLayout(context: Context) : AViewGroup(context) {
 
@@ -18,7 +17,7 @@ class ActivityMainLayout(context: Context) : AViewGroup(context) {
             )
         }
 
-    val currentWeatherLayout = TodayDescLayout(context).apply {
+    val currentWeatherLayout = CurrentWeatherLayout(context).apply {
         layoutParams =
             LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
