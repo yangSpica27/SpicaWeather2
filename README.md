@@ -6,16 +6,14 @@
 ## Screenshots
 
 <p>
-<img src="/pic/1.jpg" width="20%"/>
-<img src="/pic/2.jpeg" width="20%"/>
+<img src="/pic/1.png" width="20%"/>
+<img src="/pic/2.png" width="20%"/>
 <img src="/pic/3.png" width="20%"/>
-
+<img src="/pic/4.png" width="20%"/>
 </p>
 
 <p>
-<img src="/pic/4.png" width="20%"/>
-<img src="/pic/5.png" width="20%"/>
-<img src="/pic/6.jpg" width="20%"/>
+
 </p>
 
 ## 技术栈及其使用的开源库

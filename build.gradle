@@ -22,14 +22,12 @@ buildscript {
     dependencies {
         classpath 'com.google.dagger:hilt-android-gradle-plugin:2.48'
         classpath "com.didiglobal.booster:booster-gradle-plugin:$booster_version"
-//        classpath "com.didiglobal.booster:booster-task-compression-pngquant:$booster_version"
-        classpath "com.didiglobal.booster:booster-task-compression-cwebp:$booster_version"
-        classpath "com.didiglobal.booster:booster-task-compression-processed-res:$booster_version"
+        classpath "com.didiglobal.booster:booster-transform-thread:$booster_version"
         classpath "com.didiglobal.booster:booster-task-resource-deredundancy:$booster_version"
-        classpath "com.didiglobal.booster:booster-transform-r-inline:$booster_version"
-        classpath "com.didiglobal.booster:booster-transform-br-inline:$booster_version"
-        classpath "com.didiglobal.booster:booster-transform-toast:$booster_version"
+//        classpath "com.didiglobal.booster:booster-transform-r-inline:$booster_version"
         classpath "com.didiglobal.booster:booster-transform-activity-thread:$booster_version"
+        classpath "com.didiglobal.booster:booster-task-compression-processed-res:$booster_version"
+
         classpath 'com.tencent.mm:AndResGuard-gradle-plugin:1.2.21'
         classpath 'com.android.tools.build:gradle:7.1.3'
         classpath("com.android.tools:r8:8.3.37")
