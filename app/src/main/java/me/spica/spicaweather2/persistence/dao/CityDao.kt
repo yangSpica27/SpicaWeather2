@@ -32,6 +32,10 @@ interface CityDao {
     fun getAllList(): List<CityBean>
 
 
+    @Query("SELECT count(*) FROM t_city")
+    fun getCount(): Int
+
+
     @Transaction
     @Query("SELECT * FROM t_city ORDER BY sort ASC")
     fun getCitiesWithWeather(): Flow<List<CityWithWeather>>

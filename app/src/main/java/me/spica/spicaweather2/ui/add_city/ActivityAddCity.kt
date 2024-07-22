@@ -3,6 +3,7 @@ package me.spica.spicaweather2.ui.add_city
 import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import androidx.core.widget.addTextChangedListener
@@ -42,7 +43,8 @@ class ActivityAddCity : MaterialActivity() {
 
     private fun init() {
         // handleBack()
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
+            true
         layout.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         dividerBuilder()
             .color(getColor(R.color.line_divider))
@@ -59,7 +61,14 @@ class ActivityAddCity : MaterialActivity() {
             }
         }
         addCityAdapter.selectCityListener = {
-            lifecycleScope.launch(Dispatchers.Main) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                if (cityViewModel.getCount() >= 5) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@ActivityAddCity, "最多添加5个城市", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    return@launch
+                }
                 cityViewModel.addCity(it)
                 withContext(Dispatchers.Main) {
                     startService(Intent(this@ActivityAddCity, DataSyncWorker::class.java))

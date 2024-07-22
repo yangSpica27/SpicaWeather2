@@ -34,6 +34,14 @@ class CityRepository @Inject constructor(
         cityDao.insertCities(cityBean)
     }
 
+    @WorkerThread
+    fun getCount(): Int {
+        return cityDao.getCount()
+    }
+
+
+
+
     /**
      * 删除城市
      */

@@ -108,6 +108,11 @@ class ActivityManagerCity : MaterialActivity() {
 
         home2ManagerView.attachToRootView()
 
+
+        val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        layoutManager.initialPrefetchItemCount = 10
+        layout.recyclerView.layoutManager = layoutManager
+
         layout.recyclerView.adapter = adapter
         itemTouchHelper.attachToRecyclerView(layout.recyclerView)
 

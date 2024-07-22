@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -41,6 +40,10 @@ class CityViewModel @Inject constructor(
         viewModelScope.launch {
             citySearchKeyword.emit(keyword)
         }
+    }
+
+    fun getCount(): Int {
+        return cityRepository.getCount()
     }
 
     suspend fun addCity(city: CityBean) {
