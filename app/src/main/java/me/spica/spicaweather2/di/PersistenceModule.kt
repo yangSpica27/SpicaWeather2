@@ -15,20 +15,16 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object PersistenceModule {
-
     @Provides
     @Singleton
-    fun provideAppDatabase(
-        application: Application,
-    ): AppDatabase {
-        return Room
+    fun provideAppDatabase(application: Application): AppDatabase =
+        Room
             .databaseBuilder(
-                application, AppDatabase::class.java,
-                "spica_weather.db"
-            )
-            .fallbackToDestructiveMigration()
+                application,
+                AppDatabase::class.java,
+                "spica_weather.db",
+            ).fallbackToDestructiveMigration()
             .build()
-    }
 
     @Provides
     @Singleton

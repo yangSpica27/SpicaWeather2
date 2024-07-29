@@ -58,5 +58,5 @@ data class Daily(
     @Json(name = "windSpeedDay")
     val windSpeedDay: String,
     @Json(name = "windSpeedNight")
-    val windSpeedNight: String
+    val windSpeedNight: String,
 )

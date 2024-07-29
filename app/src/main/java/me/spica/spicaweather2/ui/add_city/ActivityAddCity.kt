@@ -26,7 +26,6 @@ import rikka.material.app.MaterialActivity
  */
 @AndroidEntryPoint
 class ActivityAddCity : MaterialActivity() {
-
     private val layout by lazy {
         ActivityAddCityLayout(this)
     }
@@ -64,7 +63,8 @@ class ActivityAddCity : MaterialActivity() {
             lifecycleScope.launch(Dispatchers.IO) {
                 if (cityViewModel.getCount() >= 5) {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(this@ActivityAddCity, "最多添加5个城市", Toast.LENGTH_SHORT)
+                        Toast
+                            .makeText(this@ActivityAddCity, "最多添加5个城市", Toast.LENGTH_SHORT)
                             .show()
                     }
                     return@launch
@@ -77,5 +77,4 @@ class ActivityAddCity : MaterialActivity() {
             }
         }
     }
-
 }

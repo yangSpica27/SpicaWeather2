@@ -11,7 +11,6 @@ import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
 
 class RainImageView : LottieAnimationView {
-
     // 降雨概率
     private var rainfallProbability = 60f
         set(value) {
@@ -27,10 +26,11 @@ class RainImageView : LottieAnimationView {
     private val textBound = Rect()
 
     // 文本画笔
-    private val textPaint = TextPaint( ).apply {
-        color = ContextCompat.getColor(context, R.color.water_color)
-        textSize = 10.dp
-    }
+    private val textPaint =
+        TextPaint().apply {
+            color = ContextCompat.getColor(context, R.color.water_color)
+            textSize = 10.dp
+        }
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
@@ -44,7 +44,8 @@ class RainImageView : LottieAnimationView {
             canvas.drawText(
                 text,
                 width - textBound.width() * 1f,
-                textBound.height() * 1f + height / 3f, textPaint
+                textBound.height() * 1f + height / 3f,
+                textPaint,
             )
         }
     }

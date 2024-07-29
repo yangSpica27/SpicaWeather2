@@ -6,5 +6,5 @@ import com.squareup.moshi.JsonClass
 data class CaiyunExtendBean(
     val alerts: List<AlertBean>,
     val description: String,
-    val forecastKeypoint: String
+    val forecastKeypoint: String,
 )

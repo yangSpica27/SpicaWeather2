@@ -7,5 +7,4 @@ import com.squareup.moshi.JsonClass
 data class Hourly(
     @Json(name = "description")
     val description: String,
-
 )

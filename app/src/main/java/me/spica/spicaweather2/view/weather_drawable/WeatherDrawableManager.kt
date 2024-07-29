@@ -7,8 +7,9 @@ import me.spica.spicaweather2.tools.getScreenWidth
 import me.spica.spicaweather2.view.weather_bg.NowWeatherView
 
 //  天气动画管理者
-class WeatherDrawableManager(context: Context) {
-
+class WeatherDrawableManager(
+    context: Context,
+) {
     // 当前的动画类型
     private var currentAnimType = NowWeatherView.WeatherAnimType.SUNNY
 
@@ -28,21 +29,27 @@ class WeatherDrawableManager(context: Context) {
         getCurrentDrawable().startAnim()
     }
 
-    fun ready(width: Int, height: Int) {
+    fun ready(
+        width: Int,
+        height: Int,
+    ) {
         drawableMaps.values.iterator().forEach {
             it.ready(width, height)
             it.setBackgroundY(cacheY)
         }
     }
 
-
-    fun calculate(width: Int, height: Int) {
+    fun calculate(
+        width: Int,
+        height: Int,
+    ) {
         synchronized(this) {
             drawableMaps[currentAnimType]?.calculate(width, height)
         }
     }
 
     private var cacheY = 0
+
     fun setBackgroundY(y: Int) {
         cacheY = y
         drawableMaps[currentAnimType]?.setBackgroundY(y)
@@ -63,12 +70,15 @@ class WeatherDrawableManager(context: Context) {
     }
 
     // 绘制
-    fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
+    fun doOnDraw(
+        canvas: Canvas,
+        width: Int,
+        height: Int,
+    ) {
         synchronized(this) {
             getCurrentDrawable().doOnDraw(canvas, width, height)
         }
     }
-
 
     // 销毁
     fun release() {
@@ -77,19 +87,14 @@ class WeatherDrawableManager(context: Context) {
         }
     }
 
-
     private fun register(
         weatherAnimType: NowWeatherView.WeatherAnimType,
-        drawable: WeatherDrawable
+        drawable: WeatherDrawable,
     ) {
         drawableMaps[weatherAnimType] = drawable
     }
 
-
-    private fun getCurrentDrawable(): WeatherDrawable {
-        return drawableMaps[currentAnimType]
+    private fun getCurrentDrawable(): WeatherDrawable =
+        drawableMaps[currentAnimType]
             ?: throw IllegalArgumentException("${currentAnimType}特效未注册")
-    }
-
-
 }

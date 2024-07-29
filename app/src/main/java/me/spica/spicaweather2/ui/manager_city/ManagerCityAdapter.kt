@@ -17,10 +17,7 @@ import me.spica.spicaweather2.view.view_group.ItemCityManagerLayout
  * 城市管理界面的Adapter
  */
 class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>() {
-
     val items: MutableList<CityWithWeather> = arrayListOf()
-
-
 
     companion object {
         const val ITEM_TYPE_NORMAL = 0
@@ -38,7 +35,6 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
             }
         }
 
-
     init {
         setHasStableIds(true)
     }
@@ -52,31 +48,38 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
 
     fun getSelectCityNames() = selectedCitiesSet.toList()
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(
+        itemView: View,
+    ) : RecyclerView.ViewHolder(itemView) {
         fun itemLayout() = itemView as ItemCityManagerLayout
     }
 
     private val selectedCitiesSet = mutableSetOf<String>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ViewHolder =
         if (ITEM_TYPE_NORMAL == viewType) {
             ViewHolder(ItemCityManagerLayout(parent.context))
         } else if (ITEM_TYPE_ADD == viewType) {
             ViewHolder(
                 MaterialButton(parent.context).apply {
-                    layoutParams = RecyclerView.LayoutParams(
-                        RecyclerView.LayoutParams.MATCH_PARENT,
-                        RecyclerView.LayoutParams.WRAP_CONTENT
-                    ).apply {
-                        updateMargins(
-                            left = 14.dp.toInt() + context.getScreenWidth() / 5,
-                            right = 14.dp.toInt() + context.getScreenWidth() / 5
-                        )
-                    }
+                    layoutParams =
+                        RecyclerView
+                            .LayoutParams(
+                                RecyclerView.LayoutParams.MATCH_PARENT,
+                                RecyclerView.LayoutParams.WRAP_CONTENT,
+                            ).apply {
+                                updateMargins(
+                                    left = 14.dp.toInt() + context.getScreenWidth() / 5,
+                                    right = 14.dp.toInt() + context.getScreenWidth() / 5,
+                                )
+                            }
                     setBackgroundColor(ContextCompat.getColor(context, R.color.light_blue_600))
                     cornerRadius = 24.dp.toInt()
                     text = "新增城市"
-                }
+                },
             )
         } else {
             ViewHolder(ItemCityManagerLayout(parent.context))
@@ -91,9 +94,11 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
 
     override fun getItemId(position: Int): Long {
         if (position == items.size) return -1
-        return items[position].city.cityName.hashCode().toLong()
+        return items[position]
+            .city.cityName
+            .hashCode()
+            .toLong()
     }
-
 
     var itemClickListener: ((Int, View) -> Unit)? = null
 
@@ -101,7 +106,10 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
 
     var addCityClickListener: (() -> Unit)? = null
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+    ) {
         if (holder.itemViewType == ITEM_TYPE_NORMAL) {
             holder.itemLayout().tag = items[position].city.cityName
             holder.itemLayout().setData(items[position])
@@ -129,7 +137,6 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
             holder.itemLayout().post {
                 holder.itemLayout().isSelectable = isSelectMode
             }
-
         } else if (holder.itemViewType == ITEM_TYPE_ADD) {
             holder.itemView.setOnClickListener {
                 addCityClickListener?.invoke()

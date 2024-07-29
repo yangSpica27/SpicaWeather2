@@ -32,5 +32,5 @@ data class Hourly(
     @Json(name = "windScale")
     val windScale: String,
     @Json(name = "windSpeed")
-    val windSpeed: String
+    val windSpeed: String,
 )

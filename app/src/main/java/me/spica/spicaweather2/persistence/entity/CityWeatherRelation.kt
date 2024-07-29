@@ -8,5 +8,5 @@ import androidx.room.Entity
 )
 data class CityWeatherRelation(
     var cityName: String,
-    var weatherCityName: String
+    var weatherCityName: String,
 )

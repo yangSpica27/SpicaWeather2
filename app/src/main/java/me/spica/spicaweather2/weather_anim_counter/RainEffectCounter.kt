@@ -1,6 +1,5 @@
 package me.spica.spicaweather2.weather_anim_counter
 
-
 import com.google.fpl.liquidfun.Body
 import com.google.fpl.liquidfun.BodyDef
 import com.google.fpl.liquidfun.BodyType
@@ -11,8 +10,7 @@ import com.google.fpl.liquidfun.Vec2
 import com.google.fpl.liquidfun.World
 import me.spica.spicaweather2.tools.dp
 
-class RainEffectCounter  {
-
+class RainEffectCounter {
     private lateinit var world: World
 
     private val random = kotlin.random.Random.Default
@@ -35,14 +33,16 @@ class RainEffectCounter  {
     private var mWorldWidth = 0
     private var mWorldHeight = 0
 
-
     private var boxWidth: Float = 0f
     private var boxHeight: Float = 0f
 
     private var isInitOK = false
 
     // 初始化
-    fun init(width: Int, height: Int) {
+    fun init(
+        width: Int,
+        height: Int,
+    ) {
         this.mWorldWidth = width
         this.mWorldHeight = height
         boxWidth = mappingView2Body(mWorldWidth * 1f - 28.dp) / 2f
@@ -115,7 +115,6 @@ class RainEffectCounter  {
         }
     }
 
-
     // 设置背景刚体的y坐标
     fun setBackgroundY(y: Int) {
         if (!isInitOK) return
@@ -123,9 +122,9 @@ class RainEffectCounter  {
             backgroundBody?.setTransform(
                 Vec2(
                     boxWidth + mappingView2Body(16.dp),
-                    mappingView2Body(y * 1f + 10.dp)
+                    mappingView2Body(y * 1f + 10.dp),
                 ),
-                0f
+                0f,
             )
         }
     }
@@ -144,9 +143,9 @@ class RainEffectCounter  {
             view.body?.setTransform(
                 Vec2(
                     mappingView2Body(view.x),
-                    mappingView2Body(view.y)
+                    mappingView2Body(view.y),
                 ),
-                0f
+                0f,
             )
             view.body?.linearVelocity = Vec2(random.nextFloat(), random.nextFloat())
             view.body?.isSleepingAllowed = false
@@ -158,7 +157,9 @@ class RainEffectCounter  {
         val body = view.body
         return if (body != null) {
             mappingBody2View(body.position.x) - view.width / 2f
-        } else 0f
+        } else {
+            0f
+        }
     }
 
     // 获取粒子在view坐标系的y坐标
@@ -166,22 +167,18 @@ class RainEffectCounter  {
         val body = view.body
         return if (body != null) {
             mappingBody2View(body.position.y) - view.height / 2f
-        } else 0f
+        } else {
+            0f
+        }
     }
 
     // view坐标系转化为模拟世界坐标系
-    private fun mappingView2Body(view: Float): Float {
-        return view / mProportion
-    }
+    private fun mappingView2Body(view: Float): Float = view / mProportion
 
     // 模拟世界坐标系转化为view坐标系
-    private fun mappingBody2View(body: Float): Float {
-        return body * mProportion
-    }
+    private fun mappingBody2View(body: Float): Float = body * mProportion
 
-
-    fun destroy(){
+    fun destroy() {
         world.delete()
     }
-
 }

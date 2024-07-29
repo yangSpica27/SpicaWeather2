@@ -8,11 +8,13 @@ import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
 
 object BitmapUtils {
-
     private const val BITMAP_SCALE = 1f
     private const val BLUR_RADIUS = 7.5f
 
-    fun blur(context: Context?, image: Bitmap): Bitmap {
+    fun blur(
+        context: Context?,
+        image: Bitmap,
+    ): Bitmap {
         val width = Math.round(image.getWidth() * BITMAP_SCALE)
         val height = Math.round(image.getHeight() * BITMAP_SCALE)
         val inputBitmap = Bitmap.createScaledBitmap(image, width, height, false)
@@ -27,5 +29,4 @@ object BitmapUtils {
         tmpOut.copyTo(outputBitmap)
         return outputBitmap
     }
-
 }

@@ -26,14 +26,13 @@ enum class WeatherType {
     WEATHER_HAIL,
     WEATHER_THUNDER,
     WEATHER_THUNDERSTORM,
-    WEATHER_SANDSTORM
+    WEATHER_SANDSTORM,
 }
 
 // 拓展方法 用于获取对应类型的图标
 @DrawableRes
-fun WeatherType.getIconRes(): Int {
-
-    return when (this) {
+fun WeatherType.getIconRes(): Int =
+    when (this) {
         WeatherType.WEATHER_SUNNY -> R.drawable.ic_sunny
         WeatherType.WEATHER_CLOUDY -> R.drawable.ic_cloudly
         WeatherType.WEATHER_FORECAST -> R.drawable.ic_forecast
@@ -47,11 +46,10 @@ fun WeatherType.getIconRes(): Int {
         WeatherType.WEATHER_THUNDERSTORM -> R.drawable.ic_thumb
         WeatherType.WEATHER_SANDSTORM -> R.drawable.ic_storm_icon
     }
-}
 
-//// 拓展方法 用于获取对应类型的动画
-//@RawRes
-//fun WeatherType.getAnimRes(): Int {
+// // 拓展方法 用于获取对应类型的动画
+// @RawRes
+// fun WeatherType.getAnimRes(): Int {
 //    return when (this) {
 //        WeatherType.WEATHER_SUNNY -> R.raw.sunny
 //        WeatherType.WEATHER_CLOUDY -> R.raw.windy
@@ -65,12 +63,12 @@ fun WeatherType.getIconRes(): Int {
 //        WeatherType.WEATHER_THUNDER -> R.raw.storm
 //        WeatherType.WEATHER_THUNDERSTORM -> R.raw.storm
 //    }
-//}
+// }
 
 // 拓展方法 用于获取对应类型的颜色
 @ColorInt
-fun WeatherType.getThemeColor(): Int {
-    return when (this) {
+fun WeatherType.getThemeColor(): Int =
+    when (this) {
         WeatherType.WEATHER_SUNNY -> Color.parseColor("#FFfdbc4c")
         WeatherType.WEATHER_CLOUDY -> Color.parseColor("#4297e7")
         WeatherType.WEATHER_FORECAST -> Color.parseColor("#68baff")
@@ -84,16 +82,16 @@ fun WeatherType.getThemeColor(): Int {
         WeatherType.WEATHER_HAIL -> Color.parseColor("#FFE1C899")
         WeatherType.WEATHER_THUNDERSTORM -> Color.parseColor("#FF4A4646")
     }
-}
 
-private val bitmapCache = lruCache<WeatherType, Bitmap>(
-    20 * 1024 * 1024
-)
+private val bitmapCache =
+    lruCache<WeatherType, Bitmap>(
+        20 * 1024 * 1024,
+    )
 
 // 获取天气主题背景色Bitmap
 fun WeatherType.getBackgroundBitmap(context: Context): Bitmap {
     val cache = bitmapCache[this]
-    if (cache != null) return cache;
+    if (cache != null) return cache
     val drawable = getDrawable()
     val bitmap = drawable.toBitmap(context.getScreenWidth(), context.getScreenHeight())
     bitmapCache.put(this, bitmap)
@@ -101,108 +99,119 @@ fun WeatherType.getBackgroundBitmap(context: Context): Bitmap {
 }
 
 // 获取天气主题背景色Drawable
-fun WeatherType.getDrawable(): GradientDrawable {
-    return when (this) {
-        WeatherType.WEATHER_SUNNY -> GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(
-                Color.parseColor("#fdbc4c"),
-                Color.parseColor("#ff8300"),
+fun WeatherType.getDrawable(): GradientDrawable =
+    when (this) {
+        WeatherType.WEATHER_SUNNY ->
+            GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(
+                    Color.parseColor("#fdbc4c"),
+                    Color.parseColor("#ff8300"),
+                ),
             )
-        )
 
-        WeatherType.WEATHER_CLOUDY -> GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(
-                Color.parseColor("#4297e7"),
-                Color.parseColor("#7F9CEA")
+        WeatherType.WEATHER_CLOUDY ->
+            GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(
+                    Color.parseColor("#4297e7"),
+                    Color.parseColor("#7F9CEA"),
+                ),
             )
-        )
 
-        WeatherType.WEATHER_FORECAST -> GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(
-                Color.parseColor("#68baff"),
-                Color.parseColor("#A7B9EB"),
+        WeatherType.WEATHER_FORECAST ->
+            GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(
+                    Color.parseColor("#68baff"),
+                    Color.parseColor("#A7B9EB"),
+                ),
             )
-        )
 
-        WeatherType.WEATHER_RAINY -> GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(
-                Color.parseColor("#4297e7"),
-                Color.parseColor("#3a4d80")
+        WeatherType.WEATHER_RAINY ->
+            GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(
+                    Color.parseColor("#4297e7"),
+                    Color.parseColor("#3a4d80"),
+                ),
             )
-        )
 
-        WeatherType.WEATHER_SNOW -> GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(
-                Color.parseColor("#4297e7"),
-                Color.parseColor("#3a4d80")
+        WeatherType.WEATHER_SNOW ->
+            GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(
+                    Color.parseColor("#4297e7"),
+                    Color.parseColor("#3a4d80"),
+                ),
             )
-        )
 
-        WeatherType.WEATHER_SLEET -> GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(
-                Color.parseColor("#00a5d9"),
-                Color.parseColor("#1762ac")
+        WeatherType.WEATHER_SLEET ->
+            GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(
+                    Color.parseColor("#00a5d9"),
+                    Color.parseColor("#1762ac"),
+                ),
             )
-        )
 
-        WeatherType.WEATHER_FOG -> GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(
-                Color.parseColor("#D7DDE8"),
-                Color.parseColor("#757F9A")
+        WeatherType.WEATHER_FOG ->
+            GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(
+                    Color.parseColor("#D7DDE8"),
+                    Color.parseColor("#757F9A"),
+                ),
             )
-        )
 
-        WeatherType.WEATHER_HAZE -> GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(
-                Color.parseColor("#E1C899"),
-                Color.parseColor("#8CA2A5")
+        WeatherType.WEATHER_HAZE ->
+            GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(
+                    Color.parseColor("#E1C899"),
+                    Color.parseColor("#8CA2A5"),
+                ),
             )
-        )
 
-        WeatherType.WEATHER_HAIL -> GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(
-                Color.parseColor("#E1C899"),
-                Color.parseColor("#8CA2A5")
+        WeatherType.WEATHER_HAIL ->
+            GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(
+                    Color.parseColor("#E1C899"),
+                    Color.parseColor("#8CA2A5"),
+                ),
             )
-        )
 
-        WeatherType.WEATHER_SANDSTORM -> GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(
-                Color.parseColor("#E1C899"),
-                Color.parseColor("#8CA2A5")
+        WeatherType.WEATHER_SANDSTORM ->
+            GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(
+                    Color.parseColor("#E1C899"),
+                    Color.parseColor("#8CA2A5"),
+                ),
             )
-        )
 
-        WeatherType.WEATHER_THUNDER -> GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(
-                Color.parseColor("#B296BD"),
-                Color.parseColor("#50367F")
+        WeatherType.WEATHER_THUNDER ->
+            GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(
+                    Color.parseColor("#B296BD"),
+                    Color.parseColor("#50367F"),
+                ),
             )
-        )
 
-        WeatherType.WEATHER_THUNDERSTORM -> GradientDrawable(
-            GradientDrawable.Orientation.TOP_BOTTOM,
-            intArrayOf(
-                Color.parseColor("#B296BD"),
-                Color.parseColor("#50367F")
+        WeatherType.WEATHER_THUNDERSTORM ->
+            GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                intArrayOf(
+                    Color.parseColor("#B296BD"),
+                    Color.parseColor("#50367F"),
+                ),
             )
-        )
     }
-}
 
-//// 获取天气主题背景色Shader
-//fun WeatherType.getShader(context: Context): LinearGradient {
+// // 获取天气主题背景色Shader
+// fun WeatherType.getShader(context: Context): LinearGradient {
 //    return when (this) {
 //        WeatherType.WEATHER_SUNNY ->
 //            LinearGradient(
@@ -268,11 +277,11 @@ fun WeatherType.getDrawable(): GradientDrawable {
 //        )
 //
 //    }
-//}
+// }
 
 // 获取天气主题动画类型
-fun WeatherType.getWeatherAnimType(): NowWeatherView.WeatherAnimType {
-    return when (this) {
+fun WeatherType.getWeatherAnimType(): NowWeatherView.WeatherAnimType =
+    when (this) {
         WeatherType.WEATHER_SUNNY -> NowWeatherView.WeatherAnimType.SUNNY
         WeatherType.WEATHER_CLOUDY -> NowWeatherView.WeatherAnimType.CLOUDY
         WeatherType.WEATHER_FORECAST -> NowWeatherView.WeatherAnimType.CLOUDY
@@ -286,4 +295,3 @@ fun WeatherType.getWeatherAnimType(): NowWeatherView.WeatherAnimType {
         WeatherType.WEATHER_THUNDERSTORM -> NowWeatherView.WeatherAnimType.RAIN
         WeatherType.WEATHER_SANDSTORM -> NowWeatherView.WeatherAnimType.SANDSTORM
     }
-}

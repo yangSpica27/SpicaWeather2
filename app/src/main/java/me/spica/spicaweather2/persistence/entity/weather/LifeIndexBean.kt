@@ -13,7 +13,6 @@ data class LifeIndexBean(
     val category: String, // 指数级别说明
     val text: String, // 说明
 ) {
-
     companion object {
         const val SPT = 0x01 // 运动指数
         const val CLOTHES = 0x02 // 穿衣指数

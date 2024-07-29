@@ -13,7 +13,6 @@ import me.spica.spicaweather2.tools.dp
  * 添加城市的adapter
  */
 class AddCityAdapter : RecyclerView.Adapter<AddCityAdapter.ViewHolder>() {
-
     private val items: MutableList<CityBean> = arrayListOf()
 
     init {
@@ -29,37 +28,43 @@ class AddCityAdapter : RecyclerView.Adapter<AddCityAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    class ViewHolder(val item: AppCompatTextView) : RecyclerView.ViewHolder(item) {
+    class ViewHolder(
+        val item: AppCompatTextView,
+    ) : RecyclerView.ViewHolder(item) {
         fun setTextView(text: String) {
             item.text = text.trim()
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ViewHolder =
+        ViewHolder(
             AppCompatTextView(parent.context).apply {
-                layoutParams = RecyclerView.LayoutParams(
-                    RecyclerView.LayoutParams.MATCH_PARENT,
-                    RecyclerView.LayoutParams.WRAP_CONTENT,
-                )
+                layoutParams =
+                    RecyclerView.LayoutParams(
+                        RecyclerView.LayoutParams.MATCH_PARENT,
+                        RecyclerView.LayoutParams.WRAP_CONTENT,
+                    )
                 updatePadding(
                     24.dp.toInt(),
                     20.dp.toInt(),
                     24.dp.toInt(),
-                    20.dp.toInt()
+                    20.dp.toInt(),
                 )
                 setTextAppearance(R.style.TextAppearance_Material3_BodyLarge)
-            }
+            },
         )
-    }
 
     override fun getItemCount(): Int = items.size
 
-    override fun getItemId(position: Int): Long {
-        return items[position].cityName.hashCode().toLong()
-    }
+    override fun getItemId(position: Int): Long = items[position].cityName.hashCode().toLong()
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+    ) {
         val item = items[position]
         holder.setTextView("${item.cityName.trim()}, 经度:${item.lon}° 纬度:${item.lat}°")
         holder.itemView.setOnClickListener {

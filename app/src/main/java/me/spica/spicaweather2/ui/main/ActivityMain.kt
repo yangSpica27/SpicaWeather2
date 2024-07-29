@@ -35,13 +35,11 @@ import org.greenrobot.eventbus.ThreadMode
 import rikka.material.app.MaterialActivity
 import timber.log.Timber
 
-
 /**
  * 主页面
  */
 @AndroidEntryPoint
 class ActivityMain : MaterialActivity() {
-
     companion object {
         // 当前页面的 截图
         var screenBitmap: Bitmap? = null
@@ -65,7 +63,6 @@ class ActivityMain : MaterialActivity() {
         EventBus.getDefault().register(this)
     }
 
-
     // 用于同步滑动的变量
     var listScrollerY = 0
         set(value) {
@@ -81,7 +78,6 @@ class ActivityMain : MaterialActivity() {
     private val manager2HomeView by lazy {
         Manager2HomeView(this)
     }
-
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: MessageEvent) {
@@ -113,19 +109,26 @@ class ActivityMain : MaterialActivity() {
         }
 
         layout.mainTitleLayout.titleTextView.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setTitle("选择天气动画类型").setItems(
+            AlertDialog
+                .Builder(this)
+                .setTitle("选择天气动画类型")
+                .setItems(
                     arrayOf(
-                        "晴天", "多云", "雨天", "霾", "沙尘暴"
-                    )
+                        "晴天",
+                        "多云",
+                        "雨天",
+                        "霾",
+                        "沙尘暴",
+                    ),
                 ) { _, which ->
-                    val type = when (which) {
-                        0 -> WeatherType.WEATHER_SUNNY
-                        1 -> WeatherType.WEATHER_CLOUDY
-                        2 -> WeatherType.WEATHER_RAINY
-                        3 -> WeatherType.WEATHER_FOG
-                        else -> WeatherType.WEATHER_SANDSTORM
-                    }
+                    val type =
+                        when (which) {
+                            0 -> WeatherType.WEATHER_SUNNY
+                            1 -> WeatherType.WEATHER_CLOUDY
+                            2 -> WeatherType.WEATHER_RAINY
+                            3 -> WeatherType.WEATHER_FOG
+                            else -> WeatherType.WEATHER_SANDSTORM
+                        }
                     with(layout.weatherBackgroundSurfaceView) {
                         bgColor = type.getThemeColor()
                         currentWeatherAnimType = type.getWeatherAnimType()
@@ -141,7 +144,7 @@ class ActivityMain : MaterialActivity() {
 
         // 启动后台同步
         startService(Intent(this, DataSyncWorker::class.java))
-         layout.currentWeatherLayout.dotIndicator.attachTo(viewPager2 = layout.viewPager2)
+        layout.currentWeatherLayout.dotIndicator.attachTo(viewPager2 = layout.viewPager2)
         lifecycleScope.launch {
             viewModel.allCityWithWeather.collectLatest {
                 mainPagerAdapter.updateCities(it)
@@ -150,23 +153,26 @@ class ActivityMain : MaterialActivity() {
             }
         }
 
-        layout.viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        layout.viewPager2.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    // 更新标题
+                    viewModel.setCurrentPagerIndex(position)
+                    layout.currentWeatherLayout.dotIndicator.refreshDots()
+                }
 
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                // 更新标题
-                viewModel.setCurrentPagerIndex(position)
-                 layout.currentWeatherLayout.dotIndicator.refreshDots()
-            }
-
-            override fun onPageScrolled(
-                position: Int, positionOffset: Float, positionOffsetPixels: Int
-            ) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-                // 同步当前页面的滚动
-                updateOtherPageScroller()
-            }
-        })
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int,
+                ) {
+                    super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                    // 同步当前页面的滚动
+                    updateOtherPageScroller()
+                }
+            },
+        )
 
         lifecycleScope.launch {
             viewModel.currentPagerIndex.collectLatest { position ->
@@ -175,22 +181,23 @@ class ActivityMain : MaterialActivity() {
         }
     }
 
-
-
     // 返回拦截
     private fun handleBack() {
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                AlertDialog.Builder(this@ActivityMain)
-                    .setTitle("退出应用")
-                    .setMessage("是否退出应用")
-                    .setPositiveButton("退出") { _, _ ->
-                        finish()
-                    }
-                    .setNegativeButton("取消") { _, _ -> }
-                    .show()
-            }
-        })
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    AlertDialog
+                        .Builder(this@ActivityMain)
+                        .setTitle("退出应用")
+                        .setMessage("是否退出应用")
+                        .setPositiveButton("退出") { _, _ ->
+                            finish()
+                        }.setNegativeButton("取消") { _, _ -> }
+                        .show()
+                }
+            },
+        )
     }
 
     // 进入城市管理页面
@@ -202,19 +209,20 @@ class ActivityMain : MaterialActivity() {
                 screenBitmap = null
             }
             val count1 = System.currentTimeMillis()
-            val bgBitmap: Bitmap = try {
-                window.decorView.drawToBitmap()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Bitmap.createBitmap(
-                    window.decorView.width,
-                    window.decorView.height,
-                    Bitmap.Config.ARGB_8888
-                )
-            }
+            val bgBitmap: Bitmap =
+                try {
+                    window.decorView.drawToBitmap()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Bitmap.createBitmap(
+                        window.decorView.width,
+                        window.decorView.height,
+                        Bitmap.Config.ARGB_8888,
+                    )
+                }
 
             layout.weatherBackgroundSurfaceView.getScreenCopy(
-                bgBitmap
+                bgBitmap,
             ) {
                 screenBitmap = it
                 val count2 = System.currentTimeMillis()
@@ -226,20 +234,22 @@ class ActivityMain : MaterialActivity() {
         }
     }
 
-
     // 更新标题
     private fun updateTitleBarUI(scrollY: Int) {
         layout.mainTitleLayout.translationY = -scrollY * 1f
         layout.weatherBackgroundSurfaceView.setMScrollY(scrollY)
-        layout.currentWeatherLayout.alpha = (1 - scrollY / 1350f)
-            .coerceAtLeast(0f)
-            .coerceAtMost(1f)
-        layout.currentWeatherLayout.scaleX = (1 - scrollY / 3000f)
-            .coerceAtLeast(.85f)
-            .coerceAtMost(1f)
-        layout.currentWeatherLayout.scaleY = (1 - scrollY / 3000f)
-            .coerceAtLeast(0.85f)
-            .coerceAtMost(1f)
+        layout.currentWeatherLayout.alpha =
+            (1 - scrollY / 1350f)
+                .coerceAtLeast(0f)
+                .coerceAtMost(1f)
+        layout.currentWeatherLayout.scaleX =
+            (1 - scrollY / 3000f)
+                .coerceAtLeast(.85f)
+                .coerceAtMost(1f)
+        layout.currentWeatherLayout.scaleY =
+            (1 - scrollY / 3000f)
+                .coerceAtLeast(0.85f)
+                .coerceAtMost(1f)
     }
 
     // 更新其他页面的滚动
@@ -274,7 +284,6 @@ class ActivityMain : MaterialActivity() {
             e.printStackTrace()
         }
     }
-
 
     // 给引擎传入刚体进行碰撞计算
     fun setBox2dBackground(y: Int) {

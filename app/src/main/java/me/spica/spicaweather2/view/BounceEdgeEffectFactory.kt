@@ -15,12 +15,14 @@ private const val FLING_TRANSLATION_MAGNITUDE = 0.5f
 /**
  * Replace edge effect by a bounce
  */
-class BounceEdgeEffectFactory(val isVertical: Boolean = true) : RecyclerView.EdgeEffectFactory() {
-
-    override fun createEdgeEffect(recyclerView: RecyclerView, direction: Int): EdgeEffect {
-
+class BounceEdgeEffectFactory(
+    val isVertical: Boolean = true,
+) : RecyclerView.EdgeEffectFactory() {
+    override fun createEdgeEffect(
+        recyclerView: RecyclerView,
+        direction: Int,
+    ): EdgeEffect {
         return object : EdgeEffect(recyclerView.context) {
-
             // A reference to the [SpringAnimation] for this RecyclerView used to bring the item back after the over-scroll effect.
             var translationAnim: SpringAnimation? = null
 
@@ -29,7 +31,10 @@ class BounceEdgeEffectFactory(val isVertical: Boolean = true) : RecyclerView.Edg
                 handlePull(deltaDistance)
             }
 
-            override fun onPull(deltaDistance: Float, displacement: Float) {
+            override fun onPull(
+                deltaDistance: Float,
+                displacement: Float,
+            ) {
                 super.onPull(deltaDistance, displacement)
                 handlePull(deltaDistance)
             }
@@ -82,14 +87,13 @@ class BounceEdgeEffectFactory(val isVertical: Boolean = true) : RecyclerView.Edg
             private fun createAnim() =
                 SpringAnimation(
                     recyclerView,
-                    if (isVertical) SpringAnimation.TRANSLATION_Y else SpringAnimation.TRANSLATION_X
+                    if (isVertical) SpringAnimation.TRANSLATION_Y else SpringAnimation.TRANSLATION_X,
                 ).setSpring(
                     SpringForce()
                         .setFinalPosition(0f)
                         .setDampingRatio(SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY)
-                        .setStiffness(SpringForce.STIFFNESS_LOW)
+                        .setStiffness(SpringForce.STIFFNESS_LOW),
                 )
-
         }
     }
 }

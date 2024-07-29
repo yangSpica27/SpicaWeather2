@@ -16,9 +16,8 @@ abstract class SimpleDrawTask(
     // 绘制间隔
     val interval: Long = 16L,
     // 绘制逻辑
-    val drawFunc: (Canvas) -> Unit
+    val drawFunc: (Canvas) -> Unit,
 ) : IDrawTask {
-
     // 绘制线程
     private var handlerThread: HandlerThread? = null
 
@@ -26,18 +25,16 @@ abstract class SimpleDrawTask(
 
     private val lock = ReentrantLock()
 
-
     private var isRunning = false
 
-
     companion object {
-        private val PAINT = Paint().apply {
-            xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
-            color = Color.TRANSPARENT
-        }
+        private val PAINT =
+            Paint().apply {
+                xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+                color = Color.TRANSPARENT
+            }
         private val RECT = Rect()
     }
-
 
     override fun ready() {
         if (isRunning) {
@@ -52,33 +49,32 @@ abstract class SimpleDrawTask(
         lock.unlock()
     }
 
-
-    private val drawRunnable = object : Runnable {
-
-        override fun run() {
-            // 未初始化或者在结束流程中
-            while (true) {
-                if (!isRunning || Thread.interrupted()) {
-                    return
-                }
-                val count = measureTimeMillis {
-                    lock.lock()
-                    val canvas = lockCanvas()
-                    if (canvas == null) {
-                        lock.unlock()
-                        handler?.postDelayed(this, interval)
+    private val drawRunnable =
+        object : Runnable {
+            override fun run() {
+                // 未初始化或者在结束流程中
+                while (true) {
+                    if (!isRunning || Thread.interrupted()) {
                         return
                     }
-                    draw(canvas)
-                    unlockCanvas(canvas)
-                    lock.unlock()
+                    val count =
+                        measureTimeMillis {
+                            lock.lock()
+                            val canvas = lockCanvas()
+                            if (canvas == null) {
+                                lock.unlock()
+                                handler?.postDelayed(this, interval)
+                                return
+                            }
+                            draw(canvas)
+                            unlockCanvas(canvas)
+                            lock.unlock()
+                        }
+                    val delay = interval - count
+                    SystemClock.sleep(if (delay > 0) delay else 0)
                 }
-                val delay = interval - count
-                SystemClock.sleep(if (delay > 0) delay else 0)
             }
         }
-    }
-
 
     override fun draw(canvas: Canvas) {
         if (!isRunning) {
@@ -87,11 +83,10 @@ abstract class SimpleDrawTask(
         drawFunc(canvas)
     }
 
-
     private fun clearCanvas(canvas: Canvas) {
         canvas.drawColor(
             Color.TRANSPARENT,
-            PorterDuff.Mode.CLEAR
+            PorterDuff.Mode.CLEAR,
         )
         RECT.set(0, 0, canvas.width, canvas.height)
         canvas.drawRect(RECT, PAINT)
@@ -114,6 +109,4 @@ abstract class SimpleDrawTask(
         handlerThread?.interrupt()
         lock.unlock()
     }
-
-
 }

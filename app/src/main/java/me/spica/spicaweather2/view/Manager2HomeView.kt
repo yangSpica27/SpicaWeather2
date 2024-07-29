@@ -24,7 +24,6 @@ import me.spica.spicaweather2.tools.dp
 import timber.log.Timber
 
 class Manager2HomeView : View {
-
     companion object {
         // 用于保存背景图
         var mBackground: Bitmap? = null
@@ -32,7 +31,10 @@ class Manager2HomeView : View {
         // 用于保存起始位置
         var originRect = RectF()
 
-        fun initFromViewRect(from: View, window: Window) {
+        fun initFromViewRect(
+            from: View,
+            window: Window,
+        ) {
             val intArray = IntArray(2)
             from.getLocationInWindow(intArray)
             originRect.set(
@@ -46,7 +48,6 @@ class Manager2HomeView : View {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-
         }
     }
 
@@ -63,7 +64,7 @@ class Manager2HomeView : View {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context,
         attrs,
-        defStyleAttr
+        defStyleAttr,
     )
 
     var endAction: (() -> Unit)? = null
@@ -81,7 +82,7 @@ class Manager2HomeView : View {
                     originRect.left - widthExtra,
                     originRect.top - topExtra,
                     originRect.right + widthExtra,
-                    originRect.bottom + bottomExtra
+                    originRect.bottom + bottomExtra,
                 )
                 postInvalidateOnAnimation()
             }
@@ -117,10 +118,11 @@ class Manager2HomeView : View {
 
     // 将自己添加到根布局中
     fun attachToRootView() {
-        layoutParams = FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
+        layoutParams =
+            FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+            )
         if (parent == null) {
             mRootView.addView(this)
         }
@@ -161,14 +163,12 @@ class Manager2HomeView : View {
             clearRect,
             12.dp,
             12.dp,
-            clearPaint
+            clearPaint,
         )
         // 恢复图层
         canvas.restoreToCount(layer)
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        return progressAnimation.animatedFraction != 1f
-    }
+    override fun onTouchEvent(event: MotionEvent): Boolean = progressAnimation.animatedFraction != 1f
 }

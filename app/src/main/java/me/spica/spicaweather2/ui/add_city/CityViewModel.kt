@@ -14,39 +14,38 @@ import me.spica.spicaweather2.persistence.repository.CityRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class CityViewModel @Inject constructor(
-    private val cityRepository: CityRepository
-) : ViewModel() {
+class CityViewModel
+    @Inject
+    constructor(
+        private val cityRepository: CityRepository,
+    ) : ViewModel() {
+        private val allCity = arrayListOf<CityBean>()
 
-    private val allCity = arrayListOf<CityBean>()
+        private val citySearchKeyword = MutableSharedFlow<String>()
 
-    private val citySearchKeyword = MutableSharedFlow<String>()
+        val searchFlow =
+            citySearchKeyword
+                .map { keyword ->
+                    if (keyword.isEmpty()) return@map allCity
+                    return@map allCity.filter { it.cityName.contains(keyword) || it.sortName.contains(keyword) }
+                }.flowOn(Dispatchers.IO)
 
-    val searchFlow = citySearchKeyword.map { keyword ->
-        if (keyword.isEmpty()) return@map allCity
-        return@map allCity.filter { it.cityName.contains(keyword) || it.sortName.contains(keyword) }
-    }
-        .flowOn(Dispatchers.IO)
+        init {
+            viewModelScope.launch(Dispatchers.IO) {
+                allCity.addAll(CityBean.getAllCities(App.instance))
+                citySearchKeyword.emit("")
+            }
+        }
 
+        fun updateSearchKeyword(keyword: String) {
+            viewModelScope.launch {
+                citySearchKeyword.emit(keyword)
+            }
+        }
 
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            allCity.addAll(CityBean.getAllCities(App.instance))
-            citySearchKeyword.emit("")
+        fun getCount(): Int = cityRepository.getCount()
+
+        suspend fun addCity(city: CityBean) {
+            cityRepository.add(city)
         }
     }
-
-    fun updateSearchKeyword(keyword: String) {
-        viewModelScope.launch {
-            citySearchKeyword.emit(keyword)
-        }
-    }
-
-    fun getCount(): Int {
-        return cityRepository.getCount()
-    }
-
-    suspend fun addCity(city: CityBean) {
-        cityRepository.add(city)
-    }
-}

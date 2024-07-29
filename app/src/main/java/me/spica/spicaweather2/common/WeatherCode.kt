@@ -1,7 +1,6 @@
 package me.spica.spicaweather2.common
 
 object WeatherCodeUtils {
-
     // https://dev.qweather.com/docs/start/icons/
     fun getWeatherCode(iconId: Int): WeatherType {
         when (iconId.toString()) {
@@ -18,7 +17,7 @@ object WeatherCodeUtils {
             "300", "301", "303", "305", "306",
             "307", "308", "309", "310", "311", "312",
             "314", "315", "316", "317", "318", "350", "351",
-            "399"
+            "399",
             -> {
                 return WeatherType.WEATHER_RAINY
             }
@@ -35,18 +34,19 @@ object WeatherCodeUtils {
             }
             "503", "504", "505", "506", "507", "508", "509", "510",
 
-            "511", "512", "513", "514", "515" -> {
-               return WeatherType.WEATHER_HAZE
+            "511", "512", "513", "514", "515",
+            -> {
+                return WeatherType.WEATHER_HAZE
             }
             "313" -> {
                 return WeatherType.WEATHER_HAIL
             }
             "" -> {
-                return  WeatherType.WEATHER_THUNDER
+                return WeatherType.WEATHER_THUNDER
             }
 
             "302", "304" -> {
-                return  WeatherType.WEATHER_THUNDERSTORM
+                return WeatherType.WEATHER_THUNDERSTORM
             }
         }
 

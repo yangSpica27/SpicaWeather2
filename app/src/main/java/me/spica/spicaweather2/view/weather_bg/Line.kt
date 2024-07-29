@@ -21,7 +21,12 @@ class Line {
         y2 = src.y2
     }
 
-    operator fun set(x1: Int, y1: Int, x2: Int, y2: Int) {
+    operator fun set(
+        x1: Int,
+        y1: Int,
+        x2: Int,
+        y2: Int,
+    ) {
         this.x1 = x1
         this.y1 = y1
         this.x2 = x2
@@ -35,16 +40,22 @@ class Line {
         y2 = -y2
     }
 
-    fun offset(dx: Int, dy: Int) {
+    fun offset(
+        dx: Int,
+        dy: Int,
+    ) {
         x1 += dx
         y1 += dy
         x2 += dx
         y2 += dy
     }
 
-    fun equals(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-        return this.x1 == x1 && this.y1 == y1 && this.x2 == x2 && this.y2 == y2
-    }
+    fun equals(
+        x1: Int,
+        y1: Int,
+        x2: Int,
+        y2: Int,
+    ): Boolean = this.x1 == x1 && this.y1 == y1 && this.x2 == x2 && this.y2 == y2
 
     override fun equals(other: Any?): Boolean {
         if (other is Line) {
@@ -53,9 +64,7 @@ class Line {
         return false
     }
 
-    override fun toString(): String {
-        return "Line($x1, $y1$x2, $y2)"
-    }
+    override fun toString(): String = "Line($x1, $y1$x2, $y2)"
 
     override fun hashCode(): Int {
         var result = x1

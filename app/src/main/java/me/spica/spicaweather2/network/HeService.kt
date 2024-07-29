@@ -9,7 +9,6 @@ import retrofit2.http.Query
 
 @Suppress("unused")
 interface HeService {
-
     // 聚合接口
     @GET("http://106.54.25.152:4040/api/weather/all")
     suspend fun getAllWeather(
@@ -21,8 +20,5 @@ interface HeService {
     suspend fun getMinutely(
         @Query("latitude") latitude: Double,
         @Query("longitude") longitude: Double,
-
     ): ApiResponse<CaiyunBean>
-
-
 }

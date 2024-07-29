@@ -1,6 +1,5 @@
 package me.spica.spicaweather2.network.model.hitokoto
 
-
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -23,5 +22,5 @@ data class HitokotoBean(
     val length: Int? = null,
     val reviewer: Int? = null,
     val type: String? = null,
-    val uuid: String? = null
+    val uuid: String? = null,
 )

@@ -23,43 +23,45 @@ import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import timber.log.Timber
 
 class WeatherMainLayout2 : ScrollViewAtViewPager {
-
-
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
 
     private val items = HomeCardType.entries.toMutableList()
 
-    private val contentView = LinearLayout(context).apply {
-        layoutParams = MarginLayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        updatePadding(bottom = 40.dp.toInt())
-        orientation = LinearLayout.VERTICAL
-    }
+    private val contentView =
+        LinearLayout(context).apply {
+            layoutParams =
+                MarginLayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                )
+            updatePadding(bottom = 40.dp.toInt())
+            orientation = LinearLayout.VERTICAL
+        }
 
     init {
-        layoutParams = RecyclerView.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
+        layoutParams =
+            RecyclerView.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+            )
         // 载入item数据
         items.forEachIndexed { index, item ->
             val itemView = item.getViewType(context)
             itemView.tag = item.name
-            itemView.layoutParams = MarginLayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            ).apply {
-                topMargin =
-                    if (index == 0) (context.getScreenHeight() * .6f).toInt() else 16.dp.toInt()
-                leftMargin = 24.dp.toInt()
-                rightMargin = 24.dp.toInt()
-                if (index == items.size - 1) {
-                    bottomMargin = 16.dp.toInt()
+            itemView.layoutParams =
+                MarginLayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                ).apply {
+                    topMargin =
+                        if (index == 0) (context.getScreenHeight() * .6f).toInt() else 16.dp.toInt()
+                    leftMargin = 24.dp.toInt()
+                    rightMargin = 24.dp.toInt()
+                    if (index == items.size - 1) {
+                        bottomMargin = 16.dp.toInt()
+                    }
                 }
-            }
             if (itemView is SpicaWeatherCard) {
                 itemView.resetAnim()
                 itemView.doOnPreDraw {
@@ -83,16 +85,15 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
         overScrollMode = OVER_SCROLL_NEVER
     }
 
-
     //  滑动停止后的操作
-    private val doOnScrollStop = Runnable {
-        if (scrollY >= context.getScreenHeight()) return@Runnable
-        if (scrollY < context.getScreenHeight() / 3f ) {
-            // 滑动不满一半 回复到最顶
-            smoothScrollTo(0, 0)
+    private val doOnScrollStop =
+        Runnable {
+            if (scrollY >= context.getScreenHeight()) return@Runnable
+            if (scrollY < context.getScreenHeight() / 3f) {
+                // 滑动不满一半 回复到最顶
+                smoothScrollTo(0, 0)
+            }
         }
-    }
-
 
     @Synchronized
     fun updateBackgroundY() {
@@ -110,7 +111,6 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
 
     // 复用的rect 防止内存抖动
     private val itemVisibleRect = Rect()
-
 
     fun initData(weather: Weather) {
         contentView.children.forEach { view ->
@@ -161,5 +161,4 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
         }
         return null
     }
-
 }

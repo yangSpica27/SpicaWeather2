@@ -7,7 +7,10 @@ import android.graphics.Color
  * @param alpha 透明度
  * @param baseColor 基础颜色
  */
-fun getColorWithAlpha(alpha: Float, baseColor: Int): Int {
+fun getColorWithAlpha(
+    alpha: Float,
+    baseColor: Int,
+): Int {
     var alpha1 = alpha
     if (alpha1 < 0) {
         alpha1 = 0f
@@ -25,7 +28,11 @@ fun getColorWithAlpha(alpha: Float, baseColor: Int): Int {
  * @param color2 颜色2
  * @param ratio 比例
  */
-fun blendColors(color1: Int, color2: Int, ratio: Float): Int {
+fun blendColors(
+    color1: Int,
+    color2: Int,
+    ratio: Float,
+): Int {
     val inverseRatio = 1f - ratio
     val a = (Color.alpha(color1) * inverseRatio) + (Color.alpha(color2) * ratio)
     val r = (Color.red(color1) * inverseRatio) + (Color.red(color2) * ratio)

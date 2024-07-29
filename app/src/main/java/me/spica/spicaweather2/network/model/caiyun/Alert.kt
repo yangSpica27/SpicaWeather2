@@ -10,5 +10,5 @@ data class Alert(
     @Json(name = "content")
     val content: List<AlertContent>,
     @Json(name = "status")
-    val status: String
+    val status: String,
 )

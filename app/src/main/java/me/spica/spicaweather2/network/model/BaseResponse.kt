@@ -6,5 +6,5 @@ import com.squareup.moshi.JsonClass
 class BaseResponse<T> constructor(
     val code: Int,
     var message: String,
-    val data: T?
+    val data: T?,
 )

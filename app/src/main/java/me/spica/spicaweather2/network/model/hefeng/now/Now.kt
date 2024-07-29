@@ -34,5 +34,5 @@ data class Now(
     @Json(name = "windScale")
     val windScale: String,
     @Json(name = "windSpeed")
-    val windSpeed: String
+    val windSpeed: String,
 )

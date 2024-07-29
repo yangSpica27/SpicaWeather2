@@ -10,16 +10,18 @@ import kotlin.random.Random
 private val random = Random.Default
 
 class SandStormDrawable : WeatherDrawable() {
-
-
-    private val paint = Paint().apply {
-        isAntiAlias = true
-        style = Paint.Style.FILL
-    }
+    private val paint =
+        Paint().apply {
+            isAntiAlias = true
+            style = Paint.Style.FILL
+        }
 
     private val stormLines = mutableListOf<StormLine>()
 
-    override fun ready(width: Int, height: Int) {
+    override fun ready(
+        width: Int,
+        height: Int,
+    ) {
         viewWidth = width
         viewHeight = height
         stormLines.clear()
@@ -31,7 +33,10 @@ class SandStormDrawable : WeatherDrawable() {
 
     private var isPlus = true
 
-    override fun calculate(width: Int, height: Int) {
+    override fun calculate(
+        width: Int,
+        height: Int,
+    ) {
         super.calculate(width, height)
         stormLines.forEach {
             it.next()
@@ -48,7 +53,6 @@ class SandStormDrawable : WeatherDrawable() {
         } else if (extraAngle < -15) {
             isPlus = true
         }
-
     }
 
     private var viewWidth: Int = -1
@@ -66,7 +70,11 @@ class SandStormDrawable : WeatherDrawable() {
         stormLines.clear()
     }
 
-    override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
+    override fun doOnDraw(
+        canvas: Canvas,
+        width: Int,
+        height: Int,
+    ) {
         canvas.save()
         canvas.rotate(extraAngle, width / 2f, height / 2f)
         stormLines.forEach {
@@ -76,9 +84,10 @@ class SandStormDrawable : WeatherDrawable() {
     }
 }
 
-
-data class StormLine(val width: Int, val height: Int) {
-
+data class StormLine(
+    val width: Int,
+    val height: Int,
+) {
     private var cx: Float = 0.0f
 
     private var cy: Float = 0.0f
@@ -97,13 +106,14 @@ data class StormLine(val width: Int, val height: Int) {
 
     init {
         val rd = random.nextDouble()
-        color = if (rd < 0.5) {
-            Color.WHITE
-        } else if (rd < 0.7) {
-            Color.parseColor("#FF795548")
-        } else {
-            Color.parseColor("#80FFFFFF")
-        }
+        color =
+            if (rd < 0.5) {
+                Color.WHITE
+            } else if (rd < 0.7) {
+                Color.parseColor("#FF795548")
+            } else {
+                Color.parseColor("#80FFFFFF")
+            }
 
         radius = (2.dp + random.nextDouble() * 2.dp).toFloat()
         x = -width * random.nextDouble().toFloat() - width
@@ -121,7 +131,10 @@ data class StormLine(val width: Int, val height: Int) {
         }
     }
 
-    fun draw(canvas: Canvas, paint: Paint) {
+    fun draw(
+        canvas: Canvas,
+        paint: Paint,
+    ) {
         paint.color = color
         paint.strokeWidth = radius
 
@@ -132,11 +145,10 @@ data class StormLine(val width: Int, val height: Int) {
                 cx + 3 * i * radius,
                 cy,
                 radius + radius / 2 * ((cx + 3 * i * radius) / width),
-                paint
+                paint,
             )
         }
 
         canvas.rotate(-angle)
     }
-
 }

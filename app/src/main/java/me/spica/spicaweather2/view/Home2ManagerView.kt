@@ -24,19 +24,15 @@ import me.spica.spicaweather2.ui.main.ActivityMain
 import timber.log.Timber
 
 class Home2ManagerView : View {
-
-
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context,
         attrs,
-        defStyleAttr
+        defStyleAttr,
     )
 
-
     private val endRect: RectF = RectF(0f, 0f, 0f, 0f)
-
 
     private var hasBind = false
 
@@ -57,7 +53,6 @@ class Home2ManagerView : View {
         hasBind = true
     }
 
-
     var endAction: (() -> Unit)? = null
 
     private val mRootView: ViewGroup by lazy {
@@ -69,7 +64,6 @@ class Home2ManagerView : View {
         mRootView.removeView(this)
         isAttached = false
     }
-
 
     private var drawRect = RectF(0f, 0f, 0f, 0f)
 
@@ -89,12 +83,13 @@ class Home2ManagerView : View {
                     0f + (endRect.left) * progress,
                     0f + (endRect.top) * progress,
                     width * 1f - (width - endRect.right) * progress,
-                    height * 1f - (height - endRect.bottom) * progress
+                    height * 1f - (height - endRect.bottom) * progress,
                 )
 
                 if (drawRect.bottom > lastB) {
-                    Timber.tag("异常数据")
-                        .e("height:${height} bottom:${drawRect.bottom} lastB:${lastB} progress:${progress}")
+                    Timber
+                        .tag("异常数据")
+                        .e("height:$height bottom:${drawRect.bottom} lastB:$lastB progress:$progress")
                 }
                 lastB = drawRect.bottom
                 postInvalidateOnAnimation()
@@ -109,10 +104,11 @@ class Home2ManagerView : View {
 
     // 将自己添加到根布局中
     fun attachToRootView() {
-        layoutParams = FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
+        layoutParams =
+            FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+            )
         if (parent == null) {
             mRootView.addView(this)
         }
@@ -152,7 +148,6 @@ class Home2ManagerView : View {
 
     private val srcInXfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
 
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         mPaint.alpha = 255
@@ -171,7 +166,7 @@ class Home2ManagerView : View {
             drawRect,
             8.dp * progressAnimation.animatedFraction,
             8.dp * progressAnimation.animatedFraction,
-            mPaint
+            mPaint,
         )
         // 绘制过渡区域内容
         mPaint.xfermode = srcInXfermode
@@ -191,7 +186,5 @@ class Home2ManagerView : View {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        return progressAnimation.animatedFraction != 1f
-    }
+    override fun onTouchEvent(event: MotionEvent): Boolean = progressAnimation.animatedFraction != 1f
 }

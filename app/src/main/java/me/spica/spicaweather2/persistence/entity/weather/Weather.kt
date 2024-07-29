@@ -27,9 +27,8 @@ data class Weather(
     var alerts: List<AlertBean> = arrayListOf(),
     @Json(name = "minutely")
     var minutelies: List<Minutely> = arrayListOf(),
-    var welcomeText: String = ""
+    var welcomeText: String = "",
 ) {
-
     fun getWeatherType(): WeatherType {
         when (todayWeather.iconId) {
             302, 304 -> {
@@ -51,7 +50,7 @@ data class Weather(
             300, 301, 303, 305, 306,
             307, 308, 309, 310, 311, 312,
             314, 315, 316, 317, 318, 350, 351,
-            399
+            399,
             -> {
                 return WeatherType.WEATHER_RAINY
             }
@@ -65,7 +64,6 @@ data class Weather(
                 return WeatherType.WEATHER_SLEET
             }
 
-
             500, 501, 502 -> {
                 return WeatherType.WEATHER_FOG
             }
@@ -75,7 +73,8 @@ data class Weather(
             }
 
             509, 510,
-            511, 512, 513, 514, 515 -> {
+            511, 512, 513, 514, 515,
+            -> {
                 return WeatherType.WEATHER_HAZE
             }
 
@@ -92,8 +91,8 @@ data class Weather(
     }
 
     @DrawableRes
-    fun getWeatherIcon(): Int {
-        return when (getWeatherType()) {
+    fun getWeatherIcon(): Int =
+        when (getWeatherType()) {
             WeatherType.WEATHER_SUNNY -> R.drawable.ic_sunny
             WeatherType.WEATHER_CLOUDY -> R.drawable.ic_cloudly
             WeatherType.WEATHER_FORECAST -> R.drawable.ic_cloudly
@@ -107,5 +106,4 @@ data class Weather(
             WeatherType.WEATHER_THUNDERSTORM -> R.drawable.ic_thumb
             WeatherType.WEATHER_SANDSTORM -> R.drawable.ic_storm_icon
         }
-    }
 }

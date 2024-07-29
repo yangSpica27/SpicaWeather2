@@ -13,30 +13,30 @@ import rikka.material.app.MaterialActivity
  * 空气质量介绍页面
  */
 class AirIntroductionActivity : MaterialActivity() {
-
     private val layout by lazy {
         AirIntroduceLayout(this).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
+            layoutParams =
+                ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                )
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val scrollView = ScrollView(this).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-            addView(layout)
-            overScrollMode = ScrollView.OVER_SCROLL_NEVER
-            setBackgroundColor(ContextCompat.getColor(context, R.color.white))
-        }
+        val scrollView =
+            ScrollView(this).apply {
+                layoutParams =
+                    ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                    )
+                addView(layout)
+                overScrollMode = ScrollView.OVER_SCROLL_NEVER
+                setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+            }
         setContentView(scrollView)
         WindowInsetsControllerCompat(window, scrollView).isAppearanceLightStatusBars = true
     }
-
-
 }

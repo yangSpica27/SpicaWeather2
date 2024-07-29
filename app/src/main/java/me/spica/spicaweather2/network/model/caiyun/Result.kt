@@ -10,5 +10,5 @@ data class Result(
     @Json(name = "forecast_keypoint")
     val forecastKeypoint: String,
     @Json(name = "hourly")
-    val hourly: Hourly
+    val hourly: Hourly,
 )

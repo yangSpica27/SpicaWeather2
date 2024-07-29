@@ -14,17 +14,18 @@ data class AirBean(
     val so2: Float, // so2
     val co: Float, // co
     val o3: Float, // 臭氧
-    var fxLink: String? = ""
+    var fxLink: String? = "",
 )
 
-fun Now.toAir(): AirBean = AirBean(
-    aqi = this.aqi.toIntOrNull() ?: 0,
-    category = this.category,
-    primary = primary,
-    pm10 = pm10.toFloatOrNull() ?: 0f,
-    pm2p5 = pm2p5.toFloatOrNull() ?: 0f,
-    no2 = no2.toFloatOrNull() ?: 0f,
-    so2 = so2.toFloatOrNull() ?: 0f,
-    co = co.toFloatOrNull() ?: 0f,
-    o3 = o3.toFloatOrNull() ?: 0f,
-)
+fun Now.toAir(): AirBean =
+    AirBean(
+        aqi = this.aqi.toIntOrNull() ?: 0,
+        category = this.category,
+        primary = primary,
+        pm10 = pm10.toFloatOrNull() ?: 0f,
+        pm2p5 = pm2p5.toFloatOrNull() ?: 0f,
+        no2 = no2.toFloatOrNull() ?: 0f,
+        so2 = so2.toFloatOrNull() ?: 0f,
+        co = co.toFloatOrNull() ?: 0f,
+        o3 = o3.toFloatOrNull() ?: 0f,
+    )

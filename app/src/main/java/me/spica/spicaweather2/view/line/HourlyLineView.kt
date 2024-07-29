@@ -41,7 +41,6 @@ import kotlin.math.abs
  * 逐小时天气折线图
  */
 class HourlyLineView : View {
-
     private val mScroller: OverScroller = OverScroller(context)
     private val mVelocityTracker: VelocityTracker = VelocityTracker.obtain()
 
@@ -54,7 +53,9 @@ class HourlyLineView : View {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context, attrs, defStyleAttr
+        context,
+        attrs,
+        defStyleAttr,
     )
 
     private val gapWidth = 50f
@@ -66,23 +67,26 @@ class HourlyLineView : View {
 
     private val topIconPaint = Paint()
 
-    private val tempPaint = TextPaint().apply {
-        typeface = Typeface.DEFAULT_BOLD
-        textSize = 16.dp
-        color = ContextCompat.getColor(context, R.color.textColorPrimary)
-        textAlign = Paint.Align.CENTER
-    }
+    private val tempPaint =
+        TextPaint().apply {
+            typeface = Typeface.DEFAULT_BOLD
+            textSize = 16.dp
+            color = ContextCompat.getColor(context, R.color.textColorPrimary)
+            textAlign = Paint.Align.CENTER
+        }
 
-    private val lineBgPaint = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.black)
-        style = Paint.Style.FILL
-    }
+    private val lineBgPaint =
+        Paint().apply {
+            color = ContextCompat.getColor(context, R.color.black)
+            style = Paint.Style.FILL
+        }
 
-    private val linePaint = Paint().apply {
-        strokeWidth = 3.dp
-        style = Paint.Style.STROKE
-        strokeCap = Paint.Cap.ROUND
-    }
+    private val linePaint =
+        Paint().apply {
+            strokeWidth = 3.dp
+            style = Paint.Style.STROKE
+            strokeCap = Paint.Cap.ROUND
+        }
 
     private val itemWidth = 75.dp // 每个单元的宽度
 
@@ -153,9 +157,12 @@ class HourlyLineView : View {
             maxTemp = Math.max(maxTemp, item.temp)
             minTemp = Math.min(minTemp, item.temp)
             bitmaps.add(
-                ContextCompat.getDrawable(
-                    context, WeatherCodeUtils.getWeatherCode(item.iconId).getIconRes()
-                )!!.toBitmap(40.dp.toInt(), 40.dp.toInt(), Bitmap.Config.ARGB_8888)
+                ContextCompat
+                    .getDrawable(
+                        context,
+                        WeatherCodeUtils.getWeatherCode(item.iconId).getIconRes(),
+                    )!!
+                    .toBitmap(40.dp.toInt(), 40.dp.toInt(), Bitmap.Config.ARGB_8888),
             )
         }
 
@@ -184,37 +191,40 @@ class HourlyLineView : View {
                     intArrayOf(
                         Color.TRANSPARENT,
                         ColorUtils.setAlphaComponent(themeColor, 125),
-                        Color.TRANSPARENT
+                        Color.TRANSPARENT,
                     ),
                     floatArrayOf(
                         0f,
                         .5f,
-                        1f
+                        1f,
                     ),
-                    TileMode.CLAMP
-                )
+                    TileMode.CLAMP,
+                ),
             )
         }
-        val themeColor = WeatherCodeUtils.getWeatherCode(iconId = data.firstOrNull()?.iconId ?: 101)
-            .getThemeColor()
+        val themeColor =
+            WeatherCodeUtils
+                .getWeatherCode(iconId = data.firstOrNull()?.iconId ?: 101)
+                .getThemeColor()
         linePaint.color = themeColor
 
-        lineBgPaint.shader = LinearGradient(
-            0f,
-            paddingTop + 12.dp + 24.dp +
-                    tempTextHeight + 12.dp
-                    + lineHeight - 12.dp - lineHeight,
-            0f,
-            paddingTop + 12.dp + 24.dp +
-                    tempTextHeight + 12.dp
-                    + lineHeight - 12.dp,
-            intArrayOf(
-                ColorUtils.setAlphaComponent(colors.firstOrNull() ?: Color.TRANSPARENT, 60),
-                ColorUtils.setAlphaComponent(colors.firstOrNull() ?: Color.TRANSPARENT, 0)
-            ),
-            floatArrayOf(0f, 1f),
-            TileMode.CLAMP
-        )
+        lineBgPaint.shader =
+            LinearGradient(
+                0f,
+                paddingTop + 12.dp + 24.dp +
+                    tempTextHeight + 12.dp +
+                    lineHeight - 12.dp - lineHeight,
+                0f,
+                paddingTop + 12.dp + 24.dp +
+                    tempTextHeight + 12.dp +
+                    lineHeight - 12.dp,
+                intArrayOf(
+                    ColorUtils.setAlphaComponent(colors.firstOrNull() ?: Color.TRANSPARENT, 60),
+                    ColorUtils.setAlphaComponent(colors.firstOrNull() ?: Color.TRANSPARENT, 0),
+                ),
+                floatArrayOf(0f, 1f),
+                TileMode.CLAMP,
+            )
 
         mPointList.forEachIndexed { index, point ->
             // 上个点
@@ -264,12 +274,16 @@ class HourlyLineView : View {
                 val secondDiffY: Float = nextPoint.y * 1f - lastPoint.y
 
                 // 根据锚点间坐标差 求出 两个控制点 参数给的越大 斜率越小
-                val controlPointLeft = PointF(
-                    lastPoint.x + 0.1f * firstDiffX, lastPoint.y + 0.1f * firstDiffY
-                )
-                val controlPointRight = PointF(
-                    point.x - 0.1f * secondDiffX, point.y - 0.1f * secondDiffY
-                )
+                val controlPointLeft =
+                    PointF(
+                        lastPoint.x + 0.1f * firstDiffX,
+                        lastPoint.y + 0.1f * firstDiffY,
+                    )
+                val controlPointRight =
+                    PointF(
+                        point.x - 0.1f * secondDiffX,
+                        point.y - 0.1f * secondDiffY,
+                    )
                 // 做二阶贝塞尔
                 tempLinePath.cubicTo(
                     controlPointLeft.x,
@@ -277,7 +291,7 @@ class HourlyLineView : View {
                     controlPointRight.x,
                     controlPointRight.y,
                     point.x * 1f,
-                    point.y * 1f
+                    point.y * 1f,
                 )
             }
         }
@@ -285,14 +299,14 @@ class HourlyLineView : View {
         tempLineBgPath.lineTo(
             mPointList.last().x.toFloat(),
             paddingTop + 12.dp + 24.dp +
-                    tempTextHeight + 12.dp
-                    + lineHeight - 12.dp,
+                tempTextHeight + 12.dp +
+                lineHeight - 12.dp,
         )
         tempLineBgPath.lineTo(
             mPointList.first().x.toFloat(),
             paddingTop + 12.dp + 24.dp +
-                    tempTextHeight + 12.dp
-                    + lineHeight - 12.dp,
+                tempTextHeight + 12.dp +
+                lineHeight - 12.dp,
         )
         tempLineBgPath.close()
         invalidate()
@@ -300,15 +314,17 @@ class HourlyLineView : View {
 
     private var cacheBitmap: Bitmap? = null
 
-    private var cursorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = ContextCompat.getColor(context, R.color.line_divider)
-        strokeWidth = itemWidth
-    }
+    private var cursorPaint =
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = ContextCompat.getColor(context, R.color.line_divider)
+            strokeWidth = itemWidth
+        }
 
-    private val baseLinePaint = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.line_divider)
-        strokeWidth = 2f
-    }
+    private val baseLinePaint =
+        Paint().apply {
+            color = ContextCompat.getColor(context, R.color.line_divider)
+            strokeWidth = 2f
+        }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -316,11 +332,12 @@ class HourlyLineView : View {
         // 读取缓存图片
         if (cacheBitmap == null) {
             // 没有缓存就画一遍 然后画完生成位图保存 后面直接加载图片就可以了 避免重复绘制工作
-            cacheBitmap = Bitmap.createBitmap(
-                (paddingLeft + paddingRight + mPointList.size * itemWidth).toInt(),
-                height,
-                Bitmap.Config.ARGB_8888
-            )
+            cacheBitmap =
+                Bitmap.createBitmap(
+                    (paddingLeft + paddingRight + mPointList.size * itemWidth).toInt(),
+                    height,
+                    Bitmap.Config.ARGB_8888,
+                )
             val cacheCanvas = Canvas(cacheBitmap!!)
             drawBaseLine(cacheCanvas)
             drawTempLine(cacheCanvas)
@@ -352,11 +369,11 @@ class HourlyLineView : View {
         val currentX =
             (offset / scrollMaxWidth) * (width - paddingLeft - paddingRight - itemWidth) + itemWidth / 2f + paddingLeft
 
-        val currentIndex = Math.min(
-            Math.abs((currentX + offset - itemWidth / 2f - paddingLeft) / itemWidth),
-            data.size - 1f
-        )
-
+        val currentIndex =
+            Math.min(
+                Math.abs((currentX + offset - itemWidth / 2f - paddingLeft) / itemWidth),
+                data.size - 1f,
+            )
 
         cursorPaint.shader = shaders[currentIndex.toInt()]
 
@@ -367,32 +384,38 @@ class HourlyLineView : View {
             paddingTop * 1f,
             12.dp,
             12.dp,
-            cursorPaint
+            cursorPaint,
         )
     }
 
-    private fun getItemCenterX(index: Int): Float {
-        return paddingLeft + index * itemWidth + itemWidth / 2f - offset
-    }
+    private fun getItemCenterX(index: Int): Float = paddingLeft + index * itemWidth + itemWidth / 2f - offset
 
-    private val popTextPaint = TextPaint().apply {
-        textSize = 15.dp
-        color = ContextCompat.getColor(context, R.color.textColorPrimaryHint)
-        typeface = Typeface.DEFAULT_BOLD
-        textAlign = Paint.Align.CENTER
-    }
+    private val popTextPaint =
+        TextPaint().apply {
+            textSize = 15.dp
+            color = ContextCompat.getColor(context, R.color.textColorPrimaryHint)
+            typeface = Typeface.DEFAULT_BOLD
+            textAlign = Paint.Align.CENTER
+        }
 
-    private val weatherNameTextPaint = TextPaint().apply {
-        textSize = 18.dp
-        textAlign = Paint.Align.CENTER
-    }
+    private val weatherNameTextPaint =
+        TextPaint().apply {
+            textSize = 18.dp
+            textAlign = Paint.Align.CENTER
+        }
 
-    private val weatherNameBackgroundPaint = Paint().apply {
-        style = Style.FILL
-    }
+    private val weatherNameBackgroundPaint =
+        Paint().apply {
+            style = Style.FILL
+        }
 
     private val textBound = Rect()
-    private fun drawWeatherName(canvas: Canvas, index: Int, point: Point) {
+
+    private fun drawWeatherName(
+        canvas: Canvas,
+        index: Int,
+        point: Point,
+    ) {
         val item = data[index]
         val color = colors[index]
         weatherNameTextPaint.color = color
@@ -405,36 +428,46 @@ class HourlyLineView : View {
             paddingTop + topIconHeight + lineHeight + tempTextHeight + popHeight + weatherNameHeight / 2f - textBound.height() / 2f - 4.dp,
             12.dp,
             12.dp,
-            weatherNameBackgroundPaint
+            weatherNameBackgroundPaint,
         )
         canvas.drawText(
             item.weatherName,
             point.x.toFloat(),
             paddingTop + topIconHeight + lineHeight + tempTextHeight + popHeight + weatherNameHeight / 2f + textBound.height() / 2f,
-            weatherNameTextPaint
+            weatherNameTextPaint,
         )
     }
 
-    private val drawTimeTextPaint = TextPaint().apply {
-        textSize = 16.dp
-        textAlign = Paint.Align.CENTER
-        color = ContextCompat.getColor(context, R.color.textColorPrimary)
-        typeface = Typeface.DEFAULT_BOLD
-    }
+    private val drawTimeTextPaint =
+        TextPaint().apply {
+            textSize = 16.dp
+            textAlign = Paint.Align.CENTER
+            color = ContextCompat.getColor(context, R.color.textColorPrimary)
+            typeface = Typeface.DEFAULT_BOLD
+        }
 
     private val sdfHHMM = SimpleDateFormat("HH时", Locale.CHINA)
-    private fun drawTime(canvas: Canvas, point: Point, index: Int) {
+
+    private fun drawTime(
+        canvas: Canvas,
+        point: Point,
+        index: Int,
+    ) {
         val time = sdfHHMM.format(data[index].fxTime())
         drawTimeTextPaint.getTextBounds(time, 0, time.length, textBound)
         canvas.drawText(
             time,
             point.x.toFloat(),
             height - (timeHeight - textBound.height()) / 2f,
-            drawTimeTextPaint
+            drawTimeTextPaint,
         )
     }
 
-    private fun drawPop(canvas: Canvas, index: Int, point: Point) {
+    private fun drawPop(
+        canvas: Canvas,
+        index: Int,
+        point: Point,
+    ) {
         if (data[index].pop > 40) {
             popTextPaint.color = ContextCompat.getColor(context, R.color.light_blue_600)
             popTextPaint.typeface = Typeface.DEFAULT_BOLD
@@ -446,20 +479,34 @@ class HourlyLineView : View {
             "${data[index].pop}%",
             point.x.toFloat(),
             paddingTop + topIconHeight + lineHeight + tempTextHeight + popHeight / 2f + 12.dp,
-            popTextPaint
+            popTextPaint,
         )
     }
 
-    private fun drawTempText(canvas: Canvas, index: Int, point: Point) {
+    private fun drawTempText(
+        canvas: Canvas,
+        index: Int,
+        point: Point,
+    ) {
         canvas.drawText(
-            "${data[index].temp}℃", point.x.toFloat(), point.y - 20.dp, tempPaint
+            "${data[index].temp}℃",
+            point.x.toFloat(),
+            point.y - 20.dp,
+            tempPaint,
         )
     }
 
-    private fun drawIcon(canvas: Canvas, index: Int, point: Point) {
+    private fun drawIcon(
+        canvas: Canvas,
+        index: Int,
+        point: Point,
+    ) {
         val bitmap = bitmaps[index]
         canvas.drawBitmap(
-            bitmap, point.x - bitmap.width / 2f, paddingTop * 1f, topIconPaint
+            bitmap,
+            point.x - bitmap.width / 2f,
+            paddingTop * 1f,
+            topIconPaint,
         )
     }
 
@@ -468,11 +515,12 @@ class HourlyLineView : View {
         canvas.drawPath(tempLinePath, linePaint)
     }
 
-    private val rainRectPaint = Paint().apply {
-        strokeWidth = itemWidth / 5f
-        color = ContextCompat.getColor(context, R.color.rain_pop)
-        strokeCap = Paint.Cap.ROUND
-    }
+    private val rainRectPaint =
+        Paint().apply {
+            strokeWidth = itemWidth / 5f
+            color = ContextCompat.getColor(context, R.color.rain_pop)
+            strokeCap = Paint.Cap.ROUND
+        }
 
     private fun drawRainLine(canvas: Canvas) {
         for (point in rainPointList) {
@@ -481,9 +529,9 @@ class HourlyLineView : View {
                 point.y.toFloat(),
                 point.x.toFloat(),
                 paddingTop + 12.dp + 24.dp +
-                        tempTextHeight + 12.dp
-                        + lineHeight - 12.dp,
-                rainRectPaint
+                    tempTextHeight + 12.dp +
+                    lineHeight - 12.dp,
+                rainRectPaint,
             )
         }
     }
@@ -492,47 +540,50 @@ class HourlyLineView : View {
         canvas.drawLine(
             paddingLeft.toFloat(),
             paddingTop + 12.dp + 24.dp +
-                    tempTextHeight + 12.dp
-                    + lineHeight - 12.dp,
+                tempTextHeight + 12.dp +
+                lineHeight - 12.dp,
             paddingLeft + paddingRight + mPointList.size * itemWidth,
             paddingTop + 12.dp + 24.dp +
-                    tempTextHeight + 12.dp
-                    + lineHeight - 12.dp,
-            baseLinePaint
+                tempTextHeight + 12.dp +
+                lineHeight - 12.dp,
+            baseLinePaint,
         )
         canvas.drawLine(
             paddingLeft.toFloat(),
             paddingTop + 12.dp + 24.dp +
-                    tempTextHeight + 12.dp
-                    + lineHeight - 12.dp - lineHeight,
+                tempTextHeight + 12.dp +
+                lineHeight - 12.dp - lineHeight,
             paddingLeft + paddingRight + mPointList.size * itemWidth,
             paddingTop + 12.dp + 24.dp +
-                    tempTextHeight + 12.dp
-                    + lineHeight - 12.dp - lineHeight,
-            baseLinePaint
+                tempTextHeight + 12.dp +
+                lineHeight - 12.dp - lineHeight,
+            baseLinePaint,
         )
         canvas.drawLine(
             paddingLeft.toFloat(),
             paddingTop + 12.dp + 24.dp +
-                    tempTextHeight + 12.dp
-                    + lineHeight - 12.dp - lineHeight / 2f,
+                tempTextHeight + 12.dp +
+                lineHeight - 12.dp - lineHeight / 2f,
             paddingLeft + paddingRight + mPointList.size * itemWidth,
             paddingTop + 12.dp + 24.dp +
-                    tempTextHeight + 12.dp
-                    + lineHeight - 12.dp - lineHeight / 2f,
-            baseLinePaint
+                tempTextHeight + 12.dp +
+                lineHeight - 12.dp - lineHeight / 2f,
+            baseLinePaint,
         )
     }
 
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+    override fun onMeasure(
+        widthMeasureSpec: Int,
+        heightMeasureSpec: Int,
+    ) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         setMeasuredDimension(
             resolveSize(measuredWidth, widthMeasureSpec),
             resolveSize(
-                (paddingTop + paddingBottom + topIconHeight + tempTextHeight + lineHeight + popHeight + weatherNameHeight + timeHeight).toInt(),
-                heightMeasureSpec
-            )
+                (paddingTop + paddingBottom + topIconHeight + tempTextHeight + lineHeight + popHeight + weatherNameHeight + timeHeight)
+                    .toInt(),
+                heightMeasureSpec,
+            ),
         )
     }
 
@@ -571,7 +622,7 @@ class HourlyLineView : View {
                         0,
                         (paddingLeft + paddingRight + mPointList.size * itemWidth - width).toInt(),
                         0,
-                        0
+                        0,
                     )
                     invalidate()
                 } else {

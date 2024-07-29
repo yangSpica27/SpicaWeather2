@@ -4,5 +4,4 @@ import com.google.fpl.liquidfun.ParticleGroup
 
 class RainItem(
     var particleGroup: ParticleGroup? = null,
-) {
-}
+)

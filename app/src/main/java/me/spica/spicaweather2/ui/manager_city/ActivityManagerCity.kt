@@ -42,7 +42,6 @@ import java.util.Collections
  */
 @AndroidEntryPoint
 class ActivityManagerCity : MaterialActivity() {
-
     companion object {
         const val ARG_CITY_NAME = "arg_position"
     }
@@ -59,24 +58,25 @@ class ActivityManagerCity : MaterialActivity() {
 
     private val viewModel by viewModels<CityManagerViewModel>()
 
-    private val itemTouchHelper = CityItemTouchHelper(
-        isDrag = false,
-        onMove = { viewHolder, target ->
-            viewModel.moveCity(
-                adapter.items[viewHolder.absoluteAdapterPosition].city,
-                adapter.items[target.absoluteAdapterPosition].city
-            )
-            Collections.swap(
-                adapter.items,
-                viewHolder.absoluteAdapterPosition,
-                target.absoluteAdapterPosition
-            )
-            adapter.notifyItemMoved(
-                viewHolder.absoluteAdapterPosition,
-                target.absoluteAdapterPosition
-            )
-        },
-    )
+    private val itemTouchHelper =
+        CityItemTouchHelper(
+            isDrag = false,
+            onMove = { viewHolder, target ->
+                viewModel.moveCity(
+                    adapter.items[viewHolder.absoluteAdapterPosition].city,
+                    adapter.items[target.absoluteAdapterPosition].city,
+                )
+                Collections.swap(
+                    adapter.items,
+                    viewHolder.absoluteAdapterPosition,
+                    target.absoluteAdapterPosition,
+                )
+                adapter.notifyItemMoved(
+                    viewHolder.absoluteAdapterPosition,
+                    target.absoluteAdapterPosition,
+                )
+            },
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
@@ -89,11 +89,12 @@ class ActivityManagerCity : MaterialActivity() {
 
     private fun init() {
         setSupportActionBar(layout.titleBar)
-        layout.recyclerView.layoutManager = LinearLayoutManager(
-            this,
-            LinearLayoutManager.VERTICAL,
-            false
-        )
+        layout.recyclerView.layoutManager =
+            LinearLayoutManager(
+                this,
+                LinearLayoutManager.VERTICAL,
+                false,
+            )
 
         WindowCompat.getInsetsController(this.window, window.decorView).apply {
             isAppearanceLightStatusBars = true
@@ -108,7 +109,6 @@ class ActivityManagerCity : MaterialActivity() {
 
         home2ManagerView.attachToRootView()
 
-
         val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
         layoutManager.initialPrefetchItemCount = 10
         layout.recyclerView.layoutManager = layoutManager
@@ -118,9 +118,9 @@ class ActivityManagerCity : MaterialActivity() {
 
         adapter.itemClickListener = { position, view ->
             lifecycleScope.launch(Dispatchers.Default) {
-
                 Manager2HomeView.initFromViewRect(view, window)
-                EventBus.getDefault()
+                EventBus
+                    .getDefault()
                     .post(MessageEvent.create(MessageType.Get2MainActivityAnim, position))
 
                 withContext(Dispatchers.Main) {
@@ -142,7 +142,6 @@ class ActivityManagerCity : MaterialActivity() {
             startActivity(Intent(this@ActivityManagerCity, ActivityAddCity::class.java))
         }
 
-
         layout.recyclerView.addOnChildAttachStateChangeListener(
             object : RecyclerView.OnChildAttachStateChangeListener {
                 override fun onChildViewAttachedToWindow(view: View) {
@@ -153,8 +152,8 @@ class ActivityManagerCity : MaterialActivity() {
                 }
 
                 override fun onChildViewDetachedFromWindow(view: View) = Unit
-            })
-
+            },
+        )
 
         layout.deleteBtn.setOnClickListener {
             if (adapter.getSelectCityNames().size == adapter.items.size) {
@@ -167,7 +166,6 @@ class ActivityManagerCity : MaterialActivity() {
         lifecycleScope.launch {
             viewModel.allCityWithWeather.collectLatest {
                 adapter.setItems(it)
-
             }
         }
 
@@ -193,18 +191,18 @@ class ActivityManagerCity : MaterialActivity() {
         layout.titleBar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-        onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (adapter.isSelectMode) {
-                    viewModel.setSelectable(false)
-                    return
+        onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (adapter.isSelectMode) {
+                        viewModel.setSelectable(false)
+                        return
+                    }
+                    backToMain()
                 }
-                backToMain()
-            }
-        })
-
+            },
+        )
     }
-
 
     private fun backToMain() {
         if (Build.VERSION.SDK_INT >= 34) {
@@ -219,7 +217,6 @@ class ActivityManagerCity : MaterialActivity() {
         }
         finish()
     }
-
 
     private fun createInAnim(toView: View) {
         toView.post {

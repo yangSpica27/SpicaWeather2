@@ -8,10 +8,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-private val sdf = SimpleDateFormat(
-    "yyyy-MM-dd'T'HH:mm+08:00",
-    Locale.CHINA
-)
+private val sdf =
+    SimpleDateFormat(
+        "yyyy-MM-dd'T'HH:mm+08:00",
+        Locale.CHINA,
+    )
 
 @JsonClass(generateAdapter = true)
 data class HourlyWeatherBean(
@@ -24,10 +25,7 @@ data class HourlyWeatherBean(
     val weatherName: String,
     val pop: Int, // 降雨概率
 ) {
-
-    fun getWeatherType(): WeatherType {
-        return WeatherCodeUtils.getWeatherCode(iconId)
-    }
+    fun getWeatherType(): WeatherType = WeatherCodeUtils.getWeatherCode(iconId)
 
     fun fxTime(): Date {
         try {
@@ -39,9 +37,8 @@ data class HourlyWeatherBean(
     }
 }
 
-fun Hourly.toHourlyWeatherBean(): HourlyWeatherBean {
-
-    return HourlyWeatherBean(
+fun Hourly.toHourlyWeatherBean(): HourlyWeatherBean =
+    HourlyWeatherBean(
         fxTime = this.fxTime,
         temp = temp.toIntOrNull() ?: 0,
         iconId = icon.toIntOrNull() ?: 0,
@@ -49,6 +46,5 @@ fun Hourly.toHourlyWeatherBean(): HourlyWeatherBean {
         water = humidity.toIntOrNull() ?: 0,
         windPa = pressure.toIntOrNull() ?: 0,
         weatherName = text,
-        pop = pop.toIntOrNull() ?: 0
+        pop = pop.toIntOrNull() ?: 0,
     )
-}

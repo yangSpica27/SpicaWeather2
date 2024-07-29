@@ -12,5 +12,5 @@ data class Province(
     @Json(name = "log")
     val log: String,
     @Json(name = "name")
-    val name: String
+    val name: String,
 )

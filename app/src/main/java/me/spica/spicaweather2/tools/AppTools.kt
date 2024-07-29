@@ -18,7 +18,6 @@ import android.view.MotionEvent
 import android.view.TouchDelegate
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.*
@@ -27,21 +26,18 @@ import androidx.coordinatorlayout.widget.ViewGroupUtils
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import me.spica.spicaweather2.R
-
 
 /**
  * 获取版本号
  */
-fun Context.getVersion(): String {
-    return try {
+fun Context.getVersion(): String =
+    try {
         val packageInfo = packageManager.getPackageInfo(packageName, 0)
         packageInfo.versionName
     } catch (e: Exception) {
         e.printStackTrace()
         "-1"
     }
-}
 
 // 隐藏软键盘
 fun View.hideKeyboard() {
@@ -59,18 +55,22 @@ fun View.showKeyboard() {
     }
 }
 
-fun doOnMainThreadIdle(action: () -> Unit, timeout: Long? = null) {
+fun doOnMainThreadIdle(
+    action: () -> Unit,
+    timeout: Long? = null,
+) {
     val handler = Handler(Looper.getMainLooper())
 
-    val idleHandler = MessageQueue.IdleHandler {
-        handler.removeCallbacksAndMessages(null)
-        try {
-            action()
-        } catch (_: Exception) {
-        }
+    val idleHandler =
+        MessageQueue.IdleHandler {
+            handler.removeCallbacksAndMessages(null)
+            try {
+                action()
+            } catch (_: Exception) {
+            }
 
-        return@IdleHandler false
-    }
+            return@IdleHandler false
+        }
 
     fun setupIdleHandler(queue: MessageQueue) {
         if (timeout != null) {
@@ -92,8 +92,8 @@ fun doOnMainThreadIdle(action: () -> Unit, timeout: Long? = null) {
     }
 }
 
-fun getRefreshRate(context: Context): Float {
-    return try {
+fun getRefreshRate(context: Context): Float =
+    try {
         val displayManager = context.getSystemService(Context.DISPLAY_SERVICE) as android.hardware.display.DisplayManager
         val display = displayManager.getDisplay(Display.DEFAULT_DISPLAY)
         val displayMode = display?.mode
@@ -101,14 +101,18 @@ fun getRefreshRate(context: Context): Float {
     } catch (e: Exception) {
         60f
     }
-}
 
 // 扩大剑姬区域
 @SuppressLint("RestrictedApi")
-fun View.expand(dx: Int, dy: Int) {
+fun View.expand(
+    dx: Int,
+    dy: Int,
+) {
     // 将刚才定义代理类放到方法内部，调用方不需要了解这些细节
-    class MultiTouchDelegate(bound: Rect? = null, delegateView: View) :
-        TouchDelegate(bound, delegateView) {
+    class MultiTouchDelegate(
+        bound: Rect? = null,
+        delegateView: View,
+    ) : TouchDelegate(bound, delegateView) {
         val delegateViewMap = mutableMapOf<View, Rect>()
         private var delegateView: View? = null
 
@@ -132,7 +136,10 @@ fun View.expand(dx: Int, dy: Int) {
             return handled
         }
 
-        private fun findDelegateViewUnder(x: Int, y: Int): View? {
+        private fun findDelegateViewUnder(
+            x: Int,
+            y: Int,
+        ): View? {
             delegateViewMap.forEach { entry -> if (entry.value.contains(x, y)) return entry.key }
             return null
         }
@@ -144,8 +151,10 @@ fun View.expand(dx: Int, dy: Int) {
     parentView ?: return
 
     // 若父控件未设置触摸代理，则构建 MultiTouchDelegate 并设置给它
-    if (parentView.touchDelegate == null) parentView.touchDelegate =
-        MultiTouchDelegate(delegateView = this)
+    if (parentView.touchDelegate == null) {
+        parentView.touchDelegate =
+            MultiTouchDelegate(delegateView = this)
+    }
     post {
         val rect = Rect()
         // 获取子控件在父控件中的区域
@@ -157,30 +166,46 @@ fun View.expand(dx: Int, dy: Int) {
     }
 }
 
-fun Context?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) =
-    this?.let { Toast.makeText(it, text, duration).show() }
+fun Context?.toast(
+    text: CharSequence,
+    duration: Int = Toast.LENGTH_LONG,
+) = this?.let { Toast.makeText(it, text, duration).show() }
 
-fun Context?.toast(@StringRes textId: Int, duration: Int = Toast.LENGTH_LONG) =
-    this?.let { Toast.makeText(it, textId, duration).show() }
+fun Context?.toast(
+    @StringRes textId: Int,
+    duration: Int = Toast.LENGTH_LONG,
+) = this?.let { Toast.makeText(it, textId, duration).show() }
 
-fun Fragment?.toast(text: CharSequence, duration: Int = Toast.LENGTH_LONG) =
-    this?.let { activity.toast(text, duration) }
+fun Fragment?.toast(
+    text: CharSequence,
+    duration: Int = Toast.LENGTH_LONG,
+) = this?.let { activity.toast(text, duration) }
 
-fun Fragment?.toast(@StringRes textId: Int, duration: Int = Toast.LENGTH_LONG) =
-    this?.let { activity.toast(textId, duration) }
+fun Fragment?.toast(
+    @StringRes textId: Int,
+    duration: Int = Toast.LENGTH_LONG,
+) = this?.let { activity.toast(textId, duration) }
 
-fun Context.getCompatColor(@ColorRes id: Int) = ContextCompat.getColor(this, id)
+fun Context.getCompatColor(
+    @ColorRes id: Int,
+) = ContextCompat.getColor(this, id)
 
-fun Context.getCompatDrawable(@DrawableRes id: Int) = ContextCompat.getDrawable(this, id)
+fun Context.getCompatDrawable(
+    @DrawableRes id: Int,
+) = ContextCompat.getDrawable(this, id)
 
-fun Context.getInteger(@IntegerRes id: Int) = resources.getInteger(id)
+fun Context.getInteger(
+    @IntegerRes id: Int,
+) = resources.getInteger(id)
 
-fun Context.getBoolean(@BoolRes id: Int) = resources.getBoolean(id)
+fun Context.getBoolean(
+    @BoolRes id: Int,
+) = resources.getBoolean(id)
 
 // startActivityWithAnimation
 inline fun <reified T : Activity> Context.startActivityWithAnimation(
     enterResId: Int = 0,
-    exitResId: Int = 0
+    exitResId: Int = 0,
 ) {
     val intent = Intent(this, T::class.java)
     val bundle = ActivityOptionsCompat.makeCustomAnimation(this, enterResId, exitResId).toBundle()
@@ -190,7 +215,7 @@ inline fun <reified T : Activity> Context.startActivityWithAnimation(
 inline fun <reified T : Activity> Context.startActivityWithAnimation(
     enterResId: Int = 0,
     exitResId: Int = 0,
-    intentBody: Intent.() -> Unit
+    intentBody: Intent.() -> Unit,
 ) {
     val intent = Intent(this, T::class.java)
     intent.intentBody()
@@ -207,10 +232,12 @@ inline fun <reified T : Activity> Context.startActivityWithAnimation(
 // }
 
 val Int.dp: Float
-    get() = android.util.TypedValue.applyDimension(
-        android.util.TypedValue.COMPLEX_UNIT_DIP, this.toFloat(),
-        Resources.getSystem().displayMetrics
-    )
+    get() =
+        android.util.TypedValue.applyDimension(
+            android.util.TypedValue.COMPLEX_UNIT_DIP,
+            this.toFloat(),
+            Resources.getSystem().displayMetrics,
+        )
 
 fun View.show() {
     this.visibility = View.VISIBLE
@@ -223,9 +250,8 @@ fun View.hide() {
 fun AppCompatActivity.addNewFragment(
     new_add_fragment: Fragment,
     container_view_id: Int,
-    need_back_from_stack: Boolean = false
+    need_back_from_stack: Boolean = false,
 ) {
-
     val transaction = this.supportFragmentManager.beginTransaction()
 
     transaction.add(container_view_id, new_add_fragment) // 新加
@@ -240,10 +266,8 @@ fun AppCompatActivity.addNewFragment(
 
 fun AppCompatActivity.showOldFragment(
     show_old_fragment: Fragment,
-    hide_fragment_list:
-    List<Fragment> = listOf()
+    hide_fragment_list: List<Fragment> = listOf(),
 ) {
-
     val transaction = this.supportFragmentManager.beginTransaction()
 
     hide_fragment_list.forEach {
@@ -289,7 +313,7 @@ fun Context.getScreenHeight(): Int {
 internal fun View.locationOnScreen(
     intBuffer: IntArray = IntArray(2),
     rectBuffer: Rect = Rect(),
-    ignoreTranslations: Boolean = false
+    ignoreTranslations: Boolean = false,
 ): Rect {
     getLocationOnScreen(intBuffer)
     if (ignoreTranslations) {

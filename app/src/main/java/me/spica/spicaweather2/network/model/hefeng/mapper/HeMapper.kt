@@ -2,18 +2,14 @@ package me.spica.spicaweather2.network.model.hefeng.mapper
 
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.mappers.ApiSuccessModelMapper
-import com.skydoves.sandwich.retrofit.apiMessage
 import me.spica.spicaweather2.network.model.BaseResponse
 import me.spica.spicaweather2.network.model.HeCode
-import me.spica.spicaweather2.network.model.caiyun.CaiyunBean
 import me.spica.spicaweather2.network.model.hefeng.air.Air
 import me.spica.spicaweather2.network.model.hefeng.daily.DailyWeather
 import me.spica.spicaweather2.network.model.hefeng.hourly.HourlyWeather
 import me.spica.spicaweather2.network.model.hefeng.index.LifeIndex
 import me.spica.spicaweather2.network.model.hefeng.now.NowWeather
 import me.spica.spicaweather2.persistence.entity.weather.AirBean
-import me.spica.spicaweather2.persistence.entity.weather.AlertBean
-import me.spica.spicaweather2.persistence.entity.weather.CaiyunExtendBean
 import me.spica.spicaweather2.persistence.entity.weather.DailyWeatherBean
 import me.spica.spicaweather2.persistence.entity.weather.HourlyWeatherBean
 import me.spica.spicaweather2.persistence.entity.weather.LifeIndexBean
@@ -26,11 +22,8 @@ import me.spica.spicaweather2.persistence.entity.weather.toLifeIndexBean
 import me.spica.spicaweather2.persistence.entity.weather.toNowWeatherBean
 
 object SuccessDailyWeatherMapper : ApiSuccessModelMapper<DailyWeather, List<DailyWeatherBean>> {
-
     @Throws(RuntimeException::class)
-    override fun map(apiSuccessResponse: ApiResponse.Success<DailyWeather>):
-        List<DailyWeatherBean> {
-
+    override fun map(apiSuccessResponse: ApiResponse.Success<DailyWeather>): List<DailyWeatherBean> {
         if (apiSuccessResponse.data.code == HeCode.Ok.code) {
             return apiSuccessResponse.data.daily.map {
                 it.toDailyWeatherBean()
@@ -43,9 +36,7 @@ object SuccessDailyWeatherMapper : ApiSuccessModelMapper<DailyWeather, List<Dail
 
 object SuccessNowWeatherMapper : ApiSuccessModelMapper<NowWeather, NowWeatherBean> {
     @Throws(RuntimeException::class)
-    override fun map(apiSuccessResponse: ApiResponse.Success<NowWeather>):
-        NowWeatherBean {
-
+    override fun map(apiSuccessResponse: ApiResponse.Success<NowWeather>): NowWeatherBean {
         if (apiSuccessResponse.data.code == HeCode.Ok.code) {
             val now = apiSuccessResponse.data.now.toNowWeatherBean()
             now.fxLink = apiSuccessResponse.data.fxLink
@@ -57,11 +48,8 @@ object SuccessNowWeatherMapper : ApiSuccessModelMapper<NowWeather, NowWeatherBea
 }
 
 object SuccessHourlyWeatherMapper : ApiSuccessModelMapper<HourlyWeather, List<HourlyWeatherBean>> {
-
     @Throws(RuntimeException::class)
-    override fun map(apiSuccessResponse: ApiResponse.Success<HourlyWeather>):
-        List<HourlyWeatherBean> {
-
+    override fun map(apiSuccessResponse: ApiResponse.Success<HourlyWeather>): List<HourlyWeatherBean> {
         if (apiSuccessResponse.data.code == HeCode.Ok.code) {
             return apiSuccessResponse.data.hourly.map {
                 it.toHourlyWeatherBean()
@@ -73,11 +61,8 @@ object SuccessHourlyWeatherMapper : ApiSuccessModelMapper<HourlyWeather, List<Ho
 }
 
 object SuccessLifeIndexWeatherMapper : ApiSuccessModelMapper<LifeIndex, List<LifeIndexBean>> {
-
     @Throws(RuntimeException::class)
-    override fun map(apiSuccessResponse: ApiResponse.Success<LifeIndex>):
-        List<LifeIndexBean> {
-
+    override fun map(apiSuccessResponse: ApiResponse.Success<LifeIndex>): List<LifeIndexBean> {
         if (apiSuccessResponse.data.code == HeCode.Ok.code) {
             return apiSuccessResponse.data.daily.map {
                 it.toLifeIndexBean()
@@ -89,7 +74,6 @@ object SuccessLifeIndexWeatherMapper : ApiSuccessModelMapper<LifeIndex, List<Lif
 }
 
 object SuccessAirMapper : ApiSuccessModelMapper<Air, AirBean> {
-
     @Throws(RuntimeException::class)
     override fun map(apiSuccessResponse: ApiResponse.Success<Air>): AirBean {
         if (apiSuccessResponse.data.code == HeCode.Ok.code) {
@@ -102,7 +86,7 @@ object SuccessAirMapper : ApiSuccessModelMapper<Air, AirBean> {
     }
 }
 
-//object SuccessMinutelyMapper : ApiSuccessModelMapper<CaiyunBean, CaiyunExtendBean> {
+// object SuccessMinutelyMapper : ApiSuccessModelMapper<CaiyunBean, CaiyunExtendBean> {
 //
 //    @Throws(RuntimeException::class)
 //    override fun map(apiSuccessResponse: ApiResponse.Success<CaiyunBean>): CaiyunExtendBean {
@@ -119,7 +103,7 @@ object SuccessAirMapper : ApiSuccessModelMapper<Air, AirBean> {
 //            throw java.lang.RuntimeException(apiSuccessResponse.apiMessage)
 //        }
 //    }
-//}
+// }
 
 object SuccessWeatherMapper : ApiSuccessModelMapper<BaseResponse<Weather>, Weather> {
     override fun map(apiSuccessResponse: ApiResponse.Success<BaseResponse<Weather>>): Weather {

@@ -13,13 +13,10 @@ import com.google.fpl.liquidfun.World
 import me.spica.spicaweather2.common.ParticleType
 import me.spica.spicaweather2.tools.dp
 
-
 /**
  * 雨滴粒子管理器
  */
 class RainParticleManager {
-
-
     private val dt = 1f / 30f
     private val velocityIterations = 3
     private val positionIterations = 1
@@ -45,15 +42,15 @@ class RainParticleManager {
 
     private val random = kotlin.random.Random.Default
 
-
-    fun init(width: Int, height: Int) {
+    fun init(
+        width: Int,
+        height: Int,
+    ) {
         this.mWorldWidth = width
         this.mWorldHeight = height
         boxWidth = mappingView2Body(mWorldWidth * 1f - 48.dp) / 2f
         boxHeight = mappingView2Body(mProportion * 1f)
         world = World(0f, 20f)
-
-
 
         createCardBox()
         createRainItemShapeAndDef()
@@ -75,13 +72,12 @@ class RainParticleManager {
                     elapsed / 1000f * 2,
                     velocityIterations,
                     positionIterations,
-                    particleIterations
+                    particleIterations,
                 )
             }
             lastStepTime = System.currentTimeMillis()
         }
     }
-
 
     // 设置背景刚体的y坐标
     fun setBackgroundY(y: Int) {
@@ -89,8 +85,10 @@ class RainParticleManager {
         synchronized(world) {
             backgroundBody?.setTransform(
                 Vec2(
-                    boxWidth + mappingView2Body(24.dp), mappingView2Body(y * 1f + 16.dp)
-                ), 0f
+                    boxWidth + mappingView2Body(24.dp),
+                    mappingView2Body(y * 1f + 16.dp),
+                ),
+                0f,
             )
         }
     }
@@ -137,7 +135,6 @@ class RainParticleManager {
         return@lazy ps
     }
 
-
     private val rainItemShape = PolygonShape()
 
     private val rainItemDef = ParticleGroupDef()
@@ -146,7 +143,6 @@ class RainParticleManager {
         rainItemDef.shape = rainItemShape
 //        rainItemDef.linearVelocity = Vec2(0f, 9f)
     }
-
 
     // 创建雨点
     fun createRainItem(): ParticleGroup {
@@ -159,7 +155,8 @@ class RainParticleManager {
                 Vec2(mappingView2Body(x + width), mappingView2Body(y)),
                 Vec2(mappingView2Body(x + width), mappingView2Body(y + 18.dp)),
                 Vec2(mappingView2Body(x), mappingView2Body(y + 18.dp)),
-            ), 4
+            ),
+            4,
         )
 //        rainItemDef.lifetime = 12f
         rainItemDef.flags = ParticleType.b2_waterParticle.toLong()
@@ -169,15 +166,10 @@ class RainParticleManager {
     }
 
     // view坐标系转化为模拟世界坐标系
-    private fun mappingView2Body(view: Float): Float {
-        return view / mProportion
-    }
+    private fun mappingView2Body(view: Float): Float = view / mProportion
 
     // 模拟世界坐标系转化为view坐标系
-    private fun mappingBody2View(body: Float): Float {
-        return body * mProportion
-    }
-
+    private fun mappingBody2View(body: Float): Float = body * mProportion
 
     fun destroy() {
         synchronized(world) {
@@ -192,6 +184,4 @@ class RainParticleManager {
             }
         }
     }
-
-
 }

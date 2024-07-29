@@ -10,5 +10,5 @@ data class AlertBean(
     val title: String,
     val text: String,
     val sender: String,
-    val startTime: String
+    val startTime: String,
 ) : Parcelable

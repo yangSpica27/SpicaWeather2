@@ -26,67 +26,55 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
     /**
      * 注入ohHttpClient
      */
     @Provides
     @Singleton
-    fun provideOkHttpClient(@ApplicationContext context: Context): OkHttpClient {
-
-        return OkHttpClient.Builder()
+    fun provideOkHttpClient(
+        @ApplicationContext context: Context,
+    ): OkHttpClient =
+        OkHttpClient
+            .Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             .retryOnConnectionFailure(true)
             .connectTimeout(5000L, TimeUnit.MILLISECONDS)
             .build()
-    }
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
+        Retrofit
+            .Builder()
             .client(okHttpClient)
             .baseUrl("https://devapi.qweather.com/v7/")
             .addConverterFactory(MoshiConverterFactory.create())
             .addCallAdapterFactory(ApiResponseCallAdapterFactory.create())
             .build()
-    }
 
     @Provides
     @Singleton
-    fun provideHeService(retrofit: Retrofit): HeService {
-        return retrofit
+    fun provideHeService(retrofit: Retrofit): HeService =
+        retrofit
             .create(HeService::class.java)
-    }
-
 
     @Provides
     @Singleton
-    fun provideHitokotoService(retrofit: Retrofit): HitokotoService {
-        return retrofit.create(HitokotoService::class.java)
-    }
+    fun provideHitokotoService(retrofit: Retrofit): HitokotoService = retrofit.create(HitokotoService::class.java)
 
     @Provides
     @Singleton
-    fun provideHeClient(heService: HeService): HeClient {
-        return HeClient(heService)
-    }
+    fun provideHeClient(heService: HeService): HeClient = HeClient(heService)
 
     @Provides
     @Singleton
-    fun provideHitokotoClient(hitokotoService: HitokotoService): HitokotoClient {
-        return HitokotoClient(hitokotoService)
-    }
+    fun provideHitokotoClient(hitokotoService: HitokotoService): HitokotoClient = HitokotoClient(hitokotoService)
 
     @Provides
     @Singleton
-    fun provideHeRepository(heClient: HeClient): HeRepository {
-        return HeRepository(heClient)
-    }
+    fun provideHeRepository(heClient: HeClient): HeRepository = HeRepository(heClient)
 
     @Provides
     @Singleton
-    fun provideHitokotoRepository(hitokotoClient: HitokotoClient): HitokotoRepository {
-        return HitokotoRepository(hitokotoClient)
-    }
+    fun provideHitokotoRepository(hitokotoClient: HitokotoClient): HitokotoRepository = HitokotoRepository(hitokotoClient)
 }

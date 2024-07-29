@@ -5,12 +5,10 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.ScrollView
 
-
 /**
  * 处理了滑动冲突的滑动布局
  */
 abstract class ScrollViewAtViewPager : ScrollView {
-
     private var startX = 0
 
     private var startY = 0
@@ -19,8 +17,7 @@ abstract class ScrollViewAtViewPager : ScrollView {
 
     private var pullDownListener: PullDownListener? = null
 
-
-    fun setPullDownListener(pullDownListener:PullDownListener?) {
+    fun setPullDownListener(pullDownListener: PullDownListener?) {
         this.pullDownListener = pullDownListener
     }
 
@@ -38,7 +35,7 @@ abstract class ScrollViewAtViewPager : ScrollView {
                 val disX = Math.abs(endX - startX)
                 val disY = Math.abs(endY - startY)
                 if (disX > disY) {
-                    //如果是纵向滑动，告知父布局不进行时间拦截，交由子布局消费，　requestDisallowInterceptTouchEvent(true)
+                    // 如果是纵向滑动，告知父布局不进行时间拦截，交由子布局消费，　requestDisallowInterceptTouchEvent(true)
                     parent.requestDisallowInterceptTouchEvent(canScrollHorizontally(startX - endX))
                 } else {
                     parent.requestDisallowInterceptTouchEvent(canScrollVertically(startX - endX))
@@ -62,6 +59,7 @@ abstract class ScrollViewAtViewPager : ScrollView {
 
     interface PullDownListener {
         fun onPullDown(downY: Float)
+
         fun onPullUp(downY: Float)
     }
 }

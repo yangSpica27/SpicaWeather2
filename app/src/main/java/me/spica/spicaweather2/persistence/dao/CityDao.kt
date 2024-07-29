@@ -17,13 +17,11 @@ import me.spica.spicaweather2.persistence.entity.city.CityBean
 
 @Dao
 interface CityDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCities(vararg cityBean: CityBean)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCities(cityBean: List<CityBean>)
-
 
     @Query("SELECT * FROM t_city ORDER BY sort ASC")
     fun getCities(): Flow<List<CityBean>>
@@ -31,10 +29,8 @@ interface CityDao {
     @Query("SELECT * FROM t_city ORDER  by sort ASC")
     fun getAllList(): List<CityBean>
 
-
     @Query("SELECT count(*) FROM t_city")
     fun getCount(): Int
-
 
     @Transaction
     @Query("SELECT * FROM t_city ORDER BY sort ASC")
@@ -48,14 +44,16 @@ interface CityDao {
 
     // 交换顺序
     @Transaction
-    fun exchangeSort(cityBean: CityBean, cityBean1: CityBean) {
+    fun exchangeSort(
+        cityBean: CityBean,
+        cityBean1: CityBean,
+    ) {
         val temp = cityBean.sort
         cityBean.sort = cityBean1.sort
         cityBean1.sort = temp
         update(cityBean)
         update(cityBean1)
     }
-
 
     @Update
     fun update(cityBean: CityBean)
@@ -65,5 +63,4 @@ interface CityDao {
 
     @Query("DELETE FROM t_city WHERE cityName IN (:names)")
     fun deleteCitiesWithNames(names: List<String>)
-
 }

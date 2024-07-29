@@ -1,11 +1,8 @@
 package me.spica.spicaweather2
 
-import android.app.Activity
 import android.app.Application
-import android.view.WindowManager
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
-
 
 /**
  * 柠檬天气v2.0
@@ -14,7 +11,6 @@ import timber.log.Timber
  */
 @HiltAndroidApp
 class App : Application() {
-
     companion object {
         @JvmStatic
         lateinit var instance: App
@@ -32,5 +28,4 @@ class App : Application() {
         }
         instance = this
     }
-
 }

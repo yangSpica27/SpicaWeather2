@@ -1,10 +1,9 @@
 package me.spica.spicaweather2.persistence.entity.weather
 
-
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -16,5 +15,5 @@ data class Minutely(
     @Json(name = "precip")
     val precip: String,
     @Json(name = "type")
-    val type: String
-): Parcelable
+    val type: String,
+) : Parcelable

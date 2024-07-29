@@ -14,5 +14,5 @@ data class LifeIndex(
     @Json(name = "refer")
     val refer: Refer,
     @Json(name = "updateTime")
-    val updateTime: String
+    val updateTime: String,
 )

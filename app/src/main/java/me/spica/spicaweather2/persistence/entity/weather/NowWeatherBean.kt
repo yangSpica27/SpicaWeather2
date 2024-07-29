@@ -21,7 +21,7 @@ data class NowWeatherBean(
     val water: Int, // 湿度
     val windPa: Int, // 气压
     val weatherName: String,
-    var fxLink: String? = ""
+    var fxLink: String? = "",
 ) : Parcelable {
     fun obsTime(): Date {
         try {
@@ -31,39 +31,31 @@ data class NowWeatherBean(
         return Date()
     }
 
-
-
-
-
     // 获取体感温度的描述
-    fun getFeelTempDescription(): String {
-        return if (feelTemp < 0) {
-            "寒冷，注意保暖";
+    fun getFeelTempDescription(): String =
+        if (feelTemp < 0) {
+            "寒冷，注意保暖"
         } else if (feelTemp < 10) {
-            "冷，注意保暖";
+            "冷，注意保暖"
         } else if (feelTemp < 20) {
-            "凉爽，适合户外活动";
+            "凉爽，适合户外活动"
         } else if (feelTemp < 26) {
-            "舒适，适合户外活动";
+            "舒适，适合户外活动"
         } else if (feelTemp < 35) {
-            "炎热，注意防暑";
+            "炎热，注意防暑"
         } else {
-            "酷热，注意防暑";
+            "酷热，注意防暑"
         }
-    }
 
     // 获取湿度的描述
-    fun getWaterDescription(): String {
-        return if (water <= 30) {
-            "干燥，注意补水";
+    fun getWaterDescription(): String =
+        if (water <= 30) {
+            "干燥，注意补水"
         } else if (water <= 60) {
-            "舒适";
+            "舒适"
         } else {
-            "潮湿,体感温度会更高";
+            "潮湿,体感温度会更高"
         }
-    }
-
-
 }
 
 fun Now.toNowWeatherBean(): NowWeatherBean {
@@ -76,8 +68,6 @@ fun Now.toNowWeatherBean(): NowWeatherBean {
         windSpeed = windSpeed.toIntOrNull() ?: 0,
         water = humidity.toIntOrNull() ?: 0,
         windPa = pressure.toIntOrNull() ?: 0,
-        weatherName = text
+        weatherName = text,
     )
-
-
 }

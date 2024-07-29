@@ -14,13 +14,15 @@ import me.spica.spicaweather2.tools.getRefreshRate
 import me.spica.spicaweather2.view.weather_drawable.WeatherDrawableManager
 import kotlin.math.roundToLong
 
-class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
-
-
+class WeatherBackgroundSurfaceView :
+    SurfaceView,
+    SurfaceHolder.Callback {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context, attrs, defStyleAttr
+        context,
+        attrs,
+        defStyleAttr,
     )
 
     init {
@@ -30,24 +32,24 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
     private val weatherDrawableManager = WeatherDrawableManager(context)
 
     // 通过 SimpleDrawTask 实现绘制逻辑
-    private val simpleDrawTask = object :
-        SimpleDrawTask(
-            (1000 / getRefreshRate(this@WeatherBackgroundSurfaceView.context).roundToLong()),
-            { canvas ->
-                weatherDrawableManager.calculate(width, height)
-                drawBackground(canvas)
-                weatherDrawableManager.doOnDraw(canvas, width, height)
-            }) {
+    private val simpleDrawTask =
+        object :
+            SimpleDrawTask(
+                (1000 / getRefreshRate(this@WeatherBackgroundSurfaceView.context).roundToLong()),
+                { canvas ->
+                    weatherDrawableManager.calculate(width, height)
+                    drawBackground(canvas)
+                    weatherDrawableManager.doOnDraw(canvas, width, height)
+                },
+            ) {
+            override fun lockCanvas(): Canvas? = this@WeatherBackgroundSurfaceView.holder.lockCanvas()
 
-        override fun lockCanvas(): Canvas? = this@WeatherBackgroundSurfaceView.holder.lockCanvas()
-
-        override fun unlockCanvas(canvas: Canvas?) {
-            if (canvas != null) {
-                holder.unlockCanvasAndPost(canvas)
+            override fun unlockCanvas(canvas: Canvas?) {
+                if (canvas != null) {
+                    holder.unlockCanvasAndPost(canvas)
+                }
             }
         }
-    }
-
 
     var bgColor = ContextCompat.getColor(context, R.color.light_blue_600)
         set(value) {
@@ -59,16 +61,16 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
             backgroundColorAnim.start()
         }
 
-
-    private val backgroundColorAnim = ValueAnimator.ofArgb(
-        ContextCompat.getColor(context, R.color.white),
-        ContextCompat.getColor(context, R.color.white)
-    ).apply {
-        duration = 250
-        setEvaluator(ArgbEvaluator())
-        start()
-    }
-
+    private val backgroundColorAnim =
+        ValueAnimator
+            .ofArgb(
+                ContextCompat.getColor(context, R.color.white),
+                ContextCompat.getColor(context, R.color.white),
+            ).apply {
+                duration = 250
+                setEvaluator(ArgbEvaluator())
+                start()
+            }
 
     var currentWeatherAnimType = NowWeatherView.WeatherAnimType.UNKNOWN
         set(value) {
@@ -79,8 +81,10 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
             }
         }
 
-
-    fun getScreenCopy(foregroundBitmap: Bitmap, callbacks: (Bitmap) -> Unit) {
+    fun getScreenCopy(
+        foregroundBitmap: Bitmap,
+        callbacks: (Bitmap) -> Unit,
+    ) {
         val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
         canvas.drawColor(backgroundColorAnim.animatedValue as Int)
@@ -105,20 +109,23 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback {
 //        )
     }
 
-
     override fun surfaceCreated(holder: SurfaceHolder) {
         // 渲染线程
         weatherDrawableManager.ready(width, height)
         simpleDrawTask.ready()
     }
 
-    override fun surfaceChanged(holder: SurfaceHolder, p1: Int, p2: Int, p3: Int) = Unit
+    override fun surfaceChanged(
+        holder: SurfaceHolder,
+        p1: Int,
+        p2: Int,
+        p3: Int,
+    ) = Unit
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         simpleDrawTask.destroy()
         weatherDrawableManager.release()
     }
-
 
     fun setMScrollY(y: Int) {
         weatherDrawableManager.setScrollY(y)

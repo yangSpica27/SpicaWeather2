@@ -8,5 +8,5 @@ data class Adcode(
     @Json(name = "adcode")
     val adcode: Int,
     @Json(name = "name")
-    val name: String
+    val name: String,
 )

@@ -16,5 +16,5 @@ data class Daily(
     @Json(name = "text")
     val text: String?,
     @Json(name = "type")
-    val type: String
+    val type: String,
 )

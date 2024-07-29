@@ -12,30 +12,35 @@ private const val OVERSCROLL_TRANSLATION_MAGNITUDE = 0.5f
 /** The magnitude of translation distance when the list reaches the edge on fling. */
 private const val FLING_TRANSLATION_MAGNITUDE = 0.5f
 
-
-class BounceEdgeEffectFactory2(val isVertical: Boolean = true) : RecyclerView.EdgeEffectFactory() {
-
-    override fun createEdgeEffect(recyclerView: RecyclerView, direction: Int): EdgeEffect {
-
+class BounceEdgeEffectFactory2(
+    val isVertical: Boolean = true,
+) : RecyclerView.EdgeEffectFactory() {
+    override fun createEdgeEffect(
+        recyclerView: RecyclerView,
+        direction: Int,
+    ): EdgeEffect {
         return object : EdgeEffect(recyclerView.context) {
-
             // A reference to the [SpringAnimation] for this RecyclerView used to bring the item back after the over-scroll effect.
-            val translationAnim: SpringAnimation = SpringAnimation(
-                recyclerView,
-                if (isVertical) SpringAnimation.TRANSLATION_Y else SpringAnimation.TRANSLATION_X
-            ).setSpring(
-                SpringForce()
-                    .setFinalPosition(0f)
-                    .setDampingRatio(SpringForce.DAMPING_RATIO_NO_BOUNCY)
-                    .setStiffness(SpringForce.STIFFNESS_LOW)
-            )
+            val translationAnim: SpringAnimation =
+                SpringAnimation(
+                    recyclerView,
+                    if (isVertical) SpringAnimation.TRANSLATION_Y else SpringAnimation.TRANSLATION_X,
+                ).setSpring(
+                    SpringForce()
+                        .setFinalPosition(0f)
+                        .setDampingRatio(SpringForce.DAMPING_RATIO_NO_BOUNCY)
+                        .setStiffness(SpringForce.STIFFNESS_LOW),
+                )
 
             override fun onPull(deltaDistance: Float) {
                 super.onPull(deltaDistance)
                 handlePull(deltaDistance)
             }
 
-            override fun onPull(deltaDistance: Float, displacement: Float) {
+            override fun onPull(
+                deltaDistance: Float,
+                displacement: Float,
+            ) {
                 super.onPull(deltaDistance, displacement)
                 handlePull(deltaDistance)
             }
@@ -85,7 +90,6 @@ class BounceEdgeEffectFactory2(val isVertical: Boolean = true) : RecyclerView.Ed
                 // Without this, will skip future calls to onAbsorb()
                 return translationAnim.isRunning.not()
             }
-
         }
     }
 }

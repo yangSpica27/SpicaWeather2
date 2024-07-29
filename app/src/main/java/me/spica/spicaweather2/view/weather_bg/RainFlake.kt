@@ -22,12 +22,16 @@ class RainFlake( // 雨滴
     private var mIncrement: Float, // 雨滴的大小
     private var mFlakeSize: Float, // 画笔
     private var mPaint: Paint,
-    private var color: Int
+    private var color: Int,
 ) {
-
     companion object {
         // 生成雨滴
-        fun create(width: Int, height: Int, paint: Paint, color: Int): RainFlake {
+        fun create(
+            width: Int,
+            height: Int,
+            paint: Paint,
+            color: Int,
+        ): RainFlake {
             val random = RainRandomGenerator()
             val nline: IntArray = random.getLine(width, height)
             val line = Line(nline[0], nline[1], nline[2], nline[3])
@@ -45,7 +49,10 @@ class RainFlake( // 雨滴
     }
 
     // 计算下落
-    fun calculation(width: Int, height: Int) {
+    fun calculation(
+        width: Int,
+        height: Int,
+    ) {
         mPaint.strokeWidth = mFlakeSize
         // y是豎直方向，就是下落
         val y1: Double = mLine.y1 + height / 100.0
@@ -72,7 +79,11 @@ class RainFlake( // 雨滴
      * @param width
      * @param height
      */
-    private fun drawLine(canvas: Canvas, width: Int, height: Int) {
+    private fun drawLine(
+        canvas: Canvas,
+        width: Int,
+        height: Int,
+    ) {
         // 設置線寬
         mPaint.strokeWidth = mFlakeSize
         // y是豎直方向，就是下落
@@ -88,12 +99,13 @@ class RainFlake( // 雨滴
     }
 
     // 判斷是否在其中
-    private fun isInsideLine(height: Int): Boolean {
-        return mLine.y1 < height && mLine.y2 < height
-    }
+    private fun isInsideLine(height: Int): Boolean = mLine.y1 < height && mLine.y2 < height
 
     // 重置雨滴
-    private fun resetLine(width: Int, height: Int) {
+    private fun resetLine(
+        width: Int,
+        height: Int,
+    ) {
         val nline: IntArray = mRandom.getLine(width, height)
         mLine.x1 = nline[0]
         mLine.y1 = nline[1]

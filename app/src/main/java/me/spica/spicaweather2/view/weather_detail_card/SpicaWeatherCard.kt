@@ -13,7 +13,6 @@ import me.spica.spicaweather2.tools.dp
 import java.util.concurrent.atomic.AtomicBoolean
 
 interface SpicaWeatherCard {
-
     // 卡片的View
     var animatorView: View
 
@@ -45,35 +44,45 @@ interface SpicaWeatherCard {
         enterAnim.playTogether(
             ObjectAnimator.ofFloat(
                 animatorView,
-                "alpha", 0f, 1f
+                "alpha",
+                0f,
+                1f,
             ),
-            ObjectAnimator.ofFloat(
-                animatorView, "translationY", 60.dp, 0f
-            ).apply {
-                interpolator = OvershootInterpolator(.2f * (index / 2f + 1))
-            },
-            ObjectAnimator.ofFloat(
-                animatorView, "scaleY", 1.025f, 1f
-            ).apply {
-                interpolator = DecelerateInterpolator(1f)
-            },
-            ObjectAnimator.ofFloat(
-                animatorView, "scaleX", 1.025f, 1f
-            ).apply {
-                interpolator = DecelerateInterpolator(1f)
-            },
+            ObjectAnimator
+                .ofFloat(
+                    animatorView,
+                    "translationY",
+                    60.dp,
+                    0f,
+                ).apply {
+                    interpolator = OvershootInterpolator(.2f * (index / 2f + 1))
+                },
+            ObjectAnimator
+                .ofFloat(
+                    animatorView,
+                    "scaleY",
+                    1.025f,
+                    1f,
+                ).apply {
+                    interpolator = DecelerateInterpolator(1f)
+                },
+            ObjectAnimator
+                .ofFloat(
+                    animatorView,
+                    "scaleX",
+                    1.025f,
+                    1f,
+                ).apply {
+                    interpolator = DecelerateInterpolator(1f)
+                },
         )
         enterAnim.duration = 450
     }
 
-
     var hasInScreen: AtomicBoolean
 
-
     // 检查是否进入屏幕
-    fun checkEnterScreen(
-        isIn: Boolean
-    ) {
+    fun checkEnterScreen(isIn: Boolean) {
         if (hasInScreen.get()) {
             return
         }
@@ -83,7 +92,7 @@ interface SpicaWeatherCard {
             animatorView.post {
                 doOnMainThreadIdle({
                     startEnterAnim()
-                },550)
+                }, 550)
             }
         }
     }

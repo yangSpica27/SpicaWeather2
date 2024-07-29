@@ -64,32 +64,31 @@ class DataSyncWorker : Service() {
 
             cityList
                 .forEach { cityBean ->
-                    val res: Deferred<Boolean> = async(Dispatchers.IO, CoroutineStart.DEFAULT) {
+                    val res: Deferred<Boolean> =
+                        async(Dispatchers.IO, CoroutineStart.DEFAULT) {
+                            // 获取天气数据
+                            val weatherResponse: BaseResponse<Weather>? =
+                                try {
+                                    heClient.getAllWeather(cityBean.lon, cityBean.lat).getOrThrow()
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                    null
+                                }
 
-                        // 获取天气数据
-                        val weatherResponse: BaseResponse<Weather>? =
-                            try {
-                                heClient.getAllWeather(cityBean.lon, cityBean.lat).getOrThrow()
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                                null
+                            // 获取一言数据
+                            val hitokotoResponse = hitokotoClient.getHitokoto().getOrNull()
+
+                            // 如果获取到了数据，则插入到数据库中
+                            weatherResponse?.data?.let { weather ->
+                                weather.cityName = cityBean.cityName
+                                weather.welcomeText =
+                                    hitokotoResponse?.hitokoto ?: "昭昭若日月之明，离离如星辰之行"
+                                weatherDao.insertWeather(weather)
+                                return@async true
                             }
-
-                        // 获取一言数据
-                        val hitokotoResponse = hitokotoClient.getHitokoto().getOrNull()
-
-
-                        // 如果获取到了数据，则插入到数据库中
-                        weatherResponse?.data?.let { weather ->
-                            weather.cityName = cityBean.cityName
-                            weather.welcomeText =
-                                hitokotoResponse?.hitokoto ?: "昭昭若日月之明，离离如星辰之行"
-                            weatherDao.insertWeather(weather)
-                            return@async true
+                            // 如果没有获取到数据，则返回 false
+                            return@async false
                         }
-                        // 如果没有获取到数据，则返回 false
-                        return@async false
-                    }
                     ds.add(res)
                 }
 
@@ -117,5 +116,4 @@ class DataSyncWorker : Service() {
         val cityList = CityBean.getAllCities(context)
         cityList.findLast { it.cityName == "南京" }?.let { cityDao.insertCities(it) }
     }
-
 }

@@ -16,5 +16,5 @@ data class Air(
     @Json(name = "station")
     val station: List<Station>?,
     @Json(name = "updateTime")
-    val updateTime: String
+    val updateTime: String,
 )

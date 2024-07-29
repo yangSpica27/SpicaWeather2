@@ -7,11 +7,12 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'kotlin-android'
     id 'kotlin-parcelize'
-    id 'AndResGuard'
+//    id 'AndResGuard'
     id 'com.google.devtools.ksp'
 }
 
 android {
+    namespace 'me.spica.weather2'
     compileSdk 34
 
     defaultConfig {
@@ -25,7 +26,7 @@ android {
         renderscriptSupportModeEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        resConfigs 'en'
+        resourceConfigurations += ['en']
 
         ndk {
             //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
@@ -43,7 +44,6 @@ android {
 
     sourceSets {
         main {
-            jni.srcDirs = []
             jniLibs.srcDirs = ['libs']
         }
     }
@@ -80,13 +80,18 @@ android {
         kotlinOptions.freeCompilerArgs += ["-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"]
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
     kotlinOptions {
         jvmTarget = '17'
         //        useK2 = true
     }
-    lintOptions {
-        checkReleaseBuilds false
+    namespace 'me.spica.spicaweather2'
+    lint {
         abortOnError false
+        checkReleaseBuilds false
     }
 }
 
@@ -182,31 +187,31 @@ configurations.configureEach {
     exclude group: 'androidx.appcompat', module: 'appcompat'
 }
 
-andResGuard {
-    mappingFile = null
-    use7zip = true
-    useSign = true
-    // 打开这个开关，会keep住所有资源的原始路径，只混淆资源的名字
-    keepRoot = false
-    // 设置这个值，会把arsc name列混淆成相同的名字，减少string常量池的大小
-    fixedResName = "arg"
-    // 打开这个开关会合并所有哈希值相同的资源，但请不要过度依赖这个功能去除去冗余资源
-    mergeDuplicatedRes = true
-    compressFilePattern = ["*.png",
-                           "*.jpg",
-                           "*.jpeg",
-                           "*.gif",]
-    sevenzip {
-        artifact = 'com.tencent.mm:SevenZip:1.2.21'
-    }
-}
+//andResGuard {
+//    mappingFile = null
+//    use7zip = true
+//    useSign = true
+//    // 打开这个开关，会keep住所有资源的原始路径，只混淆资源的名字
+//    keepRoot = false
+//    // 设置这个值，会把arsc name列混淆成相同的名字，减少string常量池的大小
+//    fixedResName = "arg"
+//    // 打开这个开关会合并所有哈希值相同的资源，但请不要过度依赖这个功能去除去冗余资源
+//    mergeDuplicatedRes = true
+//    compressFilePattern = ["*.png",
+//                           "*.jpg",
+//                           "*.jpeg",
+//                           "*.gif",]
+//    sevenzip {
+//        artifact = 'com.tencent.mm:SevenZip:1.2.21'
+//    }
+//}
 
 configurations {
     ktlint
 }
 
 dependencies {
-    ktlint 'com.pinterest:ktlint:0.44.0'
+    ktlint 'com.pinterest.ktlint:ktlint-cli:1.3.1'
 }
 tasks.register('ktlint', JavaExec) {
     description = "Check Kotlin code style."
@@ -217,10 +222,12 @@ tasks.register('ktlint', JavaExec) {
 check.dependsOn ktlint
 
 tasks.register('ktlintFormat', JavaExec) {
+    group = "formatting"
     description = "Fix Kotlin code style deviations."
     classpath = configurations.ktlint
     mainClass = "com.pinterest.ktlint.Main"
-    args "-F", "src/**/*.kt"
+//    jvmArgs = "--add-opens=java.base/java.lang=ALL-UNNAMED"
+    args "-F", "src/**/*.kt", "**.kts", "!**/build/**"
 }
 
 //tasks.register('copyAndroidNatives') {

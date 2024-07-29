@@ -25,24 +25,22 @@ data class CityBean(
     var sortName: String, // 拼音
     var lon: String, // 经度
     var lat: String, // 纬度
-    var sort: Long = Calendar.getInstance().timeInMillis
+    var sort: Long = Calendar.getInstance().timeInMillis,
 ) : Parcelable {
-
-
     @Ignore
     @IgnoredOnParcel
     var iconId: Int = 100
 
     @IgnoredOnParcel
     @Ignore
-    val sortId: String = if (sortName.isNotEmpty()) {
-        sortName[0].toString()
-    } else {
-        "#"
-    }
+    val sortId: String =
+        if (sortName.isNotEmpty()) {
+            sortName[0].toString()
+        } else {
+            "#"
+        }
 
     companion object {
-
         // 读取配置文件中的所有城市信息
         @JvmStatic
         @WorkerThread
@@ -50,29 +48,33 @@ data class CityBean(
             val provinces = arrayListOf<Province>()
             val cityList = arrayListOf<CityBean>()
             val moshi = Moshi.Builder().build()
-            val listOfCardsType = Types.newParameterizedType(
-                List::class.java, Province::class.java
-            )
+            val listOfCardsType =
+                Types.newParameterizedType(
+                    List::class.java,
+                    Province::class.java,
+                )
             val jsonAdapter = moshi.adapter<List<Province>>(listOfCardsType)
 
             provinces.addAll(
                 jsonAdapter.fromJson(
-                    getJsonString(context)
-                ) ?: listOf()
+                    getJsonString(context),
+                ) ?: listOf(),
             )
 
             cityList.addAll(
-                provinces.map {
-                    CityBean(
-                        cityName = it.name,
-                        sortName = PinyinHelper.convertToPinyinString
-                            (it.name, "", PinyinFormat.WITHOUT_TONE),
-                        lon = it.log,
-                        lat = it.lat
-                    )
-                }.filter {
-                    it.cityName.isNotEmpty()
-                }
+                provinces
+                    .map {
+                        CityBean(
+                            cityName = it.name,
+                            sortName =
+                                PinyinHelper.convertToPinyinString
+                                    (it.name, "", PinyinFormat.WITHOUT_TONE),
+                            lon = it.log,
+                            lat = it.lat,
+                        )
+                    }.filter {
+                        it.cityName.isNotEmpty()
+                    },
             )
 
             provinces.forEach {
@@ -80,12 +82,13 @@ data class CityBean(
                     it.children.map { city ->
                         CityBean(
                             cityName = city.name,
-                            sortName = PinyinHelper.convertToPinyinString
-                                (city.name, "", PinyinFormat.WITHOUT_TONE),
+                            sortName =
+                                PinyinHelper.convertToPinyinString
+                                    (city.name, "", PinyinFormat.WITHOUT_TONE),
                             lon = city.log,
-                            lat = city.lat
+                            lat = city.lat,
                         )
-                    }
+                    },
                 )
             }
 

@@ -3,7 +3,7 @@ package me.spica.spicaweather2.view.list
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class DiffAdapter<T, I, VH : RecyclerView.ViewHolder>(
-    differFactory: ListDiffer.Factory<T, I>
+    differFactory: ListDiffer.Factory<T, I>,
 ) : RecyclerView.Adapter<VH>() {
     private val differ = differFactory.new(@Suppress("LeakingThis") this)
 
@@ -26,7 +26,11 @@ abstract class DiffAdapter<T, I, VH : RecyclerView.ViewHolder>(
      * @param instructions The instructions specifying how to update the list.
      * @param onDone Called when the update process is completed. Defaults to a no-op.
      */
-    fun submitList(newList: List<T>, instructions: I, onDone: () -> Unit = {}) {
+    fun submitList(
+        newList: List<T>,
+        instructions: I,
+        onDone: () -> Unit = {},
+    ) {
         differ.submitList(newList, instructions, onDone)
     }
 }

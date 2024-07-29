@@ -30,5 +30,5 @@ data class Station(
     @Json(name = "pubTime")
     val pubTime: String,
     @Json(name = "so2")
-    val so2: String
+    val so2: String,
 )

@@ -13,7 +13,6 @@ import me.spica.spicaweather2.view.view_group.WeatherMainLayout2
  * 主页的adapter
  */
 class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
-
     companion object {
         private const val TYPE_EMPTY = -1
         private const val TYPE_DATA = 1
@@ -25,8 +24,6 @@ class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
 //        setHasStableIds(true)
     }
 
-
-
     @SuppressLint("NotifyDataSetChanged")
     fun updateCities(cities: List<CityWithWeather>) {
         this.items.clear()
@@ -34,8 +31,9 @@ class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+    class ViewHolder(
+        itemView: View,
+    ) : RecyclerView.ViewHolder(itemView) {
         fun setWeather(weather: Weather) {
             if (itemView !is WeatherMainLayout2) {
                 return
@@ -44,7 +42,10 @@ class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ViewHolder {
         if (viewType == TYPE_EMPTY) {
             return ViewHolder(NoWeatherDataLayout(parent.context))
         }
@@ -62,12 +63,18 @@ class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
 
     override fun getItemId(position: Int): Long {
         if (items[position].weather != null) {
-            return items[position].city.cityName.hashCode().toLong()
+            return items[position]
+                .city.cityName
+                .hashCode()
+                .toLong()
         }
         return 0
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+    ) {
         val weather = items[position].weather
         if (weather != null) {
             holder.setWeather(weather)

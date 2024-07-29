@@ -26,5 +26,5 @@ data class Now(
     @Json(name = "pubTime")
     val pubTime: String,
     @Json(name = "so2")
-    val so2: String
+    val so2: String,
 )

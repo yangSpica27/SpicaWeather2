@@ -10,33 +10,33 @@ import timber.log.Timber
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-
 /**
  * 雨水的绘制
  */
 class RainDrawable2 : WeatherDrawable() {
-
-
     // 绘制雨水的paint
-    private val rainPaint = Paint().apply {
-        strokeCap = Paint.Cap.ROUND
-        strokeWidth = 1.dp * 2
-        color = Color.parseColor("#A2CAF1")
-        style = Paint.Style.FILL
-    }
+    private val rainPaint =
+        Paint().apply {
+            strokeCap = Paint.Cap.ROUND
+            strokeWidth = 1.dp * 2
+            color = Color.parseColor("#A2CAF1")
+            style = Paint.Style.FILL
+        }
 
-    private val rainPaint2 = Paint().apply {
-        strokeCap = Paint.Cap.ROUND
-        strokeWidth = 4.dp
-        color = Color.parseColor("#A2CAF1")
-        style = Paint.Style.FILL
-    }
+    private val rainPaint2 =
+        Paint().apply {
+            strokeCap = Paint.Cap.ROUND
+            strokeWidth = 4.dp
+            color = Color.parseColor("#A2CAF1")
+            style = Paint.Style.FILL
+        }
 
     private val lock = Any()
 
     private var rainEffectCounter = RainParticleManager()
 
     private val rainFlakes = arrayListOf<RainFlake>()
+
     override fun startAnim() {
         if (rainFlakes.isEmpty() && viewWidth != -1 && viewHeight != -1) {
             release()
@@ -53,7 +53,10 @@ class RainDrawable2 : WeatherDrawable() {
     private var viewHeight: Int = -1
 
     // 初始化
-    override fun ready(width: Int, height: Int) {
+    override fun ready(
+        width: Int,
+        height: Int,
+    ) {
         synchronized(lock) {
             viewWidth = width
             viewHeight = height
@@ -66,8 +69,8 @@ class RainDrawable2 : WeatherDrawable() {
                         width,
                         height,
                         rainPaint2,
-                        Color.parseColor("#65E8E8E8")
-                    )
+                        Color.parseColor("#65E8E8E8"),
+                    ),
                 )
             }
         }
@@ -81,13 +84,14 @@ class RainDrawable2 : WeatherDrawable() {
         rainEffectCounter.setBackgroundY(y)
     }
 
-
     // 上一次添加雨滴的时间
     private var lastAddRainTime = 0L
 
-
     // 计算雨滴的位置
-    override fun calculate(w: Int, h: Int) {
+    override fun calculate(
+        w: Int,
+        h: Int,
+    ) {
         if (rainFlakes.isEmpty() || viewHeight == -1 || viewWidth == -1) {
             return
         }
@@ -104,9 +108,7 @@ class RainDrawable2 : WeatherDrawable() {
                 rainEffectCounter.createRainItem()
             }
         }
-
     }
-
 
     // 粒子的位置缓冲区
     private var mParticlePositionBuffer: ByteBuffer =
@@ -120,8 +122,11 @@ class RainDrawable2 : WeatherDrawable() {
     // 过滤屏幕之外的点
     private val positionArray2 = FloatArray(RainParticleManager.ParticleMaxCount * 2)
 
-
-    override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
+    override fun doOnDraw(
+        canvas: Canvas,
+        width: Int,
+        height: Int,
+    ) {
         if (rainFlakes.isEmpty() || viewHeight == -1 || viewWidth == -1) {
             return
         }
@@ -134,7 +139,7 @@ class RainDrawable2 : WeatherDrawable() {
             rainEffectCounter.system.copyPositionBuffer(
                 0,
                 rainEffectCounter.system.particleCount,
-                mParticlePositionBuffer
+                mParticlePositionBuffer,
             )
             mParticlePositionBuffer.asFloatBuffer().get(positionArray)
 
@@ -145,8 +150,9 @@ class RainDrawable2 : WeatherDrawable() {
                 positionArray[i] = positionArray[i] * RainParticleManager.mProportion
                 positionArray[i + 1] = positionArray[i + 1] * RainParticleManager.mProportion
 
-                if (positionArray[i] < 0 || positionArray[i] > width
-                    || positionArray[i + 1] < 0 ||
+                if (positionArray[i] < 0 ||
+                    positionArray[i] > width ||
+                    positionArray[i + 1] < 0 ||
                     positionArray[i + 1] > height
                 ) {
                     // 超出屏幕范围的点不做绘制
@@ -174,5 +180,4 @@ class RainDrawable2 : WeatherDrawable() {
             positionArray.fill(0f)
         }
     }
-
 }

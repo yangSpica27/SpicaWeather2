@@ -12,7 +12,6 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import androidx.annotation.WorkerThread
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
@@ -20,38 +19,42 @@ import me.spica.spicaweather2.tools.dp
 /**
  * 雾天的天气效果
  */
-class FoggyDrawable(private val context: Context) : WeatherDrawable() {
-
+class FoggyDrawable(
+    private val context: Context,
+) : WeatherDrawable() {
     // 锚点
     private val circles = arrayListOf<Circle>()
-
 
     private var enterProgress = 0f
 
     private val interpolator = AccelerateInterpolator()
 
-    private val anim = ObjectAnimator.ofFloat(0f, 1f)
-        .apply {
-            interpolator = LinearInterpolator()
-            duration = 2800L
-            repeatCount = Animation.INFINITE
-            repeatMode = ValueAnimator.REVERSE
-        }
+    private val anim =
+        ObjectAnimator
+            .ofFloat(0f, 1f)
+            .apply {
+                interpolator = LinearInterpolator()
+                duration = 2800L
+                repeatCount = Animation.INFINITE
+                repeatMode = ValueAnimator.REVERSE
+            }
 
-    private val anim2 = ObjectAnimator.ofFloat(0f, 1f)
-        .apply {
-            interpolator = DecelerateInterpolator()
-            duration = 3200L
-            repeatCount = Animation.INFINITE
-            repeatMode = ValueAnimator.REVERSE
-        }
+    private val anim2 =
+        ObjectAnimator
+            .ofFloat(0f, 1f)
+            .apply {
+                interpolator = DecelerateInterpolator()
+                duration = 3200L
+                repeatCount = Animation.INFINITE
+                repeatMode = ValueAnimator.REVERSE
+            }
 
     override fun startAnim() {
         anim.start()
         anim2.start()
     }
 
-    override  fun cancelAnim() {
+    override fun cancelAnim() {
         anim.cancel()
         anim2.cancel()
         if (enterProgress == 1f) {
@@ -59,7 +62,10 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
         }
     }
 
-    override  fun ready(width: Int, height: Int) {
+    override fun ready(
+        width: Int,
+        height: Int,
+    ) {
         synchronized(circles) {
             circles.clear()
             path.reset()
@@ -70,8 +76,8 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
                         height / 4f,
                     ),
                     height / 5f,
-                    8.dp
-                )
+                    8.dp,
+                ),
             )
 
             circles.add(
@@ -81,8 +87,8 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
                         height / 2f,
                     ),
                     width / 5.5f,
-                    10.dp
-                )
+                    10.dp,
+                ),
             )
 
             circles.add(
@@ -92,8 +98,8 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
                         height - height / 4f,
                     ),
                     height / 4f,
-                    20.dp
-                )
+                    20.dp,
+                ),
             )
 
             circles.add(
@@ -103,8 +109,8 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
                         height - height / 4f,
                     ),
                     height / 4f,
-                    12.dp
-                )
+                    12.dp,
+                ),
             )
 
             circles.add(
@@ -114,8 +120,8 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
                         height - height / 4f,
                     ),
                     height / 4f,
-                    12.dp
-                )
+                    12.dp,
+                ),
             )
 
             circles.add(
@@ -125,8 +131,8 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
                         height - height / 5f,
                     ),
                     height / 5f,
-                    10.dp
-                )
+                    10.dp,
+                ),
             )
 
             circles.add(
@@ -136,8 +142,8 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
                         height - height / 4f,
                     ),
                     height / 4.5f,
-                    12.dp
-                )
+                    12.dp,
+                ),
             )
 
             circles.add(
@@ -147,8 +153,8 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
                         height - height / 1.9f - 22.dp,
                     ),
                     height / 5.5f,
-                    6.dp
-                )
+                    6.dp,
+                ),
             )
 
             circles.add(
@@ -158,8 +164,8 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
                         height / 5f,
                     ),
                     height / 5f,
-                    8.dp
-                )
+                    8.dp,
+                ),
             )
 
             circles.add(
@@ -169,8 +175,8 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
                         height / 3.5f,
                     ),
                     height / 4f,
-                    10.dp
-                )
+                    10.dp,
+                ),
             )
 
             path.moveTo(circles[0].centerPoint.x, circles[0].centerPoint.y)
@@ -183,7 +189,10 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
 
     private val path = Path()
 
-   override fun calculate(width: Int, height: Int) {
+    override fun calculate(
+        width: Int,
+        height: Int,
+    ) {
         synchronized(circles) {
             circles.forEachIndexed { index, circle ->
                 if (index % 3 == 0) {
@@ -200,13 +209,18 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
         }
     }
 
-    private val fogPaint = Paint().apply {
-        style = Paint.Style.FILL
-        color = ContextCompat.getColor(context, R.color.fog_color)
-        pathEffect = CornerPathEffect(12.dp)
-    }
+    private val fogPaint =
+        Paint().apply {
+            style = Paint.Style.FILL
+            color = ContextCompat.getColor(context, R.color.fog_color)
+            pathEffect = CornerPathEffect(12.dp)
+        }
 
-    override fun doOnDraw(canvas: Canvas, width: Int, height: Int) {
+    override fun doOnDraw(
+        canvas: Canvas,
+        width: Int,
+        height: Int,
+    ) {
         synchronized(circles) {
             enterProgress += .02f
             enterProgress = Math.min(1f, enterProgress)
@@ -216,7 +230,7 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
                     it.centerPoint.x,
                     it.centerPoint.y,
                     it.currentRadius * animProgressValue,
-                    fogPaint
+                    fogPaint,
                 )
                 canvas.drawPath(path, fogPaint)
             }
@@ -227,6 +241,6 @@ class FoggyDrawable(private val context: Context) : WeatherDrawable() {
         val centerPoint: PointF,
         val defaultRadius: Float,
         val variableRadius: Float,
-        var currentRadius: Float = 0.dp
+        var currentRadius: Float = 0.dp,
     )
 }

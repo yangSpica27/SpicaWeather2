@@ -17,51 +17,50 @@ import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
-import java.util.Collections
 
 // 空气质量指数view
 private val VIEW_MARGIN = 14.dp
 
 class AirCircleProgressView : View {
-
     private var mCenterX = 0
     private var mCenterY = 0
-
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context,
         attrs,
-        defStyleAttr
+        defStyleAttr,
     )
 
     private val mRectF: RectF = RectF()
 
+    private val textPaint =
+        TextPaint().apply {
+            textSize = 50.dp
+            color = ContextCompat.getColor(context, R.color.textColorPrimary)
+        }
 
-    private val textPaint = TextPaint().apply {
-        textSize = 50.dp
-        color = ContextCompat.getColor(context, R.color.textColorPrimary)
-    }
+    private val secondTextPaint =
+        TextPaint().apply {
+            textSize = 16.dp
+            color = ContextCompat.getColor(context, R.color.white)
+            typeface = Typeface.DEFAULT_BOLD
+        }
 
-    private val secondTextPaint = TextPaint().apply {
-        textSize = 16.dp
-        color = ContextCompat.getColor(context, R.color.white)
-        typeface = Typeface.DEFAULT_BOLD
-    }
+    private val secondTextBackgroundPaint =
+        TextPaint().apply {
+            color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
+            style = Paint.Style.FILL
+        }
 
-    private val secondTextBackgroundPaint = TextPaint().apply {
-        color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
-        style = Paint.Style.FILL
-    }
-
-    private val linePaint = Paint().apply {
-        strokeWidth = 12.dp
-        style = Paint.Style.STROKE
-        color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
-        strokeCap = Paint.Cap.ROUND
-    }
-
+    private val linePaint =
+        Paint().apply {
+            strokeWidth = 12.dp
+            style = Paint.Style.STROKE
+            color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
+            strokeCap = Paint.Cap.ROUND
+        }
 
     private val startAngle = 135f
 
@@ -76,7 +75,10 @@ class AirCircleProgressView : View {
     private var category = "良"
 
     // 设置进度
-    fun bindProgress(lv: Int, category: String) {
+    fun bindProgress(
+        lv: Int,
+        category: String,
+    ) {
         // 根据空气质量等级设置颜色
         if (lv < 50) {
             textPaint.color = ContextCompat.getColor(context, R.color.l1)
@@ -97,7 +99,6 @@ class AirCircleProgressView : View {
         postInvalidateOnAnimation()
     }
 
-
     // 开始动画
     fun startAnim() {
         val animator = ValueAnimator.ofFloat(0f, lv * 1f / maxLv)
@@ -113,22 +114,30 @@ class AirCircleProgressView : View {
         animator.start()
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+    override fun onMeasure(
+        widthMeasureSpec: Int,
+        heightMeasureSpec: Int,
+    ) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val width = (MeasureSpec.getSize(widthMeasureSpec) - 2 * VIEW_MARGIN)
         setMeasuredDimension(
             MeasureSpec.makeMeasureSpec(
                 (width + 2 * VIEW_MARGIN).toInt(),
-                MeasureSpec.EXACTLY
+                MeasureSpec.EXACTLY,
             ),
             MeasureSpec.makeMeasureSpec(
                 (width + 2 * VIEW_MARGIN).toInt(),
-                MeasureSpec.EXACTLY
-            )
+                MeasureSpec.EXACTLY,
+            ),
         )
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+    override fun onSizeChanged(
+        w: Int,
+        h: Int,
+        oldw: Int,
+        oldh: Int,
+    ) {
         super.onSizeChanged(w, h, oldw, oldh)
         mCenterX = width / 2
         mCenterY = height / 2
@@ -137,10 +146,9 @@ class AirCircleProgressView : View {
             VIEW_MARGIN * 1f,
             VIEW_MARGIN,
             measuredWidth - VIEW_MARGIN,
-            measuredHeight - VIEW_MARGIN
+            measuredHeight - VIEW_MARGIN,
         )
     }
-
 
     // 中心文本 bound
     private val textBound = Rect()
@@ -157,7 +165,7 @@ class AirCircleProgressView : View {
             valueText,
             mRectF.centerX() - textBound.width() / 2f,
             mRectF.centerY() + textBound.height() / 2f,
-            textPaint
+            textPaint,
         )
         val tipText = category
 
@@ -170,38 +178,41 @@ class AirCircleProgressView : View {
             mRectF.bottom - textBound.height() + (textBound.bottom) + 4.dp,
             10f,
             10f,
-            secondTextBackgroundPaint
+            secondTextBackgroundPaint,
         )
         canvas.drawText(
             tipText,
             mRectF.centerX() - textBound.width() / 2f,
             mRectF.bottom - textBound.height(),
-            secondTextPaint
+            secondTextPaint,
         )
     }
 
-
     // 背景颜色
-    private val bgColors = listOf(
-        ContextCompat.getColor(context, R.color.l1),
-        ContextCompat.getColor(context, R.color.l2),
-        ContextCompat.getColor(context, R.color.l3),
-        ContextCompat.getColor(context, R.color.l4),
-        ContextCompat.getColor(context, R.color.l5),
-        ContextCompat.getColor(context, R.color.l6),
-        ContextCompat.getColor(context, R.color.l7),
-        ContextCompat.getColor(context, R.color.l8),
-    )
+    private val bgColors =
+        listOf(
+            ContextCompat.getColor(context, R.color.l1),
+            ContextCompat.getColor(context, R.color.l2),
+            ContextCompat.getColor(context, R.color.l3),
+            ContextCompat.getColor(context, R.color.l4),
+            ContextCompat.getColor(context, R.color.l5),
+            ContextCompat.getColor(context, R.color.l6),
+            ContextCompat.getColor(context, R.color.l7),
+            ContextCompat.getColor(context, R.color.l8),
+        )
 
     // 背景渐变
     private lateinit var progressShader: SweepGradient
 
     // 设置背景渐变
     private fun setProgressColourAsGradient() {
-        val sweepGradient = SweepGradient(
-            mCenterX * 1f, mCenterY * 1f, bgColors.toIntArray(),
-            floatArrayOf(.1f, 0.2f, .3f, .4f, .5f, .6f, .7f, .8f)
-        )
+        val sweepGradient =
+            SweepGradient(
+                mCenterX * 1f,
+                mCenterY * 1f,
+                bgColors.toIntArray(),
+                floatArrayOf(.1f, 0.2f, .3f, .4f, .5f, .6f, .7f, .8f),
+            )
         val matrix = Matrix()
         matrix.setRotate(90f, width / 2f, height / 2f)
         sweepGradient.setLocalMatrix(matrix)
@@ -218,7 +229,7 @@ class AirCircleProgressView : View {
             startAngle,
             swipeAngle,
             false,
-            linePaint
+            linePaint,
         )
         linePaint.strokeWidth = 12.dp
         linePaint.color = Color.WHITE
@@ -228,8 +239,7 @@ class AirCircleProgressView : View {
             startAngle,
             swipeAngle * progress,
             false,
-            linePaint
+            linePaint,
         )
     }
-
 }

@@ -8,5 +8,5 @@ data class Refer(
     @Json(name = "license")
     val license: List<String>,
     @Json(name = "sources")
-    val sources: List<String>
+    val sources: List<String>,
 )

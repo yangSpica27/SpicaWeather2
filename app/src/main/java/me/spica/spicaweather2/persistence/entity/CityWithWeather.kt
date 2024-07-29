@@ -8,29 +8,24 @@ import me.spica.spicaweather2.view.list.ListDiffer
 import me.spica.spicaweather2.view.list.SimpleDiffCallback
 
 data class CityWithWeather(
-
     @Embedded
     var city: CityBean,
-
     @Relation(
         parentColumn = "cityName",
         entityColumn = "cityName",
     )
-    var weather: Weather?
-
+    var weather: Weather?,
 ) {
-
-
     companion object {
-        val diffFactory = ListDiffer.Blocking(
-            object : SimpleDiffCallback<CityWithWeather>() {
-                override fun areContentsTheSame(
-                    oldItem: CityWithWeather,
-                    newItem: CityWithWeather
-                ) =
-                    oldItem == newItem
-            }
-        )
+        val diffFactory =
+            ListDiffer.Blocking(
+                object : SimpleDiffCallback<CityWithWeather>() {
+                    override fun areContentsTheSame(
+                        oldItem: CityWithWeather,
+                        newItem: CityWithWeather,
+                    ) = oldItem == newItem
+                },
+            )
     }
 
     override fun equals(other: Any?): Boolean {
@@ -50,5 +45,4 @@ data class CityWithWeather(
         result = 31 * result + (weather?.hashCode() ?: 0)
         return result
     }
-
 }

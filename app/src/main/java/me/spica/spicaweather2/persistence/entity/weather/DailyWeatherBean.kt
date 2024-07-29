@@ -35,39 +35,34 @@ data class DailyWeatherBean(
     val pressure: String? = "",
     val uv: String,
     val vis: Int,
-    val cloud: Int
+    val cloud: Int,
 ) : Parcelable {
-
     @IgnoredOnParcel
     val windSpeed: Int = dayWindSpeed.toIntOrNull() ?: 0
 
-    fun getWeatherType(): WeatherType {
-        return WeatherCodeUtils.getWeatherCode(iconId)
-    }
+    fun getWeatherType(): WeatherType = WeatherCodeUtils.getWeatherCode(iconId)
 
     //
 
     // 获取紫外线强度的描述
-    fun getUVLevelDescription(): String {
-        return when (uv.toIntOrNull()) {
+    fun getUVLevelDescription(): String =
+        when (uv.toIntOrNull()) {
             in 0..2 -> "低"
             in 3..5 -> "中等"
             in 6..7 -> "高"
             in 8..10 -> "很高"
             else -> "极高"
         }
-    }
 
     // 获取紫外线的描述
-    fun getUVDescription(): String {
-        return when (uv.toIntOrNull()) {
+    fun getUVDescription(): String =
+        when (uv.toIntOrNull()) {
             in 0..2 -> "不需采取防护措施"
             in 3..5 -> "涂擦 SPF 大于 15、PA+防晒护肤品"
             in 6..7 -> "尽量减少外出，需要涂抹高倍数防晒霜"
             in 8..10 -> "尽量减少外出，需要涂抹高倍数防晒霜"
             else -> "尽量减少外出，需要涂抹高倍数防晒霜"
         }
-    }
 
     fun fxTime(): Date {
         try {
@@ -95,8 +90,8 @@ data class DailyWeatherBean(
     }
 }
 
-fun Daily.toDailyWeatherBean(): DailyWeatherBean {
-    return DailyWeatherBean(
+fun Daily.toDailyWeatherBean(): DailyWeatherBean =
+    DailyWeatherBean(
         maxTemp = tempMax.toIntOrNull() ?: 0,
         minTemp = tempMin.toIntOrNull() ?: 0,
         iconId = iconDay.toIntOrNull() ?: 0,
@@ -115,6 +110,5 @@ fun Daily.toDailyWeatherBean(): DailyWeatherBean {
         pressure = pressure,
         uv = uvIndex,
         vis = vis.toIntOrNull() ?: 0,
-        cloud = cloud?.toIntOrNull() ?: 0
+        cloud = cloud?.toIntOrNull() ?: 0,
     )
-}

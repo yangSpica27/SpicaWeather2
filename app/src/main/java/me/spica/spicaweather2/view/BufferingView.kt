@@ -1,19 +1,6 @@
 package me.spica.spicaweather2.view
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.util.AttributeSet
-import android.view.View
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import timber.log.Timber
-
-//abstract class BufferingView : View {
+// abstract class BufferingView : View {
 //    constructor(context: Context?) : super(context)
 //    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
 //    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
@@ -150,4 +137,4 @@ import timber.log.Timber
 //            }
 //        }
 //    }
-//}
+// }
