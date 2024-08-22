@@ -2,11 +2,9 @@ package me.spica.spicaweather2.view.view_group
 
 import android.animation.AnimatorSet
 import android.content.Context
-import android.graphics.Color.alpha
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.core.view.marginTop
-import androidx.vectordrawable.graphics.drawable.AnimationUtilsCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
