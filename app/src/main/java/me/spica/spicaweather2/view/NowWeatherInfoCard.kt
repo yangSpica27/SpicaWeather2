@@ -305,4 +305,13 @@ class NowWeatherInfoCard(
     override var index: Int = HomeCardType.NOW_WEATHER.code
 
     override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
+
+    override fun resetAnim() {
+        super.resetAnim()
+    }
+
+
+    override fun startEnterAnim() {
+        super.startEnterAnim()
+    }
 }

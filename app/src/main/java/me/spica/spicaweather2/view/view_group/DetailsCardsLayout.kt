@@ -140,6 +140,7 @@ class DetailsCardsLayout(
             .animate()
             .alpha(1f)
             .setDuration(850)
+            .setInterpolator(AnimationUtils.loadInterpolator(context, android.R.anim.decelerate_interpolator))
             .start()
 
         uvDescCard.doShowEnterAnimator()
