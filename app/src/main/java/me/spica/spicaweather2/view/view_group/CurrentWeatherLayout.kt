@@ -37,7 +37,6 @@ class CurrentWeatherLayout(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                 )
-            text = "--"
             setTextColor(Color.WHITE)
             includeFontPadding = false
         }
@@ -52,7 +51,6 @@ class CurrentWeatherLayout(
                 ).also {
                     it.updateMargins(left = 15.dp)
                 }
-            text = "--"
             setTextColor(Color.WHITE)
             setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21f)
             includeFontPadding = false

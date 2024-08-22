@@ -33,7 +33,7 @@ import androidx.fragment.app.Fragment
 fun Context.getVersion(): String =
     try {
         val packageInfo = packageManager.getPackageInfo(packageName, 0)
-        packageInfo.versionName
+        packageInfo.versionName?:"-1"
     } catch (e: Exception) {
         e.printStackTrace()
         "-1"

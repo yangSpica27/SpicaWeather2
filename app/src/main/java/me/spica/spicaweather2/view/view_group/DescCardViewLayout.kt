@@ -5,14 +5,13 @@ import android.os.Build
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ImageSpan
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.annotation.DrawableRes
 import androidx.annotation.IntRange
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.HtmlCompat
 import androidx.core.view.marginLeft
 import androidx.core.view.marginTop
+import kotlinx.coroutines.NonCancellable.start
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.getCompatDrawable
 
@@ -61,6 +60,13 @@ class DescCardViewLayout(
             textSize = 14.5f
         }
 
+    private var animDelay = 1000
+
+    fun setAnimDelay(delay: Int) {
+        animDelay = delay
+    }
+
+
     init {
         addView(titleTextView)
         addView(subTitleTextView)
@@ -106,6 +112,33 @@ class DescCardViewLayout(
         descProgressLineView.setProgress(progress.toFloat(), mode)
     }
 
+    fun resetAnim() {
+        titleTextView.translationY = -12.dp.toFloat()
+        titleTextView.alpha = 0f
+        subTitleTextView.translationY = -12.dp.toFloat()
+        subTitleTextView.alpha = 0f
+        suggestTextView.translationY = -12.dp.toFloat()
+        suggestTextView.alpha = 0f
+    }
+
+    fun doShowEnterAnimator() {
+        titleTextView.animate().alpha(1f).translationY(0f)
+            .setDuration(350)
+            .setStartDelay(animDelay.toLong())
+            .start()
+        subTitleTextView.animate().alpha(1f).setDuration(550).translationY(0f)
+            .setStartDelay(animDelay.toLong())
+            .start()
+        suggestTextView.animate().alpha(1f).setDuration(850).translationY(0f)
+            .setStartDelay(animDelay.toLong())
+            .start()
+
+    }
+
+
+
+
+
     override fun onMeasure(
         widthMeasureSpec: Int,
         heightMeasureSpec: Int,
@@ -117,10 +150,10 @@ class DescCardViewLayout(
         descProgressLineView.measure(
             widthMeasureSpec,
             (
-                MeasureSpec.getSize(widthMeasureSpec) * 1.5.toInt() - titleTextView.measuredHeightWithMargins -
-                    subTitleTextView.measuredHeightWithMargins -
-                    suggestTextView.measuredHeightWithMargins - paddingTop - paddingBottom
-            ).toExactlyMeasureSpec(),
+                    MeasureSpec.getSize(widthMeasureSpec) * 1.5.toInt() - titleTextView.measuredHeightWithMargins -
+                            subTitleTextView.measuredHeightWithMargins -
+                            suggestTextView.measuredHeightWithMargins - paddingTop - paddingBottom
+                    ).toExactlyMeasureSpec(),
         )
         setMeasuredDimension(
             measuredWidth,

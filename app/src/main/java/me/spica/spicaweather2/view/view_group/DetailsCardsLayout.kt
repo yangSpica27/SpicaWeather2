@@ -2,8 +2,11 @@ package me.spica.spicaweather2.view.view_group
 
 import android.animation.AnimatorSet
 import android.content.Context
+import android.graphics.Color.alpha
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.core.view.marginTop
+import androidx.vectordrawable.graphics.drawable.AnimationUtilsCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
@@ -16,9 +19,14 @@ class DetailsCardsLayout(
     context: Context,
 ) : AViewGroup(context),
     SpicaWeatherCard {
-    private val uvDescCard = DescCardViewLayout(context)
+    private val uvDescCard = DescCardViewLayout(context).apply {
+        setAnimDelay(125)
+    }
 
-    private val humidityDescCard = DescCardViewLayout(context)
+    private val humidityDescCard = DescCardViewLayout(context).apply {
+        setAnimDelay(275)
+    }
+
 
     private val feelTempDescCard =
         DescCardViewLayout(context).apply {
@@ -29,7 +37,10 @@ class DetailsCardsLayout(
                 ).apply {
                     topMargin = 12.dp
                 }
+        }.apply {
+            setAnimDelay(525)
         }
+
 
     private val sunRiseDescCard =
         DescCardViewLayout(context).apply {
@@ -40,7 +51,10 @@ class DetailsCardsLayout(
                 ).apply {
                     topMargin = 12.dp
                 }
+        }.apply {
+            setAnimDelay(350)
         }
+
 
     init {
         addView(uvDescCard)
@@ -102,35 +116,36 @@ class DetailsCardsLayout(
 
     override fun startEnterAnim() {
         super.startEnterAnim()
-//        uvDescCard.alpha = 1f
-//        humidityDescCard.alpha = 1f
-//        feelTempDescCard.alpha = 1f
-//        sunRiseDescCard.alpha = 1f
 
         uvDescCard
             .animate()
             .alpha(1f)
-            .setStartDelay(200)
-            .withLayer()
+            .setStartDelay(250)
+            .setDuration(250)
             .start()
+
         humidityDescCard
             .animate()
             .alpha(1f)
-            .setStartDelay(250)
-            .withLayer()
+            .setStartDelay(50)
+            .setDuration(550)
             .start()
         feelTempDescCard
             .animate()
             .alpha(1f)
-            .setStartDelay(350)
-            .withLayer()
+            .setStartDelay(150)
+            .setDuration(350)
             .start()
         sunRiseDescCard
             .animate()
             .alpha(1f)
-            .setStartDelay(150)
-            .withLayer()
+            .setDuration(850)
             .start()
+
+        uvDescCard.doShowEnterAnimator()
+        humidityDescCard.doShowEnterAnimator()
+        feelTempDescCard.doShowEnterAnimator()
+        sunRiseDescCard.doShowEnterAnimator()
     }
 
     override fun resetAnim() {
@@ -138,6 +153,10 @@ class DetailsCardsLayout(
         humidityDescCard.alpha = 0f
         feelTempDescCard.alpha = 0f
         sunRiseDescCard.alpha = 0f
+        uvDescCard.resetAnim()
+        humidityDescCard.resetAnim()
+        feelTempDescCard.resetAnim()
+        sunRiseDescCard.resetAnim()
     }
 
     override fun bindData(weather: Weather) {

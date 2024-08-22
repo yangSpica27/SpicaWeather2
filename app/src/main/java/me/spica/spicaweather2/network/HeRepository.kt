@@ -1,5 +1,6 @@
 package me.spica.spicaweather2.network
 
+import android.util.Log
 import com.skydoves.sandwich.message
 import com.skydoves.sandwich.suspendOnError
 import com.skydoves.sandwich.suspendOnFailure
