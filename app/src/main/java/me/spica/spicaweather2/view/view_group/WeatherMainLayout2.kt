@@ -18,7 +18,7 @@ import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.tools.getScreenHeight
 import me.spica.spicaweather2.ui.main.ActivityMain
 import me.spica.spicaweather2.view.scroller_view.ScrollViewAtViewPager
-import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
+import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import timber.log.Timber
 

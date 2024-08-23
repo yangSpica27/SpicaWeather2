@@ -15,7 +15,7 @@ import androidx.core.view.updatePadding
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.view_group.AViewGroup
-import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
+import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.util.concurrent.atomic.AtomicBoolean
 

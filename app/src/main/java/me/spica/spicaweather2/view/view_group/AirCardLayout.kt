@@ -18,10 +18,11 @@ import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.view.AirCircleProgressView
-import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
+import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.util.concurrent.atomic.AtomicBoolean
 
+@Suppress("SameParameterValue")
 @SuppressLint("SetTextI18n")
 class AirCardLayout(
     context: Context,
@@ -89,7 +90,7 @@ class AirCardLayout(
             text = title
         }
 
-    private fun createValueTextView(value: String): AppCompatTextView =
+    private fun createValueTextView(value: String=""): AppCompatTextView =
         AppCompatTextView(context).apply {
             layoutParams =
                 LayoutParams(
@@ -122,8 +123,7 @@ class AirCardLayout(
         addView(tvPm25Title)
         addView(tvPm25Value)
         val lp =
-            ViewGroup
-                .MarginLayoutParams(
+            MarginLayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                 ).also {

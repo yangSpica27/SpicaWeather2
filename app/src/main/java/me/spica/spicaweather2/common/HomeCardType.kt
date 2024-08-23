@@ -1,4 +1,4 @@
-package me.spica.spicaweather2.view.weather_detail_card
+package me.spica.spicaweather2.common
 
 import android.content.Context
 import android.view.View

@@ -13,7 +13,7 @@ import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.dailyItem.DailyItemView
-import me.spica.spicaweather2.view.weather_detail_card.HomeCardType
+import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.util.concurrent.atomic.AtomicBoolean
 
