@@ -37,7 +37,7 @@ class CurrentWeatherLayout(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                 )
-            setTextColor(Color.WHITE)
+            setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
             includeFontPadding = false
         }
 
@@ -51,7 +51,7 @@ class CurrentWeatherLayout(
                 ).also {
                     it.updateMargins(left = 15.dp)
                 }
-            setTextColor(Color.WHITE)
+            setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
             setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21f)
             includeFontPadding = false
         }
@@ -66,8 +66,8 @@ class CurrentWeatherLayout(
                     it.topMargin = 12.dp
                 }
             this.setPadding(0)
-            this.setDotIndicatorColor(ContextCompat.getColor(context, R.color.white))
-            this.setStrokeDotsIndicatorColor(ContextCompat.getColor(context, R.color.white))
+            this.setDotIndicatorColor(ContextCompat.getColor(context, R.color.textColorPrimary))
+            this.setStrokeDotsIndicatorColor(ContextCompat.getColor(context, R.color.textColorPrimaryLight))
         }
 
     init {
@@ -172,9 +172,9 @@ class CurrentWeatherLayout(
                     0f,
                     tempTextView.height * 1f,
                     intArrayOf(
-                        Color.WHITE,
-                        getColorWithAlpha(0.9f, Color.WHITE),
-                        getColorWithAlpha(0.5f, Color.WHITE),
+                        Color.BLACK,
+                        getColorWithAlpha(0.9f, Color.BLACK),
+                        getColorWithAlpha(0.5f, Color.BLACK),
                     ),
                     floatArrayOf(
                         0f,

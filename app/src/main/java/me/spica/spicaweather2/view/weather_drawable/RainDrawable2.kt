@@ -69,7 +69,7 @@ class RainDrawable2 : WeatherDrawable() {
                         width,
                         height,
                         rainPaint2,
-                        Color.parseColor("#65E8E8E8"),
+                        Color.parseColor("#E8E8E8"),
                     ),
                 )
             }

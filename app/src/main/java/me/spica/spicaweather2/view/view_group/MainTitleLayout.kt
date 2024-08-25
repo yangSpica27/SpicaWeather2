@@ -7,6 +7,7 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.marginTop
 import androidx.core.view.setPadding
 import me.spica.spicaweather2.R
@@ -22,7 +23,7 @@ class MainTitleLayout(
                 LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             setTextAppearance(R.style.TextAppearance_Material3_TitleLarge)
             text = "--"
-            setTextColor(Color.WHITE)
+            setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
             typeface =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     Typeface.create(Typeface.DEFAULT, 500, false)
@@ -36,7 +37,7 @@ class MainTitleLayout(
             layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             setText(R.string.add)
             setPadding(12.dp)
-            setTextColor(Color.WHITE)
+            setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
             textSize = 18f
             typeface =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

@@ -83,17 +83,6 @@ class HazeDrawable(
     ) {
         this.width = width
         this.height = height
-        bgShader =
-            LinearGradient(
-                0F,
-                0F,
-                width * 1f,
-                0f,
-                getColorWithAlpha(.1f, Color.WHITE),
-                getColorWithAlpha(.4f, Color.WHITE),
-                Shader.TileMode.CLAMP,
-            )
-        pathPaint.shader = bgShader
     }
 
     private var scrollY = 0
@@ -157,9 +146,11 @@ class HazeDrawable(
     private val path3 = Path()
 
     private val pathPaint =
-        Paint(Paint.DITHER_FLAG).apply {
+        Paint().apply {
             style = Paint.Style.FILL
             color = ContextCompat.getColor(context, R.color.fog_color)
+            isDither = true
+            isAntiAlias = true
         }
 
     private lateinit var bgShader: LinearGradient
@@ -169,8 +160,11 @@ class HazeDrawable(
         width: Int,
         height: Int,
     ) {
+        pathPaint.color = ContextCompat.getColor(context, R.color.fog_color)
         canvas.drawPath(path1, pathPaint)
+        pathPaint.color = ContextCompat.getColor(context, R.color.fog_color)
         canvas.drawPath(path2, pathPaint)
+        pathPaint.color = ContextCompat.getColor(context, R.color.fog_color)
         canvas.drawPath(path3, pathPaint)
     }
 }

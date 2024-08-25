@@ -108,11 +108,11 @@ data class StormLine(
         val rd = random.nextDouble()
         color =
             if (rd < 0.5) {
-                Color.WHITE
+                Color.parseColor("#333333")
             } else if (rd < 0.7) {
                 Color.parseColor("#FF795548")
             } else {
-                Color.parseColor("#80FFFFFF")
+                Color.parseColor("#bfbfbf")
             }
 
         radius = (2.dp + random.nextDouble() * 2.dp).toFloat()

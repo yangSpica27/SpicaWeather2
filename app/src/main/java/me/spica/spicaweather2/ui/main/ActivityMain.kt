@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.WindowCompat
 import androidx.core.view.children
 import androidx.core.view.drawToBitmap
 import androidx.lifecycle.lifecycleScope
@@ -104,6 +105,7 @@ class ActivityMain : MaterialActivity() {
 
     private fun initializer() {
         handleBack()
+        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
         layout.mainTitleLayout.plusBtn.setOnClickListener {
             enterManagerCity()
         }

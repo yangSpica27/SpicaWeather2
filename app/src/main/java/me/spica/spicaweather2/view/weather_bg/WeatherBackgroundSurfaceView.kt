@@ -156,6 +156,6 @@ class WeatherBackgroundSurfaceView :
     }
 
     private fun drawBackground(canvas: Canvas) {
-        canvas.drawColor(backgroundColorAnim.animatedValue as Int)
+        canvas.drawColor(Color.parseColor("#f7f8fa"))
     }
 }

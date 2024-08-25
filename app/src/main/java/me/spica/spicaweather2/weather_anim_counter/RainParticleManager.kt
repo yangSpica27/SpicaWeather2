@@ -161,7 +161,6 @@ class RainParticleManager {
 //        rainItemDef.lifetime = 12f
         rainItemDef.flags = ParticleType.b2_waterParticle.toLong()
 //        rainItemDef.groupFlags = ParticleGroupType.b2_solidParticleGroup.toLong()
-        rainItemDef.lifetime = 20f
         return system.createParticleGroup(rainItemDef)
     }
 
