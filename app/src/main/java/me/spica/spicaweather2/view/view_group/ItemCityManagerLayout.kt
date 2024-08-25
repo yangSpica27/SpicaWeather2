@@ -21,7 +21,6 @@ import androidx.core.widget.CompoundButtonCompat
 import com.google.android.material.radiobutton.MaterialRadioButton
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.WeatherCodeUtils
-import me.spica.spicaweather2.common.getDrawable
 import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
 

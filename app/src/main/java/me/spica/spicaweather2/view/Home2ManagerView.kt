@@ -23,7 +23,6 @@ import androidx.core.view.drawToBitmap
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.ui.main.ActivityMain
 import timber.log.Timber
-import kotlin.math.roundToInt
 
 class Home2ManagerView : View {
     constructor(context: Context?) : super(context)
