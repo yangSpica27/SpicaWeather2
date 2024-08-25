@@ -1,6 +1,7 @@
 package me.spica.spicaweather2.view
 
 import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.text.SpannableString
@@ -9,7 +10,10 @@ import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import me.spica.spicaweather2.R
@@ -20,6 +24,7 @@ import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.util.concurrent.atomic.AtomicBoolean
 
 // 当前天气信息卡片
+@Suppress("SameParameterValue")
 class NowWeatherInfoCard(
     context: Context,
 ) : AViewGroup(context = context),
@@ -38,6 +43,7 @@ class NowWeatherInfoCard(
                 )
             setTextColor(ContextCompat.getColor(context, R.color.humidness_color))
             updatePadding(bottom = 4.dp)
+            typeface=android.graphics.Typeface.DEFAULT_BOLD
             text = "--"
         }
 
@@ -50,6 +56,7 @@ class NowWeatherInfoCard(
                 )
             setTextColor(ContextCompat.getColor(context, R.color.humidness_color))
             text = "湿度"
+            setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18f)
         }
 
     // 风速
@@ -61,6 +68,7 @@ class NowWeatherInfoCard(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                 )
             setTextColor(ContextCompat.getColor(context, R.color.wind_speed_color))
+            typeface=android.graphics.Typeface.DEFAULT_BOLD
             updatePadding(bottom = 4.dp)
             text = "--"
         }
@@ -74,6 +82,7 @@ class NowWeatherInfoCard(
                 )
             setTextColor(ContextCompat.getColor(context, R.color.wind_speed_color))
             text = "风速"
+            setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18f)
         }
 
     // 气压
@@ -86,6 +95,7 @@ class NowWeatherInfoCard(
                 )
             updatePadding(bottom = 4.dp)
             setTextColor(ContextCompat.getColor(context, R.color.pressure_color))
+            typeface=android.graphics.Typeface.DEFAULT_BOLD
             text = "--"
         }
 
@@ -98,6 +108,7 @@ class NowWeatherInfoCard(
                 )
             setTextColor(ContextCompat.getColor(context, R.color.pressure_color))
             text = "气压"
+            setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18f)
         }
 
     //   体感温度
@@ -110,6 +121,7 @@ class NowWeatherInfoCard(
                 )
             updatePadding(bottom = 4.dp)
             setTextColor(ContextCompat.getColor(context, R.color.feel_temp_color))
+            typeface=android.graphics.Typeface.DEFAULT_BOLD
             text = "--"
         }
 
@@ -122,6 +134,7 @@ class NowWeatherInfoCard(
                 )
             setTextColor(ContextCompat.getColor(context, R.color.feel_temp_color))
             text = "体感温度"
+            setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18f)
         }
 
     // 描述文本
@@ -132,8 +145,8 @@ class NowWeatherInfoCard(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                 )
-            setTextAppearance(R.style.TextAppearance_Material3_LabelLarge)
-            setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14f)
+            setTextAppearance(R.style.TextAppearance_Material3_TitleMedium)
+            setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16f)
             setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
             text = "--"
             updatePadding(0, 0, 0, 12.dp)
@@ -238,10 +251,10 @@ class NowWeatherInfoCard(
             resolveSize(measuredWidth, widthMeasureSpec),
             resolveSize(
                 paddingTop +
-                    paddingBottom +
-                    descText.measuredHeightWithMargins +
-                    windSpeedText.measuredHeightWithMargins +
-                    bottomTextWindSpeed.measuredHeightWithMargins,
+                        paddingBottom +
+                        descText.measuredHeightWithMargins +
+                        windSpeedText.measuredHeightWithMargins +
+                        bottomTextWindSpeed.measuredHeightWithMargins,
                 heightMeasureSpec,
             ),
         )
@@ -306,12 +319,56 @@ class NowWeatherInfoCard(
 
     override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
 
-    override fun resetAnim() {
-        super.resetAnim()
+
+    private val extraEnterAnimator =
+        ObjectAnimator.ofFloat(this, "doExtraEnterAnim", 0f, 1f).apply {
+            duration = 350
+        }
+
+    private val accelerateInterpolator = AccelerateInterpolator()
+
+    private val decelerateInterpolator = DecelerateInterpolator()
+
+
+    private fun setDoExtraEnterAnim(progress: Float) {
+        val accelerateProgress = accelerateInterpolator.getInterpolation(progress)
+        val decelerateProgress = decelerateInterpolator.getInterpolation(progress)
+
+        descText.alpha = accelerateProgress
+        descText.translationY = -descText.height * (1 - decelerateProgress)
+
+        windSpeedText.alpha = accelerateProgress
+        waterText.alpha = accelerateProgress
+        pressureText.alpha = accelerateProgress
+        feelTemp.alpha = accelerateProgress
+        bottomTextWindSpeed.alpha = accelerateProgress
+        bottomTextWater.alpha = accelerateProgress
+        bottomTextPressure.alpha = accelerateProgress
+        bottomTextFeelTemp.alpha = accelerateProgress
+
+        windSpeedText.translationY = (-12).dp + 12.dp * decelerateProgress
+        waterText.translationY = (-12).dp + 12.dp * decelerateProgress
+        pressureText.translationY = (-12).dp + 12.dp * decelerateProgress
+        feelTemp.translationY = (-12).dp + 12.dp * decelerateProgress
+
+        bottomTextWindSpeed.translationY = (-12).dp + 12.dp * accelerateProgress
+        bottomTextWater.translationY = (-12).dp + 12.dp * accelerateProgress
+        bottomTextPressure.translationY = (-12).dp + 12.dp * accelerateProgress
+        bottomTextFeelTemp.translationY = (-12).dp + 12.dp * accelerateProgress
+
     }
 
+
+    override fun resetAnim() {
+        super.resetAnim()
+        setDoExtraEnterAnim(0f)
+    }
 
     override fun startEnterAnim() {
         super.startEnterAnim()
+        enterAnim.doOnEnd {
+            extraEnterAnimator.start()
+        }
     }
 }
+

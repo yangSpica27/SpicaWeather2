@@ -1,11 +1,15 @@
 package me.spica.spicaweather2.view.view_group
 
 import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.animation.doOnEnd
 import androidx.core.view.children
 import androidx.core.view.marginBottom
 import androidx.core.view.marginLeft
@@ -19,6 +23,7 @@ import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.util.concurrent.atomic.AtomicBoolean
 
+@Suppress("SameParameterValue")
 class TipsLayout(
     context: Context,
 ) : AViewGroup(context),
@@ -150,7 +155,7 @@ class TipsLayout(
             resolveSize(measuredWidth, widthMeasureSpec),
             resolveSize(
                 (sptItem.measuredHeightWithMargins + airItem.measuredHeightWithMargins + titleText.measuredHeightWithMargins) +
-                    paddingTop + paddingBottom,
+                        paddingTop + paddingBottom,
                 heightMeasureSpec,
             ),
         )
@@ -183,4 +188,39 @@ class TipsLayout(
 
     override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
 
+    private val extraEnterAnimator =
+        ObjectAnimator.ofFloat(this, "doExtraEnterAnim", 0f, 1f).apply {
+            duration = 750
+        }
+
+    private val accelerateInterpolator = AccelerateInterpolator()
+
+    private val decelerateInterpolator = DecelerateInterpolator()
+
+
+    private fun setDoExtraEnterAnim(progress: Float) {
+        val accelerateProgress = accelerateInterpolator.getInterpolation(progress)
+        val decelerateProgress = decelerateInterpolator.getInterpolation(progress)
+        sptItem.alpha = decelerateProgress
+        airItem.alpha = decelerateProgress
+        sptItem.translationX = 12.dp - 12.dp * decelerateProgress
+        airItem.translationX = 12.dp - 12.dp * decelerateProgress
+
+        clothesItem.alpha = accelerateProgress
+        carItem.alpha = accelerateProgress
+        clothesItem.translationX = 12.dp - 12.dp * accelerateProgress
+        carItem.translationX = 12.dp - 12.dp * accelerateProgress
+    }
+
+    override fun resetAnim() {
+        super.resetAnim()
+        setDoExtraEnterAnim(0f)
+    }
+
+    override fun startEnterAnim() {
+        super.startEnterAnim()
+        enterAnim.doOnEnd {
+            extraEnterAnimator.start()
+        }
+    }
 }

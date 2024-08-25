@@ -5,10 +5,12 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.getRefreshRate
 import me.spica.spicaweather2.view.weather_drawable.WeatherDrawableManager
@@ -37,12 +39,18 @@ class WeatherBackgroundSurfaceView :
             SimpleDrawTask(
                 (1000 / getRefreshRate(this@WeatherBackgroundSurfaceView.context).roundToLong()),
                 { canvas ->
-                    weatherDrawableManager.calculate(width, height)
-                    drawBackground(canvas)
-                    weatherDrawableManager.doOnDraw(canvas, width, height)
+                    if (markerColor == Color.parseColor("#f7f8fa")) {
+                        canvas.drawColor(markerColor)
+                    } else {
+                        weatherDrawableManager.calculate(width, height)
+                        drawBackground(canvas)
+                        weatherDrawableManager.doOnDraw(canvas, width, height)
+                        canvas.drawColor(markerColor)
+                    }
                 },
             ) {
-            override fun lockCanvas(): Canvas? = this@WeatherBackgroundSurfaceView.holder.lockCanvas()
+            override fun lockCanvas(): Canvas? =
+                this@WeatherBackgroundSurfaceView.holder.lockCanvas()
 
             override fun unlockCanvas(canvas: Canvas?) {
                 if (canvas != null) {
@@ -127,8 +135,20 @@ class WeatherBackgroundSurfaceView :
         weatherDrawableManager.release()
     }
 
+    private var markerColor = Color.TRANSPARENT
+
+    private val screenHeight = resources.displayMetrics.heightPixels
+
     fun setMScrollY(y: Int) {
         weatherDrawableManager.setScrollY(y)
+        val limit = screenHeight / 3 * 2
+        markerColor = if (y < 0) {
+            ColorUtils.setAlphaComponent(Color.parseColor("#f7f8fa"), 0)
+        } else if (y < limit) {
+            ColorUtils.setAlphaComponent(Color.parseColor("#f7f8fa"), 255 * y / limit)
+        } else {
+            ColorUtils.setAlphaComponent(Color.parseColor("#f7f8fa"), 255)
+        }
     }
 
     fun setBackgroundY(y: Int) {

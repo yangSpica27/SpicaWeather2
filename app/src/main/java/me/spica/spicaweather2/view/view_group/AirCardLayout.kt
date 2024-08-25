@@ -1,12 +1,15 @@
 package me.spica.spicaweather2.view.view_group
 
 import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.animation.doOnEnd
 import androidx.core.text.HtmlCompat
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
@@ -14,11 +17,10 @@ import androidx.core.view.marginTop
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
+import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.weather.Weather
-import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.view.AirCircleProgressView
-import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -90,7 +92,7 @@ class AirCardLayout(
             text = title
         }
 
-    private fun createValueTextView(value: String=""): AppCompatTextView =
+    private fun createValueTextView(value: String = ""): AppCompatTextView =
         AppCompatTextView(context).apply {
             layoutParams =
                 LayoutParams(
@@ -102,7 +104,7 @@ class AirCardLayout(
                     )
                 }
             setTextAppearance(context, R.style.TextAppearance_Material3_BodyMedium)
-            setTextColor(context.getColor(R.color.textColorPrimary))
+            setTextColor(context.getColor(R.color.textColorPrimaryHint))
             text = value
         }
 
@@ -124,11 +126,11 @@ class AirCardLayout(
         addView(tvPm25Value)
         val lp =
             MarginLayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                ).also {
-                    it.updateMargins(left = 14.dp, right = 14.dp)
-                }
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+            ).also {
+                it.updateMargins(left = 14.dp, right = 14.dp)
+            }
         layoutParams = lp
     }
 
@@ -155,13 +157,13 @@ class AirCardLayout(
             resolveSize(
                 Math.max(
                     airCircleProgressView.measuredHeightWithMargins +
-                        titleText.measuredHeightWithMargins,
+                            titleText.measuredHeightWithMargins,
                     tvNo2Title.measuredHeightWithMargins +
-                        tvC0Title.measuredHeightWithMargins +
-                        tvPm25Title.measuredHeightWithMargins +
-                        tvSo2Title.measuredHeightWithMargins +
-                        titleText.measuredHeightWithMargins +
-                        paddingBottom + paddingTop,
+                            tvC0Title.measuredHeightWithMargins +
+                            tvPm25Title.measuredHeightWithMargins +
+                            tvSo2Title.measuredHeightWithMargins +
+                            titleText.measuredHeightWithMargins +
+                            paddingBottom + paddingTop,
                 ),
                 heightMeasureSpec,
             ),
@@ -183,9 +185,9 @@ class AirCardLayout(
 
         val titleHeight =
             tvC0Title.height +
-                tvPm25Title.height +
-                tvSo2Title.height +
-                titleText.height
+                    tvPm25Title.height +
+                    tvSo2Title.height +
+                    titleText.height
 
         val progressHeight = airCircleProgressView.height
 
@@ -246,18 +248,64 @@ class AirCardLayout(
         val themeColor = weather.getWeatherType().getThemeColor()
         airCircleProgressView.bindProgress(weather.air.aqi, weather.air.category)
         titleText.setTextColor(themeColor)
-        tvC0Value.text = HtmlCompat.fromHtml("${weather.air.co}<b>微克/m³</b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        tvC0Value.text =
+            HtmlCompat.fromHtml("${weather.air.co}<b>微克/m³</b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
 //        tvC0Value.text = "${weather.air.co}微克/m³"
-        tvNo2Value.text = HtmlCompat.fromHtml("${weather.air.no2}<b>微克/m³</b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-        tvPm25Value.text = HtmlCompat.fromHtml("${weather.air.pm2p5}<b>微克/m³</b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-        tvSo2Value.text = HtmlCompat.fromHtml("${weather.air.so2}<b>微克/m³</b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        tvNo2Value.text = HtmlCompat.fromHtml(
+            "${weather.air.no2}<b>微克/m³</b>",
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
+        tvPm25Value.text = HtmlCompat.fromHtml(
+            "${weather.air.pm2p5}<b>微克/m³</b>",
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
+        tvSo2Value.text = HtmlCompat.fromHtml(
+            "${weather.air.so2}<b>微克/m³</b>",
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
         airCircleProgressView.postInvalidate()
     }
 
+    private val valueTextAnim = ObjectAnimator.ofFloat(this, "doValueTextAnim", 0f, 1f).apply {
+        duration = 1250
+        interpolator = DecelerateInterpolator(1.2f)
+    }
+
+
+    private fun setDoValueTextAnim(progress: Float) {
+        tvC0Value.alpha = progress
+        tvNo2Value.alpha = progress
+        tvPm25Value.alpha = progress
+        tvSo2Value.alpha = progress
+
+        tvC0Title.alpha = progress
+        tvNo2Title.alpha = progress
+        tvPm25Title.alpha = progress
+        tvSo2Title.alpha = progress
+
+        tvNo2Title.translationY = (1 - progress) *  (-4).dp
+        tvPm25Title.translationY = (1 - progress) *  (-4).dp
+        tvSo2Title.translationY = (1 - progress) *  (-4).dp
+        tvC0Title.translationY = (1 - progress) *  (-4).dp
+
+        tvC0Value.translationX = (1 - progress) *  (-4).dp
+        tvNo2Value.translationX = (1 - progress) *  (-4).dp
+        tvPm25Value.translationX = (1 - progress) *  (-4).dp
+        tvSo2Value.translationX = (1 - progress) *  (-4).dp
+
+    }
+
+    override fun resetAnim() {
+        super.resetAnim()
+        setDoValueTextAnim(0f)
+    }
+
+
     override fun startEnterAnim() {
         super.startEnterAnim()
-        doOnMainThreadIdle({
+        enterAnim.doOnEnd {
             airCircleProgressView.startAnim()
-        })
+            valueTextAnim.start()
+        }
     }
 }
