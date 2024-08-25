@@ -30,6 +30,8 @@ class WeatherBackgroundSurfaceView :
     init {
         holder.addCallback(this)
     }
+    
+    private val backgroundColorValue = Color.parseColor("#f7f8fa")
 
     private val weatherDrawableManager = WeatherDrawableManager(context)
 
@@ -39,7 +41,7 @@ class WeatherBackgroundSurfaceView :
             SimpleDrawTask(
                 (1000 / getRefreshRate(this@WeatherBackgroundSurfaceView.context).roundToLong()),
                 { canvas ->
-                    if (markerColor == Color.parseColor("#f7f8fa")) {
+                    if (markerColor == backgroundColorValue) {
                         canvas.drawColor(markerColor)
                     } else {
                         weatherDrawableManager.calculate(width, height)
@@ -95,7 +97,7 @@ class WeatherBackgroundSurfaceView :
     ) {
         val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(result)
-        canvas.drawColor(backgroundColorAnim.animatedValue as Int)
+        canvas.drawColor(backgroundColorValue)
         canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
         callbacks.invoke(result)
 //        val background = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -143,11 +145,11 @@ class WeatherBackgroundSurfaceView :
         weatherDrawableManager.setScrollY(y)
         val limit = screenHeight / 3 * 2
         markerColor = if (y < 0) {
-            ColorUtils.setAlphaComponent(Color.parseColor("#f7f8fa"), 0)
+            ColorUtils.setAlphaComponent(backgroundColorValue, 0)
         } else if (y < limit) {
-            ColorUtils.setAlphaComponent(Color.parseColor("#f7f8fa"), 255 * y / limit)
+            ColorUtils.setAlphaComponent(backgroundColorValue, 255 * y / limit)
         } else {
-            ColorUtils.setAlphaComponent(Color.parseColor("#f7f8fa"), 255)
+            ColorUtils.setAlphaComponent(backgroundColorValue, 255)
         }
     }
 
@@ -156,6 +158,6 @@ class WeatherBackgroundSurfaceView :
     }
 
     private fun drawBackground(canvas: Canvas) {
-        canvas.drawColor(Color.parseColor("#f7f8fa"))
+        canvas.drawColor(backgroundColorValue)
     }
 }

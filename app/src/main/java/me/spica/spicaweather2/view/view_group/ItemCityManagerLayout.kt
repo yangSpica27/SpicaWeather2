@@ -189,6 +189,7 @@ class ItemCityManagerLayout(
         }
 
         cityWithWeather.weather?.let { weather ->
+            val themeColor = WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId).getThemeColor()
             background =
                 ContextCompat
                     .getDrawable(
@@ -197,9 +198,10 @@ class ItemCityManagerLayout(
                     )?.apply {
                         colorFilter =
                             PorterDuffColorFilter(
-                                WeatherCodeUtils.getWeatherCode(weather.todayWeather.iconId).getThemeColor(),
+                                themeColor,
                                 PorterDuff.Mode.SRC_IN,
                             )
+                        setTag(R.id.dn_theme_color, themeColor)
                     }
         }
 

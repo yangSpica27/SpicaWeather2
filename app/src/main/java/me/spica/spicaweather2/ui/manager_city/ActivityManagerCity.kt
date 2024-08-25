@@ -1,6 +1,7 @@
 package me.spica.spicaweather2.ui.manager_city
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -118,7 +119,11 @@ class ActivityManagerCity : MaterialActivity() {
 
         adapter.itemClickListener = { position, view ->
             lifecycleScope.launch(Dispatchers.Default) {
-                Manager2HomeView.initFromViewRect(view, window)
+                Manager2HomeView.initFromViewRect(
+                    view,
+                    window,
+                    view.getTag(R.id.dn_theme_color) as Int? ?: Color.TRANSPARENT
+                )
                 EventBus
                     .getDefault()
                     .post(MessageEvent.create(MessageType.Get2MainActivityAnim, position))

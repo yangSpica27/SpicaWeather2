@@ -19,6 +19,7 @@ import android.view.Window
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.core.animation.doOnEnd
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.drawToBitmap
 import me.spica.spicaweather2.tools.dp
 import timber.log.Timber
@@ -31,12 +32,16 @@ class Manager2HomeView : View {
         // 用于保存起始位置
         var originRect = RectF()
 
+        private var themeColor = 0
+
         fun initFromViewRect(
             from: View,
             window: Window,
+            themeColor: Int
         ) {
             val intArray = IntArray(2)
             from.getLocationInWindow(intArray)
+            this.themeColor = themeColor
             originRect.set(
                 intArray[0] * 1f,
                 intArray[1] * 1f,
@@ -150,6 +155,8 @@ class Manager2HomeView : View {
 
     private val clearXfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
 
+    private val markerPaint = Paint()
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         // 保存图层
@@ -159,6 +166,7 @@ class Manager2HomeView : View {
         mBackground?.let { canvas.drawBitmap(it, 0f, 0f, clearPaint) }
         // 绘制清除区域
         clearPaint.xfermode = clearXfermode
+
         canvas.drawRoundRect(
             clearRect,
             12.dp,
@@ -167,8 +175,20 @@ class Manager2HomeView : View {
         )
         // 恢复图层
         canvas.restoreToCount(layer)
+        // 绘制遮罩
+        markerPaint.color = ColorUtils.setAlphaComponent(
+            themeColor,
+            255 - (255 * progressAnimation.animatedFraction).toInt()
+        )
+        canvas.drawRoundRect(
+            clearRect,
+            12.dp,
+            12.dp,
+            markerPaint
+        )
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean = progressAnimation.animatedFraction != 1f
+    override fun onTouchEvent(event: MotionEvent): Boolean =
+        progressAnimation.animatedFraction != 1f
 }

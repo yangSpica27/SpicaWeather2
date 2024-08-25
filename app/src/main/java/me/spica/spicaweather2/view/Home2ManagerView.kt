@@ -18,10 +18,12 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.core.animation.doOnEnd
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.drawToBitmap
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.ui.main.ActivityMain
 import timber.log.Timber
+import kotlin.math.roundToInt
 
 class Home2ManagerView : View {
     constructor(context: Context?) : super(context)
@@ -74,7 +76,7 @@ class Home2ManagerView : View {
     private val progressAnimation =
         ValueAnimator.ofFloat(0f, 1f).setDuration(550).apply {
 //            interpolator = LinearInterpolator()
-            interpolator = DecelerateInterpolator(2f)
+            interpolator = DecelerateInterpolator(1.5f)
             addUpdateListener {
                 val progress = it.animatedValue as Float
 
@@ -148,6 +150,10 @@ class Home2ManagerView : View {
 
     private val srcInXfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
 
+    private val markerPaint = Paint().apply {
+        style = Paint.Style.FILL
+    }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         mPaint.alpha = 255
@@ -168,6 +174,7 @@ class Home2ManagerView : View {
             8.dp * progressAnimation.animatedFraction,
             mPaint,
         )
+
         // 绘制过渡区域内容
         mPaint.xfermode = srcInXfermode
         if (ActivityMain.screenBitmap != null && progressAnimation.animatedFraction < .6f) {
@@ -175,9 +182,23 @@ class Home2ManagerView : View {
         } else {
             canvas.drawRect(0f, 0f, width * 1f, height * 1f, mPaint)
         }
+
         // 恢复图层
         canvas.restoreToCount(layer)
         mPaint.xfermode = null
+
+
+        markerPaint.color = ColorUtils.setAlphaComponent(
+            ActivityMain.currentThemeColor,
+            (progressAnimation.animatedFraction * 255).toInt(),
+        )
+        canvas.drawRoundRect(
+            drawRect,
+            8.dp * progressAnimation.animatedFraction,
+            8.dp * progressAnimation.animatedFraction,
+            markerPaint,
+        )
+
         // 动画进度到90%时，渐显绘制下一页面的被遮挡的内容
         if (toViewBitmap != null && progressAnimation.animatedFraction > .9f) {
             mPaint.alpha = (255 * ((progressAnimation.animatedFraction - 0.9f) / (0.1))).toInt()
@@ -186,5 +207,6 @@ class Home2ManagerView : View {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean = progressAnimation.animatedFraction != 1f
+    override fun onTouchEvent(event: MotionEvent): Boolean =
+        progressAnimation.animatedFraction != 1f
 }
