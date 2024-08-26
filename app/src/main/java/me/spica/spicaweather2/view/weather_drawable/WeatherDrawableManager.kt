@@ -26,7 +26,6 @@ class WeatherDrawableManager(
         register(NowWeatherView.WeatherAnimType.UNKNOWN, CloudDrawable(context))
         register(NowWeatherView.WeatherAnimType.SANDSTORM, SandStormDrawable())
         ready(context.getScreenWidth(), context.getScreenHeight())
-        getCurrentDrawable().startAnim()
     }
 
     fun ready(
@@ -37,6 +36,7 @@ class WeatherDrawableManager(
             it.ready(width, height)
             it.setBackgroundY(cacheY)
         }
+        getCurrentDrawable().startAnim()
     }
 
     fun calculate(
