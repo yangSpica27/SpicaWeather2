@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Paint.Style
@@ -166,6 +167,7 @@ class HourlyLineView : View {
             )
         }
 
+        rainPointList.clear()
         // 计算锚点
         data.forEachIndexed { index, item ->
             val x = paddingLeft + index * itemWidth + itemWidth / 2f
@@ -212,12 +214,12 @@ class HourlyLineView : View {
             LinearGradient(
                 0f,
                 paddingTop + 12.dp + 24.dp +
-                    tempTextHeight + 12.dp +
-                    lineHeight - 12.dp - lineHeight,
+                        tempTextHeight + 12.dp +
+                        lineHeight - 12.dp - lineHeight,
                 0f,
                 paddingTop + 12.dp + 24.dp +
-                    tempTextHeight + 12.dp +
-                    lineHeight - 12.dp,
+                        tempTextHeight + 12.dp +
+                        lineHeight - 12.dp,
                 intArrayOf(
                     ColorUtils.setAlphaComponent(colors.firstOrNull() ?: Color.TRANSPARENT, 60),
                     ColorUtils.setAlphaComponent(colors.firstOrNull() ?: Color.TRANSPARENT, 0),
@@ -299,14 +301,14 @@ class HourlyLineView : View {
         tempLineBgPath.lineTo(
             mPointList.last().x.toFloat(),
             paddingTop + 12.dp + 24.dp +
-                tempTextHeight + 12.dp +
-                lineHeight - 12.dp,
+                    tempTextHeight + 12.dp +
+                    lineHeight - 12.dp,
         )
         tempLineBgPath.lineTo(
             mPointList.first().x.toFloat(),
             paddingTop + 12.dp + 24.dp +
-                tempTextHeight + 12.dp +
-                lineHeight - 12.dp,
+                    tempTextHeight + 12.dp +
+                    lineHeight - 12.dp,
         )
         tempLineBgPath.close()
         invalidate()
@@ -322,8 +324,9 @@ class HourlyLineView : View {
 
     private val baseLinePaint =
         Paint().apply {
-            color = ContextCompat.getColor(context, R.color.line_divider)
+            color = ContextCompat.getColor(context, R.color.dottedLineColor)
             strokeWidth = 2f
+            pathEffect = DashPathEffect(floatArrayOf(10f, 10f), 0f)
         }
 
     override fun onDraw(canvas: Canvas) {
@@ -529,8 +532,8 @@ class HourlyLineView : View {
                 point.y.toFloat(),
                 point.x.toFloat(),
                 paddingTop + 12.dp + 24.dp +
-                    tempTextHeight + 12.dp +
-                    lineHeight - 12.dp,
+                        tempTextHeight + 12.dp +
+                        lineHeight - 12.dp,
                 rainRectPaint,
             )
         }
@@ -540,34 +543,34 @@ class HourlyLineView : View {
         canvas.drawLine(
             paddingLeft.toFloat(),
             paddingTop + 12.dp + 24.dp +
-                tempTextHeight + 12.dp +
-                lineHeight - 12.dp,
+                    tempTextHeight + 12.dp +
+                    lineHeight - 12.dp,
             paddingLeft + paddingRight + mPointList.size * itemWidth,
             paddingTop + 12.dp + 24.dp +
-                tempTextHeight + 12.dp +
-                lineHeight - 12.dp,
+                    tempTextHeight + 12.dp +
+                    lineHeight - 12.dp,
             baseLinePaint,
         )
         canvas.drawLine(
             paddingLeft.toFloat(),
             paddingTop + 12.dp + 24.dp +
-                tempTextHeight + 12.dp +
-                lineHeight - 12.dp - lineHeight,
+                    tempTextHeight + 12.dp +
+                    lineHeight - 12.dp - lineHeight,
             paddingLeft + paddingRight + mPointList.size * itemWidth,
             paddingTop + 12.dp + 24.dp +
-                tempTextHeight + 12.dp +
-                lineHeight - 12.dp - lineHeight,
+                    tempTextHeight + 12.dp +
+                    lineHeight - 12.dp - lineHeight,
             baseLinePaint,
         )
         canvas.drawLine(
             paddingLeft.toFloat(),
             paddingTop + 12.dp + 24.dp +
-                tempTextHeight + 12.dp +
-                lineHeight - 12.dp - lineHeight / 2f,
+                    tempTextHeight + 12.dp +
+                    lineHeight - 12.dp - lineHeight / 2f,
             paddingLeft + paddingRight + mPointList.size * itemWidth,
             paddingTop + 12.dp + 24.dp +
-                tempTextHeight + 12.dp +
-                lineHeight - 12.dp - lineHeight / 2f,
+                    tempTextHeight + 12.dp +
+                    lineHeight - 12.dp - lineHeight / 2f,
             baseLinePaint,
         )
     }

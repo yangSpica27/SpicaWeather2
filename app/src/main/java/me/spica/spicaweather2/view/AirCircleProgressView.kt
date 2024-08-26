@@ -59,7 +59,7 @@ class AirCircleProgressView : View {
             strokeWidth = 12.dp
             style = Paint.Style.STROKE
             color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
-            strokeCap = Paint.Cap.ROUND
+            strokeCap = Paint.Cap.SQUARE
         }
 
     private val startAngle = 135f
@@ -163,7 +163,7 @@ class AirCircleProgressView : View {
         textPaint.getTextBounds(valueText, 0, valueText.length, textBound)
         canvas.drawText(
             valueText,
-            mRectF.centerX() - textBound.width() / 2f,
+            mRectF.centerX() - textBound.width() / 2f-4,
             mRectF.centerY() + textBound.height() / 2f,
             textPaint,
         )
@@ -222,7 +222,7 @@ class AirCircleProgressView : View {
     // 绘制背景弧
     private fun drawBack(canvas: Canvas) {
         linePaint.strokeWidth = 8.dp
-        linePaint.color = ContextCompat.getColor(context, R.color.material_grey_200)
+        linePaint.color = Color.parseColor("#F5F5F5")
         linePaint.shader = null
         canvas.drawArc(
             mRectF,
