@@ -9,10 +9,10 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.view.marginLeft
 import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
+import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.line.HourlyLineView
-import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.util.concurrent.atomic.AtomicBoolean
 

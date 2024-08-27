@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.animation.doOnEnd
 import androidx.core.view.children
 import androidx.core.view.marginBottom
 import androidx.core.view.updateMargins
@@ -15,6 +16,7 @@ import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.dailyItem.DailyItemView
 import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 class DailyWeatherLayout(
@@ -128,13 +130,29 @@ class DailyWeatherLayout(
             }
             dailyItemView.setData(it, index == 0, maxMaxTemp, minMinTemp)
         }
+        //  如果入场动画未执行过 则归位
+        if (!hasInScreen.get()) {
+            children.forEachIndexed { _, childView ->
+                childView.animate().cancel()
+                childView.alpha = 0f
+                childView.translationY = -12.dp.toFloat()
+            }
+        }
     }
+
 
     override fun startEnterAnim() {
         super.startEnterAnim()
-    }
-
-    override fun resetAnim() {
-        super.resetAnim()
+        enterAnim.doOnEnd {
+            children.forEachIndexed { index, childView ->
+                childView.animate()
+                    .withLayer()
+                    .alpha(1f)
+                    .translationY(0f)
+                    .setStartDelay(60L * index)
+                    .setDuration(250 + 120L * index)
+                    .start()
+            }
+        }
     }
 }
