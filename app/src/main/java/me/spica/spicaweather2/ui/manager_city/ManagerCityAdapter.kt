@@ -94,9 +94,9 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
 
     override fun getItemId(position: Int): Long {
         if (position == items.size) return -1
-        return items[position]
+        return System.identityHashCode(items[position]
             .city.cityName
-            .hashCode()
+            .hashCode())
             .toLong()
     }
 
