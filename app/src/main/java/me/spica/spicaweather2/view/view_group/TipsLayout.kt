@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
+import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.animation.doOnEnd
 import androidx.core.view.children
@@ -190,7 +191,7 @@ class TipsLayout(
 
     private val extraEnterAnimator =
         ObjectAnimator.ofFloat(this, "doExtraEnterAnim", 0f, 1f).apply {
-            duration = 750
+            duration = 550
         }
 
     private val accelerateInterpolator = AccelerateInterpolator()
@@ -198,6 +199,7 @@ class TipsLayout(
     private val decelerateInterpolator = DecelerateInterpolator()
 
 
+    @Keep
     private fun setDoExtraEnterAnim(progress: Float) {
         val accelerateProgress = accelerateInterpolator.getInterpolation(progress)
         val decelerateProgress = decelerateInterpolator.getInterpolation(progress)

@@ -148,8 +148,8 @@ class DailyWeatherLayout(
                     .withLayer()
                     .alpha(1f)
                     .translationY(0f)
-                    .setStartDelay(60L * index)
-                    .setDuration(250 + 120L * index)
+                    .setStartDelay(30L * index)
+                    .setDuration(150 + 120L * index)
                     .start()
             }
         }

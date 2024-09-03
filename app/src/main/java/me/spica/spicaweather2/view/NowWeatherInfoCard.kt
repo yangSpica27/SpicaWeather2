@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
+import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
@@ -330,6 +331,7 @@ class NowWeatherInfoCard(
     private val decelerateInterpolator = DecelerateInterpolator()
 
 
+    @Keep
     private fun setDoExtraEnterAnim(progress: Float) {
         val accelerateProgress = accelerateInterpolator.getInterpolation(progress)
         val decelerateProgress = decelerateInterpolator.getInterpolation(progress)
