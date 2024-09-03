@@ -5,3 +5,4 @@
 
 -keep class com.tbuonomo.** { *;}
 -keep class com.badlogic.gdx.** { *;}
+-keep class com.google.fpl.liquidfun.** { *;}

@@ -73,7 +73,7 @@ class Home2ManagerView : View {
   private var mPaint: Paint = Paint()
 
   private val progressAnimation =
-    ValueAnimator.ofFloat(0f, 1f).setDuration(550).apply {
+    ValueAnimator.ofFloat(0f, 1f).setDuration(475).apply {
 //            interpolator = LinearInterpolator()
       interpolator = DecelerateInterpolator(1.5f)
       addUpdateListener {
