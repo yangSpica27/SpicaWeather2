@@ -18,9 +18,9 @@ import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
 import me.spica.spicaweather2.R
+import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.view_group.AViewGroup
-import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -44,7 +44,7 @@ class NowWeatherInfoCard(
                 )
             setTextColor(ContextCompat.getColor(context, R.color.humidness_color))
             updatePadding(bottom = 4.dp)
-            typeface=android.graphics.Typeface.DEFAULT_BOLD
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
             text = "--"
         }
 
@@ -69,7 +69,7 @@ class NowWeatherInfoCard(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                 )
             setTextColor(ContextCompat.getColor(context, R.color.wind_speed_color))
-            typeface=android.graphics.Typeface.DEFAULT_BOLD
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
             updatePadding(bottom = 4.dp)
             text = "--"
         }
@@ -96,7 +96,7 @@ class NowWeatherInfoCard(
                 )
             updatePadding(bottom = 4.dp)
             setTextColor(ContextCompat.getColor(context, R.color.pressure_color))
-            typeface=android.graphics.Typeface.DEFAULT_BOLD
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
             text = "--"
         }
 
@@ -122,7 +122,7 @@ class NowWeatherInfoCard(
                 )
             updatePadding(bottom = 4.dp)
             setTextColor(ContextCompat.getColor(context, R.color.feel_temp_color))
-            typeface=android.graphics.Typeface.DEFAULT_BOLD
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
             text = "--"
         }
 
@@ -252,10 +252,10 @@ class NowWeatherInfoCard(
             resolveSize(measuredWidth, widthMeasureSpec),
             resolveSize(
                 paddingTop +
-                        paddingBottom +
-                        descText.measuredHeightWithMargins +
-                        windSpeedText.measuredHeightWithMargins +
-                        bottomTextWindSpeed.measuredHeightWithMargins,
+                    paddingBottom +
+                    descText.measuredHeightWithMargins +
+                    windSpeedText.measuredHeightWithMargins +
+                    bottomTextWindSpeed.measuredHeightWithMargins,
                 heightMeasureSpec,
             ),
         )
@@ -320,7 +320,6 @@ class NowWeatherInfoCard(
 
     override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
 
-
     private val extraEnterAnimator =
         ObjectAnimator.ofFloat(this, "doExtraEnterAnim", 0f, 1f).apply {
             duration = 350
@@ -329,7 +328,6 @@ class NowWeatherInfoCard(
     private val accelerateInterpolator = AccelerateInterpolator()
 
     private val decelerateInterpolator = DecelerateInterpolator()
-
 
     @Keep
     private fun setDoExtraEnterAnim(progress: Float) {
@@ -357,9 +355,7 @@ class NowWeatherInfoCard(
         bottomTextWater.translationY = (-12).dp + 12.dp * accelerateProgress
         bottomTextPressure.translationY = (-12).dp + 12.dp * accelerateProgress
         bottomTextFeelTemp.translationY = (-12).dp + 12.dp * accelerateProgress
-
     }
-
 
     override fun resetAnim() {
         super.resetAnim()
@@ -373,4 +369,3 @@ class NowWeatherInfoCard(
         }
     }
 }
-

@@ -30,7 +30,7 @@ class WeatherBackgroundSurfaceView :
     init {
         holder.addCallback(this)
     }
-    
+
     private val backgroundColorValue = Color.parseColor("#f7f8fa")
 
     private val weatherDrawableManager = WeatherDrawableManager(context)
@@ -51,8 +51,7 @@ class WeatherBackgroundSurfaceView :
                     }
                 },
             ) {
-            override fun lockCanvas(): Canvas? =
-                this@WeatherBackgroundSurfaceView.holder.lockCanvas()
+            override fun lockCanvas(): Canvas? = this@WeatherBackgroundSurfaceView.holder.lockCanvas()
 
             override fun unlockCanvas(canvas: Canvas?) {
                 if (canvas != null) {
@@ -144,13 +143,14 @@ class WeatherBackgroundSurfaceView :
     fun setMScrollY(y: Int) {
         weatherDrawableManager.setScrollY(y)
         val limit = screenHeight / 3 * 2
-        markerColor = if (y < 0) {
-            ColorUtils.setAlphaComponent(backgroundColorValue, 0)
-        } else if (y < limit) {
-            ColorUtils.setAlphaComponent(backgroundColorValue, 255 * y / limit)
-        } else {
-            ColorUtils.setAlphaComponent(backgroundColorValue, 255)
-        }
+        markerColor =
+            if (y < 0) {
+                ColorUtils.setAlphaComponent(backgroundColorValue, 0)
+            } else if (y < limit) {
+                ColorUtils.setAlphaComponent(backgroundColorValue, 255 * y / limit)
+            } else {
+                ColorUtils.setAlphaComponent(backgroundColorValue, 255)
+            }
     }
 
     fun setBackgroundY(y: Int) {

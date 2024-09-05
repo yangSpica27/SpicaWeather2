@@ -156,7 +156,7 @@ class TipsLayout(
             resolveSize(measuredWidth, widthMeasureSpec),
             resolveSize(
                 (sptItem.measuredHeightWithMargins + airItem.measuredHeightWithMargins + titleText.measuredHeightWithMargins) +
-                        paddingTop + paddingBottom,
+                    paddingTop + paddingBottom,
                 heightMeasureSpec,
             ),
         )
@@ -197,7 +197,6 @@ class TipsLayout(
     private val accelerateInterpolator = AccelerateInterpolator()
 
     private val decelerateInterpolator = DecelerateInterpolator()
-
 
     @Keep
     private fun setDoExtraEnterAnim(progress: Float) {

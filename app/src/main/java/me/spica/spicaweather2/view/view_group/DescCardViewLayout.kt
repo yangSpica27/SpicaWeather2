@@ -66,7 +66,6 @@ class DescCardViewLayout(
         animDelay = delay
     }
 
-
     init {
         addView(titleTextView)
         addView(subTitleTextView)
@@ -122,22 +121,28 @@ class DescCardViewLayout(
     }
 
     fun doShowEnterAnimator() {
-        titleTextView.animate().alpha(1f).translationY(0f)
+        titleTextView
+            .animate()
+            .alpha(1f)
+            .translationY(0f)
             .setDuration(350)
             .setStartDelay(animDelay.toLong())
             .start()
-        subTitleTextView.animate().alpha(1f).setDuration(550).translationY(0f)
+        subTitleTextView
+            .animate()
+            .alpha(1f)
+            .setDuration(550)
+            .translationY(0f)
             .setStartDelay(animDelay.toLong())
             .start()
-        suggestTextView.animate().alpha(1f).setDuration(850).translationY(0f)
+        suggestTextView
+            .animate()
+            .alpha(1f)
+            .setDuration(850)
+            .translationY(0f)
             .setStartDelay(animDelay.toLong())
             .start()
-
     }
-
-
-
-
 
     override fun onMeasure(
         widthMeasureSpec: Int,
@@ -150,10 +155,10 @@ class DescCardViewLayout(
         descProgressLineView.measure(
             widthMeasureSpec,
             (
-                    MeasureSpec.getSize(widthMeasureSpec) * 1.5.toInt() - titleTextView.measuredHeightWithMargins -
-                            subTitleTextView.measuredHeightWithMargins -
-                            suggestTextView.measuredHeightWithMargins - paddingTop - paddingBottom
-                    ).toExactlyMeasureSpec(),
+                MeasureSpec.getSize(widthMeasureSpec) * 1.5.toInt() - titleTextView.measuredHeightWithMargins -
+                    subTitleTextView.measuredHeightWithMargins -
+                    suggestTextView.measuredHeightWithMargins - paddingTop - paddingBottom
+            ).toExactlyMeasureSpec(),
         )
         setMeasuredDimension(
             measuredWidth,

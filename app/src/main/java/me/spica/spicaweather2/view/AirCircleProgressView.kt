@@ -163,7 +163,7 @@ class AirCircleProgressView : View {
         textPaint.getTextBounds(valueText, 0, valueText.length, textBound)
         canvas.drawText(
             valueText,
-            mRectF.centerX() - textBound.width() / 2f-4,
+            mRectF.centerX() - textBound.width() / 2f - 4,
             mRectF.centerY() + textBound.height() / 2f,
             textPaint,
         )

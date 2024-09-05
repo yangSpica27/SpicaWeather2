@@ -157,13 +157,13 @@ class AirCardLayout(
             resolveSize(
                 Math.max(
                     airCircleProgressView.measuredHeightWithMargins +
-                            titleText.measuredHeightWithMargins,
+                        titleText.measuredHeightWithMargins,
                     tvNo2Title.measuredHeightWithMargins +
-                            tvC0Title.measuredHeightWithMargins +
-                            tvPm25Title.measuredHeightWithMargins +
-                            tvSo2Title.measuredHeightWithMargins +
-                            titleText.measuredHeightWithMargins +
-                            paddingBottom + paddingTop,
+                        tvC0Title.measuredHeightWithMargins +
+                        tvPm25Title.measuredHeightWithMargins +
+                        tvSo2Title.measuredHeightWithMargins +
+                        titleText.measuredHeightWithMargins +
+                        paddingBottom + paddingTop,
                 ),
                 heightMeasureSpec,
             ),
@@ -185,9 +185,9 @@ class AirCardLayout(
 
         val titleHeight =
             tvC0Title.height +
-                    tvPm25Title.height +
-                    tvSo2Title.height +
-                    titleText.height
+                tvPm25Title.height +
+                tvSo2Title.height +
+                titleText.height
 
         val progressHeight = airCircleProgressView.height
 
@@ -251,26 +251,29 @@ class AirCardLayout(
         tvC0Value.text =
             HtmlCompat.fromHtml("${weather.air.co}<b>微克/m³</b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
 //        tvC0Value.text = "${weather.air.co}微克/m³"
-        tvNo2Value.text = HtmlCompat.fromHtml(
-            "${weather.air.no2}<b>微克/m³</b>",
-            HtmlCompat.FROM_HTML_MODE_LEGACY
-        )
-        tvPm25Value.text = HtmlCompat.fromHtml(
-            "${weather.air.pm2p5}<b>微克/m³</b>",
-            HtmlCompat.FROM_HTML_MODE_LEGACY
-        )
-        tvSo2Value.text = HtmlCompat.fromHtml(
-            "${weather.air.so2}<b>微克/m³</b>",
-            HtmlCompat.FROM_HTML_MODE_LEGACY
-        )
+        tvNo2Value.text =
+            HtmlCompat.fromHtml(
+                "${weather.air.no2}<b>微克/m³</b>",
+                HtmlCompat.FROM_HTML_MODE_LEGACY,
+            )
+        tvPm25Value.text =
+            HtmlCompat.fromHtml(
+                "${weather.air.pm2p5}<b>微克/m³</b>",
+                HtmlCompat.FROM_HTML_MODE_LEGACY,
+            )
+        tvSo2Value.text =
+            HtmlCompat.fromHtml(
+                "${weather.air.so2}<b>微克/m³</b>",
+                HtmlCompat.FROM_HTML_MODE_LEGACY,
+            )
         airCircleProgressView.postInvalidate()
     }
 
-    private val valueTextAnim = ObjectAnimator.ofFloat(this, "doValueTextAnim", 0f, 1f).apply {
-        duration = 1250
-        interpolator = DecelerateInterpolator(1.2f)
-    }
-
+    private val valueTextAnim =
+        ObjectAnimator.ofFloat(this, "doValueTextAnim", 0f, 1f).apply {
+            duration = 1250
+            interpolator = DecelerateInterpolator(1.2f)
+        }
 
     private fun setDoValueTextAnim(progress: Float) {
         tvC0Value.alpha = progress
@@ -283,23 +286,21 @@ class AirCardLayout(
         tvPm25Title.alpha = progress
         tvSo2Title.alpha = progress
 
-        tvNo2Title.translationY = (1 - progress) *  (-4).dp
-        tvPm25Title.translationY = (1 - progress) *  (-4).dp
-        tvSo2Title.translationY = (1 - progress) *  (-4).dp
-        tvC0Title.translationY = (1 - progress) *  (-4).dp
+        tvNo2Title.translationY = (1 - progress) * (-4).dp
+        tvPm25Title.translationY = (1 - progress) * (-4).dp
+        tvSo2Title.translationY = (1 - progress) * (-4).dp
+        tvC0Title.translationY = (1 - progress) * (-4).dp
 
-        tvC0Value.translationX = (1 - progress) *  (-4).dp
-        tvNo2Value.translationX = (1 - progress) *  (-4).dp
-        tvPm25Value.translationX = (1 - progress) *  (-4).dp
-        tvSo2Value.translationX = (1 - progress) *  (-4).dp
-
+        tvC0Value.translationX = (1 - progress) * (-4).dp
+        tvNo2Value.translationX = (1 - progress) * (-4).dp
+        tvPm25Value.translationX = (1 - progress) * (-4).dp
+        tvSo2Value.translationX = (1 - progress) * (-4).dp
     }
 
     override fun resetAnim() {
         super.resetAnim()
         setDoValueTextAnim(0f)
     }
-
 
     override fun startEnterAnim() {
         super.startEnterAnim()

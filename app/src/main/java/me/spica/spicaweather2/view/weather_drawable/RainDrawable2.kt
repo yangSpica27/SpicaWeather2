@@ -89,8 +89,8 @@ class RainDrawable2 : WeatherDrawable() {
 
     // 计算雨滴的位置
     override fun calculate(
-        w: Int,
-        h: Int,
+        width: Int,
+        height: Int,
     ) {
         if (rainFlakes.isEmpty() || viewHeight == -1 || viewWidth == -1) {
             return

@@ -139,12 +139,12 @@ class DailyWeatherLayout(
         }
     }
 
-
     override fun startEnterAnim() {
         super.startEnterAnim()
         enterAnim.doOnEnd {
             children.forEachIndexed { index, childView ->
-                childView.animate()
+                childView
+                    .animate()
                     .withLayer()
                     .alpha(1f)
                     .translationY(0f)

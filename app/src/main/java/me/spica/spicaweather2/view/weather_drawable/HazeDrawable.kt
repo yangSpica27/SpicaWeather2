@@ -3,17 +3,14 @@ package me.spica.spicaweather2.view.weather_drawable
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.Shader
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.core.content.ContextCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
-import me.spica.spicaweather2.tools.getColorWithAlpha
 import kotlin.math.absoluteValue
 
 /**

@@ -20,7 +20,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.annotation.*
+import androidx.annotation.BoolRes
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.IntegerRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.ViewGroupUtils
 import androidx.core.app.ActivityOptionsCompat
@@ -33,7 +37,7 @@ import androidx.fragment.app.Fragment
 fun Context.getVersion(): String =
     try {
         val packageInfo = packageManager.getPackageInfo(packageName, 0)
-        packageInfo.versionName?:"-1"
+        packageInfo.versionName ?: "-1"
     } catch (e: Exception) {
         e.printStackTrace()
         "-1"
@@ -278,6 +282,7 @@ fun AppCompatActivity.showOldFragment(
     transaction.commit() // 提交
 }
 
+@SuppressLint("InternalInsetResource")
 fun Context.getStatusBarHeight(): Int {
     var height = 0
     val resourceId =
@@ -290,6 +295,7 @@ fun Context.getStatusBarHeight(): Int {
 
 private var screenSize: Point? = null
 
+@Suppress("DEPRECATION")
 private fun initScreenSize(context: Context) {
     if (screenSize == null) {
         screenSize = Point()

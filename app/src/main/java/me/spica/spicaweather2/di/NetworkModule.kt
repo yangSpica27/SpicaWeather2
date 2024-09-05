@@ -1,11 +1,9 @@
 package me.spica.spicaweather2.di
 
-import android.content.Context
 import com.skydoves.sandwich.retrofit.adapters.ApiResponseCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import me.spica.spicaweather2.network.HeClient
 import me.spica.spicaweather2.network.HeRepository
@@ -31,9 +29,7 @@ object NetworkModule {
      */
     @Provides
     @Singleton
-    fun provideOkHttpClient(
-        @ApplicationContext context: Context,
-    ): OkHttpClient =
+    fun provideOkHttpClient(): OkHttpClient =
         OkHttpClient
             .Builder()
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))

@@ -1,7 +1,6 @@
 package me.spica.spicaweather2.view.view_group
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.util.AttributeSet

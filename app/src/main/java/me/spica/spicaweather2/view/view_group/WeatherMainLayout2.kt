@@ -13,12 +13,12 @@ import androidx.core.view.children
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
+import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.tools.getScreenHeight
 import me.spica.spicaweather2.ui.main.ActivityMain
 import me.spica.spicaweather2.view.scroller_view.ScrollViewAtViewPager
-import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import timber.log.Timber
 

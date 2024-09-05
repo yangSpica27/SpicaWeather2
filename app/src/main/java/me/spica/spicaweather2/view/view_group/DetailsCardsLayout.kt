@@ -6,8 +6,8 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.core.view.marginTop
 import me.spica.spicaweather2.R
-import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.common.HomeCardType
+import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.util.Date
 import java.util.concurrent.atomic.AtomicBoolean
@@ -17,42 +17,43 @@ class DetailsCardsLayout(
     context: Context,
 ) : AViewGroup(context),
     SpicaWeatherCard {
-    private val uvDescCard = DescCardViewLayout(context).apply {
-        setAnimDelay(125)
-    }
+    private val uvDescCard =
+        DescCardViewLayout(context).apply {
+            setAnimDelay(125)
+        }
 
-    private val humidityDescCard = DescCardViewLayout(context).apply {
-        setAnimDelay(275)
-    }
-
+    private val humidityDescCard =
+        DescCardViewLayout(context).apply {
+            setAnimDelay(275)
+        }
 
     private val feelTempDescCard =
-        DescCardViewLayout(context).apply {
-            layoutParams =
-                MarginLayoutParams(
-                    MarginLayoutParams.MATCH_PARENT,
-                    MarginLayoutParams.WRAP_CONTENT,
-                ).apply {
-                    topMargin = 12.dp
-                }
-        }.apply {
-            setAnimDelay(525)
-        }
-
+        DescCardViewLayout(context)
+            .apply {
+                layoutParams =
+                    MarginLayoutParams(
+                        MarginLayoutParams.MATCH_PARENT,
+                        MarginLayoutParams.WRAP_CONTENT,
+                    ).apply {
+                        topMargin = 12.dp
+                    }
+            }.apply {
+                setAnimDelay(525)
+            }
 
     private val sunRiseDescCard =
-        DescCardViewLayout(context).apply {
-            layoutParams =
-                MarginLayoutParams(
-                    MarginLayoutParams.MATCH_PARENT,
-                    MarginLayoutParams.WRAP_CONTENT,
-                ).apply {
-                    topMargin = 12.dp
-                }
-        }.apply {
-            setAnimDelay(350)
-        }
-
+        DescCardViewLayout(context)
+            .apply {
+                layoutParams =
+                    MarginLayoutParams(
+                        MarginLayoutParams.MATCH_PARENT,
+                        MarginLayoutParams.WRAP_CONTENT,
+                    ).apply {
+                        topMargin = 12.dp
+                    }
+            }.apply {
+                setAnimDelay(350)
+            }
 
     init {
         addView(uvDescCard)

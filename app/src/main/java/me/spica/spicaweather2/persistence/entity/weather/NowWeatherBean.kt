@@ -5,8 +5,7 @@ import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import me.spica.spicaweather2.network.model.hefeng.now.Now
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 private val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA)
 
@@ -59,7 +58,7 @@ data class NowWeatherBean(
 }
 
 fun Now.toNowWeatherBean(): NowWeatherBean {
-    val updateDate = sdf.parse(this.obsTime) ?: Date()
+//    val updateDate = sdf.parse(this.obsTime) ?: Date()
     return NowWeatherBean(
         obsTime = this.obsTime,
         temp = this.temp.toIntOrNull() ?: 0,
