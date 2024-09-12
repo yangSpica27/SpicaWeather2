@@ -2,7 +2,7 @@ package me.spica.spicaweather2.view.weather_drawable
 
 import android.graphics.Canvas
 
-abstract class WeatherDrawable {
+abstract class WeatherDrawable  {
     // 入场动画
     open fun startAnim() = Unit
 

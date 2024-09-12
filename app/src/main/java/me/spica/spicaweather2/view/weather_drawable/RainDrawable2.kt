@@ -105,7 +105,7 @@ class RainDrawable2 : WeatherDrawable() {
                 rainEffectCounter.system.particleCount <= RainParticleManager.ParticleMaxCount
             ) {
                 lastAddRainTime = System.currentTimeMillis()
-                rainEffectCounter.createRainItem()
+                 rainEffectCounter.createRainItem()
             }
         }
     }

@@ -10,6 +10,7 @@ import com.google.fpl.liquidfun.ParticleSystemDef
 import com.google.fpl.liquidfun.PolygonShape
 import com.google.fpl.liquidfun.Vec2
 import com.google.fpl.liquidfun.World
+import me.spica.spicaweather2.common.ParticleGroupType
 import me.spica.spicaweather2.common.ParticleType
 import me.spica.spicaweather2.tools.dp
 
@@ -20,7 +21,7 @@ class RainParticleManager {
     private val dt = 1f / 30f
     private val velocityIterations = 3
     private val positionIterations = 1
-    private val particleIterations = 3
+    private val particleIterations = 4
 
     companion object {
         const val ParticleMaxCount = 4000
@@ -123,8 +124,9 @@ class RainParticleManager {
         psd.density = 1f
         psd.maxCount = ParticleMaxCount
         psd.radius = mappingView2Body(1.dp)
-        psd.pressureStrength = 0.03f
+//        psd.pressureStrength = 0.03f
         psd.strictContactCheck = false
+        psd.particleWithBodyPressureStrength = 2f
         psd.springStrength = 0.1f
 //        psd.gravityScale = 1.4f
 //        psd.repulsiveStrength = 0.2f
@@ -141,6 +143,7 @@ class RainParticleManager {
 
     private fun createRainItemShapeAndDef() {
         rainItemDef.shape = rainItemShape
+        rainItemDef.linearVelocity = Vec2(0f, 20f)
 //        rainItemDef.linearVelocity = Vec2(0f, 9f)
     }
 
@@ -158,9 +161,9 @@ class RainParticleManager {
             ),
             4,
         )
-//        rainItemDef.lifetime = 12f
+//        rainItemDef.lifetime = 10f
         rainItemDef.flags = ParticleType.b2_waterParticle.toLong()
-//        rainItemDef.groupFlags = ParticleGroupType.b2_solidParticleGroup.toLong()
+        rainItemDef.groupFlags = ParticleGroupType.b2_solidParticleGroup.toLong()
         return system.createParticleGroup(rainItemDef)
     }
 
