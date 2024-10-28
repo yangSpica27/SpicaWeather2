@@ -11,6 +11,8 @@ import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
+import android.os.Handler
+import android.os.HandlerThread
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -23,6 +25,7 @@ import androidx.core.view.drawToBitmap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import me.spica.spicaweather2.tools.BlurBitmapUtil
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.ui.main.ActivityMain
 import timber.log.Timber
@@ -47,7 +50,41 @@ class Home2ManagerView : View {
   private var toViewBitmap: Bitmap? = null
 
   // 背景的Bitmap
-//  private var bgBitmap: Bitmap? = null
+  private var bgBitmap: Bitmap? = null
+
+  // 模糊过的bgBitmap
+  private var blurBgBitmap: Bitmap? = null
+
+  private val blurHandlerThread = HandlerThread("blur-thread").apply { start() }
+
+  private val blurHandler = Handler(blurHandlerThread.looper)
+
+  private val lock = Any()
+
+  private val blurRunnable = Runnable {
+    while (!Thread.interrupted()) {
+      if (bgBitmap == null || bgBitmap?.isRecycled == true) continue
+      if (!progressAnimation.isRunning) continue
+      val blurBitmap: Bitmap? =
+        BlurBitmapUtil.blurBitmap(
+          context, bgBitmap!!,
+          (25 - (progressAnimation.animatedValue as Float) * 25),
+        )
+      synchronized(lock) {
+        if (blurBitmap?.isRecycled == false) {
+          blurBgBitmap?.recycle()
+        }
+        if (blurBitmap != null){
+          blurBgBitmap = blurBitmap
+        }
+      }
+      try {
+        Thread.sleep(16)
+      } catch (e: InterruptedException) {
+        break
+      }
+    }
+  }
 
   fun bindEndView(view: View, parent: ViewGroup) {
     if (hasBind) return
@@ -63,9 +100,11 @@ class Home2ManagerView : View {
       )
       toViewBitmap = view.drawToBitmap()
       view.alpha = 0f
-//      bgBitmap = parent.drawToBitmap()
+      bgBitmap = parent.drawToBitmap()
+      blurBgBitmap = BlurBitmapUtil.blurBitmap(context, bgBitmap!!, 25f)
       view.alpha = 1f
       hasBind = true
+      blurHandler.post(blurRunnable)
       if (needStartAnimWhenBindOk) {
         startAnim()
         needStartAnimWhenBindOk = false
@@ -105,7 +144,8 @@ class Home2ManagerView : View {
       )
 
       if (drawRect.bottom > lastB) {
-        Timber.tag("异常数据").e("height:$height bottom:${drawRect.bottom} lastB:$lastB progress:$progress")
+        Timber.tag("异常数据")
+          .e("height:$height bottom:${drawRect.bottom} lastB:$lastB progress:$progress")
       }
       lastB = drawRect.bottom
       postInvalidateOnAnimation()
@@ -154,9 +194,16 @@ class Home2ManagerView : View {
     if (toViewBitmap?.isRecycled == false) {
       toViewBitmap?.recycle()
     }
-//    if (bgBitmap?.isRecycled == false) {
-//      bgBitmap?.recycle()
-//    }
+    blurHandler.removeCallbacks(blurRunnable)
+    blurHandlerThread.interrupt()
+    blurHandlerThread.join(16)
+    blurHandlerThread.quitSafely()
+    if (bgBitmap?.isRecycled == false) {
+      bgBitmap?.recycle()
+    }
+    if (blurBgBitmap?.isRecycled == false) {
+      blurBgBitmap?.recycle()
+    }
   }
 
   private var isAttached = false
@@ -178,9 +225,8 @@ class Home2ManagerView : View {
     style = Paint.Style.FILL
   }
 
-  private val bgPaint = Paint().apply {
-    style = Paint.Style.FILL
-  }
+
+  private val bgBitmapPaint = Paint()
 
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
@@ -191,7 +237,13 @@ class Home2ManagerView : View {
       canvas.drawBitmap(ActivityMain.screenBitmap!!, 0f, 0f, mPaint)
       return
     }
-//    bgBitmap?.let { canvas.drawBitmap(it, endRect.left, endRect.top, mPaint) }
+
+    // 绘制从模糊到清晰的背景
+    if (blurBgBitmap != null && bgBitmap != null) {
+      synchronized(lock) {
+        canvas.drawBitmap(blurBgBitmap!!, 0f, 0f, bgBitmapPaint)
+      }
+    }
 
     // 保存图层
     val layer: Int = canvas.saveLayer(0f, 0f, width.toFloat(), height.toFloat(), null)
