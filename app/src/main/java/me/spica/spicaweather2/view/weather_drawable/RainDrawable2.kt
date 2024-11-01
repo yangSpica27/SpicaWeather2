@@ -18,7 +18,7 @@ class RainDrawable2 : WeatherDrawable() {
     private val rainPaint =
         Paint().apply {
             strokeCap = Paint.Cap.ROUND
-            strokeWidth = 1.dp * 2
+            strokeWidth = 5.dp
             color = Color.parseColor("#A2CAF1")
             style = Paint.Style.FILL
         }

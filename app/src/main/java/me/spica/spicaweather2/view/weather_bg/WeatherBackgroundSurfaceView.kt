@@ -12,9 +12,7 @@ import android.view.SurfaceView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import me.spica.spicaweather2.R
-import me.spica.spicaweather2.tools.getRefreshRate
 import me.spica.spicaweather2.view.weather_drawable.WeatherDrawableManager
-import kotlin.math.roundToLong
 
 class WeatherBackgroundSurfaceView :
     SurfaceView,
@@ -39,7 +37,7 @@ class WeatherBackgroundSurfaceView :
     private val simpleDrawTask =
         object :
             SimpleDrawTask(
-                (1000 / getRefreshRate(this@WeatherBackgroundSurfaceView.context).roundToLong()),
+                8,
                 { canvas ->
                     if (markerColor == backgroundColorValue) {
                         canvas.drawColor(markerColor)
