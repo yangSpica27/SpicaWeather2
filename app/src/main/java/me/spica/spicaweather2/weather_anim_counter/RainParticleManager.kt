@@ -18,12 +18,12 @@ import me.spica.spicaweather2.tools.dp
  */
 class RainParticleManager {
   private val dt = 1f / 30f
-  private val velocityIterations = 1
-  private val positionIterations = 1
-  private val particleIterations = 4
+  private val velocityIterations = 8
+  private val positionIterations = 3
+  private val particleIterations = 3
 
   companion object {
-    const val ParticleMaxCount = 600
+    const val ParticleMaxCount = 550
 
     // 模拟世界和view坐标的转化比例
     const val mProportion = 60f
@@ -106,7 +106,7 @@ class RainParticleManager {
     fixtureDef.shape = box
     fixtureDef.density = mDensity
 //        fixtureDef.friction = 0.1f // 摩擦系数
-//        fixtureDef.restitution = 0.3f // 补偿系数
+    fixtureDef.restitution = 0.3f // 补偿系数
     fixtureDef.filter.maskBits = 0b01
     fixtureDef.filter.groupIndex = 0b01
     bodyDef.position[boxWidth + mappingView2Body(24.dp + 4.dp)] =
@@ -155,8 +155,8 @@ class RainParticleManager {
       arrayOf(
         Vec2(mappingView2Body(x), mappingView2Body(y)),
         Vec2(mappingView2Body(x + width), mappingView2Body(y)),
-        Vec2(mappingView2Body(x + width), mappingView2Body(y + 18.dp)),
-        Vec2(mappingView2Body(x), mappingView2Body(y + 18.dp)),
+        Vec2(mappingView2Body(x + width), mappingView2Body(y + 24.dp)),
+        Vec2(mappingView2Body(x), mappingView2Body(y + 24.dp)),
       ),
       4,
     )
