@@ -8,6 +8,7 @@ import me.spica.spicaweather2.persistence.entity.CityWithWeather
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.view_group.NoWeatherDataLayout
 import me.spica.spicaweather2.view.view_group.WeatherMainLayout2
+import timber.log.Timber
 
 /**
  * 主页的adapter
@@ -78,6 +79,8 @@ class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
         val weather = items[position].weather
         if (weather != null) {
             holder.setWeather(weather)
+        }else{
+            Timber.tag("MainViewAdapter").d("weather is null")
         }
     }
 }

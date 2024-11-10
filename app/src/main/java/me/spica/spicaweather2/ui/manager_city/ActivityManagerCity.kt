@@ -46,211 +46,211 @@ import java.util.*
  */
 @AndroidEntryPoint
 class ActivityManagerCity : MaterialActivity() {
-  companion object {
-    const val ARG_CITY_NAME = "arg_position"
-  }
-
-  private val layout by lazy {
-    ActivityManagerCityLayout(this)
-  }
-
-  // 是否已经执行过入场动画
-  private var hasDoEnterAnim = false
-
-  private val home2ManagerView by lazy {
-    Home2ManagerView(this)
-  }
-
-  private val adapter = ManagerCityAdapter()
-
-  private val viewModel by viewModels<CityManagerViewModel>()
-
-  private val itemTouchHelper =
-    CityItemTouchHelper(
-      isDrag = false,
-      onMove = { viewHolder, target ->
-        viewModel.moveCity(
-          adapter.items[viewHolder.absoluteAdapterPosition].city,
-          adapter.items[target.absoluteAdapterPosition].city,
-        )
-        Collections.swap(
-          adapter.items,
-          viewHolder.absoluteAdapterPosition,
-          target.absoluteAdapterPosition,
-        )
-        adapter.notifyItemMoved(
-          viewHolder.absoluteAdapterPosition,
-          target.absoluteAdapterPosition,
-        )
-      },
-    )
-
-  override fun onCreate(savedInstanceState: Bundle?) {
-    window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
-    setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
-    window.sharedElementsUseOverlay = false
-    super.onCreate(savedInstanceState)
-    setContentView(layout)
-    init()
-  }
-
-  @Suppress("DEPRECATION")
-  private fun init() {
-    setSupportActionBar(layout.titleBar)
-    layout.recyclerView.layoutManager =
-      LinearLayoutManager(
-        this,
-        LinearLayoutManager.VERTICAL,
-        false,
-      )
-
-    WindowCompat.getInsetsController(this.window, window.decorView).apply {
-      isAppearanceLightStatusBars = true
+    companion object {
+        const val ARG_CITY_NAME = "arg_position"
     }
-    dividerBuilder()
-      .showLastDivider()
-      .showFirstDivider()
-      .asSpace()
-      .size(12.dp.toInt())
-      .build()
-      .addTo(layout.recyclerView)
 
-    home2ManagerView.attachToRootView()
+    private val layout by lazy {
+        ActivityManagerCityLayout(this)
+    }
 
-    val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-    layoutManager.initialPrefetchItemCount = 10
-    layout.recyclerView.layoutManager = layoutManager
+    // 是否已经执行过入场动画
+    private var hasDoEnterAnim = false
 
-    layout.recyclerView.adapter = adapter
-    itemTouchHelper.attachToRecyclerView(layout.recyclerView)
+    private val home2ManagerView by lazy {
+        Home2ManagerView(this)
+    }
 
-    adapter.itemClickListener = { position, view ->
-      lifecycleScope.launch(Dispatchers.Default) {
-        Manager2HomeView.initFromViewRect(
-          view,
-          window,
-          view.getTag(R.id.dn_theme_color) as Int? ?: Color.TRANSPARENT,
+    private val adapter = ManagerCityAdapter()
+
+    private val viewModel by viewModels<CityManagerViewModel>()
+
+    private val itemTouchHelper =
+        CityItemTouchHelper(
+            isDrag = false,
+            onMove = { viewHolder, target ->
+                viewModel.moveCity(
+                    adapter.items[viewHolder.absoluteAdapterPosition].city,
+                    adapter.items[target.absoluteAdapterPosition].city,
+                )
+                Collections.swap(
+                    adapter.items,
+                    viewHolder.absoluteAdapterPosition,
+                    target.absoluteAdapterPosition,
+                )
+                adapter.notifyItemMoved(
+                    viewHolder.absoluteAdapterPosition,
+                    target.absoluteAdapterPosition,
+                )
+            },
         )
-        EventBus
-          .getDefault()
-          .post(MessageEvent.create(MessageType.Get2MainActivityAnim, position))
 
-        withContext(Dispatchers.Main) {
-          if (Build.VERSION.SDK_INT >= 34) {
-            overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, 0, 0)
-          } else {
-            overridePendingTransition(0, 0)
-          }
-          finish()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
+        setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+        window.sharedElementsUseOverlay = false
+        super.onCreate(savedInstanceState)
+        setContentView(layout)
+        init()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun init() {
+        setSupportActionBar(layout.titleBar)
+        layout.recyclerView.layoutManager =
+            LinearLayoutManager(
+                this,
+                LinearLayoutManager.VERTICAL,
+                false,
+            )
+
+        WindowCompat.getInsetsController(this.window, window.decorView).apply {
+            isAppearanceLightStatusBars = true
         }
-      }
-    }
+        dividerBuilder()
+            .showLastDivider()
+            .showFirstDivider()
+            .asSpace()
+            .size(12.dp.toInt())
+            .build()
+            .addTo(layout.recyclerView)
 
-    adapter.itemLongClickListener = { _, _ ->
-      viewModel.setSelectable(isSelectable = true)
-    }
+        home2ManagerView.attachToRootView()
 
-    adapter.addCityClickListener = {
-      startActivity(Intent(this@ActivityManagerCity, ActivityAddCity::class.java))
-    }
+        val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        layoutManager.initialPrefetchItemCount = 10
+        layout.recyclerView.layoutManager = layoutManager
 
-    layout.deleteBtn.setOnClickListener {
-      if (adapter.getSelectCityNames().size == adapter.items.size) {
-        toast("至少保留一个城市")
-        return@setOnClickListener
-      }
-      viewModel.deleteCities(adapter.getSelectCityNames())
-    }
+        layout.recyclerView.adapter = adapter
+        itemTouchHelper.attachToRecyclerView(layout.recyclerView)
 
-    lifecycleScope.launch {
-      viewModel.allCityWithWeather.collectLatest { it ->
+        adapter.itemClickListener = { position, view ->
+            lifecycleScope.launch(Dispatchers.Default) {
+                Manager2HomeView.initFromViewRect(
+                    view,
+                    window,
+                    view.getTag(R.id.dn_theme_color) as Int? ?: Color.TRANSPARENT,
+                )
+                EventBus
+                    .getDefault()
+                    .post(MessageEvent.create(MessageType.Get2MainActivityAnim, position))
 
-        if (!hasDoEnterAnim) {
-          layout.recyclerView.itemAnimator = null
-          layout.recyclerView.doOnNextLayout {
-            layout.recyclerView.children.find { it.tag == intent.getStringExtra(ARG_CITY_NAME) }?.let { toView ->
-              hasDoEnterAnim = true
-              createInAnim(toView)
-              layout.recyclerView.itemAnimator = DefaultItemAnimator()
+                withContext(Dispatchers.Main) {
+                    if (Build.VERSION.SDK_INT >= 34) {
+                        overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, 0, 0)
+                    } else {
+                        overridePendingTransition(0, 0)
+                    }
+                    finish()
+                }
             }
-          }
         }
 
-        adapter.setItems(it)
-      }
+        adapter.itemLongClickListener = { _, _ ->
+            viewModel.setSelectable(isSelectable = true)
+        }
+
+        adapter.addCityClickListener = {
+            startActivity(Intent(this@ActivityManagerCity, ActivityAddCity::class.java))
+        }
+
+        layout.deleteBtn.setOnClickListener {
+            if (adapter.getSelectCityNames().size == adapter.items.size) {
+                toast("至少保留一个城市")
+                return@setOnClickListener
+            }
+            viewModel.deleteCities(adapter.getSelectCityNames())
+        }
+
+        lifecycleScope.launch {
+            viewModel.allCityWithWeather.collectLatest { it ->
+
+                if (!hasDoEnterAnim) {
+                    layout.recyclerView.itemAnimator = null
+                    layout.recyclerView.doOnNextLayout {
+                        layout.recyclerView.children.find { it.tag == intent.getStringExtra(ARG_CITY_NAME) }?.let { toView ->
+                            hasDoEnterAnim = true
+                            createInAnim(toView)
+                            layout.recyclerView.itemAnimator = DefaultItemAnimator()
+                        }
+                    }
+                }
+
+                adapter.setItems(it)
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.topTitle.collectLatest {
+                layout.titleBar.title = it
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isSelectable.collectLatest {
+                adapter.isSelectMode = it
+                itemTouchHelper.isDrag = it
+                if (it) {
+                    Timber.tag("ManagerCity").d("show delete button")
+                    layout.deleteBtn.show()
+                } else {
+                    Timber.tag("ManagerCity").d("hide delete button")
+                    layout.deleteBtn.hide()
+                }
+            }
+        }
+        layout.titleBar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+        onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (adapter.isSelectMode) {
+                        viewModel.setSelectable(false)
+                        return
+                    }
+                    backToMain()
+                }
+            },
+        )
     }
 
-    lifecycleScope.launch {
-      viewModel.topTitle.collectLatest {
-        layout.titleBar.title = it
-      }
-    }
-
-    lifecycleScope.launch {
-      viewModel.isSelectable.collectLatest {
-        adapter.isSelectMode = it
-        itemTouchHelper.isDrag = it
-        if (it) {
-          Timber.tag("ManagerCity").d("show delete button")
-          layout.deleteBtn.show()
+    @Suppress("DEPRECATION")
+    private fun backToMain() {
+        if (Build.VERSION.SDK_INT >= 34) {
+            overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, 0, 0)
         } else {
-          Timber.tag("ManagerCity").d("hide delete button")
-          layout.deleteBtn.hide()
+            overridePendingTransition(0, 0)
         }
-      }
-    }
-    layout.titleBar.setNavigationOnClickListener {
-      onBackPressedDispatcher.onBackPressed()
-    }
-    onBackPressedDispatcher.addCallback(
-      object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-          if (adapter.isSelectMode) {
-            viewModel.setSelectable(false)
+        val firstItemView = layout.recyclerView.findViewHolderForAdapterPosition(0)?.itemView
+        if (firstItemView != null) {
+            firstItemView.performClick()
             return
-          }
-          backToMain()
         }
-      },
-    )
-  }
-
-  @Suppress("DEPRECATION")
-  private fun backToMain() {
-    if (Build.VERSION.SDK_INT >= 34) {
-      overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, 0, 0)
-    } else {
-      overridePendingTransition(0, 0)
+        finish()
     }
-    val firstItemView = layout.recyclerView.findViewHolderForAdapterPosition(0)?.itemView
-    if (firstItemView != null) {
-      firstItemView.performClick()
-      return
+
+    private fun createInAnim(toView: View) {
+        home2ManagerView.bindEndView(toView, layout)
+        doOnMainThreadIdle({
+            startInAnim()
+        }, 200)
     }
-    finish()
-  }
 
-  private fun createInAnim(toView: View) {
-    home2ManagerView.bindEndView(toView, layout)
-    doOnMainThreadIdle({
-      startInAnim()
-    }, 200)
-  }
-
-  // 开始入场动画
-  private fun startInAnim() {
-    home2ManagerView.startAnim()
-  }
-
-  override fun onCreateOptionsMenu(menu: Menu): Boolean {
-    menuInflater.inflate(R.menu.menu_manager_city, menu)
-    return super.onCreateOptionsMenu(menu)
-  }
-
-  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    if (item.itemId == R.id.add_city) {
-      startActivity(Intent(this@ActivityManagerCity, ActivityAddCity::class.java))
+    // 开始入场动画
+    private fun startInAnim() {
+        home2ManagerView.startAnim()
     }
-    return super.onOptionsItemSelected(item)
-  }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_manager_city, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.add_city) {
+            startActivity(Intent(this@ActivityManagerCity, ActivityAddCity::class.java))
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
