@@ -79,7 +79,7 @@ class MainViewAdapter : RecyclerView.Adapter<MainViewAdapter.ViewHolder>() {
         val weather = items[position].weather
         if (weather != null) {
             holder.setWeather(weather)
-        }else{
+        } else {
             Timber.tag("MainViewAdapter").d("weather is null")
         }
     }
