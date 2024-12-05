@@ -10,10 +10,10 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @JsonClass(generateAdapter = true)
 data class Minutely(
-    @Json(name = "fxTime")
-    val fxTime: String,
-    @Json(name = "precip")
-    val precip: String,
-    @Json(name = "type")
-    val type: String,
+  @Json(name = "fxTime")
+  val fxTime: String,
+  @Json(name = "precip")
+  val precip: String,
+  @Json(name = "type")
+  val type: String,
 ) : Parcelable

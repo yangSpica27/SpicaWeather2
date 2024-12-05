@@ -1,7 +1,7 @@
 package me.spica.spicaweather2.common
 
 enum class Preference(
-    val key: String,
+  val key: String,
 ) {
-    CARDS("cards"),
+  CARDS("cards"),
 }

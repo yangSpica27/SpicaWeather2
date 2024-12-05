@@ -7,8 +7,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @JsonClass(generateAdapter = true)
 data class AlertBean(
-    val title: String,
-    val text: String,
-    val sender: String,
-    val startTime: String,
+  val title: String,
+  val text: String,
+  val sender: String,
+  val startTime: String,
 ) : Parcelable

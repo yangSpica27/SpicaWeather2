@@ -13,83 +13,84 @@ private const val OVERSCROLL_TRANSLATION_MAGNITUDE = 0.5f
 private const val FLING_TRANSLATION_MAGNITUDE = 0.5f
 
 class BounceEdgeEffectFactory2(
-    val isVertical: Boolean = true,
+  val isVertical: Boolean = true,
 ) : RecyclerView.EdgeEffectFactory() {
-    override fun createEdgeEffect(
-        recyclerView: RecyclerView,
-        direction: Int,
-    ): EdgeEffect {
-        return object : EdgeEffect(recyclerView.context) {
-            // A reference to the [SpringAnimation] for this RecyclerView used to bring the item back after the over-scroll effect.
-            val translationAnim: SpringAnimation =
-                SpringAnimation(
-                    recyclerView,
-                    if (isVertical) SpringAnimation.TRANSLATION_Y else SpringAnimation.TRANSLATION_X,
-                ).setSpring(
-                    SpringForce()
-                        .setFinalPosition(0f)
-                        .setDampingRatio(SpringForce.DAMPING_RATIO_NO_BOUNCY)
-                        .setStiffness(SpringForce.STIFFNESS_LOW),
-                )
+  override fun createEdgeEffect(
+    recyclerView: RecyclerView,
+    direction: Int,
+  ): EdgeEffect {
+    return object : EdgeEffect(recyclerView.context) {
+      // A reference to the [SpringAnimation] for this RecyclerView used to bring the item back after the over-scroll effect.
+      val translationAnim: SpringAnimation =
+        SpringAnimation(
+          recyclerView,
+          if (isVertical) SpringAnimation.TRANSLATION_Y else SpringAnimation.TRANSLATION_X,
+        ).setSpring(
+          SpringForce()
+            .setFinalPosition(0f)
+            .setDampingRatio(SpringForce.DAMPING_RATIO_NO_BOUNCY)
+            .setStiffness(SpringForce.STIFFNESS_LOW),
+        )
 
-            override fun onPull(deltaDistance: Float) {
-                super.onPull(deltaDistance)
-                handlePull(deltaDistance)
-            }
+      override fun onPull(deltaDistance: Float) {
+        super.onPull(deltaDistance)
+        handlePull(deltaDistance)
+      }
 
-            override fun onPull(
-                deltaDistance: Float,
-                displacement: Float,
-            ) {
-                super.onPull(deltaDistance, displacement)
-                handlePull(deltaDistance)
-            }
+      override fun onPull(
+        deltaDistance: Float,
+        displacement: Float,
+      ) {
+        super.onPull(deltaDistance, displacement)
+        handlePull(deltaDistance)
+      }
 
-            private fun handlePull(deltaDistance: Float) {
-                // This is called on every touch event while the list is scrolled with a finger.
+      private fun handlePull(deltaDistance: Float) {
+        // This is called on every touch event while the list is scrolled with a finger.
 
-                // Translate the recyclerView with the distance
+        // Translate the recyclerView with the distance
 
-                if (isVertical) {
-                    val sign = if (direction == DIRECTION_BOTTOM) -1 else 1
-                    val translationYDelta = sign * recyclerView.width * deltaDistance * OVERSCROLL_TRANSLATION_MAGNITUDE
-                    recyclerView.translationY += translationYDelta
-                } else {
-                    val sign = if (direction == DIRECTION_RIGHT) -1 else 1
-                    val translationXDelta =
-                        sign * recyclerView.height * deltaDistance * OVERSCROLL_TRANSLATION_MAGNITUDE
-                    recyclerView.translationX += translationXDelta
-                }
-
-                translationAnim.cancel()
-            }
-
-            override fun onRelease() {
-                super.onRelease()
-                // The finger is lifted. Start the animation to bring translation back to the resting state.
-                if ((if (isVertical) recyclerView.translationY else recyclerView.translationX) != 0f) {
-                    translationAnim.start()
-                }
-            }
-
-            override fun onAbsorb(velocity: Int) {
-                super.onAbsorb(velocity)
-
-                // The list has reached the edge on fling.
-                val sign = if (direction == if (isVertical) DIRECTION_BOTTOM else DIRECTION_RIGHT) -1 else 1
-                val translationVelocity = sign * velocity * FLING_TRANSLATION_MAGNITUDE
-                translationAnim.setStartVelocity(translationVelocity).start()
-            }
-
-            override fun draw(canvas: Canvas?): Boolean {
-                // don't paint the usual edge effect
-                return false
-            }
-
-            override fun isFinished(): Boolean {
-                // Without this, will skip future calls to onAbsorb()
-                return translationAnim.isRunning.not()
-            }
+        if (isVertical) {
+          val sign = if (direction == DIRECTION_BOTTOM) -1 else 1
+          val translationYDelta =
+            sign * recyclerView.width * deltaDistance * OVERSCROLL_TRANSLATION_MAGNITUDE
+          recyclerView.translationY += translationYDelta
+        } else {
+          val sign = if (direction == DIRECTION_RIGHT) -1 else 1
+          val translationXDelta =
+            sign * recyclerView.height * deltaDistance * OVERSCROLL_TRANSLATION_MAGNITUDE
+          recyclerView.translationX += translationXDelta
         }
+
+        translationAnim.cancel()
+      }
+
+      override fun onRelease() {
+        super.onRelease()
+        // The finger is lifted. Start the animation to bring translation back to the resting state.
+        if ((if (isVertical) recyclerView.translationY else recyclerView.translationX) != 0f) {
+          translationAnim.start()
+        }
+      }
+
+      override fun onAbsorb(velocity: Int) {
+        super.onAbsorb(velocity)
+
+        // The list has reached the edge on fling.
+        val sign = if (direction == if (isVertical) DIRECTION_BOTTOM else DIRECTION_RIGHT) -1 else 1
+        val translationVelocity = sign * velocity * FLING_TRANSLATION_MAGNITUDE
+        translationAnim.setStartVelocity(translationVelocity).start()
+      }
+
+      override fun draw(canvas: Canvas?): Boolean {
+        // don't paint the usual edge effect
+        return false
+      }
+
+      override fun isFinished(): Boolean {
+        // Without this, will skip future calls to onAbsorb()
+        return translationAnim.isRunning.not()
+      }
     }
+  }
 }

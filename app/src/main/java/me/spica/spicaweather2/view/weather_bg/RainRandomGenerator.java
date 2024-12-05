@@ -38,7 +38,7 @@ public class RainRandomGenerator {
   public int[] getLine(int width, int height) {
     int[] tempCheckNum = { 0, 0, 0, 0 };
     int temp = getRandomWidth(width);
-    int initfromH = (int) (height + Math.random() * height*2);
+    int initfromH = (int) (height + Math.random() * height * 2);
     for (int i = 0; i < 4; i += 4) {
       tempCheckNum[i] = temp;
       tempCheckNum[i + 1] = (int) (Math.random() * height / 20 - initfromH);

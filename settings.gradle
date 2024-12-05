@@ -1,38 +1,33 @@
 pluginManagement {
-    repositories {
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/public'}
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-        maven { url "https://jitpack.io" }
-        google()
-        mavenCentral()
-        maven {
-            url = uri("https://storage.googleapis.com/r8-releases/raw")
-        }
+  repositories {
+    maven { url 'https://maven.aliyun.com/repository/central' }
+    maven { url 'https://maven.aliyun.com/repository/google' }
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+    maven { url "https://jitpack.io" }
+    google {
+      content {
+        includeGroupByRegex("com\\.android.*")
+        includeGroupByRegex("com\\.google.*")
+        includeGroupByRegex("androidx.*")
+      }
     }
+    mavenCentral()
+    gradlePluginPortal()
+  }
 }
-
-
-
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        //    gradlePluginPortal()
-        //    google()
-        //    mavenCentral()
-        mavenCentral()
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/public'}
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-        maven { url "https://jitpack.io" }
-        google()
-        mavenCentral()
-        maven {
-            url = uri("https://storage.googleapis.com/r8-releases/raw")
-        }
-    }
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  repositories {
+    maven { url 'https://maven.aliyun.com/repository/central' }
+    maven { url 'https://maven.aliyun.com/repository/google' }
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+    maven { url "https://jitpack.io" }
+    google()
+    mavenCentral()
+  }
 }
-rootProject.name = "SpicaWeather2"
+
+rootProject.name = "柠檬天气2"
 include ':app'

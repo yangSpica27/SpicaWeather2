@@ -46,7 +46,7 @@ public class DegreeUtil {
   public static double getCoordinateRadians2(double x, double y) {
     double rad = Math.atan2(y, x);
     if (rad > 0) {
-      rad = toRadians(180-toDegrees(rad));
+      rad = toRadians(180 - toDegrees(rad));
     }
     return rad;
   }

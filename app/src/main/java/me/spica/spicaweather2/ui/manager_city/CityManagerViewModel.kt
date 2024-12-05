@@ -15,46 +15,46 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CityManagerViewModel
-    @Inject
-    constructor(
-        private val cityRepository: CityRepository,
-    ) : ViewModel() {
-        // 通过Flow获取所有的城市
-        val allCityWithWeather = cityRepository.allCitiesWithWeatherFlow()
+@Inject
+constructor(
+  private val cityRepository: CityRepository,
+) : ViewModel() {
+  // 通过Flow获取所有的城市
+  val allCityWithWeather = cityRepository.allCitiesWithWeatherFlow()
 
-        // 是否是选择模式
-        private val _isSelectMode = MutableSharedFlow<Boolean>(1)
+  // 是否是选择模式
+  private val _isSelectMode = MutableSharedFlow<Boolean>(1)
 
-        val isSelectable: Flow<Boolean>
-            get() = _isSelectMode
+  val isSelectable: Flow<Boolean>
+    get() = _isSelectMode
 
-        val topTitle =
-            _isSelectMode
-                .map {
-                    return@map if (it) {
-                        "请选择城市"
-                    } else {
-                        "管理城市"
-                    }
-                }.distinctUntilChanged()
-
-        fun setSelectable(isSelectable: Boolean) {
-            _isSelectMode.tryEmit(isSelectable)
+  val topTitle =
+    _isSelectMode
+      .map {
+        return@map if (it) {
+          "请选择城市"
+        } else {
+          "管理城市"
         }
+      }.distinctUntilChanged()
 
-        fun moveCity(
-            from: CityBean,
-            to: CityBean,
-        ) {
-            viewModelScope.launch(Dispatchers.IO) {
-                cityRepository.exchangeSort(from, to)
-            }
-        }
+  fun setSelectable(isSelectable: Boolean) {
+    _isSelectMode.tryEmit(isSelectable)
+  }
 
-        // 删除选择的城市
-        fun deleteCities(citiesNames: List<String>) {
-            viewModelScope.launch(Dispatchers.IO) {
-                cityRepository.deleteCitiesWithNames(citiesNames)
-            }
-        }
+  fun moveCity(
+    from: CityBean,
+    to: CityBean,
+  ) {
+    viewModelScope.launch(Dispatchers.IO) {
+      cityRepository.exchangeSort(from, to)
     }
+  }
+
+  // 删除选择的城市
+  fun deleteCities(citiesNames: List<String>) {
+    viewModelScope.launch(Dispatchers.IO) {
+      cityRepository.deleteCitiesWithNames(citiesNames)
+    }
+  }
+}

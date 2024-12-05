@@ -8,18 +8,18 @@ import android.graphics.Color
  * @param baseColor 基础颜色
  */
 fun getColorWithAlpha(
-    alpha: Float,
-    baseColor: Int,
+  alpha: Float,
+  baseColor: Int,
 ): Int {
-    var alpha1 = alpha
-    if (alpha1 < 0) {
-        alpha1 = 0f
-    } else if (alpha1 > 1f) {
-        alpha1 = 1f
-    }
-    val a = Math.min(255, Math.max(0, (alpha1 * 255).toInt())) shl 24
-    val rgb = 0x00ffffff and baseColor
-    return a + rgb
+  var alpha1 = alpha
+  if (alpha1 < 0) {
+    alpha1 = 0f
+  } else if (alpha1 > 1f) {
+    alpha1 = 1f
+  }
+  val a = Math.min(255, Math.max(0, (alpha1 * 255).toInt())) shl 24
+  val rgb = 0x00ffffff and baseColor
+  return a + rgb
 }
 
 /**
@@ -29,14 +29,14 @@ fun getColorWithAlpha(
  * @param ratio 比例
  */
 fun blendColors(
-    color1: Int,
-    color2: Int,
-    ratio: Float,
+  color1: Int,
+  color2: Int,
+  ratio: Float,
 ): Int {
-    val inverseRatio = 1f - ratio
-    val a = (Color.alpha(color1) * inverseRatio) + (Color.alpha(color2) * ratio)
-    val r = (Color.red(color1) * inverseRatio) + (Color.red(color2) * ratio)
-    val g = (Color.green(color1) * inverseRatio) + (Color.green(color2) * ratio)
-    val b = (Color.blue(color1) * inverseRatio) + (Color.blue(color2) * ratio)
-    return Color.argb(a.toInt(), r.toInt(), g.toInt(), b.toInt())
+  val inverseRatio = 1f - ratio
+  val a = (Color.alpha(color1) * inverseRatio) + (Color.alpha(color2) * ratio)
+  val r = (Color.red(color1) * inverseRatio) + (Color.red(color2) * ratio)
+  val g = (Color.green(color1) * inverseRatio) + (Color.green(color2) * ratio)
+  val b = (Color.blue(color1) * inverseRatio) + (Color.blue(color2) * ratio)
+  return Color.argb(a.toInt(), r.toInt(), g.toInt(), b.toInt())
 }

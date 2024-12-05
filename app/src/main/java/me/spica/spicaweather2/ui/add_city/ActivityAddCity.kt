@@ -17,64 +17,64 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import me.spica.spicaweather2.R
+import me.spica.spicaweather2.base.BaseActivity
+import me.spica.spicaweather2.service.DataSyncService
 import me.spica.spicaweather2.view.view_group.ActivityAddCityLayout
-import me.spica.spicaweather2.work.DataSyncWorker
-import rikka.material.app.MaterialActivity
 
 /**
  * 添加城市
  */
 @AndroidEntryPoint
-class ActivityAddCity : MaterialActivity() {
-    private val layout by lazy {
-        ActivityAddCityLayout(this)
+class ActivityAddCity : BaseActivity() {
+  private val layout by lazy {
+    ActivityAddCityLayout(this)
+  }
+
+  private val addCityAdapter = AddCityAdapter()
+
+  private val cityViewModel by viewModels<CityViewModel>()
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(layout)
+    init()
+  }
+
+  private fun init() {
+    // handleBack()
+    WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
+      true
+    layout.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+    dividerBuilder()
+      .color(getColor(R.color.line_divider))
+      .size(2, TypedValue.COMPLEX_UNIT_PX)
+      .build()
+      .addTo(layout.recyclerView)
+    layout.recyclerView.adapter = addCityAdapter
+    layout.searchBarLayout.editText.addTextChangedListener {
+      cityViewModel.updateSearchKeyword(it.toString())
     }
-
-    private val addCityAdapter = AddCityAdapter()
-
-    private val cityViewModel by viewModels<CityViewModel>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(layout)
-        init()
+    lifecycleScope.launch {
+      cityViewModel.searchFlow.collectLatest {
+        addCityAdapter.setItems(it)
+      }
     }
-
-    private fun init() {
-        // handleBack()
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
-            true
-        layout.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        dividerBuilder()
-            .color(getColor(R.color.line_divider))
-            .size(2, TypedValue.COMPLEX_UNIT_PX)
-            .build()
-            .addTo(layout.recyclerView)
-        layout.recyclerView.adapter = addCityAdapter
-        layout.searchBarLayout.editText.addTextChangedListener {
-            cityViewModel.updateSearchKeyword(it.toString())
+    addCityAdapter.selectCityListener = {
+      lifecycleScope.launch(Dispatchers.IO) {
+        if (cityViewModel.getCount() >= 5) {
+          withContext(Dispatchers.Main) {
+            Toast
+              .makeText(this@ActivityAddCity, "最多添加5个城市", Toast.LENGTH_SHORT)
+              .show()
+          }
+          return@launch
         }
-        lifecycleScope.launch {
-            cityViewModel.searchFlow.collectLatest {
-                addCityAdapter.setItems(it)
-            }
+        cityViewModel.addCity(it)
+        withContext(Dispatchers.Main) {
+          startService(Intent(this@ActivityAddCity, DataSyncService::class.java))
+          finish()
         }
-        addCityAdapter.selectCityListener = {
-            lifecycleScope.launch(Dispatchers.IO) {
-                if (cityViewModel.getCount() >= 5) {
-                    withContext(Dispatchers.Main) {
-                        Toast
-                            .makeText(this@ActivityAddCity, "最多添加5个城市", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                    return@launch
-                }
-                cityViewModel.addCity(it)
-                withContext(Dispatchers.Main) {
-                    startService(Intent(this@ActivityAddCity, DataSyncWorker::class.java))
-                    finish()
-                }
-            }
-        }
+      }
     }
+  }
 }

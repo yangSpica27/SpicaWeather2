@@ -6,11 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import me.spica.spicaweather2.network.HeClient
-import me.spica.spicaweather2.network.HeRepository
 import me.spica.spicaweather2.network.HeService
-import me.spica.spicaweather2.network.HitokotoClient
-import me.spica.spicaweather2.network.HitokotoRepository
-import me.spica.spicaweather2.network.HitokotoService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -24,53 +20,38 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    /**
-     * 注入ohHttpClient
-     */
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(): OkHttpClient =
-        OkHttpClient
-            .Builder()
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-            .retryOnConnectionFailure(true)
-            .connectTimeout(5000L, TimeUnit.MILLISECONDS)
-            .build()
+  /**
+   * 注入ohHttpClient
+   */
+  @Provides
+  @Singleton
+  fun provideOkHttpClient(): OkHttpClient =
+    OkHttpClient
+      .Builder()
+      .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+      .retryOnConnectionFailure(true)
+      .connectTimeout(5000L, TimeUnit.MILLISECONDS)
+      .build()
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
-        Retrofit
-            .Builder()
-            .client(okHttpClient)
-            .baseUrl("https://devapi.qweather.com/v7/")
-            .addConverterFactory(MoshiConverterFactory.create())
-            .addCallAdapterFactory(ApiResponseCallAdapterFactory.create())
-            .build()
+  @Provides
+  @Singleton
+  fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
+    Retrofit
+      .Builder()
+      .client(okHttpClient)
+      .baseUrl("https://devapi.qweather.com/v7/")
+      .addConverterFactory(MoshiConverterFactory.create())
+      .addCallAdapterFactory(ApiResponseCallAdapterFactory.create())
+      .build()
 
-    @Provides
-    @Singleton
-    fun provideHeService(retrofit: Retrofit): HeService =
-        retrofit
-            .create(HeService::class.java)
+  @Provides
+  @Singleton
+  fun provideHeService(retrofit: Retrofit): HeService =
+    retrofit
+      .create(HeService::class.java)
 
-    @Provides
-    @Singleton
-    fun provideHitokotoService(retrofit: Retrofit): HitokotoService = retrofit.create(HitokotoService::class.java)
+  @Provides
+  @Singleton
+  fun provideHeClient(heService: HeService): HeClient = HeClient(heService)
 
-    @Provides
-    @Singleton
-    fun provideHeClient(heService: HeService): HeClient = HeClient(heService)
-
-    @Provides
-    @Singleton
-    fun provideHitokotoClient(hitokotoService: HitokotoService): HitokotoClient = HitokotoClient(hitokotoService)
-
-    @Provides
-    @Singleton
-    fun provideHeRepository(heClient: HeClient): HeRepository = HeRepository(heClient)
-
-    @Provides
-    @Singleton
-    fun provideHitokotoRepository(hitokotoClient: HitokotoClient): HitokotoRepository = HitokotoRepository(hitokotoClient)
 }

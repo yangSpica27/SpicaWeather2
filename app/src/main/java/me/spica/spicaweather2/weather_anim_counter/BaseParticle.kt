@@ -8,10 +8,10 @@ import java.util.*
  * 粒子基类
  */
 abstract class BaseParticle(
-    var id: String = UUID.randomUUID().toString(),
-    var x: Float = 0f,
-    var y: Float = 0f,
-    var body: Body? = null,
-    var width: Float = 1.dp/4,
-    var height: Float = 1.dp/4,
+  var id: String = UUID.randomUUID().toString(),
+  var x: Float = 0f,
+  var y: Float = 0f,
+  var body: Body? = null,
+  var width: Float = 1.dp / 4,
+  var height: Float = 1.dp / 4,
 )

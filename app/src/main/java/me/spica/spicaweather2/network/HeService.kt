@@ -9,16 +9,16 @@ import retrofit2.http.Query
 
 @Suppress("unused")
 interface HeService {
-    // 聚合接口
-    @GET("http://106.54.25.152:4040/api/weather/all")
-    suspend fun getAllWeather(
-        @Query("location")
-        location: String,
-    ): ApiResponse<BaseResponse<Weather>>
+  // 聚合接口
+  @GET("http://106.54.25.152:4040/api/weather/all")
+  suspend fun getAllWeather(
+    @Query("location")
+    location: String,
+  ): ApiResponse<BaseResponse<Weather>>
 
-    @GET("https://weatherapi.market.xiaomi.com/wtr-v3/weather/all")
-    suspend fun getMinutely(
-        @Query("latitude") latitude: Double,
-        @Query("longitude") longitude: Double,
-    ): ApiResponse<CaiyunBean>
+  @GET("https://weatherapi.market.xiaomi.com/wtr-v3/weather/all")
+  suspend fun getMinutely(
+    @Query("latitude") latitude: Double,
+    @Query("longitude") longitude: Double,
+  ): ApiResponse<CaiyunBean>
 }

@@ -5,8 +5,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class Adcode(
-    @Json(name = "adcode")
-    val adcode: Int,
-    @Json(name = "name")
-    val name: String,
+  @Json(name = "adcode")
+  val adcode: Int,
+  @Json(name = "name")
+  val name: String,
 )

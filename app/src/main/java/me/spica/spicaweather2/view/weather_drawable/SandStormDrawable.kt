@@ -10,145 +10,145 @@ import kotlin.random.Random
 private val random = Random.Default
 
 class SandStormDrawable : WeatherDrawable() {
-    private val paint =
-        Paint().apply {
-            isAntiAlias = true
-            style = Paint.Style.FILL
-        }
-
-    private val stormLines = mutableListOf<StormLine>()
-
-    override fun ready(
-        width: Int,
-        height: Int,
-    ) {
-        viewWidth = width
-        viewHeight = height
-        stormLines.clear()
-        for (i: Int in 0..40) {
-            stormLines.add(StormLine(width, height))
-        }
-        Timber.tag("SandStormDrawable").e("stormLines size: ${stormLines.size}")
+  private val paint =
+    Paint().apply {
+      isAntiAlias = true
+      style = Paint.Style.FILL
     }
 
-    private var isPlus = true
+  private val stormLines = mutableListOf<StormLine>()
 
-    override fun calculate(
-        width: Int,
-        height: Int,
-    ) {
-        super.calculate(width, height)
-        stormLines.forEach {
-            it.next()
-        }
+  override fun ready(
+    width: Int,
+    height: Int,
+  ) {
+    viewWidth = width
+    viewHeight = height
+    stormLines.clear()
+    for (i: Int in 0..40) {
+      stormLines.add(StormLine(width, height))
+    }
+    Timber.tag("SandStormDrawable").e("stormLines size: ${stormLines.size}")
+  }
 
-        if (isPlus) {
-            extraAngle += 15 / 10f / 60f
-        } else {
-            extraAngle -= 15 / 10f / 60f
-        }
+  private var isPlus = true
 
-        if (extraAngle > 15) {
-            isPlus = false
-        } else if (extraAngle < -15) {
-            isPlus = true
-        }
+  override fun calculate(
+    width: Int,
+    height: Int,
+  ) {
+    super.calculate(width, height)
+    stormLines.forEach {
+      it.next()
     }
 
-    private var viewWidth: Int = -1
-
-    private var viewHeight: Int = -1
-
-    private var extraAngle = 0.0f
-
-    override fun startAnim() {
-        ready(viewWidth, viewHeight)
+    if (isPlus) {
+      extraAngle += 15 / 10f / 60f
+    } else {
+      extraAngle -= 15 / 10f / 60f
     }
 
-    override fun cancelAnim() {
-        super.cancelAnim()
-        stormLines.clear()
+    if (extraAngle > 15) {
+      isPlus = false
+    } else if (extraAngle < -15) {
+      isPlus = true
     }
+  }
 
-    override fun doOnDraw(
-        canvas: Canvas,
-        width: Int,
-        height: Int,
-    ) {
-        canvas.save()
-        canvas.rotate(extraAngle, width / 2f, height / 2f)
-        stormLines.forEach {
-            it.draw(canvas, paint)
-        }
-        canvas.restore()
+  private var viewWidth: Int = -1
+
+  private var viewHeight: Int = -1
+
+  private var extraAngle = 0.0f
+
+  override fun startAnim() {
+    ready(viewWidth, viewHeight)
+  }
+
+  override fun cancelAnim() {
+    super.cancelAnim()
+    stormLines.clear()
+  }
+
+  override fun doOnDraw(
+    canvas: Canvas,
+    width: Int,
+    height: Int,
+  ) {
+    canvas.save()
+    canvas.rotate(extraAngle, width / 2f, height / 2f)
+    stormLines.forEach {
+      it.draw(canvas, paint)
     }
+    canvas.restore()
+  }
 }
 
 data class StormLine(
-    val width: Int,
-    val height: Int,
+  val width: Int,
+  val height: Int,
 ) {
-    private var cx: Float = 0.0f
+  private var cx: Float = 0.0f
 
-    private var cy: Float = 0.0f
+  private var cy: Float = 0.0f
 
-    private var radius: Float
+  private var radius: Float
 
-    private val color: Int
+  private val color: Int
 
-    private val x: Float
+  private val x: Float
 
-    private val y: Float
+  private val y: Float
 
-    private val angle: Float
+  private val angle: Float
 
-    private val speed: Float
+  private val speed: Float
 
-    init {
-        val rd = random.nextDouble()
-        color =
-            if (rd < 0.5) {
-                Color.parseColor("#333333")
-            } else if (rd < 0.7) {
-                Color.parseColor("#FF795548")
-            } else {
-                Color.parseColor("#bfbfbf")
-            }
+  init {
+    val rd = random.nextDouble()
+    color =
+      if (rd < 0.5) {
+        Color.parseColor("#333333")
+      } else if (rd < 0.7) {
+        Color.parseColor("#FF795548")
+      } else {
+        Color.parseColor("#bfbfbf")
+      }
 
-        radius = (2.dp + random.nextDouble() * 2.dp).toFloat()
-        x = -width * random.nextDouble().toFloat() - width
-        y = (random.nextDouble() * height / 10f * 8f + height / 10f).toFloat()
-        angle = ((y - height / 10f) / (height / 10f * 8f) * 15 - 7.5).toFloat()
-        speed = (5.0 + random.nextDouble() * 5f).toFloat()
-        cx = x
-        cy = y
+    radius = (2.dp + random.nextDouble() * 2.dp).toFloat()
+    x = -width * random.nextDouble().toFloat() - width
+    y = (random.nextDouble() * height / 10f * 8f + height / 10f).toFloat()
+    angle = ((y - height / 10f) / (height / 10f * 8f) * 15 - 7.5).toFloat()
+    speed = (5.0 + random.nextDouble() * 5f).toFloat()
+    cx = x
+    cy = y
+  }
+
+  fun next() {
+    cx += speed
+    if (cx > (width * 2)) {
+      cx = x
+    }
+  }
+
+  fun draw(
+    canvas: Canvas,
+    paint: Paint,
+  ) {
+    paint.color = color
+    paint.strokeWidth = radius
+
+    canvas.rotate(angle)
+
+    for (i: Int in 0..5) {
+      canvas.drawCircle(
+        cx + 3 * i * radius,
+        cy,
+        radius + radius / 2 * ((cx + 3 * i * radius) / width),
+        paint,
+      )
     }
 
-    fun next() {
-        cx += speed
-        if (cx > (width * 2)) {
-            cx = x
-        }
-    }
-
-    fun draw(
-        canvas: Canvas,
-        paint: Paint,
-    ) {
-        paint.color = color
-        paint.strokeWidth = radius
-
-        canvas.rotate(angle)
-
-        for (i: Int in 0..5) {
-            canvas.drawCircle(
-                cx + 3 * i * radius,
-                cy,
-                radius + radius / 2 * ((cx + 3 * i * radius) / width),
-                paint,
-            )
-        }
-
-        canvas.rotate(-angle)
-    }
+    canvas.rotate(-angle)
+  }
 }

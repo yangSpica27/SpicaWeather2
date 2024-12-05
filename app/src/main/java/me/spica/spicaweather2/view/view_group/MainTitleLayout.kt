@@ -13,78 +13,78 @@ import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.getStatusBarHeight
 
 class MainTitleLayout(
-    context: Context,
-    attributeSet: AttributeSet? = null,
+  context: Context,
+  attributeSet: AttributeSet? = null,
 ) : AViewGroup(context, attributeSet) {
-    val titleTextView =
-        AppCompatTextView(context).apply {
-            layoutParams =
-                LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            setTextAppearance(R.style.TextAppearance_Material3_TitleLarge)
-            text = "--"
-            setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
-            typeface =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    Typeface.create(Typeface.DEFAULT, 500, false)
-                } else {
-                    Typeface.DEFAULT
-                }
+  val titleTextView =
+    AppCompatTextView(context).apply {
+      layoutParams =
+        LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+      setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_TitleLarge)
+      text = "--"
+      setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
+      typeface =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+          Typeface.create(Typeface.DEFAULT, 500, false)
+        } else {
+          Typeface.DEFAULT
         }
-
-    val plusBtn =
-        AppCompatTextView(context).apply {
-            layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            setText(R.string.add)
-            setPadding(12.dp)
-            setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
-            textSize = 18f
-            typeface =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    Typeface.create(Typeface.DEFAULT, 500, false)
-                } else {
-                    Typeface.DEFAULT
-                }
-        }
-
-    init {
-        setPadding(14.dp, 12.dp + context.getStatusBarHeight(), 14.dp, 12.dp)
-        addView(titleTextView)
-        addView(plusBtn)
     }
 
-    override fun onMeasure(
-        widthMeasureSpec: Int,
-        heightMeasureSpec: Int,
-    ) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        titleTextView.autoMeasure()
-        plusBtn.autoMeasure()
-        setMeasuredDimension(
-            resolveSize(measuredWidth, widthMeasureSpec),
-            resolveSize(
-                titleTextView.measuredHeightWithMargins +
-                    paddingBottom +
-                    paddingTop,
-                heightMeasureSpec,
-            ),
-        )
+  val plusBtn =
+    AppCompatTextView(context).apply {
+      layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+      setText(R.string.add)
+      setPadding(12.dp)
+      setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
+      textSize = 18f
+      typeface =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+          Typeface.create(Typeface.DEFAULT, 500, false)
+        } else {
+          Typeface.DEFAULT
+        }
     }
 
-    override fun onLayout(
-        p0: Boolean,
-        left: Int,
-        top: Int,
-        right: Int,
-        bottom: Int,
-    ) {
-        titleTextView.layout(
-            titleTextView.toHorizontalCenter(this),
+  init {
+    setPadding(14.dp, 12.dp + context.getStatusBarHeight(), 14.dp, 12.dp)
+    addView(titleTextView)
+    addView(plusBtn)
+  }
+
+  override fun onMeasure(
+    widthMeasureSpec: Int,
+    heightMeasureSpec: Int,
+  ) {
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    titleTextView.autoMeasure()
+    plusBtn.autoMeasure()
+    setMeasuredDimension(
+      resolveSize(measuredWidth, widthMeasureSpec),
+      resolveSize(
+        titleTextView.measuredHeightWithMargins +
+            paddingBottom +
             paddingTop,
-        )
-        plusBtn.layout(
-            paddingRight,
-            plusBtn.toViewVerticalCenter(titleTextView) + plusBtn.marginTop,
-            true,
-        )
-    }
+        heightMeasureSpec,
+      ),
+    )
+  }
+
+  override fun onLayout(
+    p0: Boolean,
+    left: Int,
+    top: Int,
+    right: Int,
+    bottom: Int,
+  ) {
+    titleTextView.layout(
+      titleTextView.toHorizontalCenter(this),
+      paddingTop,
+    )
+    plusBtn.layout(
+      paddingRight,
+      plusBtn.toViewVerticalCenter(titleTextView) + plusBtn.marginTop,
+      true,
+    )
+  }
 }

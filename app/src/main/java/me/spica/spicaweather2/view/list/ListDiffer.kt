@@ -3,58 +3,58 @@ package me.spica.spicaweather2.view.list
 import androidx.recyclerview.widget.*
 
 interface ListDiffer<T, I> {
-    /** The current list of [T] items. */
-    val currentList: List<T>
+  /** The current list of [T] items. */
+  val currentList: List<T>
 
-    /**
-     * Dynamically determine how to update the list based on the given instructions.
-     * @param newList The new list of [T] items to show.
-     * @param instructions The [BasicListInstructions] specifying how to update the list.
-     * @param onDone Called when the update process is completed.
-     */
-    fun submitList(
-        newList: List<T>,
-        instructions: I,
-        onDone: () -> Unit,
-    )
+  /**
+   * Dynamically determine how to update the list based on the given instructions.
+   * @param newList The new list of [T] items to show.
+   * @param instructions The [BasicListInstructions] specifying how to update the list.
+   * @param onDone Called when the update process is completed.
+   */
+  fun submitList(
+    newList: List<T>,
+    instructions: I,
+    onDone: () -> Unit,
+  )
 
+  /**
+   * Defines the creation of new [ListDiffer] instances. Allows such [ListDiffer]s to be passed as
+   * arguments without reliance on a `this` [RecyclerView.Adapter].
+   */
+  abstract class Factory<T, I> {
     /**
-     * Defines the creation of new [ListDiffer] instances. Allows such [ListDiffer]s to be passed as
-     * arguments without reliance on a `this` [RecyclerView.Adapter].
+     * Create a new [ListDiffer] bound to the given [RecyclerView.Adapter].
+     * @param adapter The [RecyclerView.Adapter] to bind to.
      */
-    abstract class Factory<T, I> {
-        /**
-         * Create a new [ListDiffer] bound to the given [RecyclerView.Adapter].
-         * @param adapter The [RecyclerView.Adapter] to bind to.
-         */
-        abstract fun new(adapter: RecyclerView.Adapter<*>): ListDiffer<T, I>
-    }
+    abstract fun new(adapter: RecyclerView.Adapter<*>): ListDiffer<T, I>
+  }
 
-    /**
-     * Update lists on another thread. This is useful when large diffs are likely to occur in this
-     * list that would be exceedingly slow with [Blocking].
-     * @param diffCallback A [DiffUtil.ItemCallback] to use for item comparison when diffing the
-     * internal list.
-     */
-    class Async<T>(
-        private val diffCallback: DiffUtil.ItemCallback<T>,
-    ) : Factory<T, BasicListInstructions>() {
-        override fun new(adapter: RecyclerView.Adapter<*>): ListDiffer<T, BasicListInstructions> =
-            RealAsyncListDiffer(AdapterListUpdateCallback(adapter), diffCallback)
-    }
+  /**
+   * Update lists on another thread. This is useful when large diffs are likely to occur in this
+   * list that would be exceedingly slow with [Blocking].
+   * @param diffCallback A [DiffUtil.ItemCallback] to use for item comparison when diffing the
+   * internal list.
+   */
+  class Async<T>(
+    private val diffCallback: DiffUtil.ItemCallback<T>,
+  ) : Factory<T, BasicListInstructions>() {
+    override fun new(adapter: RecyclerView.Adapter<*>): ListDiffer<T, BasicListInstructions> =
+      RealAsyncListDiffer(AdapterListUpdateCallback(adapter), diffCallback)
+  }
 
-    /**
-     * Update lists on the main thread. This is useful when many small, discrete list diffs are
-     * likely to occur that would cause [Async] to suffer from race conditions.
-     * @param diffCallback A [DiffUtil.ItemCallback] to use for item comparison when diffing the
-     * internal list.
-     */
-    class Blocking<T>(
-        private val diffCallback: DiffUtil.ItemCallback<T>,
-    ) : Factory<T, BasicListInstructions>() {
-        override fun new(adapter: RecyclerView.Adapter<*>): ListDiffer<T, BasicListInstructions> =
-            RealBlockingListDiffer(AdapterListUpdateCallback(adapter), diffCallback)
-    }
+  /**
+   * Update lists on the main thread. This is useful when many small, discrete list diffs are
+   * likely to occur that would cause [Async] to suffer from race conditions.
+   * @param diffCallback A [DiffUtil.ItemCallback] to use for item comparison when diffing the
+   * internal list.
+   */
+  class Blocking<T>(
+    private val diffCallback: DiffUtil.ItemCallback<T>,
+  ) : Factory<T, BasicListInstructions>() {
+    override fun new(adapter: RecyclerView.Adapter<*>): ListDiffer<T, BasicListInstructions> =
+      RealBlockingListDiffer(AdapterListUpdateCallback(adapter), diffCallback)
+  }
 }
 
 /**
@@ -62,159 +62,159 @@ interface ListDiffer<T, I> {
  * @author Alexander Capehart (OxygenCobalt)
  */
 enum class BasicListInstructions {
-    /**
-     * (A)synchronously diff the list. This should be used for small diffs with little item
-     * movement.
-     */
-    DIFF,
+  /**
+   * (A)synchronously diff the list. This should be used for small diffs with little item
+   * movement.
+   */
+  DIFF,
 
-    /**
-     * Synchronously remove the current list and replace it with a new one. This should be used for
-     * large diffs with that would cause erratic scroll behavior or in-efficiency.
-     */
-    REPLACE,
+  /**
+   * Synchronously remove the current list and replace it with a new one. This should be used for
+   * large diffs with that would cause erratic scroll behavior or in-efficiency.
+   */
+  REPLACE,
 }
 
 private abstract class BasicListDiffer<T> : ListDiffer<T, BasicListInstructions> {
-    override fun submitList(
-        newList: List<T>,
-        instructions: BasicListInstructions,
-        onDone: () -> Unit,
-    ) {
-        when (instructions) {
-            BasicListInstructions.DIFF -> diffList(newList, onDone)
-            BasicListInstructions.REPLACE -> replaceList(newList, onDone)
-        }
+  override fun submitList(
+    newList: List<T>,
+    instructions: BasicListInstructions,
+    onDone: () -> Unit,
+  ) {
+    when (instructions) {
+      BasicListInstructions.DIFF -> diffList(newList, onDone)
+      BasicListInstructions.REPLACE -> replaceList(newList, onDone)
     }
+  }
 
-    protected abstract fun diffList(
-        newList: List<T>,
-        onDone: () -> Unit,
-    )
+  protected abstract fun diffList(
+    newList: List<T>,
+    onDone: () -> Unit,
+  )
 
-    protected abstract fun replaceList(
-        newList: List<T>,
-        onDone: () -> Unit,
-    )
+  protected abstract fun replaceList(
+    newList: List<T>,
+    onDone: () -> Unit,
+  )
 }
 
 private class RealAsyncListDiffer<T>(
-    updateCallback: ListUpdateCallback,
-    diffCallback: DiffUtil.ItemCallback<T>,
+  updateCallback: ListUpdateCallback,
+  diffCallback: DiffUtil.ItemCallback<T>,
 ) : BasicListDiffer<T>() {
-    private val inner =
-        AsyncListDiffer(updateCallback, AsyncDifferConfig.Builder(diffCallback).build())
+  private val inner =
+    AsyncListDiffer(updateCallback, AsyncDifferConfig.Builder(diffCallback).build())
 
-    override val currentList: List<T>
-        get() = inner.currentList
+  override val currentList: List<T>
+    get() = inner.currentList
 
-    override fun diffList(
-        newList: List<T>,
-        onDone: () -> Unit,
-    ) {
-        inner.submitList(newList, onDone)
-    }
+  override fun diffList(
+    newList: List<T>,
+    onDone: () -> Unit,
+  ) {
+    inner.submitList(newList, onDone)
+  }
 
-    override fun replaceList(
-        newList: List<T>,
-        onDone: () -> Unit,
-    ) {
-        inner.submitList(null) { inner.submitList(newList, onDone) }
-    }
+  override fun replaceList(
+    newList: List<T>,
+    onDone: () -> Unit,
+  ) {
+    inner.submitList(null) { inner.submitList(newList, onDone) }
+  }
 }
 
 private class RealBlockingListDiffer<T>(
-    private val updateCallback: ListUpdateCallback,
-    private val diffCallback: DiffUtil.ItemCallback<T>,
+  private val updateCallback: ListUpdateCallback,
+  private val diffCallback: DiffUtil.ItemCallback<T>,
 ) : BasicListDiffer<T>() {
-    override var currentList = listOf<T>()
+  override var currentList = listOf<T>()
 
-    override fun diffList(
-        newList: List<T>,
-        onDone: () -> Unit,
-    ) {
-        if (newList === currentList || newList.isEmpty() && currentList.isEmpty()) {
-            onDone()
-            return
-        }
-
-        if (newList.isEmpty()) {
-            val oldListSize = currentList.size
-            currentList = listOf()
-            updateCallback.onRemoved(0, oldListSize)
-            onDone()
-            return
-        }
-
-        if (currentList.isEmpty()) {
-            currentList = newList
-            updateCallback.onInserted(0, newList.size)
-            onDone()
-            return
-        }
-
-        val oldList = currentList
-        val result =
-            DiffUtil.calculateDiff(
-                object : DiffUtil.Callback() {
-                    override fun getOldListSize(): Int = oldList.size
-
-                    override fun getNewListSize(): Int = newList.size
-
-                    override fun areItemsTheSame(
-                        oldItemPosition: Int,
-                        newItemPosition: Int,
-                    ): Boolean {
-                        val oldItem: T? = oldList[oldItemPosition]
-                        val newItem: T? = newList[newItemPosition]
-                        return if (oldItem != null && newItem != null) {
-                            diffCallback.areItemsTheSame(oldItem, newItem)
-                        } else {
-                            oldItem == null && newItem == null
-                        }
-                    }
-
-                    override fun areContentsTheSame(
-                        oldItemPosition: Int,
-                        newItemPosition: Int,
-                    ): Boolean {
-                        val oldItem: T? = oldList[oldItemPosition]
-                        val newItem: T? = newList[newItemPosition]
-                        return if (oldItem != null && newItem != null) {
-                            diffCallback.areContentsTheSame(oldItem, newItem)
-                        } else if (oldItem == null && newItem == null) {
-                            true
-                        } else {
-                            throw AssertionError()
-                        }
-                    }
-
-                    override fun getChangePayload(
-                        oldItemPosition: Int,
-                        newItemPosition: Int,
-                    ): Any? {
-                        val oldItem: T? = oldList[oldItemPosition]
-                        val newItem: T? = newList[newItemPosition]
-                        return if (oldItem != null && newItem != null) {
-                            diffCallback.getChangePayload(oldItem, newItem)
-                        } else {
-                            throw AssertionError()
-                        }
-                    }
-                },
-            )
-
-        currentList = newList
-        result.dispatchUpdatesTo(updateCallback)
-        onDone()
+  override fun diffList(
+    newList: List<T>,
+    onDone: () -> Unit,
+  ) {
+    if (newList === currentList || newList.isEmpty() && currentList.isEmpty()) {
+      onDone()
+      return
     }
 
-    override fun replaceList(
-        newList: List<T>,
-        onDone: () -> Unit,
-    ) {
-        if (currentList != newList) {
-            diffList(listOf()) { diffList(newList, onDone) }
-        }
+    if (newList.isEmpty()) {
+      val oldListSize = currentList.size
+      currentList = listOf()
+      updateCallback.onRemoved(0, oldListSize)
+      onDone()
+      return
     }
+
+    if (currentList.isEmpty()) {
+      currentList = newList
+      updateCallback.onInserted(0, newList.size)
+      onDone()
+      return
+    }
+
+    val oldList = currentList
+    val result =
+      DiffUtil.calculateDiff(
+        object : DiffUtil.Callback() {
+          override fun getOldListSize(): Int = oldList.size
+
+          override fun getNewListSize(): Int = newList.size
+
+          override fun areItemsTheSame(
+            oldItemPosition: Int,
+            newItemPosition: Int,
+          ): Boolean {
+            val oldItem: T? = oldList[oldItemPosition]
+            val newItem: T? = newList[newItemPosition]
+            return if (oldItem != null && newItem != null) {
+              diffCallback.areItemsTheSame(oldItem, newItem)
+            } else {
+              oldItem == null && newItem == null
+            }
+          }
+
+          override fun areContentsTheSame(
+            oldItemPosition: Int,
+            newItemPosition: Int,
+          ): Boolean {
+            val oldItem: T? = oldList[oldItemPosition]
+            val newItem: T? = newList[newItemPosition]
+            return if (oldItem != null && newItem != null) {
+              diffCallback.areContentsTheSame(oldItem, newItem)
+            } else if (oldItem == null && newItem == null) {
+              true
+            } else {
+              throw AssertionError()
+            }
+          }
+
+          override fun getChangePayload(
+            oldItemPosition: Int,
+            newItemPosition: Int,
+          ): Any? {
+            val oldItem: T? = oldList[oldItemPosition]
+            val newItem: T? = newList[newItemPosition]
+            return if (oldItem != null && newItem != null) {
+              diffCallback.getChangePayload(oldItem, newItem)
+            } else {
+              throw AssertionError()
+            }
+          }
+        },
+      )
+
+    currentList = newList
+    result.dispatchUpdatesTo(updateCallback)
+    onDone()
+  }
+
+  override fun replaceList(
+    newList: List<T>,
+    onDone: () -> Unit,
+  ) {
+    if (currentList != newList) {
+      diffList(listOf()) { diffList(newList, onDone) }
+    }
+  }
 }

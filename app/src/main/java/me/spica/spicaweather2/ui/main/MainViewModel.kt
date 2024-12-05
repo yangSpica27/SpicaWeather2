@@ -14,21 +14,21 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class MainViewModel
-    @Inject
-    constructor(
-        cityRepository: CityRepository,
-    ) : ViewModel() {
-        // 获取所有城市的天气
-        val allCityWithWeather = cityRepository.allCitiesWithWeatherFlow()
+@Inject
+constructor(
+  cityRepository: CityRepository,
+) : ViewModel() {
+  // 获取所有城市的天气
+  val allCityWithWeather = cityRepository.allCitiesWithWeatherFlow()
 
-        private val _currentPagerIndex = MutableStateFlow(0)
+  private val _currentPagerIndex = MutableStateFlow(0)
 
-        val currentPagerIndex: Flow<Int>
-            get() = _currentPagerIndex
+  val currentPagerIndex: Flow<Int>
+    get() = _currentPagerIndex
 
-        fun setCurrentPagerIndex(index: Int) {
-            viewModelScope.launch {
-                _currentPagerIndex.emit(index)
-            }
-        }
+  fun setCurrentPagerIndex(index: Int) {
+    viewModelScope.launch {
+      _currentPagerIndex.emit(index)
     }
+  }
+}
