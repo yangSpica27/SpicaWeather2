@@ -120,6 +120,7 @@ class ActivityMain : MaterialActivity() {
                         "多云",
                         "雨天",
                         "霾",
+                        "雪天",
                         "沙尘暴",
                     ),
                 ) { _, which ->
@@ -129,6 +130,7 @@ class ActivityMain : MaterialActivity() {
                             1 -> WeatherType.WEATHER_CLOUDY
                             2 -> WeatherType.WEATHER_RAINY
                             3 -> WeatherType.WEATHER_FOG
+                            4 -> WeatherType.WEATHER_SNOW
                             else -> WeatherType.WEATHER_SANDSTORM
                         }
                     with(layout.weatherBackgroundSurfaceView) {
