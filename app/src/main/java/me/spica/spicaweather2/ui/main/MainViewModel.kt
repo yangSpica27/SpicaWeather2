@@ -18,6 +18,8 @@ class MainViewModel
 constructor(
   cityRepository: CityRepository,
 ) : ViewModel() {
+
+
   // 获取所有城市的天气
   val allCityWithWeather = cityRepository.allCitiesWithWeatherFlow()
 
@@ -25,6 +27,8 @@ constructor(
 
   val currentPagerIndex: Flow<Int>
     get() = _currentPagerIndex
+
+
 
   fun setCurrentPagerIndex(index: Int) {
     viewModelScope.launch {

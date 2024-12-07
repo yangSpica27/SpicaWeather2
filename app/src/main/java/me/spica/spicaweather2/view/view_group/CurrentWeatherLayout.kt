@@ -12,6 +12,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
 import android.util.TypedValue
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.widget.AppCompatTextView
@@ -135,6 +136,10 @@ class CurrentWeatherLayout(
 
   private var isFirstInit = false
 
+  init {
+    visibility = View.INVISIBLE
+  }
+
   @Synchronized
   fun bindData(weather: Weather) {
     if (isFirstInit) {
@@ -149,6 +154,9 @@ class CurrentWeatherLayout(
         }
       }
       translateAnimation.start()
+      if (visibility == View.INVISIBLE) {
+        visibility = View.VISIBLE
+      }
     }
   }
 

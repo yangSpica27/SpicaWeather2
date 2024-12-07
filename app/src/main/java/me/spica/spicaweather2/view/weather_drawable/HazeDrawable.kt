@@ -3,7 +3,6 @@ package me.spica.spicaweather2.view.weather_drawable
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
 import android.view.animation.AccelerateInterpolator
@@ -97,30 +96,23 @@ class HazeDrawable(
     val animProgress = interpolator.getInterpolation(enterProgress)
     val scrollYAnimValue = scrollY.absoluteValue / height.toFloat()
     path1.reset()
-    path1.moveTo(0f, 0f)
-    path1.lineTo(width * 1f, 1f)
-    path1.lineTo(width * 1f, height / 7f * animProgress - 30.dp * scrollYAnimValue)
-    path1.cubicTo(
-      width / 10f * 8f,
-      height / 7f / 10f * 15f * animProgress + 24.dp * animProgress * anim1.animatedValue as Float - 28.dp * scrollYAnimValue,
-      width / 10f * 3f,
-      height / 7f / 10f * 5f * animProgress + 32.dp * animProgress * anim2.animatedValue as Float - 20.dp * scrollYAnimValue,
-      0f,
-      height / 7f / 10f * 4f * animProgress - 40.dp * scrollYAnimValue,
+    path1.addOval(
+      -width / 2f * animProgress - 40.dp * scrollYAnimValue,
+      height / 4f - height / 5f * animProgress + 40.dp * scrollYAnimValue - anim1.animatedValue as Float * 30.dp,
+      width / 2f * animProgress - 40.dp * scrollYAnimValue + anim2.animatedValue as Float * 40.dp,
+      height / 4f + height / 5f * animProgress + 40.dp * scrollYAnimValue + anim3.animatedValue as Float * 30.dp,
+      Path.Direction.CW,
     )
 
     path2.reset()
-    path2.moveTo(0f, 0f)
-    path2.lineTo(width * 1f, 1f)
-    path2.lineTo(width * 1f, height / 6f * animProgress - 40.dp * scrollYAnimValue)
-    path2.cubicTo(
-      width / 10f * 8f,
-      height / 6f / 10f * 20f * animProgress + 24.dp * animProgress * anim2.animatedValue as Float - 40.dp * scrollYAnimValue,
-      width / 10f * 3f,
-      height / 6f / 10f * 5f * animProgress - 40.dp * animProgress * anim3.animatedValue as Float - 25.dp * scrollYAnimValue,
-      0f,
-      height / 7f / 10f * 4f * animProgress - 30.dp * scrollYAnimValue,
+    path2.addOval(
+      width + width / 2f * animProgress + 24.dp * scrollYAnimValue,
+      height / 2f + height / 6f * animProgress - 24.dp * scrollYAnimValue + anim1.animatedValue as Float * 30.dp,
+      width - width / 2f * animProgress + 24.dp * scrollYAnimValue,
+      height / 2f - height / 6f * animProgress - 24.dp * scrollYAnimValue - anim3.animatedValue as Float * 30.dp,
+      Path.Direction.CW,
     )
+
 
     path3.reset()
     path3.moveTo(0f, 0f)
@@ -150,18 +142,17 @@ class HazeDrawable(
       isAntiAlias = true
     }
 
-  private lateinit var bgShader: LinearGradient
 
   override fun doOnDraw(
     canvas: Canvas,
     width: Int,
     height: Int,
   ) {
-    pathPaint.color = ContextCompat.getColor(context, R.color.fog_color)
-    canvas.drawPath(path1, pathPaint)
-    pathPaint.color = ContextCompat.getColor(context, R.color.fog_color)
+    pathPaint.color = ContextCompat.getColor(context, R.color.fog_color3)
+    canvas.drawPath(path3, pathPaint)
+    pathPaint.color = ContextCompat.getColor(context, R.color.fog_color2)
     canvas.drawPath(path2, pathPaint)
     pathPaint.color = ContextCompat.getColor(context, R.color.fog_color)
-    canvas.drawPath(path3, pathPaint)
+    canvas.drawPath(path1, pathPaint)
   }
 }

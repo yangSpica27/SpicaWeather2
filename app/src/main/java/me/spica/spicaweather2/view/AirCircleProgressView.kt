@@ -10,6 +10,7 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.SweepGradient
 import android.graphics.Typeface
+import android.os.Build
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
@@ -39,13 +40,22 @@ class AirCircleProgressView : View {
     TextPaint().apply {
       textSize = 50.dp
       color = ContextCompat.getColor(context, R.color.textColorPrimary)
+      typeface = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        Typeface.create(Typeface.DEFAULT, 700, false)
+      } else {
+        Typeface.DEFAULT
+      }
     }
 
   private val secondTextPaint =
     TextPaint().apply {
-      textSize = 16.dp
+      textSize = 15.dp
       color = ContextCompat.getColor(context, R.color.white)
-      typeface = Typeface.DEFAULT_BOLD
+      typeface = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        Typeface.create(Typeface.DEFAULT, 500, false)
+      } else {
+        Typeface.DEFAULT
+      }
     }
 
   private val secondTextBackgroundPaint =
@@ -59,7 +69,8 @@ class AirCircleProgressView : View {
       strokeWidth = 12.dp
       style = Paint.Style.STROKE
       color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
-      strokeCap = Paint.Cap.SQUARE
+      strokeCap = Paint.Cap.ROUND
+      strokeJoin = Paint.Join.ROUND
     }
 
   private val startAngle = 135f
@@ -80,20 +91,16 @@ class AirCircleProgressView : View {
     category: String,
   ) {
     // 根据空气质量等级设置颜色
-    if (lv < 50) {
-      textPaint.color = ContextCompat.getColor(context, R.color.l1)
-    } else if (lv < 100) {
-      textPaint.color = ContextCompat.getColor(context, R.color.l2)
-    } else if (lv < 150) {
-      textPaint.color = ContextCompat.getColor(context, R.color.l5)
-    } else if (lv < 200) {
-      textPaint.color = ContextCompat.getColor(context, R.color.l6)
-    } else if (lv < 300) {
-      textPaint.color = ContextCompat.getColor(context, R.color.l7)
-    } else {
-      textPaint.color = ContextCompat.getColor(context, R.color.l8)
+    val progressColor = when {
+      lv < 50 -> ContextCompat.getColor(context, R.color.l1)
+      lv < 100 -> ContextCompat.getColor(context, R.color.l2)
+      lv < 150 -> ContextCompat.getColor(context, R.color.l5)
+      lv < 200 -> ContextCompat.getColor(context, R.color.l6)
+      lv < 300 -> ContextCompat.getColor(context, R.color.l7)
+      else -> ContextCompat.getColor(context, R.color.l8)
     }
-    secondTextBackgroundPaint.color = textPaint.color
+    secondTextBackgroundPaint.color = progressColor
+    secondTextPaint.color = progressColor
     this.lv = lv
     this.category = category
     postInvalidateOnAnimation()
@@ -171,15 +178,15 @@ class AirCircleProgressView : View {
 
     secondTextPaint.getTextBounds(tipText, 0, tipText.length, textBound)
 
-    canvas.drawRoundRect(
-      mRectF.centerX() - textBound.width() / 2f - 12.dp,
-      mRectF.bottom - textBound.height() - Math.abs(textBound.top) - 4.dp,
-      mRectF.centerX() + textBound.width() / 2f + 12.dp,
-      mRectF.bottom - textBound.height() + (textBound.bottom) + 4.dp,
-      10f,
-      10f,
-      secondTextBackgroundPaint,
-    )
+//    canvas.drawRoundRect(
+//      mRectF.centerX() - textBound.width() / 2f - 12.dp,
+//      mRectF.bottom - textBound.height() - Math.abs(textBound.top) - 4.dp,
+//      mRectF.centerX() + textBound.width() / 2f + 12.dp,
+//      mRectF.bottom - textBound.height() + (textBound.bottom) + 4.dp,
+//      10f,
+//      10f,
+//      secondTextBackgroundPaint,
+//    )
     canvas.drawText(
       tipText,
       mRectF.centerX() - textBound.width() / 2f,
@@ -221,7 +228,7 @@ class AirCircleProgressView : View {
 
   // 绘制背景弧
   private fun drawBack(canvas: Canvas) {
-    linePaint.strokeWidth = 8.dp
+    linePaint.strokeWidth = 10.dp
     linePaint.color = Color.parseColor("#F5F5F5")
     linePaint.shader = null
     canvas.drawArc(
@@ -231,7 +238,7 @@ class AirCircleProgressView : View {
       false,
       linePaint,
     )
-    linePaint.strokeWidth = 12.dp
+    linePaint.strokeWidth = 14.dp
     linePaint.color = Color.WHITE
     linePaint.shader = progressShader
     canvas.drawArc(

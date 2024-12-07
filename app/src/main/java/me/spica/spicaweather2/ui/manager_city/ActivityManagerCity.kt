@@ -1,6 +1,5 @@
 package me.spica.spicaweather2.ui.manager_city
 
-import android.app.Activity.OVERRIDE_TRANSITION_CLOSE
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -11,8 +10,6 @@ import android.view.View
 import android.view.Window
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.core.app.ActivityCompat.setExitSharedElementCallback
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
@@ -57,7 +54,8 @@ class ActivityManagerCity : BaseActivity() {
     ActivityManagerCityLayout(this)
   }
 
-  // 是否已经执行过入场动画
+
+
   private var hasDoEnterAnim = false
 
   private val home2ManagerView by lazy {

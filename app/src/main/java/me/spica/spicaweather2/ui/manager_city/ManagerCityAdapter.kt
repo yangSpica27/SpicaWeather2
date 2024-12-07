@@ -16,6 +16,7 @@ import me.spica.spicaweather2.view.view_group.ItemCityManagerLayout
 /**
  * 城市管理界面的Adapter
  */
+@SuppressLint("NotifyDataSetChanged")
 class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>() {
   val items: MutableList<CityWithWeather> = arrayListOf()
 
@@ -26,10 +27,12 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
 
   // 是否是选择模式
   var isSelectMode = false
-    @SuppressLint("NotifyDataSetChanged")
     set(value) {
+      // 变量值发生变化
       field = value
+      // 通知数据集发生变化
       notifyDataSetChanged()
+      // 如果不是选择模式，清空选择的城市
       if (!value) {
         selectedCitiesSet.clear()
       }
