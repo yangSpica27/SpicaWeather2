@@ -1,5 +1,6 @@
 package me.spica.spicaweather2.view.view_group
 
+import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
@@ -98,8 +99,8 @@ class TipsLayout(
     )
     setBackgroundResource(R.drawable.bg_card)
 
-    isFocusable = false
-    isClickable = false
+    stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.touch_raise)
+    isClickable = true
     val lp =
       LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT,

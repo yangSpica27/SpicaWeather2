@@ -1,5 +1,6 @@
 package me.spica.spicaweather2.view.view_group
 
+import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
@@ -118,10 +119,9 @@ class AirCardLayout(
     }
 
   init {
-    isFocusable = false
-    isClickable = false
+    stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.touch_raise)
+    isClickable = true
     setBackgroundResource(R.drawable.bg_card)
-
     setPadding(0, 0, 0, 12.dp)
     addView(titleText)
     addView(airCircleProgressView)

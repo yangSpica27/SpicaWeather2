@@ -1,5 +1,6 @@
 package me.spica.spicaweather2.view.view_group
 
+import android.animation.AnimatorInflater
 import android.content.Context
 import android.os.Build
 import android.text.SpannableString
@@ -11,7 +12,6 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.HtmlCompat
 import androidx.core.view.marginLeft
 import androidx.core.view.marginTop
-import kotlinx.coroutines.NonCancellable.start
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.getCompatDrawable
 
@@ -72,6 +72,8 @@ class DescCardViewLayout(
     addView(descProgressLineView)
     addView(suggestTextView)
     setBackgroundResource(R.drawable.bg_card)
+    stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.touch_raise)
+    isClickable = true
   }
 
   fun setShowData(

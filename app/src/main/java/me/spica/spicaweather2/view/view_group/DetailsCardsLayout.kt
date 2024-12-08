@@ -9,7 +9,7 @@ import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
-import java.util.Date
+import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 // 描述卡片组

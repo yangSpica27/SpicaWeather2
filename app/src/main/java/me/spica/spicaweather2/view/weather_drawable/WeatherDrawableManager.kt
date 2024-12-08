@@ -32,11 +32,13 @@ class WeatherDrawableManager(
     width: Int,
     height: Int,
   ) {
-    drawableMaps.values.iterator().forEach {
-      it.ready(width, height)
-      it.setBackgroundY(cacheY)
+    synchronized(this) {
+      drawableMaps.values.iterator().forEach {
+        it.ready(width, height)
+        it.setBackgroundY(cacheY)
+      }
+      getCurrentDrawable().startAnim()
     }
-    getCurrentDrawable().startAnim()
   }
 
   fun calculate(
@@ -82,8 +84,10 @@ class WeatherDrawableManager(
 
   // 销毁
   fun release() {
-    drawableMaps.values.iterator().forEach {
-      it.cancelAnim()
+    synchronized(this) {
+      drawableMaps.values.iterator().forEach {
+        it.cancelAnim()
+      }
     }
   }
 

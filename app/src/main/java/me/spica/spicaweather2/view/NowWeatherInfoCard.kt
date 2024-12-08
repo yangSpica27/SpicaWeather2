@@ -1,5 +1,6 @@
 package me.spica.spicaweather2.view
 
+import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
@@ -164,6 +165,8 @@ class NowWeatherInfoCard(
     addView(bottomTextWindSpeed)
     addView(bottomTextPressure)
     addView(bottomTextFeelTemp)
+    stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.touch_raise)
+    isClickable = true
   }
 
   @SuppressLint("SetTextI18n")
