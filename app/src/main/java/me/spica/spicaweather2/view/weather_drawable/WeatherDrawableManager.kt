@@ -11,7 +11,7 @@ class WeatherDrawableManager(
   context: Context,
 ) {
   // 当前的动画类型
-  private var currentAnimType = NowWeatherView.WeatherAnimType.SUNNY
+  private var currentAnimType = NowWeatherView.WeatherAnimType.UNKNOWN
 
   // 动画集合
   private val drawableMaps = HashMap<NowWeatherView.WeatherAnimType, WeatherDrawable>()
@@ -23,7 +23,7 @@ class WeatherDrawableManager(
     register(NowWeatherView.WeatherAnimType.SNOW, SnowDrawable())
     register(NowWeatherView.WeatherAnimType.FOG, HazeDrawable(context))
     register(NowWeatherView.WeatherAnimType.HAZE, HazeDrawable(context))
-    register(NowWeatherView.WeatherAnimType.UNKNOWN, CloudDrawable(context))
+    register(NowWeatherView.WeatherAnimType.UNKNOWN, UnknownDrawable())
     register(NowWeatherView.WeatherAnimType.SANDSTORM, SandStormDrawable())
     ready(context.getScreenWidth(), context.getScreenHeight())
   }

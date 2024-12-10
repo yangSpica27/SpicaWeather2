@@ -26,7 +26,7 @@ class RainParticleManager {
     const val ParticleMaxCount = 1550
 
     // 模拟世界和view坐标的转化比例
-    const val mProportion = 60f
+    const val mProportion = 200f
   }
 
   private var mWorldWidth = 0
@@ -86,7 +86,7 @@ class RainParticleManager {
       backgroundBody?.setTransform(
         Vec2(
           boxWidth + mappingView2Body(24.dp + 4.dp),
-          mappingView2Body(y * 1f + 16.dp + 1.dp),
+          mappingView2Body(y * 1f + 16.dp + 40.dp),
         ),
         0f,
       )

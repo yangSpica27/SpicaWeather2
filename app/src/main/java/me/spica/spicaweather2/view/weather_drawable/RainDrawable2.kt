@@ -19,7 +19,7 @@ class RainDrawable2 : WeatherDrawable() {
     Paint().apply {
       strokeCap = Paint.Cap.ROUND
       strokeWidth = 5.dp
-      color = Color.parseColor("#A2CAF1")
+      color = Color.parseColor("#D9D9D9")
       style = Paint.Style.FILL
     }
 
@@ -27,7 +27,7 @@ class RainDrawable2 : WeatherDrawable() {
     Paint().apply {
       strokeCap = Paint.Cap.ROUND
       strokeWidth = 4.dp
-      color = Color.parseColor("#A2CAF1")
+      color = Color.parseColor("#D9D9D9")
       style = Paint.Style.FILL
     }
 
@@ -164,8 +164,6 @@ class RainDrawable2 : WeatherDrawable() {
           index += 2
         }
       }
-
-//            Timber.tag("RainDrawable2").e("绘制数量 = ${index / 2}")
       canvas.drawPoints(positionArray2, 0, index / 2, rainPaint)
     }
   }

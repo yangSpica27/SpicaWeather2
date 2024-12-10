@@ -9,8 +9,8 @@ import kotlin.math.sin
  *  雨滴单元
  */
 // 雨滴的移動速度
-private const val INCREMENT_LOWER: Float = 10f
-private const val INCREMENT_UPPER = 30f
+private const val INCREMENT_LOWER: Float = 5f
+private const val INCREMENT_UPPER = 10f
 
 // 雨滴的大小
 private val FLAKE_SIZE_LOWER = 1.dp
@@ -56,8 +56,8 @@ class RainFlake(
   ) {
     mPaint.strokeWidth = mFlakeSize
     // y是豎直方向，就是下落
-    val y1: Double = mLine.y1 + height / 100.0
-    val y2: Double = mLine.y2 + height / 100.0
+    val y1: Double = mLine.y1 + height / 200.0
+    val y2: Double = mLine.y2 + height / 200.0
 
     // 這個是設置雨滴位置，如果在很短時間內刷新一次，就是連起來的動畫效果
     mLine.set(mLine.x1, y1.toInt(), mLine.x2, y2.toInt())
