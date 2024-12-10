@@ -50,7 +50,7 @@ class SnowEffectCounter : Closeable {
     this.mWorldWidth = width
     this.mWorldHeight = height
     boxWidth = mappingView2Body(mWorldWidth * 1f - 48.dp) / 2f
-    boxHeight = mappingView2Body(mProportion * 1f)
+    boxHeight = mappingView2Body(0f)
     world = World(0f, 8.8f)
     updateHorizontalBounds()
     isInitOK = true
@@ -137,7 +137,7 @@ class SnowEffectCounter : Closeable {
       backgroundBody?.setTransform(
         Vec2(
           boxWidth + mappingView2Body(24.dp),
-          mappingView2Body(y * 1f + 16.dp),
+          mappingView2Body(y * 1f),
         ),
         0f,
       )

@@ -62,7 +62,7 @@ class MinuteWeatherCard(
   private val nowCardXY = intArrayOf(0, 0)
 
   fun getNowCardTop(): Int {
-    getLocationOnScreen(nowCardXY)
+    getLocationInWindow(nowCardXY)
     return nowCardXY[1] +
         if (visibility == View.VISIBLE) {
           0
