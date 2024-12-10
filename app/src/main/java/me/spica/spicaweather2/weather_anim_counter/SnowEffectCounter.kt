@@ -50,7 +50,7 @@ class SnowEffectCounter : Closeable {
     this.mWorldWidth = width
     this.mWorldHeight = height
     boxWidth = mappingView2Body(mWorldWidth * 1f - 48.dp) / 2f
-    boxHeight = mappingView2Body(0f)
+    boxHeight = mappingView2Body(30f)
     world = World(0f, 8.8f)
     updateHorizontalBounds()
     isInitOK = true
@@ -101,19 +101,17 @@ class SnowEffectCounter : Closeable {
       def.friction = mFrictionRatio
       def.restitution = 0f
       // 0b00 为背景 0b01 为前景
-      def.filter.maskBits =
-        if (isBg) {
-          0b00
-        } else {
-          0b01
-        }
+      def.filter.maskBits = if (isBg) {
+        0b00
+      } else {
+        0b01
+      }
       // 0b00 为背景 0b01 为前景
-      def.filter.groupIndex =
-        if (isBg) {
-          0b00
-        } else {
-          0b01
-        }
+      def.filter.groupIndex = if (isBg) {
+        0b00
+      } else {
+        0b01
+      }
       val body = world.createBody(bodyDef)
       view.body = body
       body.linearVelocity = Vec2(random.nextFloat(), random.nextFloat())
@@ -137,7 +135,7 @@ class SnowEffectCounter : Closeable {
       backgroundBody?.setTransform(
         Vec2(
           boxWidth + mappingView2Body(24.dp),
-          mappingView2Body(y * 1f),
+          mappingView2Body(y * 1f) + boxHeight,
         ),
         0f,
       )

@@ -49,7 +49,7 @@ class RainParticleManager {
     this.mWorldWidth = width
     this.mWorldHeight = height
     boxWidth = mappingView2Body(mWorldWidth * 1f - 48.dp - 8.dp) / 2f
-    boxHeight = mappingView2Body(0f)
+    boxHeight = mappingView2Body(40f)
     world = World(0f, 20f)
 
     createCardBox()
@@ -86,7 +86,7 @@ class RainParticleManager {
       backgroundBody?.setTransform(
         Vec2(
           boxWidth + mappingView2Body(24.dp + 4.dp),
-          mappingView2Body(y * 1f),
+          mappingView2Body(y * 1f) + boxHeight,
         ),
         0f,
       )
@@ -110,10 +110,11 @@ class RainParticleManager {
     fixtureDef.filter.maskBits = 0b01
     fixtureDef.filter.groupIndex = 0b01
     bodyDef.position[boxWidth + mappingView2Body(24.dp + 4.dp)] =
-      mappingView2Body(mWorldHeight * 1f) + boxHeight
+      mappingView2Body(mWorldHeight * 1f)
     val bottomBody: Body = world.createBody(bodyDef) // 创建一个真实的下边 body
     val fixture = bottomBody.createFixture(fixtureDef)
     val body = fixture.body
+    body.isBullet = true
     backgroundBody = body
   }
 
