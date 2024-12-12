@@ -66,6 +66,10 @@ class DescCardViewLayout(
     animDelay = delay
   }
 
+  fun getAnimDelay(): Int {
+    return animDelay
+  }
+
   init {
     addView(titleTextView)
     addView(subTitleTextView)

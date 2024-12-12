@@ -3,7 +3,11 @@ package me.spica.spicaweather2.view.view_group
 import android.animation.AnimatorSet
 import android.content.Context
 import android.view.View
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.AnimationUtils
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.OvershootInterpolator
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.marginTop
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.HomeCardType
@@ -19,12 +23,12 @@ class DetailsCardsLayout(
   SpicaWeatherCard {
   private val uvDescCard =
     DescCardViewLayout(context).apply {
-      setAnimDelay(125)
+      setAnimDelay(255)
     }
 
   private val humidityDescCard =
     DescCardViewLayout(context).apply {
-      setAnimDelay(275)
+      setAnimDelay(375)
     }
 
   private val feelTempDescCard =
@@ -116,41 +120,44 @@ class DetailsCardsLayout(
   override fun startEnterAnim() {
     super.startEnterAnim()
 
-    uvDescCard
-      .animate()
-      .alpha(1f)
-      .setStartDelay(250)
-      .setDuration(250)
-      .start()
+    uvDescCard.startAnimation(AnimationUtils.loadAnimation(context, R.anim.card_in).apply {
+      interpolator = DecelerateInterpolator(1.5f)
+      duration = uvDescCard.getAnimDelay() * 1L
+    })
 
-    humidityDescCard
-      .animate()
-      .alpha(1f)
-      .setStartDelay(50)
-      .setDuration(550)
-      .start()
-    feelTempDescCard
-      .animate()
-      .alpha(1f)
-      .setStartDelay(150)
-      .setDuration(350)
-      .start()
-    sunRiseDescCard
-      .animate()
-      .alpha(1f)
-      .setDuration(850)
-      .setInterpolator(
-        AnimationUtils.loadInterpolator(
-          context,
-          android.R.anim.decelerate_interpolator
-        )
-      )
-      .start()
+    humidityDescCard.startAnimation(AnimationUtils.loadAnimation(context, R.anim.card_in).apply {
+      interpolator = OvershootInterpolator(1.2f)
+      duration = humidityDescCard.getAnimDelay() * 1L
+    })
+
+    feelTempDescCard.startAnimation(AnimationUtils.loadAnimation(context, R.anim.card_in).apply {
+      interpolator = AccelerateInterpolator(1.5f)
+      duration = feelTempDescCard.getAnimDelay() * 1L
+    })
+
+    sunRiseDescCard.startAnimation(AnimationUtils.loadAnimation(context, R.anim.card_in).apply {
+      interpolator = AccelerateInterpolator(1.5f)
+      duration = sunRiseDescCard.getAnimDelay() * 1L
+    })
+
 
     uvDescCard.doShowEnterAnimator()
     humidityDescCard.doShowEnterAnimator()
     feelTempDescCard.doShowEnterAnimator()
     sunRiseDescCard.doShowEnterAnimator()
+
+    uvDescCard.doOnPreDraw {
+      uvDescCard.alpha = 1f
+    }
+    humidityDescCard.doOnPreDraw {
+      humidityDescCard.alpha = 1f
+    }
+    feelTempDescCard.doOnPreDraw {
+      feelTempDescCard.alpha = 1f
+    }
+    sunRiseDescCard.doOnPreDraw {
+      sunRiseDescCard.alpha = 1f
+    }
   }
 
   override fun resetAnim() {
