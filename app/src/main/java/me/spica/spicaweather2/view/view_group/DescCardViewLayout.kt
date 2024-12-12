@@ -133,6 +133,7 @@ class DescCardViewLayout(
       .translationY(0f)
       .setDuration(350)
       .setStartDelay(animDelay.toLong())
+      .withLayer()
       .start()
     subTitleTextView
       .animate()
@@ -140,6 +141,7 @@ class DescCardViewLayout(
       .setDuration(550)
       .translationY(0f)
       .setStartDelay(animDelay.toLong())
+      .withLayer()
       .start()
     suggestTextView
       .animate()
@@ -147,6 +149,7 @@ class DescCardViewLayout(
       .setDuration(850)
       .translationY(0f)
       .setStartDelay(animDelay.toLong())
+      .withLayer()
       .start()
   }
 
