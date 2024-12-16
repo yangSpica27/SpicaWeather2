@@ -360,6 +360,8 @@ class NowWeatherInfoCard(
     bottomTextFeelTemp.translationY = (-12).dp + 12.dp * accelerateProgress
   }
 
+
+
   override fun resetAnim() {
     super.resetAnim()
     setDoExtraEnterAnim(0f)

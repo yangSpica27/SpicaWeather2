@@ -62,12 +62,6 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
             bottomMargin = 16.dp.toInt()
           }
         }
-      if (itemView is SpicaWeatherCard) {
-        itemView.resetAnim()
-        itemView.doOnPreDraw {
-          itemView.requestLayout()
-        }
-      }
       contentView.addView(itemView)
     }
     addView(contentView)
@@ -85,15 +79,6 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
     overScrollMode = OVER_SCROLL_NEVER
   }
 
-  //  滑动停止后的操作
-  private val doOnScrollStop =
-    Runnable {
-      if (scrollY >= context.getScreenHeight()) return@Runnable
-      if (scrollY < context.getScreenHeight() / 3f) {
-        // 滑动不满一半 回复到最顶
-        smoothScrollTo(0, 0)
-      }
-    }
 
   @Synchronized
   fun updateBackgroundY() {
@@ -116,6 +101,10 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
     contentView.children.forEach { view ->
       if (view is SpicaWeatherCard) {
         view.bindData(weather)
+        view.resetAnim()
+        view.doOnPreDraw {
+          view.requestLayout()
+        }
       }
     }
     tag = weather.cityName
@@ -132,7 +121,7 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
         if (!itemView.hasInScreen.get()) {
           val isVisible = itemView.getGlobalVisibleRect(itemVisibleRect)
           Timber.tag(tag = tag?.toString() ?: "未知").e("是否可见:$isVisible")
-          itemView.checkEnterScreen(isVisible && itemVisibleRect.bottom - itemVisibleRect.top >= itemView.height / 10f)
+          itemView.checkEnterScreen(isVisible && itemVisibleRect.bottom - itemVisibleRect.top >= 20.dp)
         }
       }
     }

@@ -162,6 +162,8 @@ class ActivityMain : BaseActivity() {
           // 更新标题
           viewModel.setCurrentPagerIndex(position)
           layout.currentWeatherLayout.dotIndicator.refreshDots()
+          listScrollerY = 0
+          updateOtherPageScroller()
         }
 
         override fun onPageScrolled(
@@ -171,7 +173,7 @@ class ActivityMain : BaseActivity() {
         ) {
           super.onPageScrolled(position, positionOffset, positionOffsetPixels)
           // 同步当前页面的滚动
-          updateOtherPageScroller()
+//          updateOtherPageScroller()
         }
       },
     )

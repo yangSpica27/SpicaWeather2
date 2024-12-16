@@ -245,6 +245,7 @@ class Home2ManagerView : View {
       canvas.drawBitmap(ActivityMain.screenBitmap!!, 0f, 0f, mPaint)
       return
     }
+    val progress = progressAnimation.animatedValue as Float
 
     // 绘制从模糊到清晰的背景
     if (blurBgBitmap != null && bgBitmap != null) {
@@ -260,13 +261,13 @@ class Home2ManagerView : View {
     // 圈定保留区域
     canvas.drawRoundRect(
       drawRect,
-      8.dp * progressAnimation.animatedFraction,
-      8.dp * progressAnimation.animatedFraction,
+      8.dp * progress,
+      8.dp * progress,
       mPaint,
     )
     // 绘制过渡区域内容
     mPaint.xfermode = srcInXfermode
-    if (ActivityMain.screenBitmap != null && progressAnimation.animatedFraction < .6f) {
+    if (ActivityMain.screenBitmap != null && progress < .6f) {
       canvas.drawBitmap(ActivityMain.screenBitmap!!, 0f, 0f, mPaint)
     } else {
       canvas.drawRect(0f, 0f, width * 1f, height * 1f, mPaint)
@@ -279,18 +280,18 @@ class Home2ManagerView : View {
     markerPaint.color =
       ColorUtils.setAlphaComponent(
         ActivityMain.currentThemeColor,
-        (progressAnimation.animatedFraction * 255).toInt(),
+        (progress * 255).toInt(),
       )
     canvas.drawRoundRect(
       drawRect,
-      8.dp * progressAnimation.animatedFraction,
-      8.dp * progressAnimation.animatedFraction,
+      8.dp * progress,
+      8.dp * progress,
       markerPaint,
     )
 
     // 动画进度到90%时，渐显绘制下一页面的被遮挡的内容
-    if (toViewBitmap != null && progressAnimation.animatedFraction > .9f) {
-      mPaint.alpha = (255 * ((progressAnimation.animatedFraction - 0.9f) / (0.1))).toInt()
+    if (toViewBitmap != null && progress > .9f) {
+      mPaint.alpha = (255 * ((progress - 0.9f) / (0.1))).toInt()
       canvas.drawBitmap(toViewBitmap!!, endRect.left, endRect.top, mPaint)
     }
 //    canvas.drawBitmap(bgBitmap!!, 0f, 0f, mPaint)

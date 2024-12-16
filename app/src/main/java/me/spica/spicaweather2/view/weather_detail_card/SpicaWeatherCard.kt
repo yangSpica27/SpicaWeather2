@@ -3,13 +3,11 @@ package me.spica.spicaweather2.view.weather_detail_card
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.view.View
-import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.tools.doOnMainThreadIdle
-import me.spica.spicaweather2.tools.dp
 import java.util.concurrent.atomic.AtomicBoolean
 
 interface SpicaWeatherCard {
@@ -32,7 +30,6 @@ interface SpicaWeatherCard {
       enterAnim = AnimatorSet()
       animatorView.setLayerType(View.LAYER_TYPE_NONE, null)
     }
-    enterAnim.startDelay = 150
     enterAnim.start()
   }
 
@@ -48,32 +45,36 @@ interface SpicaWeatherCard {
         0f,
         1f,
       ),
-      ObjectAnimator
-        .ofFloat(
-          animatorView,
-          "translationY",
-          10.dp + index * 10.dp,
-          0f,
-        ).apply {
-          interpolator = OvershootInterpolator(.2f * (index / 2f + 1))
-        },
+//      ObjectAnimator
+//        .ofFloat(
+//          animatorView,
+//          "translationX",
+//          if (fromLeft) {
+//            (-10).dp - index * 10.dp
+//          } else {
+//            10.dp + index * 10.dp
+//          },
+//          0f,
+//        ).apply {
+//          interpolator = OvershootInterpolator(.2f * (index / 2f + 1))
+//        },
       ObjectAnimator
         .ofFloat(
           animatorView,
           "scaleY",
-          1.025f,
+          0f,
           1f,
         ).apply {
-          interpolator = DecelerateInterpolator(1f)
+          interpolator = OvershootInterpolator(1.2f)
         },
       ObjectAnimator
         .ofFloat(
           animatorView,
           "scaleX",
-          1.025f,
+          0f,
           1f,
         ).apply {
-          interpolator = DecelerateInterpolator(1f)
+          interpolator = OvershootInterpolator(1.2f)
         },
     )
     enterAnim.duration = 100 + index * 50L
