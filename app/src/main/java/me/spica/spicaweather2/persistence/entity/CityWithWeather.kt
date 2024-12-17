@@ -4,8 +4,6 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.persistence.entity.weather.Weather
-import me.spica.spicaweather2.view.list.ListDiffer
-import me.spica.spicaweather2.view.list.SimpleDiffCallback
 
 data class CityWithWeather(
   @Embedded
@@ -16,17 +14,7 @@ data class CityWithWeather(
   )
   var weather: Weather?,
 ) {
-  companion object {
-    val diffFactory =
-      ListDiffer.Blocking(
-        object : SimpleDiffCallback<CityWithWeather>() {
-          override fun areContentsTheSame(
-            oldItem: CityWithWeather,
-            newItem: CityWithWeather,
-          ) = oldItem == newItem
-        },
-      )
-  }
+
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

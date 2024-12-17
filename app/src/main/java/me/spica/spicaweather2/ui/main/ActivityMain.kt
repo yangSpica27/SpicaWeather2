@@ -9,7 +9,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.WindowCompat
 import androidx.core.view.children
-import androidx.core.view.drawToBitmap
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -135,7 +134,7 @@ class ActivityMain : BaseActivity() {
               else -> WeatherType.WEATHER_SANDSTORM
             }
           with(layout.weatherBackgroundSurfaceView) {
-            bgColor = type.getThemeColor()
+            themeColor = type.getThemeColor()
             currentWeatherAnimType = type.getWeatherAnimType()
           }
         }.show()
@@ -212,26 +211,36 @@ class ActivityMain : BaseActivity() {
         screenBitmap?.recycle()
         screenBitmap = null
       }
-      val bgBitmap: Bitmap =
-        try {
-          window.decorView.drawToBitmap()
-        } catch (e: Exception) {
-          e.printStackTrace()
-          Bitmap.createBitmap(
-            window.decorView.width,
-            window.decorView.height,
-            Bitmap.Config.ARGB_8888,
-          )
-        }
-
-      layout.weatherBackgroundSurfaceView.getScreenCopy(
-        bgBitmap,
-      ) {
-        screenBitmap = it
-        startActivityWithAnimation<ActivityManagerCity> {
-          putExtra(ActivityManagerCity.ARG_CITY_NAME, currentCurrentCity?.cityName)
-        }
+      val bgBitmap: Bitmap =     Bitmap.createBitmap(
+        window.decorView.width,
+        window.decorView.height,
+        Bitmap.Config.ARGB_8888,
+      ).apply {
+        eraseColor(layout.weatherBackgroundSurfaceView.backgroundColorValue)
       }
+      screenBitmap = bgBitmap
+      startActivityWithAnimation<ActivityManagerCity> {
+        putExtra(ActivityManagerCity.ARG_CITY_NAME, currentCurrentCity?.cityName)
+      }
+//        try {
+//          window.decorView.drawToBitmap()
+//        } catch (e: Exception) {
+//          e.printStackTrace()
+//          Bitmap.createBitmap(
+//            window.decorView.width,
+//            window.decorView.height,
+//            Bitmap.Config.ARGB_8888,
+//          )
+//        }
+
+//      layout.weatherBackgroundSurfaceView.getScreenCopy(
+//        bgBitmap,
+//      ) {
+//        screenBitmap = it
+//        startActivityWithAnimation<ActivityManagerCity> {
+//          putExtra(ActivityManagerCity.ARG_CITY_NAME, currentCurrentCity?.cityName)
+//        }
+//      }
     }
   }
 
@@ -274,8 +283,8 @@ class ActivityMain : BaseActivity() {
       currentCurrentCity = currentCity
       currentWeather?.getWeatherType()?.let {
         with(layout.weatherBackgroundSurfaceView) {
-          bgColor = it.getThemeColor()
-          currentThemeColor = bgColor
+          themeColor = it.getThemeColor()
+          currentThemeColor = themeColor
           currentWeatherAnimType = it.getWeatherAnimType()
           layout.currentWeatherLayout.bindData(currentWeather)
         }

@@ -35,6 +35,7 @@ class ActivityAddCityLayout(
           ViewGroup.LayoutParams.MATCH_PARENT,
           ViewGroup.LayoutParams.MATCH_PARENT,
         )
+      clipToPadding = false
     }
 
   init {

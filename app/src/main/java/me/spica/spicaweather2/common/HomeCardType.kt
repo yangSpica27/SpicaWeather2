@@ -2,6 +2,9 @@ package me.spica.spicaweather2.common
 
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.text.HtmlCompat
 import me.spica.spicaweather2.view.NowWeatherInfoCard
 import me.spica.spicaweather2.view.view_group.AirCardLayout
 import me.spica.spicaweather2.view.view_group.DailyWeatherLayout
@@ -24,6 +27,7 @@ enum class HomeCardType(
   //    SUNRISE(6), // 日出日落
   AIR(7),
   TIPS(8), // 生活指数
+  FOOTER(9)
   ;
 
   fun getViewType(context: Context): View =
@@ -37,5 +41,10 @@ enum class HomeCardType(
 //            SUNRISE -> SunriseCardLayout(context)
       AIR -> AirCardLayout(context)
       TIPS -> TipsLayout(context)
+      FOOTER -> AppCompatTextView(context).apply {
+        layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        textAlignment = View.TEXT_ALIGNMENT_CENTER
+        text = HtmlCompat.fromHtml("<font color='#666'>数据来源于</font>&nbsp<b>和风天气<b/>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+      }
     }
 }

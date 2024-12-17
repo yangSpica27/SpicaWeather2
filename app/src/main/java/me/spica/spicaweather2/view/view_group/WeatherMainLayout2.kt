@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.children
@@ -28,6 +29,8 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
 
   private val items = HomeCardType.entries.toMutableList()
 
+
+
   private val contentView =
     LinearLayout(context).apply {
       layoutParams =
@@ -35,8 +38,9 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
           ViewGroup.LayoutParams.MATCH_PARENT,
           ViewGroup.LayoutParams.WRAP_CONTENT,
         )
-      updatePadding(bottom = 40.dp.toInt())
       orientation = LinearLayout.VERTICAL
+      gravity = Gravity.CENTER_HORIZONTAL or Gravity.TOP
+      updatePadding(bottom = 20.dp.toInt())
     }
 
   init {
@@ -58,9 +62,7 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
             if (index == 0) (context.getScreenHeight() * .6f).toInt() else 16.dp.toInt()
           leftMargin = 24.dp.toInt()
           rightMargin = 24.dp.toInt()
-          if (index == items.size - 1) {
-            bottomMargin = 16.dp.toInt()
-          }
+          bottomMargin= 0
         }
       contentView.addView(itemView)
     }

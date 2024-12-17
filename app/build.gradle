@@ -30,6 +30,8 @@ android {
   namespace 'me.spica.spicaweather2'
   compileSdk 35
 
+
+
   defaultConfig {
     applicationId "me.spica.weather2"
     minSdk 23
@@ -40,6 +42,16 @@ android {
     renderscriptTargetApi 24
     renderscriptSupportModeEnabled true
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    resConfigs 'en'
+    ndk {
+      //armeabi armeabi-v7a arm64-v8a x86 x86_64
+      abiFilters 'arm64-v8a'
+    }
+  }
+
+  buildFeatures {
+//    aidl=true
+    buildConfig=true
   }
 
   signingConfigs {

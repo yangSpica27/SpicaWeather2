@@ -34,13 +34,18 @@ interface CityDao {
 
   @Transaction
   @Query("SELECT * FROM t_city ORDER BY sort ASC")
-  fun getCitiesWithWeather(): Flow<List<CityWithWeather>>
+  fun getCitiesWithWeatherFlow(): Flow<List<CityWithWeather>>
+
+
+  @Transaction
+  @Query("SELECT * FROM t_city ORDER BY sort ASC")
+  fun getCitiesWithWeather(): List<CityWithWeather>
 
   @ExperimentalCoroutinesApi
   fun getAllDistinctUntilChanged() = getCities().distinctUntilChanged()
 
   @ExperimentalCoroutinesApi
-  fun getCitiesWithWeatherDistinctUntilChanged() = getCitiesWithWeather().distinctUntilChanged()
+  fun getCitiesWithWeatherDistinctUntilChanged() = getCitiesWithWeatherFlow().distinctUntilChanged()
 
   // 交换顺序
   @Transaction

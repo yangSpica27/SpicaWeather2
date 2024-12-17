@@ -11,7 +11,6 @@ import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
-import android.os.Handler
 import android.os.HandlerThread
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -21,11 +20,8 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.drawToBitmap
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import me.spica.spicaweather2.tools.BlurBitmapUtil
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.ui.main.ActivityMain
 import timber.log.Timber
@@ -52,12 +48,12 @@ class Home2ManagerView : View {
   // 背景的Bitmap
   private var bgBitmap: Bitmap? = null
 
-  // 模糊过的bgBitmap
-  private var blurBgBitmap: Bitmap? = null
+//  // 模糊过的bgBitmap
+//  private var blurBgBitmap: Bitmap? = null
 
   private val blurHandlerThread = HandlerThread("blur-thread").apply { start() }
 
-  private val blurHandler = Handler(blurHandlerThread.looper)
+//  private val blurHandler = Handler(blurHandlerThread.looper)
 
   private val lock = Any()
 
@@ -66,20 +62,20 @@ class Home2ManagerView : View {
       while (!Thread.interrupted()) {
         if (bgBitmap == null || bgBitmap?.isRecycled == true) continue
         if (!progressAnimation.isRunning) continue
-        val blurBitmap: Bitmap? =
-          BlurBitmapUtil.blurBitmap(
-            context,
-            bgBitmap!!,
-            (25 - (progressAnimation.animatedValue as Float) * 25),
-          )
-        synchronized(lock) {
-          if (blurBitmap?.isRecycled == false) {
-            blurBgBitmap?.recycle()
-          }
-          if (blurBitmap != null) {
-            blurBgBitmap = blurBitmap
-          }
-        }
+//        val blurBitmap: Bitmap? =
+//          BlurBitmapUtil.blurBitmap(
+//            context,
+//            bgBitmap!!,
+//            (25 - (progressAnimation.animatedValue as Float) * 25),
+//          )
+//        synchronized(lock) {
+//          if (blurBitmap?.isRecycled == false) {
+//            blurBgBitmap?.recycle()
+//          }
+//          if (blurBitmap != null) {
+//            blurBgBitmap = blurBitmap
+//          }
+//        }
         try {
           Thread.sleep(16)
         } catch (e: InterruptedException) {
@@ -93,7 +89,7 @@ class Home2ManagerView : View {
     parent: ViewGroup,
   ) {
     if (hasBind) return
-    CoroutineScope(Dispatchers.Default).launch {
+    doOnPreDraw {
       val intArray = IntArray(2)
       view.getLocationInWindow(intArray)
       mPaint.color = ActivityMain.currentThemeColor
@@ -106,14 +102,9 @@ class Home2ManagerView : View {
       toViewBitmap = view.drawToBitmap()
       view.alpha = 0f
       bgBitmap = parent.drawToBitmap()
-      blurBgBitmap = BlurBitmapUtil.blurBitmap(context, bgBitmap!!, 25f)
+//      blurBgBitmap = BlurBitmapUtil.blurBitmap(context, bgBitmap!!, 25f)
       view.alpha = 1f
       hasBind = true
-      blurHandler.post(blurRunnable)
-      if (needStartAnimWhenBindOk) {
-        startAnim()
-        needStartAnimWhenBindOk = false
-      }
     }
   }
 
@@ -136,7 +127,7 @@ class Home2ManagerView : View {
   private var mPaint: Paint = Paint()
 
   private val progressAnimation =
-    ValueAnimator.ofFloat(0f, 1f).setDuration(325).apply {
+    ValueAnimator.ofFloat(0f, 1f).setDuration(425).apply {
       interpolator = DecelerateInterpolator(1.5f)
       addUpdateListener {
         val progress = it.animatedValue as Float
@@ -181,19 +172,13 @@ class Home2ManagerView : View {
     invalidate()
   }
 
-  // 标记，防止初始化数据未就绪时，动画开始
-  @Volatile
-  private var needStartAnimWhenBindOk = false
 
   fun startAnim() {
     if (!hasBind) {
-      // 未初始化完成，不执行动画，等执行完毕后再执行
-      needStartAnimWhenBindOk = true
       return
     }
     if (progressAnimation.isRunning) return
-    post { progressAnimation.start() }
-    Timber.tag("动画").e("开始")
+    progressAnimation.start()
   }
 
   override fun onDetachedFromWindow() {
@@ -202,16 +187,16 @@ class Home2ManagerView : View {
     if (toViewBitmap?.isRecycled == false) {
       toViewBitmap?.recycle()
     }
-    blurHandler.removeCallbacks(blurRunnable)
+//    blurHandler.removeCallbacks(blurRunnable)
     blurHandlerThread.interrupt()
     blurHandlerThread.join(16)
     blurHandlerThread.quitSafely()
     if (bgBitmap?.isRecycled == false) {
       bgBitmap?.recycle()
     }
-    if (blurBgBitmap?.isRecycled == false) {
-      blurBgBitmap?.recycle()
-    }
+//    if (blurBgBitmap?.isRecycled == false) {
+//      blurBgBitmap?.recycle()
+//    }
   }
 
   private var isAttached = false
@@ -248,11 +233,11 @@ class Home2ManagerView : View {
     val progress = progressAnimation.animatedValue as Float
 
     // 绘制从模糊到清晰的背景
-    if (blurBgBitmap != null && bgBitmap != null) {
-      synchronized(lock) {
-        canvas.drawBitmap(blurBgBitmap!!, 0f, 0f, bgBitmapPaint)
-      }
-    }
+//    if (blurBgBitmap != null && bgBitmap != null) {
+//      synchronized(lock) {
+//        canvas.drawBitmap(blurBgBitmap!!, 0f, 0f, bgBitmapPaint)
+//      }
+//    }
 
     // 保存图层
     val layer: Int = canvas.saveLayer(0f, 0f, width.toFloat(), height.toFloat(), null)

@@ -29,7 +29,8 @@ class WeatherBackgroundSurfaceView :
     holder.addCallback(this)
   }
 
-  private val backgroundColorValue = Color.parseColor("#f7f8fa")
+  val backgroundColorValue = Color.parseColor("#f7f8fa")
+
 
   private val weatherDrawableManager = WeatherDrawableManager(context)
 
@@ -58,7 +59,9 @@ class WeatherBackgroundSurfaceView :
       }
     }
 
-  var bgColor = ContextCompat.getColor(context, R.color.light_blue_600)
+
+  // 主题色
+  var themeColor = ContextCompat.getColor(context, R.color.light_blue_600)
     set(value) {
       if (backgroundColorAnim.isRunning) {
         backgroundColorAnim.cancel()

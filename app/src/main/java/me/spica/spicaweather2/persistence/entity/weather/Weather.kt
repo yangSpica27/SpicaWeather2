@@ -35,7 +35,7 @@ data class Weather(
         return WeatherType.WEATHER_THUNDERSTORM
       }
 
-      100 -> {
+      100,150 -> {
         return WeatherType.WEATHER_SUNNY
       }
 
@@ -106,4 +106,41 @@ data class Weather(
       WeatherType.WEATHER_THUNDERSTORM -> R.drawable.ic_thumb
       WeatherType.WEATHER_SANDSTORM -> R.drawable.ic_storm_icon
     }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as Weather
+
+    if (todayWeather != other.todayWeather) return false
+    if (dailyWeather != other.dailyWeather) return false
+    if (hourlyWeather != other.hourlyWeather) return false
+    if (lifeIndexes != other.lifeIndexes) return false
+    if (air != other.air) return false
+    if (cityName != other.cityName) return false
+    if (descriptionForToday != other.descriptionForToday) return false
+    if (descriptionForToWeek != other.descriptionForToWeek) return false
+    if (alerts != other.alerts) return false
+    if (minutelies != other.minutelies) return false
+    if (welcomeText != other.welcomeText) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = todayWeather.hashCode()
+    result = 31 * result + dailyWeather.hashCode()
+    result = 31 * result + hourlyWeather.hashCode()
+    result = 31 * result + lifeIndexes.hashCode()
+    result = 31 * result + air.hashCode()
+    result = 31 * result + cityName.hashCode()
+    result = 31 * result + (descriptionForToday?.hashCode() ?: 0)
+    result = 31 * result + (descriptionForToWeek?.hashCode() ?: 0)
+    result = 31 * result + alerts.hashCode()
+    result = 31 * result + minutelies.hashCode()
+    result = 31 * result + welcomeText.hashCode()
+    return result
+  }
+
 }

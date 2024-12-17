@@ -54,6 +54,39 @@ data class NowWeatherBean(
     } else {
       "潮湿,体感温度会更高"
     }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as NowWeatherBean
+
+    if (obsTime != other.obsTime) return false
+    if (temp != other.temp) return false
+    if (feelTemp != other.feelTemp) return false
+    if (iconId != other.iconId) return false
+    if (windSpeed != other.windSpeed) return false
+    if (water != other.water) return false
+    if (windPa != other.windPa) return false
+    if (weatherName != other.weatherName) return false
+    if (fxLink != other.fxLink) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = obsTime.hashCode()
+    result = 31 * result + temp
+    result = 31 * result + feelTemp
+    result = 31 * result + iconId
+    result = 31 * result + windSpeed
+    result = 31 * result + water
+    result = 31 * result + windPa
+    result = 31 * result + weatherName.hashCode()
+    result = 31 * result + (fxLink?.hashCode() ?: 0)
+    return result
+  }
+
 }
 
 

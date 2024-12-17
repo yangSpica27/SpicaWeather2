@@ -2,6 +2,8 @@ package me.spica.spicaweather2.base
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import me.spica.spicaweather2.BuildConfig
+import timber.log.Timber
 
 @HiltAndroidApp
 class App : Application() {
@@ -14,6 +16,9 @@ class App : Application() {
   override fun onCreate() {
     super.onCreate()
     instance = this
+    if (BuildConfig.DEBUG){
+      Timber.plant(Timber.DebugTree())
+    }
   }
 
   init {

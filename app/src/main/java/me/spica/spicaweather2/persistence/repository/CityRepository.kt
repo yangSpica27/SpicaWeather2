@@ -33,6 +33,9 @@ constructor(
     cityDao.getCitiesWithWeatherDistinctUntilChanged().flowOn(Dispatchers.IO)
 
   @WorkerThread
+  fun getAllCityWithWeather() = cityDao.getCitiesWithWeather()
+
+  @WorkerThread
   suspend fun add(cityBean: CityBean) =
     withContext(Dispatchers.IO) {
       cityDao.insertCities(cityBean)

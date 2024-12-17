@@ -1,6 +1,5 @@
 package me.spica.spicaweather2.view.weather_bg
 
-import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
@@ -8,6 +7,7 @@ import android.graphics.Canvas
 import android.graphics.SurfaceTexture
 import android.view.TextureView
 import androidx.core.content.ContextCompat
+import com.google.android.material.animation.ArgbEvaluatorCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.view.weather_drawable.WeatherDrawableManager
 
@@ -48,7 +48,7 @@ class WeatherBackgroundTextureView(
         ContextCompat.getColor(context, R.color.white),
       ).apply {
         duration = 250
-        setEvaluator(ArgbEvaluator())
+        setEvaluator(ArgbEvaluatorCompat.getInstance())
         start()
       }
 

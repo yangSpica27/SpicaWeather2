@@ -175,13 +175,13 @@ class NowWeatherInfoCard(
     // 带入体感温度
     val feelTempText = SpannableString("${weather.todayWeather.feelTemp}℃")
     feelTempText.setSpan(
-      AbsoluteSizeSpan(28.dp),
+      AbsoluteSizeSpan(20.dp),
       0,
       feelTempText.length,
       Spanned.SPAN_INCLUSIVE_INCLUSIVE,
     )
     feelTempText.setSpan(
-      AbsoluteSizeSpan(16.dp),
+      AbsoluteSizeSpan(14.dp),
       Math.max(feelTempText.length - 1, 0),
       feelTempText.length,
       Spanned.SPAN_INCLUSIVE_INCLUSIVE,
@@ -190,13 +190,13 @@ class NowWeatherInfoCard(
     // 带入湿度
     val waterText = SpannableString("${weather.todayWeather.water}%")
     waterText.setSpan(
-      AbsoluteSizeSpan(28.dp),
+      AbsoluteSizeSpan(20.dp),
       0,
       waterText.length,
       Spanned.SPAN_INCLUSIVE_INCLUSIVE,
     )
     waterText.setSpan(
-      AbsoluteSizeSpan(16.dp),
+      AbsoluteSizeSpan(14.dp),
       Math.max(waterText.length - 1, 0),
       waterText.length,
       Spanned.SPAN_INCLUSIVE_INCLUSIVE,
@@ -205,13 +205,13 @@ class NowWeatherInfoCard(
     // 带入风速
     val windSpeedText = SpannableString("${weather.todayWeather.windSpeed}m/s")
     windSpeedText.setSpan(
-      AbsoluteSizeSpan(28.dp),
+      AbsoluteSizeSpan(20.dp),
       0,
       windSpeedText.length - 3,
       Spanned.SPAN_INCLUSIVE_INCLUSIVE,
     )
     windSpeedText.setSpan(
-      AbsoluteSizeSpan(16.dp),
+      AbsoluteSizeSpan(14.dp),
       Math.max(windSpeedText.length - 3, 0),
       windSpeedText.length,
       Spanned.SPAN_INCLUSIVE_INCLUSIVE,
@@ -220,13 +220,13 @@ class NowWeatherInfoCard(
     //  带入气压
     val pressureText = SpannableString("${weather.todayWeather.windPa}Pa")
     pressureText.setSpan(
-      AbsoluteSizeSpan(28.dp),
+      AbsoluteSizeSpan(20.dp),
       0,
       pressureText.length - 2,
       Spanned.SPAN_INCLUSIVE_INCLUSIVE,
     )
     pressureText.setSpan(
-      AbsoluteSizeSpan(16.dp),
+      AbsoluteSizeSpan(14.dp),
       Math.max(pressureText.length - 2, 0),
       pressureText.length,
       Spanned.SPAN_INCLUSIVE_INCLUSIVE,

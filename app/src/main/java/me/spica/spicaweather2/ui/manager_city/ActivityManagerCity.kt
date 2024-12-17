@@ -20,12 +20,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.base.BaseActivity
+import me.spica.spicaweather2.persistence.repository.CityRepository
 import me.spica.spicaweather2.tools.MessageEvent
 import me.spica.spicaweather2.tools.MessageType
 import me.spica.spicaweather2.tools.doOnMainThreadIdle
@@ -40,6 +39,7 @@ import me.spica.spicaweather2.view.view_group.ActivityManagerCityLayout
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
 /**
  * 城市管理页面
@@ -54,6 +54,8 @@ class ActivityManagerCity : BaseActivity() {
     ActivityManagerCityLayout(this)
   }
 
+  private val mHandlerThread = android.os.HandlerThread("manager_city")
+  private val mHandler by lazy { android.os.Handler(mHandlerThread.looper) }
 
 
   private var hasDoEnterAnim = false
@@ -86,6 +88,9 @@ class ActivityManagerCity : BaseActivity() {
       },
     )
 
+  @Inject
+  lateinit var cityRepository: CityRepository
+
   override fun onCreate(savedInstanceState: Bundle?) {
     window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
     setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
@@ -97,6 +102,7 @@ class ActivityManagerCity : BaseActivity() {
 
   @Suppress("DEPRECATION")
   private fun init() {
+    mHandlerThread.start()
     setSupportActionBar(layout.titleBar)
     layout.recyclerView.layoutManager =
       LinearLayoutManager(
@@ -126,25 +132,23 @@ class ActivityManagerCity : BaseActivity() {
     itemTouchHelper.attachToRecyclerView(layout.recyclerView)
 
     adapter.itemClickListener = { position, view ->
-      lifecycleScope.launch(Dispatchers.Default) {
-        Manager2HomeView.initFromViewRect(
-          view,
-          window,
-          view.getTag(R.id.dn_theme_color) as Int? ?: Color.TRANSPARENT,
-        )
-        EventBus
-          .getDefault()
-          .post(MessageEvent.create(MessageType.Get2MainActivityAnim, position))
+      Manager2HomeView.initFromViewRect(
+        view,
+        window,
+        view.getTag(R.id.dn_theme_color) as Int? ?: Color.TRANSPARENT,
+      )
 
-        withContext(Dispatchers.Main) {
-          if (Build.VERSION.SDK_INT >= 34) {
-            overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, 0, 0)
-          } else {
-            overridePendingTransition(0, 0)
-          }
-          finish()
-        }
+      EventBus
+        .getDefault()
+        .post(MessageEvent.create(MessageType.Get2MainActivityAnim, position))
+
+
+      if (Build.VERSION.SDK_INT >= 34) {
+        overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, 0, 0)
+      } else {
+        overridePendingTransition(0, 0)
       }
+      finish()
     }
 
     adapter.itemLongClickListener = { _, _ ->
@@ -162,22 +166,32 @@ class ActivityManagerCity : BaseActivity() {
       }
       viewModel.deleteCities(adapter.getSelectCityNames())
     }
+    val startTime = System.currentTimeMillis()
+
+    mHandler.post {
+      layout.recyclerView.itemAnimator = null
+      val data = cityRepository.getAllCityWithWeather()
+      runOnUiThread {
+        layout.recyclerView.doOnNextLayout {
+          layout.recyclerView.children.find { it.tag == intent.getStringExtra(ARG_CITY_NAME) }
+            ?.let { toView ->
+              createInAnim(toView)
+              layout.recyclerView.itemAnimator = DefaultItemAnimator()
+            }
+          val endTime = System.currentTimeMillis()
+          Timber.tag("动画绑定耗时").d("init time:${endTime - startTime}")
+        }
+        adapter.setItems(data)
+      }
+      hasDoEnterAnim = true
+
+    }
+
+
 
     lifecycleScope.launch {
-      viewModel.allCityWithWeather.collectLatest { it ->
-
-        if (!hasDoEnterAnim) {
-          layout.recyclerView.itemAnimator = null
-          layout.recyclerView.doOnNextLayout {
-            layout.recyclerView.children.find { it.tag == intent.getStringExtra(ARG_CITY_NAME) }
-              ?.let { toView ->
-                hasDoEnterAnim = true
-                createInAnim(toView)
-                layout.recyclerView.itemAnimator = DefaultItemAnimator()
-              }
-          }
-        }
-
+      viewModel.allCityWithWeather.collectLatest {
+        if (!hasDoEnterAnim) return@collectLatest
         adapter.setItems(it)
       }
     }
@@ -235,13 +249,15 @@ class ActivityManagerCity : BaseActivity() {
   private fun createInAnim(toView: View) {
     home2ManagerView.bindEndView(toView, layout)
     doOnMainThreadIdle({
-      startInAnim()
+      home2ManagerView.startAnim()
     }, 200)
   }
 
-  // 开始入场动画
-  private fun startInAnim() {
-    home2ManagerView.startAnim()
+
+  override fun onDestroy() {
+    super.onDestroy()
+    mHandler.removeCallbacksAndMessages(null)
+    mHandlerThread.quit()
   }
 
   override fun onCreateOptionsMenu(menu: Menu): Boolean {

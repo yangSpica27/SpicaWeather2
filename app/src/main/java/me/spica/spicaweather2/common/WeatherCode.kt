@@ -6,7 +6,7 @@ object WeatherCodeUtils {
   // 天气代码对应的天气类型
   fun getWeatherCode(iconId: Int): WeatherType {
     when (iconId.toString()) {
-      "100" -> {
+      "100","150" -> {
         return WeatherType.WEATHER_SUNNY
       }
 

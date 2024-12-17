@@ -9,6 +9,7 @@ import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.animation.doOnEnd
 import androidx.core.text.HtmlCompat
@@ -25,6 +26,7 @@ import me.spica.spicaweather2.view.AirCircleProgressView
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.util.concurrent.atomic.AtomicBoolean
 
+@Keep
 @Suppress("SameParameterValue")
 @SuppressLint("SetTextI18n")
 class AirCardLayout(
@@ -71,13 +73,13 @@ class AirCardLayout(
     createTitleTextView("一氧化碳").apply {
       updateLayoutParams<MarginLayoutParams> { topMargin = 12.dp }
     }
-  private val tvC0Value = createValueTextView("--微克/m³")
+  private val tvC0Value = createValueTextView("--μg/m³")
   private val tvSo2Title = createTitleTextView("二氧化硫")
-  private val tvSo2Value = createValueTextView("--微克/m³")
+  private val tvSo2Value = createValueTextView("--μg/m³")
   private val tvNo2Title = createTitleTextView("二氧化氮")
-  private val tvNo2Value = createValueTextView("--微克/m³")
+  private val tvNo2Value = createValueTextView("--μg/m³")
   private val tvPm25Title = createTitleTextView("PM2.5")
-  private val tvPm25Value = createValueTextView("--微克/m³")
+  private val tvPm25Value = createValueTextView("--μg/m³")
 
   private fun createTitleTextView(title: String): AppCompatTextView =
     AppCompatTextView(context).apply {
@@ -258,21 +260,21 @@ class AirCardLayout(
     airCircleProgressView.bindProgress(weather.air.aqi, weather.air.category)
     titleText.setTextColor(themeColor)
     tvC0Value.text =
-      HtmlCompat.fromHtml("${weather.air.co}<b>微克/m³</b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-//        tvC0Value.text = "${weather.air.co}微克/m³"
+      HtmlCompat.fromHtml("${weather.air.co}<b>μg/m³</b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+//        tvC0Value.text = "${weather.air.co}μg/m³"
     tvNo2Value.text =
       HtmlCompat.fromHtml(
-        "${weather.air.no2}<b>微克/m³</b>",
+        "${weather.air.no2}<b>μg/m³</b>",
         HtmlCompat.FROM_HTML_MODE_LEGACY,
       )
     tvPm25Value.text =
       HtmlCompat.fromHtml(
-        "${weather.air.pm2p5}<b>微克/m³</b>",
+        "${weather.air.pm2p5}<b>μg/m³</b>",
         HtmlCompat.FROM_HTML_MODE_LEGACY,
       )
     tvSo2Value.text =
       HtmlCompat.fromHtml(
-        "${weather.air.so2}<b>微克/m³</b>",
+        "${weather.air.so2}<b>μg/m³</b>",
         HtmlCompat.FROM_HTML_MODE_LEGACY,
       )
     airCircleProgressView.postInvalidate()
