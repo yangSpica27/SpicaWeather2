@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import me.spica.spicaweather2.R
@@ -29,7 +30,12 @@ class WeatherBackgroundSurfaceView :
     holder.addCallback(this)
   }
 
-  val backgroundColorValue = Color.parseColor("#f7f8fa")
+  companion object {
+    // 背景色
+    val BACKGROUND_COLOR = Color.parseColor("#f7f8fa")
+  }
+
+  private var backgroundColorValue = Color.parseColor("#f7f8fa")
 
 
   private val weatherDrawableManager = WeatherDrawableManager(context)
@@ -62,14 +68,7 @@ class WeatherBackgroundSurfaceView :
 
   // 主题色
   var themeColor = ContextCompat.getColor(context, R.color.light_blue_600)
-    set(value) {
-      if (backgroundColorAnim.isRunning) {
-        backgroundColorAnim.cancel()
-      }
-      backgroundColorAnim.setIntValues(backgroundColorAnim.animatedValue as Int, value)
-      field = value
-      backgroundColorAnim.start()
-    }
+
 
   private val backgroundColorAnim =
     ValueAnimator
@@ -77,16 +76,27 @@ class WeatherBackgroundSurfaceView :
         ContextCompat.getColor(context, R.color.white),
         ContextCompat.getColor(context, R.color.white),
       ).apply {
-        duration = 250
+        duration = 550
         setEvaluator(ArgbEvaluator())
-        start()
+        addUpdateListener {
+          backgroundColorValue = it.animatedValue as Int
+        }
       }
 
+  // 开始背景色变化动画
+  fun startBackgroundColorChangeAnim(
+    @ColorInt fromColor: Int
+  ) {
+    backgroundColorAnim.setIntValues(fromColor, BACKGROUND_COLOR)
+    backgroundColorAnim.start()
+  }
+
+  // 当前天气动画类型
   var currentWeatherAnimType = NowWeatherView.WeatherAnimType.UNKNOWN
     set(value) {
       if (value == field) return
       field = value
-      post {
+      postOnAnimation {
         weatherDrawableManager.setWeatherAnimType(value)
       }
     }

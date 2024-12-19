@@ -77,7 +77,7 @@ class Manager2HomeView : View {
   var endAction: (() -> Unit)? = null
 
   private val progressAnimation =
-    ValueAnimator.ofFloat(0f, 1f).setDuration(550).apply {
+    ValueAnimator.ofFloat(0f, 1f).setDuration(375).apply {
       interpolator = DecelerateInterpolator(1.2f)
       addUpdateListener {
         val progress = it.animatedValue as Float

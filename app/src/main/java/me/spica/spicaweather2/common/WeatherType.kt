@@ -62,23 +62,24 @@ fun WeatherType.getIconRes(): Int =
 //    }
 // }
 
+private val typeWithColorMap = hashMapOf(
+  WeatherType.WEATHER_SUNNY to Color.parseColor("#FFfdbc4c"),
+  WeatherType.WEATHER_CLOUDY to Color.parseColor("#4297e7"),
+  WeatherType.WEATHER_FORECAST to Color.parseColor("#68baff"),
+  WeatherType.WEATHER_RAINY to Color.parseColor("#4297e7"),
+  WeatherType.WEATHER_THUNDER to Color.parseColor("#B296BD"),
+  WeatherType.WEATHER_FOG to Color.parseColor("#757F9A"),
+  WeatherType.WEATHER_HAZE to Color.parseColor("#E1C899"),
+  WeatherType.WEATHER_SNOW to Color.parseColor("#FF4297e7"),
+  WeatherType.WEATHER_SLEET to Color.parseColor("#FF00a5d9"),
+  WeatherType.WEATHER_SANDSTORM to Color.parseColor("#FFE1C899"),
+  WeatherType.WEATHER_HAIL to Color.parseColor("#FFE1C899"),
+  WeatherType.WEATHER_THUNDERSTORM to Color.parseColor("#FF4A4646"),
+)
+
 // 拓展方法 用于获取对应类型的颜色
 @ColorInt
-fun WeatherType.getThemeColor(): Int =
-  when (this) {
-    WeatherType.WEATHER_SUNNY -> Color.parseColor("#FFfdbc4c")
-    WeatherType.WEATHER_CLOUDY -> Color.parseColor("#4297e7")
-    WeatherType.WEATHER_FORECAST -> Color.parseColor("#68baff")
-    WeatherType.WEATHER_RAINY -> Color.parseColor("#4297e7")
-    WeatherType.WEATHER_THUNDER -> Color.parseColor("#B296BD")
-    WeatherType.WEATHER_FOG -> Color.parseColor("#757F9A")
-    WeatherType.WEATHER_HAZE -> Color.parseColor("#E1C899")
-    WeatherType.WEATHER_SNOW -> Color.parseColor("#FF4297e7")
-    WeatherType.WEATHER_SLEET -> Color.parseColor("#FF00a5d9")
-    WeatherType.WEATHER_SANDSTORM -> Color.parseColor("#FFE1C899")
-    WeatherType.WEATHER_HAIL -> Color.parseColor("#FFE1C899")
-    WeatherType.WEATHER_THUNDERSTORM -> Color.parseColor("#FF4A4646")
-  }
+fun WeatherType.getThemeColor(): Int = typeWithColorMap[this] ?: Color.parseColor("#FF4297e7")
 
 private val bitmapCache =
   lruCache<WeatherType, Bitmap>(

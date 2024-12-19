@@ -30,6 +30,7 @@ import me.spica.spicaweather2.ui.manager_city.ActivityManagerCity
 import me.spica.spicaweather2.view.Manager2HomeView
 import me.spica.spicaweather2.view.view_group.ActivityMainLayout
 import me.spica.spicaweather2.view.view_group.WeatherMainLayout2
+import me.spica.spicaweather2.view.weather_bg.WeatherBackgroundSurfaceView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -85,6 +86,10 @@ class ActivityMain : BaseActivity() {
       MessageType.Get2MainActivityAnim.tag -> {
         // 从管理城市页面返回进行动画 切换到用户选择的城市上去
         layout.viewPager2.setCurrentItem(event.extra as Int, false)
+        data[event.extra].weather?.getWeatherType()?.getThemeColor()?.let {
+          // 更新背景颜色
+          layout.weatherBackgroundSurfaceView.startBackgroundColorChangeAnim(it)
+        }
         manager2HomeView.invalidate()
       }
     }
@@ -211,12 +216,12 @@ class ActivityMain : BaseActivity() {
         screenBitmap?.recycle()
         screenBitmap = null
       }
-      val bgBitmap: Bitmap =     Bitmap.createBitmap(
+      val bgBitmap: Bitmap = Bitmap.createBitmap(
         window.decorView.width,
         window.decorView.height,
         Bitmap.Config.ARGB_8888,
       ).apply {
-        eraseColor(layout.weatherBackgroundSurfaceView.backgroundColorValue)
+        eraseColor(WeatherBackgroundSurfaceView.BACKGROUND_COLOR)
       }
       screenBitmap = bgBitmap
       startActivityWithAnimation<ActivityManagerCity> {

@@ -16,6 +16,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.core.animation.doOnEnd
@@ -127,8 +128,8 @@ class Home2ManagerView : View {
   private var mPaint: Paint = Paint()
 
   private val progressAnimation =
-    ValueAnimator.ofFloat(0f, 1f).setDuration(425).apply {
-      interpolator = DecelerateInterpolator(1.5f)
+    ValueAnimator.ofFloat(0f, 1f).setDuration(355).apply {
+      interpolator = DecelerateInterpolator(2.5f)
       addUpdateListener {
         val progress = it.animatedValue as Float
 
@@ -219,7 +220,7 @@ class Home2ManagerView : View {
       style = Paint.Style.FILL
     }
 
-  private val bgBitmapPaint = Paint()
+  private val accelerateInterpolator = AccelerateInterpolator(4f)
 
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
@@ -265,7 +266,7 @@ class Home2ManagerView : View {
     markerPaint.color =
       ColorUtils.setAlphaComponent(
         ActivityMain.currentThemeColor,
-        (progress * 255).toInt(),
+        (accelerateInterpolator.getInterpolation(progress) * 255).toInt(),
       )
     canvas.drawRoundRect(
       drawRect,
