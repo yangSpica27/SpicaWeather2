@@ -250,7 +250,7 @@ class ActivityManagerCity : BaseActivity() {
     home2ManagerView.bindEndView(toView, layout)
     doOnMainThreadIdle({
       home2ManagerView.startAnim()
-    }, 200)
+    }, 100)
   }
 
 

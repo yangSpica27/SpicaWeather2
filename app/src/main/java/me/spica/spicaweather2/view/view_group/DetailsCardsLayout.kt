@@ -7,11 +7,11 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
-import androidx.core.view.doOnPreDraw
 import androidx.core.view.marginTop
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.persistence.entity.weather.Weather
+import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -146,18 +146,12 @@ class DetailsCardsLayout(
     feelTempDescCard.doShowEnterAnimator()
     sunRiseDescCard.doShowEnterAnimator()
 
-    uvDescCard.doOnPreDraw {
+    doOnMainThreadIdle({
       uvDescCard.alpha = 1f
-    }
-    humidityDescCard.doOnPreDraw {
       humidityDescCard.alpha = 1f
-    }
-    feelTempDescCard.doOnPreDraw {
       feelTempDescCard.alpha = 1f
-    }
-    sunRiseDescCard.doOnPreDraw {
       sunRiseDescCard.alpha = 1f
-    }
+    },125)
   }
 
   override fun resetAnim() {
