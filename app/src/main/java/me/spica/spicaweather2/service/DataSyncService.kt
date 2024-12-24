@@ -35,7 +35,6 @@ class DataSyncService : Service() {
   @Inject
   lateinit var heClient: HeClient
 
-
   @Inject
   lateinit var cityDao: CityDao
 
