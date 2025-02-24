@@ -1,6 +1,7 @@
 package me.spica.spicaweather2.ui.add_city
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.widget.Toast
@@ -35,6 +36,11 @@ class ActivityAddCity : BaseActivity() {
   private val cityViewModel by viewModels<CityViewModel>()
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    if (Build.VERSION.SDK_INT >= 34) {
+      overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.zoom_in, R.anim.zoom_out)
+    } else {
+      overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out)
+    }
     super.onCreate(savedInstanceState)
     setContentView(layout)
     init()
@@ -75,6 +81,15 @@ class ActivityAddCity : BaseActivity() {
           finish()
         }
       }
+    }
+  }
+
+  override fun finish() {
+    super.finish()
+    if (Build.VERSION.SDK_INT >= 34) {
+      overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.zoom_in, R.anim.zoom_out)
+    } else {
+      overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out)
     }
   }
 }

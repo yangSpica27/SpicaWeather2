@@ -469,6 +469,11 @@ class DailyItemView : View {
     return bitmap
   }
 
+  override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+    super.onSizeChanged(w, h, oldw, oldh)
+    invalidate()
+  }
+
   override fun onMeasure(
     widthMeasureSpec: Int,
     heightMeasureSpec: Int,

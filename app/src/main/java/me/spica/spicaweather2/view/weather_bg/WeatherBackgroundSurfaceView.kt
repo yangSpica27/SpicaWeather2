@@ -27,6 +27,7 @@ class WeatherBackgroundSurfaceView :
   )
 
   init {
+    // 添加 SurfaceHolder 回调
     holder.addCallback(this)
   }
 
@@ -35,9 +36,11 @@ class WeatherBackgroundSurfaceView :
     val BACKGROUND_COLOR = Color.parseColor("#f7f8fa")
   }
 
+  // 背景色值
   private var backgroundColorValue = Color.parseColor("#f7f8fa")
 
 
+  // 天气动画管理器
   private val weatherDrawableManager = WeatherDrawableManager(context)
 
   // 通过 SimpleDrawTask 实现绘制逻辑
@@ -47,10 +50,13 @@ class WeatherBackgroundSurfaceView :
         8,
         { canvas ->
           if (markerColor == backgroundColorValue) {
+            // 如果标记颜色和背景颜色相同，则直接绘制标记颜色
             canvas.drawColor(markerColor)
           } else {
+            // 计算天气动画
             weatherDrawableManager.calculate(width, height)
             drawBackground(canvas)
+            // 执行绘制
             weatherDrawableManager.doOnDraw(canvas, width, height)
             canvas.drawColor(markerColor)
           }
@@ -70,6 +76,7 @@ class WeatherBackgroundSurfaceView :
   var themeColor = ContextCompat.getColor(context, R.color.light_blue_600)
 
 
+  // 背景颜色动画
   private val backgroundColorAnim =
     ValueAnimator
       .ofArgb(
@@ -97,6 +104,7 @@ class WeatherBackgroundSurfaceView :
       if (value == field) return
       field = value
       postOnAnimation {
+        // 设置天气动画类型
         weatherDrawableManager.setWeatherAnimType(value)
       }
     }
@@ -105,6 +113,7 @@ class WeatherBackgroundSurfaceView :
     foregroundBitmap: Bitmap,
     callbacks: (Bitmap) -> Unit,
   ) {
+    // 创建一个位图用于存储结果
     val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(result)
     canvas.drawColor(backgroundColorValue)
@@ -130,6 +139,7 @@ class WeatherBackgroundSurfaceView :
   }
 
   override fun surfaceCreated(holder: SurfaceHolder) {
+    // Surface 创建时调用
     // 渲染线程
     weatherDrawableManager.ready(width, height)
     simpleDrawTask.ready()
@@ -143,18 +153,24 @@ class WeatherBackgroundSurfaceView :
   ) = Unit
 
   override fun surfaceDestroyed(holder: SurfaceHolder) {
+    // Surface 销毁时调用
     simpleDrawTask.destroy()
     weatherDrawableManager.release()
   }
 
+  // 标记颜色
   private var markerColor = Color.TRANSPARENT
 
+  // 屏幕高度
   private val screenHeight = resources.displayMetrics.heightPixels
 
   fun setMScrollY(y: Int) {
+    // 设置滚动 Y
     weatherDrawableManager.setScrollY(y)
     val limit = screenHeight / 3 * 2
     markerColor =
+        // 根据 Y 值计算透明度
+        // 当滚动到一定值时 透明度将固定为 1
       if (y < 0) {
         ColorUtils.setAlphaComponent(backgroundColorValue, 0)
       } else if (y < limit) {
@@ -165,10 +181,12 @@ class WeatherBackgroundSurfaceView :
   }
 
   fun setBackgroundY(y: Int) {
+    // 设置背景 Y
     weatherDrawableManager.setBackgroundY(y)
   }
 
   private fun drawBackground(canvas: Canvas) {
+    // 绘制背景
     canvas.drawColor(backgroundColorValue)
   }
 }

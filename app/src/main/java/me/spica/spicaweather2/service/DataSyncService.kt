@@ -45,6 +45,9 @@ class DataSyncService : Service() {
 
   override fun onCreate() {
     super.onCreate()
+
+
+
     scope.launch {
       // 获取到用户选择的城市列表
       val cityList = cityDao.getAllList().toMutableList()

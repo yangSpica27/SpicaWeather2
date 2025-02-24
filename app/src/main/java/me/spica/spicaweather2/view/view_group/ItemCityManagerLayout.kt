@@ -1,5 +1,6 @@
 package me.spica.spicaweather2.view.view_group
 
+import android.animation.AnimatorInflater
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
@@ -26,6 +27,7 @@ import me.spica.spicaweather2.common.WeatherCodeUtils
 import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
 
+
 class ItemCityManagerLayout(
   context: Context,
 ) : AViewGroup(context) {
@@ -38,6 +40,7 @@ class ItemCityManagerLayout(
           ViewGroup.LayoutParams.MATCH_PARENT,
           ViewGroup.LayoutParams.WRAP_CONTENT,
         )
+//      stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.touch_raise)
     }
 
     private val colorAnim = ValueAnimator.ofArgb(

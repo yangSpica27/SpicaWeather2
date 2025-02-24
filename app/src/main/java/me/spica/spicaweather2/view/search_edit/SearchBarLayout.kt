@@ -52,8 +52,8 @@ class SearchBarLayout(
 
   init {
     addView(iconLeft)
-    addView(iconClear)
     addView(editText)
+    addView(iconClear)
     setPadding(
       14.dp,
       4.dp,
@@ -71,7 +71,7 @@ class SearchBarLayout(
       }
     }
     iconClear.setOnClickListener {
-      editText.text = null
+      editText.setText("")
     }
     editText.setHint("请输入您所在的城市名称")
   }

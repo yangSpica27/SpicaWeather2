@@ -4,4 +4,5 @@
     <item name="dn_view_circle_tag" type="id"/>
     <item name="dn_view_body_tag" type="id"/>
     <item name="dn_theme_color" type="id"/>
+    <item name="dn_anim" type="id" />
 </resources>
