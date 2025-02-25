@@ -8,6 +8,7 @@ import androidx.core.view.marginTop
 import androidx.recyclerview.widget.RecyclerView
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.getStatusBarHeight
+import me.spica.spicaweather2.view.BounceEdgeEffectFactory
 import me.spica.spicaweather2.view.search_edit.SearchBarLayout
 
 class ActivityAddCityLayout(
@@ -35,13 +36,14 @@ class ActivityAddCityLayout(
           ViewGroup.LayoutParams.MATCH_PARENT,
           ViewGroup.LayoutParams.MATCH_PARENT,
         )
+      edgeEffectFactory = BounceEdgeEffectFactory()
       clipToPadding = false
     }
 
   init {
     setBackgroundResource(R.color.white)
-    addView(searchBarLayout)
     addView(recyclerView)
+    addView(searchBarLayout)
     layoutParams =
       LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
   }

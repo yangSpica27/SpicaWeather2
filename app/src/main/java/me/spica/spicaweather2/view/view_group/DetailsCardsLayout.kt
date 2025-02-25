@@ -13,6 +13,7 @@ import me.spica.spicaweather2.common.HomeCardType
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
+import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -119,7 +120,7 @@ class DetailsCardsLayout(
 
   override fun startEnterAnim() {
     super.startEnterAnim()
-
+    Timber.e("---开始执行动画---")
     uvDescCard.startAnimation(AnimationUtils.loadAnimation(context, R.anim.card_in).apply {
       interpolator = DecelerateInterpolator(1.5f)
       duration = uvDescCard.getAnimDelay() * 1L
@@ -155,6 +156,7 @@ class DetailsCardsLayout(
   }
 
   override fun resetAnim() {
+    hasInScreen.set(false)
     uvDescCard.alpha = 0f
     humidityDescCard.alpha = 0f
     feelTempDescCard.alpha = 0f
