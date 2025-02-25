@@ -30,6 +30,7 @@
       android:screenOrientation="portrait"
       android:name="me.spica.spicaweather2.ui.manager_city.ActivityManagerCity" />
     <activity
+      android:theme="@style/TranslucentTheme"
       android:screenOrientation="portrait"
       android:name="me.spica.spicaweather2.ui.add_city.ActivityAddCity" />
 
