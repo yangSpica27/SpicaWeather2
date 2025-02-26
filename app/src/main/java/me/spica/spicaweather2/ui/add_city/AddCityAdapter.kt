@@ -1,5 +1,6 @@
 package me.spica.spicaweather2.ui.add_city
 
+import android.animation.AnimatorInflater
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
@@ -54,6 +55,7 @@ class AddCityAdapter : RecyclerView.Adapter<AddCityAdapter.ViewHolder>() {
           20.dp.toInt(),
         )
         setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_BodyLarge)
+        stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.touch_raise)
       },
     )
 

@@ -58,20 +58,27 @@ class ActivityManagerCity : BaseActivity() {
   private val mHandler by lazy { android.os.Handler(mHandlerThread.looper) }
 
 
+  // 是否已经执行了进入动画
   private var hasDoEnterAnim = false
 
+  // 从主页到当前页面的动画遮罩
   private val home2ManagerView by lazy {
     Home2ManagerView(this)
   }
 
+  // 列表适配器
   private val adapter = ManagerCityAdapter()
 
   private val viewModel by viewModels<CityManagerViewModel>()
 
+  // 长按排序TouchHelper
   private val itemTouchHelper =
     CityItemTouchHelper(
       isDrag = false,
       onMove = { viewHolder, target ->
+        // 当列表发生移动时触发
+        // 1. 更新数据
+        // 2. 刷新UI
         viewModel.moveCity(
           adapter.items[viewHolder.absoluteAdapterPosition].city,
           adapter.items[target.absoluteAdapterPosition].city,
@@ -110,10 +117,12 @@ class ActivityManagerCity : BaseActivity() {
         LinearLayoutManager.VERTICAL,
         false,
       )
-
+    // 设置状态栏颜色
     WindowCompat.getInsetsController(this.window, window.decorView).apply {
       isAppearanceLightStatusBars = true
     }
+
+    // 设置分割线
     dividerBuilder()
       .showLastDivider()
       .showFirstDivider()
@@ -122,6 +131,7 @@ class ActivityManagerCity : BaseActivity() {
       .build()
       .addTo(layout.recyclerView)
 
+    // 将遮罩添加到rootview
     home2ManagerView.attachToRootView()
 
     val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
@@ -131,6 +141,7 @@ class ActivityManagerCity : BaseActivity() {
     layout.recyclerView.adapter = adapter
     itemTouchHelper.attachToRecyclerView(layout.recyclerView)
 
+    // 列表点击事件
     adapter.itemClickListener = { position, view ->
       Manager2HomeView.initFromViewRect(
         view,
@@ -138,11 +149,13 @@ class ActivityManagerCity : BaseActivity() {
         view.getTag(R.id.dn_theme_color) as Int? ?: Color.TRANSPARENT,
       )
 
+      // 绑定EventBus
       EventBus
         .getDefault()
         .post(MessageEvent.create(MessageType.Get2MainActivityAnim, position))
 
 
+      // 删除动画
       if (Build.VERSION.SDK_INT >= 34) {
         overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, 0, 0)
       } else {
@@ -151,14 +164,17 @@ class ActivityManagerCity : BaseActivity() {
       finish()
     }
 
+    // 列表长按事件
     adapter.itemLongClickListener = { _, _ ->
       viewModel.setSelectable(isSelectable = true)
     }
 
+    // 点击添加城市按钮
     adapter.addCityClickListener = {
       startActivity(Intent(this@ActivityManagerCity, ActivityAddCity::class.java))
     }
 
+    // 点击删除城市
     layout.deleteBtn.setOnClickListener {
       if (adapter.getSelectCityNames().size == adapter.items.size) {
         toast("至少保留一个城市")
@@ -166,6 +182,7 @@ class ActivityManagerCity : BaseActivity() {
       }
       viewModel.deleteCities(adapter.getSelectCityNames())
     }
+    // 记录开始加载数据的时间 用于计算动画加载时间
     val startTime = System.currentTimeMillis()
 
     mHandler.post {
@@ -187,8 +204,7 @@ class ActivityManagerCity : BaseActivity() {
 
     }
 
-
-
+    // 订阅所有城市的数据变化
     lifecycleScope.launch {
       viewModel.allCityWithWeather.collectLatest {
         if (!hasDoEnterAnim) return@collectLatest
@@ -196,6 +212,7 @@ class ActivityManagerCity : BaseActivity() {
       }
     }
 
+    // 订阅title 的变化
     lifecycleScope.launch {
       viewModel.topTitle.collectLatest {
         layout.titleBar.title = it
@@ -215,6 +232,7 @@ class ActivityManagerCity : BaseActivity() {
         }
       }
     }
+    // 设置返回键的点击事件
     layout.titleBar.setNavigationOnClickListener {
       onBackPressedDispatcher.onBackPressed()
     }
@@ -231,6 +249,7 @@ class ActivityManagerCity : BaseActivity() {
     )
   }
 
+  // 回到主页
   @Suppress("DEPRECATION")
   private fun backToMain() {
     if (Build.VERSION.SDK_INT >= 34) {
@@ -246,6 +265,7 @@ class ActivityManagerCity : BaseActivity() {
     finish()
   }
 
+  // 创建入场动画
   private fun createInAnim(toView: View) {
     home2ManagerView.bindEndView(toView, layout)
     doOnMainThreadIdle({
@@ -260,11 +280,13 @@ class ActivityManagerCity : BaseActivity() {
     mHandlerThread.quit()
   }
 
+  // 创建菜单
   override fun onCreateOptionsMenu(menu: Menu): Boolean {
     menuInflater.inflate(R.menu.menu_manager_city, menu)
     return super.onCreateOptionsMenu(menu)
   }
 
+  // 菜单点击
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     if (item.itemId == R.id.add_city) {
       startActivity(Intent(this@ActivityManagerCity, ActivityAddCity::class.java))

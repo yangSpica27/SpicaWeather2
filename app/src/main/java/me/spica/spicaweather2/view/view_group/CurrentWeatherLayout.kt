@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.core.view.marginLeft
 import androidx.core.view.marginTop
 import androidx.core.view.setPadding
@@ -153,6 +154,7 @@ class CurrentWeatherLayout(
           progressAnim.removeAllListeners()
         }
       }
+      translateAnimation.cancel()
       translateAnimation.start()
       if (visibility == View.INVISIBLE) {
         visibility = View.VISIBLE
@@ -172,17 +174,11 @@ class CurrentWeatherLayout(
           AbsoluteSizeSpan(30.dp),
           Spannable.SPAN_INCLUSIVE_INCLUSIVE,
         )
-    val bottomText = StringBuilder()
-    bottomText.append(weather.todayWeather.weatherName)
-    bottomText.append("，")
-    bottomText.append("降水概率")
-    bottomText.append(weather.hourlyWeather[0].pop)
-    bottomText.append("%")
-//        if (weather.alerts.isNotEmpty()) {
-//            bottomText.append("\n")
-//            bottomText.append(weather.alerts[0].title)
-//        }
-    descTextView.text = bottomText
+
+    descTextView.text = HtmlCompat.fromHtml(
+      "${weather.todayWeather.weatherName},降水概率&nbsp<b>${weather.hourlyWeather[0].pop}%<b/>",
+      HtmlCompat.FROM_HTML_MODE_LEGACY,
+    )
     tempTextView.post {
       val mLinearGradient =
         LinearGradient(
@@ -266,7 +262,7 @@ class CurrentWeatherLayout(
     // 设置动画的基础属性
     set.play(set1).with(set2).with(progressAnim) // 两个动画同时开始
 
-    set.setDuration(250) // 播放时长
+    set.setDuration(750) // 播放时长
     set.startDelay = 50 // 延迟播放
     set.interpolator = DecelerateInterpolator() // 设置插值器
     return@lazy set

@@ -43,6 +43,63 @@ class CityItemTouchHelper(
       actionState: Int,
     ) {
       super.onSelectedChanged(viewHolder, actionState)
+      if (viewHolder == null) return
+//      if (actionState == ACTION_STATE_DRAG) {
+//        doBiggerScale(viewHolder)
+//      }
+//      else {
+//        doSmallScale(viewHolder)
+//      }
+    }
+
+//    // 缩小动画
+//    private fun doSmallScale(viewHolder: RecyclerView.ViewHolder) {
+//      viewHolder.itemView.let {
+//        val anim = ScaleAnimation(
+//          it.scaleX,
+//          0.95f,
+//          it.scaleY,
+//          0.95f,
+//          it.width / 2f,
+//          it.height / 2f
+//        )
+//        it.startAnimation(anim)
+//      }
+//    }
+//
+//    // 变得更大
+//    private fun doBiggerScale(viewHolder: RecyclerView.ViewHolder) {
+//      viewHolder.itemView.let {
+//        val anim = ScaleAnimation(
+//          it.scaleX,
+//          1.05f,
+//          it.scaleY,
+//          1.05f,
+//          it.width / 2f,
+//          it.height / 2f
+//        )
+//        it.startAnimation(anim)
+//      }
+//    }
+//
+//    // 删除缩放
+//    private fun removeScale(viewHolder: RecyclerView.ViewHolder) {
+//      viewHolder.itemView.let {
+//        val anim = ScaleAnimation(
+//          it.scaleX,
+//          1.00f,
+//          it.scaleY,
+//          1.00f,
+//          it.width / 2f,
+//          it.height / 2f
+//        )
+//        it.startAnimation(anim)
+//      }
+//    }
+
+    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+      super.clearView(recyclerView, viewHolder)
+//      removeScale(viewHolder)
     }
 
     override fun onSwiped(

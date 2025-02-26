@@ -1,6 +1,5 @@
 package me.spica.spicaweather2.view.view_group
 
-import android.animation.AnimatorInflater
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
@@ -20,7 +19,6 @@ import androidx.core.view.marginRight
 import androidx.core.view.marginTop
 import androidx.core.view.updateMargins
 import androidx.core.widget.CompoundButtonCompat
-import com.google.android.material.animation.ArgbEvaluatorCompat
 import com.google.android.material.radiobutton.MaterialRadioButton
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.WeatherCodeUtils
@@ -43,14 +41,11 @@ class ItemCityManagerLayout(
 //      stateListAnimator = AnimatorInflater.loadStateListAnimator(context, R.animator.touch_raise)
     }
 
-    private val colorAnim = ValueAnimator.ofArgb(
-      context.getColor(R.color.light_blue_600),
-      context.getColor(R.color.light_blue_600)
+    private val colorAnim = ValueAnimator.ofFloat(
+      0f, 1f
     ).apply {
       duration = 300
-      setEvaluator(ArgbEvaluatorCompat.getInstance())
       addUpdateListener {
-        paint.color = it.animatedValue as Int
         postInvalidateOnAnimation()
       }
     }
@@ -60,9 +55,14 @@ class ItemCityManagerLayout(
       colorAnim.cancel()
     }
 
+    private var lastColor = context.getColor(R.color.light_blue_600)
+
+    private var currentColor = context.getColor(R.color.light_blue_600)
+
     fun setColor(color: Int) {
+      lastColor = currentColor
+      currentColor = color
       colorAnim.cancel()
-      colorAnim.setIntValues(colorAnim.animatedValue as Int, color)
       colorAnim.start()
     }
 
@@ -81,7 +81,18 @@ class ItemCityManagerLayout(
 
     override fun onDraw(canvas: Canvas) {
       super.onDraw(canvas)
-      canvas.drawRoundRect(rect, 8.dp.toFloat(), 8.dp.toFloat(), paint)
+      if (colorAnim.isRunning) {
+        paint.color = lastColor
+        canvas.drawRoundRect(rect, 8.dp.toFloat(), 8.dp.toFloat(), paint)
+      }
+      paint.color = currentColor
+      canvas.drawRoundRect(
+        rect.left + width - width * colorAnim.animatedValue as Float,
+        rect.top,
+        rect.right,
+        rect.bottom,
+        8.dp.toFloat(), 8.dp.toFloat(), paint
+      )
     }
   }
 
