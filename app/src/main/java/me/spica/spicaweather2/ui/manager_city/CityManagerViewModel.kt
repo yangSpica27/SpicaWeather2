@@ -6,8 +6,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import me.spica.spicaweather2.persistence.entity.city.CityBean
 import me.spica.spicaweather2.persistence.repository.CityRepository
@@ -21,6 +23,7 @@ constructor(
 ) : ViewModel() {
   // 通过Flow获取所有的城市
   val allCityWithWeather = cityRepository.allCitiesWithWeatherFlow()
+    .stateIn(viewModelScope, SharingStarted.Eagerly, listOf())
 
   // 是否是选择模式
   private val _isSelectMode = MutableSharedFlow<Boolean>(1)

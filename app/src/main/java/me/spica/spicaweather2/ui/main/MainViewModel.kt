@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import me.spica.spicaweather2.persistence.repository.CityRepository
 import javax.inject.Inject
@@ -21,7 +23,9 @@ constructor(
 
 
   // 获取所有城市的天气
-  val allCityWithWeather = cityRepository.allCitiesWithWeatherFlow()
+  val allCityWithWeather = cityRepository
+    .allCitiesWithWeatherFlow()
+    .stateIn(viewModelScope, SharingStarted.Eagerly, listOf())
 
   private val _currentPagerIndex = MutableStateFlow(0)
 
