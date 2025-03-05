@@ -30,18 +30,20 @@ import androidx.coordinatorlayout.widget.ViewGroupUtils
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * 获取版本号
  */
-fun Context.getVersion(): String =
-  try {
-    val packageInfo = packageManager.getPackageInfo(packageName, 0)
-    packageInfo.versionName ?: "-1"
-  } catch (e: Exception) {
-    e.printStackTrace()
-    "-1"
-  }
+fun Context.getVersion(): String = try {
+  val packageInfo = packageManager.getPackageInfo(packageName, 0)
+  packageInfo.versionName ?: "-1"
+} catch (e: Exception) {
+  e.printStackTrace()
+  "-1"
+}
 
 // 隐藏软键盘
 fun View.hideKeyboard() {
@@ -59,22 +61,23 @@ fun View.showKeyboard() {
   }
 }
 
+@ExperimentalContracts
 fun doOnMainThreadIdle(
   action: () -> Unit,
   timeout: Long? = null,
 ) {
+  contract { callsInPlace(action, InvocationKind.AT_MOST_ONCE) }
   val handler = Handler(Looper.getMainLooper())
 
-  val idleHandler =
-    MessageQueue.IdleHandler {
-      handler.removeCallbacksAndMessages(null)
-      try {
-        action()
-      } catch (_: Exception) {
-      }
-
-      return@IdleHandler false
+  val idleHandler = MessageQueue.IdleHandler {
+    handler.removeCallbacksAndMessages(null)
+    try {
+      action()
+    } catch (_: Exception) {
     }
+
+    return@IdleHandler false
+  }
 
   fun setupIdleHandler(queue: MessageQueue) {
     if (timeout != null) {
@@ -96,16 +99,15 @@ fun doOnMainThreadIdle(
   }
 }
 
-fun getRefreshRate(context: Context): Float =
-  try {
-    val displayManager =
-      context.getSystemService(Context.DISPLAY_SERVICE) as android.hardware.display.DisplayManager
-    val display = displayManager.getDisplay(Display.DEFAULT_DISPLAY)
-    val displayMode = display?.mode
-    displayMode?.refreshRate ?: 60f
-  } catch (e: Exception) {
-    60f
-  }
+fun getRefreshRate(context: Context): Float = try {
+  val displayManager =
+    context.getSystemService(Context.DISPLAY_SERVICE) as android.hardware.display.DisplayManager
+  val display = displayManager.getDisplay(Display.DEFAULT_DISPLAY)
+  val displayMode = display?.mode
+  displayMode?.refreshRate ?: 60f
+} catch (e: Exception) {
+  60f
+}
 
 // 扩大剑姬区域
 @SuppressLint("RestrictedApi")
@@ -157,8 +159,7 @@ fun View.expand(
 
   // 若父控件未设置触摸代理，则构建 MultiTouchDelegate 并设置给它
   if (parentView.touchDelegate == null) {
-    parentView.touchDelegate =
-      MultiTouchDelegate(delegateView = this)
+    parentView.touchDelegate = MultiTouchDelegate(delegateView = this)
   }
   post {
     val rect = Rect()
@@ -237,12 +238,11 @@ inline fun <reified T : Activity> Context.startActivityWithAnimation(
 // }
 
 val Int.dp: Float
-  get() =
-    android.util.TypedValue.applyDimension(
-      android.util.TypedValue.COMPLEX_UNIT_DIP,
-      this.toFloat(),
-      Resources.getSystem().displayMetrics,
-    )
+  get() = android.util.TypedValue.applyDimension(
+    android.util.TypedValue.COMPLEX_UNIT_DIP,
+    this.toFloat(),
+    Resources.getSystem().displayMetrics,
+  )
 
 fun View.show() {
   this.visibility = View.VISIBLE
