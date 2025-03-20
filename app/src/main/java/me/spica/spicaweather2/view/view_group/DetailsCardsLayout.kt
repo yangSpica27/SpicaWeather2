@@ -16,6 +16,7 @@ import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.contracts.ExperimentalContracts
 
 // 描述卡片组
 class DetailsCardsLayout(
@@ -118,6 +119,7 @@ class DetailsCardsLayout(
 
   override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
 
+  @OptIn(ExperimentalContracts::class)
   override fun startEnterAnim() {
     super.startEnterAnim()
     Timber.e("---开始执行动画---")

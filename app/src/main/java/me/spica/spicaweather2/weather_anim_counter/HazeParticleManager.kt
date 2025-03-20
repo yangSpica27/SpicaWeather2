@@ -9,12 +9,9 @@ import com.google.fpl.liquidfun.PolygonShape
 import com.google.fpl.liquidfun.Vec2
 import com.google.fpl.liquidfun.World
 import me.spica.spicaweather2.tools.dp
-import java.io.Closeable
 
-/**
- * 雪花效果粒子计数器
- */
-class SnowEffectCounter : Closeable {
+
+class HazeParticleManager : java.io.Closeable {
   private lateinit var world: World
 
   private val random = kotlin.random.Random.Default
@@ -29,7 +26,7 @@ class SnowEffectCounter : Closeable {
   private val positionIterations = 3
   private val particleIterations = 3
 
-  private val mProportion = 30f // 模拟世界和view坐标的转化比例
+  private val mProportion = 120f // 模拟世界和view坐标的转化比例
   private var mDensity = .5f
   private val mFrictionRatio = 10.0f // 摩擦系数
   private val mRestitutionRatio = 0.3f // 回复系数
@@ -93,8 +90,6 @@ class SnowEffectCounter : Closeable {
       bodyDef.type = BodyType.dynamicBody
       bodyDef.position[mappingView2Body(view.x + view.width / 2)] =
         mappingView2Body(view.y + view.height / 2)
-      bodyDef.gravityScale = (random.nextDouble(1.0,3.0)).toFloat()
-      bodyDef.bullet = true
       val shape = CircleShape()
       shape.radius = mappingView2Body(view.width / 2)
       val def = FixtureDef()

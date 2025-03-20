@@ -40,6 +40,7 @@ import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
+import kotlin.contracts.ExperimentalContracts
 
 /**
  * 城市管理页面
@@ -266,6 +267,7 @@ class ActivityManagerCity : BaseActivity() {
   }
 
   // 创建入场动画
+  @OptIn(ExperimentalContracts::class)
   private fun createInAnim(toView: View) {
     home2ManagerView.bindEndView(toView, layout)
     doOnMainThreadIdle({

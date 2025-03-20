@@ -9,6 +9,7 @@ import androidx.core.animation.doOnStart
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.tools.doOnMainThreadIdle
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.contracts.ExperimentalContracts
 
 interface SpicaWeatherCard {
   // 卡片的View
@@ -83,6 +84,7 @@ interface SpicaWeatherCard {
   var hasInScreen: AtomicBoolean
 
   // 检查是否进入屏幕
+  @OptIn(ExperimentalContracts::class)
   fun checkEnterScreen(isIn: Boolean) {
     if (hasInScreen.get()) {
       return
