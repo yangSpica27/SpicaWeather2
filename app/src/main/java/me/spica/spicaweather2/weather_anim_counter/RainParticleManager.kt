@@ -51,7 +51,6 @@ class RainParticleManager {
     boxWidth = mappingView2Body(mWorldWidth * 1f - 48.dp - 8.dp) / 2f
     boxHeight = mappingView2Body(40f)
     world = World(0f, 20f)
-
     createCardBox()
     createRainItemShapeAndDef()
     isInitOK = true
@@ -148,6 +147,13 @@ class RainParticleManager {
 //        rainItemDef.linearVelocity = Vec2(0f, 9f)
   }
 
+  fun applyLinearImpulse(x: Float, y: Float) {
+    if (!isInitOK) return
+    synchronized(world) {
+      world.setGravity(-x,y)
+    }
+  }
+
   // 创建雨点
   fun createRainItem(): ParticleGroup {
     val x = (0..mWorldWidth).random(random).toFloat()
@@ -172,6 +178,7 @@ class RainParticleManager {
 
   // 模拟世界坐标系转化为view坐标系
   private fun mappingBody2View(body: Float): Float = body * mProportion
+
 
   fun destroy() {
     synchronized(world) {

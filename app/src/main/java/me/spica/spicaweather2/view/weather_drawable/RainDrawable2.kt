@@ -44,6 +44,10 @@ class RainDrawable2 : WeatherDrawable() {
     }
   }
 
+  override fun applyLinearImpulse(x: Float, y: Float) {
+    rainEffectCounter.applyLinearImpulse(x, y)
+  }
+
   override fun cancelAnim() {
     release()
   }

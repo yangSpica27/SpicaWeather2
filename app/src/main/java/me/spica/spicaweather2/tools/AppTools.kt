@@ -66,6 +66,9 @@ fun doOnMainThreadIdle(
   action: () -> Unit,
   timeout: Long? = null,
 ) {
+  // 使用 kotlin 契约来告知编译器 action 函数体中的代码是否会且只会执行一次
+  // 调用方在调用该方法后，必须传入一个 action 函数体，并在内部执行。
+  // InvocationKind.AT_MOST_ONCE 的意思是该函数体至多只会执行一次。
   contract { callsInPlace(action, InvocationKind.AT_MOST_ONCE) }
   val handler = Handler(Looper.getMainLooper())
 
@@ -78,7 +81,6 @@ fun doOnMainThreadIdle(
 
     return@IdleHandler false
   }
-
   fun setupIdleHandler(queue: MessageQueue) {
     if (timeout != null) {
       handler.postDelayed({
@@ -91,7 +93,6 @@ fun doOnMainThreadIdle(
     }
     queue.addIdleHandler(idleHandler)
   }
-
   if (Looper.getMainLooper() == Looper.myLooper()) {
     setupIdleHandler(Looper.myQueue())
   } else {

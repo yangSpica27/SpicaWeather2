@@ -56,6 +56,13 @@ class SnowEffectCounter : Closeable {
     isInitOK = true
   }
 
+  fun applyLinearImpulse(x: Float, y: Float) {
+    if (!isInitOK) return
+    synchronized(world) {
+      world.setGravity(-x,y)
+    }
+  }
+
   private var backgroundBody: Body? = null
 
   // 创建刚体
@@ -93,7 +100,7 @@ class SnowEffectCounter : Closeable {
       bodyDef.type = BodyType.dynamicBody
       bodyDef.position[mappingView2Body(view.x + view.width / 2)] =
         mappingView2Body(view.y + view.height / 2)
-      bodyDef.gravityScale = (random.nextDouble(1.0,3.0)).toFloat()
+      bodyDef.gravityScale = (random.nextDouble(1.0, 3.0)).toFloat()
       bodyDef.bullet = true
       val shape = CircleShape()
       shape.radius = mappingView2Body(view.width / 2)

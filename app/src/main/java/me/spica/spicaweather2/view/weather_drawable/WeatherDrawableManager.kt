@@ -28,6 +28,14 @@ class WeatherDrawableManager(
     ready(context.getScreenWidth(), context.getScreenHeight())
   }
 
+  fun applyLinearImpulse(x: Float, y: Float) {
+    synchronized(this) {
+      drawableMaps.values.iterator().forEach {
+        it.applyLinearImpulse(x, y)
+      }
+    }
+  }
+
   fun ready(
     width: Int,
     height: Int,

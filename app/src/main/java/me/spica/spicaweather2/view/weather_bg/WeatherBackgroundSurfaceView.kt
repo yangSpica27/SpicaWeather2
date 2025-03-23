@@ -6,6 +6,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -15,9 +19,8 @@ import androidx.core.graphics.ColorUtils
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.view.weather_drawable.WeatherDrawableManager
 
-class WeatherBackgroundSurfaceView :
-  SurfaceView,
-  SurfaceHolder.Callback {
+
+class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback, SensorEventListener {
   constructor(context: Context?) : super(context)
   constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
   constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
@@ -40,36 +43,42 @@ class WeatherBackgroundSurfaceView :
   private var backgroundColorValue = Color.parseColor("#f7f8fa")
 
 
+  // 加速度传感器
+  private val sensorManager: SensorManager by lazy {
+    context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+  }
+
+  //
+
+
   // 天气动画管理器
   private val weatherDrawableManager = WeatherDrawableManager(context)
 
   // 通过 SimpleDrawTask 实现绘制逻辑
-  private val simpleDrawTask =
-    object :
-      SimpleDrawTask(
-        8,
-        { canvas ->
-          if (markerColor == backgroundColorValue) {
-            // 如果标记颜色和背景颜色相同，则直接绘制标记颜色
-            canvas.drawColor(markerColor)
-          } else {
-            // 计算天气动画
-            weatherDrawableManager.calculate(width, height)
-            drawBackground(canvas)
-            // 执行绘制
-            weatherDrawableManager.doOnDraw(canvas, width, height)
-            canvas.drawColor(markerColor)
-          }
-        },
-      ) {
-      override fun lockCanvas(): Canvas? = this@WeatherBackgroundSurfaceView.holder.lockCanvas()
+  private val simpleDrawTask = object : SimpleDrawTask(
+    8,
+    { canvas ->
+      if (markerColor == backgroundColorValue) {
+        // 如果标记颜色和背景颜色相同，则直接绘制标记颜色
+        canvas.drawColor(markerColor)
+      } else {
+        // 计算天气动画
+        weatherDrawableManager.calculate(width, height)
+        drawBackground(canvas)
+        // 执行绘制
+        weatherDrawableManager.doOnDraw(canvas, width, height)
+        canvas.drawColor(markerColor)
+      }
+    },
+  ) {
+    override fun lockCanvas(): Canvas? = this@WeatherBackgroundSurfaceView.holder.lockCanvas()
 
-      override fun unlockCanvas(canvas: Canvas?) {
-        if (canvas != null) {
-          holder.unlockCanvasAndPost(canvas)
-        }
+    override fun unlockCanvas(canvas: Canvas?) {
+      if (canvas != null) {
+        holder.unlockCanvasAndPost(canvas)
       }
     }
+  }
 
 
   // 主题色
@@ -77,18 +86,16 @@ class WeatherBackgroundSurfaceView :
 
 
   // 背景颜色动画
-  private val backgroundColorAnim =
-    ValueAnimator
-      .ofArgb(
-        ContextCompat.getColor(context, R.color.white),
-        ContextCompat.getColor(context, R.color.white),
-      ).apply {
-        duration = 550
-        setEvaluator(ArgbEvaluator())
-        addUpdateListener {
-          backgroundColorValue = it.animatedValue as Int
-        }
-      }
+  private val backgroundColorAnim = ValueAnimator.ofArgb(
+    ContextCompat.getColor(context, R.color.white),
+    ContextCompat.getColor(context, R.color.white),
+  ).apply {
+    duration = 550
+    setEvaluator(ArgbEvaluator())
+    addUpdateListener {
+      backgroundColorValue = it.animatedValue as Int
+    }
+  }
 
   // 开始背景色变化动画
   fun startBackgroundColorChangeAnim(
@@ -143,6 +150,11 @@ class WeatherBackgroundSurfaceView :
     // 渲染线程
     weatherDrawableManager.ready(width, height)
     simpleDrawTask.ready()
+    sensorManager.registerListener(
+      this,
+      sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+      SensorManager.SENSOR_DELAY_UI
+    )
   }
 
   override fun surfaceChanged(
@@ -154,6 +166,7 @@ class WeatherBackgroundSurfaceView :
 
   override fun surfaceDestroyed(holder: SurfaceHolder) {
     // Surface 销毁时调用
+    sensorManager.unregisterListener(this)
     simpleDrawTask.destroy()
     weatherDrawableManager.release()
   }
@@ -189,4 +202,12 @@ class WeatherBackgroundSurfaceView :
     // 绘制背景
     canvas.drawColor(backgroundColorValue)
   }
+
+  override fun onSensorChanged(event: SensorEvent) {
+    val x: Float = event.values[SensorManager.DATA_X]
+    val y: Float = event.values[SensorManager.DATA_Y]
+    weatherDrawableManager.applyLinearImpulse(x, y)
+  }
+
+  override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
 }

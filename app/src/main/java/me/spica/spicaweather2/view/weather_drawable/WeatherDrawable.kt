@@ -15,6 +15,9 @@ abstract class WeatherDrawable {
     height: Int,
   )
 
+
+  open fun applyLinearImpulse(x: Float, y: Float) = Unit
+
   // 绘制
   abstract fun doOnDraw(
     canvas: Canvas,

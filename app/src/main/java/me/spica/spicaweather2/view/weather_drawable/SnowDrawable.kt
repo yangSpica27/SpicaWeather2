@@ -26,6 +26,12 @@ class SnowDrawable : WeatherDrawable() {
 
   private val snowEffectCounter = SnowEffectCounter()
 
+
+  override fun applyLinearImpulse(x: Float, y: Float) {
+    snowEffectCounter.applyLinearImpulse(x, y)
+  }
+
+
   private val colors =
     intArrayOf(
       Color.parseColor("#26787474"),
