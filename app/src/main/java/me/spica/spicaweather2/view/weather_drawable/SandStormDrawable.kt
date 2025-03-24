@@ -6,6 +6,9 @@ import android.graphics.Paint
 import me.spica.spicaweather2.tools.dp
 import timber.log.Timber
 import kotlin.random.Random
+import androidx.core.graphics.toColorInt
+import java.util.ArrayList
+import java.util.Vector
 
 private val random = Random.Default
 
@@ -16,7 +19,7 @@ class SandStormDrawable : WeatherDrawable() {
       style = Paint.Style.FILL
     }
 
-  private val stormLines = mutableListOf<StormLine>()
+  private val stormLines = ArrayList<StormLine>()
 
   override fun ready(
     width: Int,
@@ -24,9 +27,11 @@ class SandStormDrawable : WeatherDrawable() {
   ) {
     viewWidth = width
     viewHeight = height
-    stormLines.clear()
-    for (i: Int in 0..40) {
-      stormLines.add(StormLine(width, height))
+    synchronized(this) {
+      stormLines.clear()
+      for (i: Int in 0..40) {
+        stormLines.add(StormLine(width, height))
+      }
     }
     Timber.tag("SandStormDrawable").e("stormLines size: ${stormLines.size}")
   }
@@ -38,8 +43,10 @@ class SandStormDrawable : WeatherDrawable() {
     height: Int,
   ) {
     super.calculate(width, height)
-    stormLines.forEach {
-      it.next()
+    synchronized(this) {
+      stormLines.forEach {
+        it.next()
+      }
     }
 
     if (isPlus) {
@@ -77,8 +84,10 @@ class SandStormDrawable : WeatherDrawable() {
   ) {
     canvas.save()
     canvas.rotate(extraAngle, width / 2f, height / 2f)
-    stormLines.forEach {
-      it.draw(canvas, paint)
+    synchronized(this) {
+      stormLines.forEach {
+        it.draw(canvas, paint)
+      }
     }
     canvas.restore()
   }
@@ -108,11 +117,11 @@ data class StormLine(
     val rd = random.nextDouble()
     color =
       if (rd < 0.5) {
-        Color.parseColor("#333333")
+        "#333333".toColorInt()
       } else if (rd < 0.7) {
-        Color.parseColor("#FF795548")
+        "#FF795548".toColorInt()
       } else {
-        Color.parseColor("#bfbfbf")
+        "#bfbfbf".toColorInt()
       }
 
     radius = (2.dp + random.nextDouble() * 2.dp).toFloat()

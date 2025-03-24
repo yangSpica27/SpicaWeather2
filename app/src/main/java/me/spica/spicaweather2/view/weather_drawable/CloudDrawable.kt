@@ -44,6 +44,7 @@ class CloudDrawable(
 
   private val overshootInterpolator = OvershootInterpolator(1.2f)
 
+
   override fun startAnim() {
     cloudAnim.start()
     cloudAnim2.start()
@@ -55,6 +56,8 @@ class CloudDrawable(
     if (enterProgress == 1f) {
       enterProgress = 0f
     }
+    tXAnimator.cancel()
+    tYAnimator.cancel()
   }
 
   override fun ready(
@@ -72,8 +75,28 @@ class CloudDrawable(
 
   private var scrollY = 0
 
+  private var tXAnimator = ValueAnimator.ofFloat(0f).apply {
+    duration = 400L
+    interpolator = LinearInterpolator()
+  }
+
+  private var tYAnimator = ValueAnimator.ofFloat(0f).apply {
+    duration = 400L
+    interpolator = LinearInterpolator()
+  }
+
+
   override fun setScrollY(y: Int) {
     scrollY = y
+  }
+
+  override fun applyLinearImpulse(x: Float, y: Float) {
+    tXAnimator.cancel()
+    tXAnimator.setFloatValues(tXAnimator.animatedValue as Float, 6 * x.toInt().dp)
+    tYAnimator.cancel()
+    tYAnimator.setFloatValues(tYAnimator.animatedValue as Float, -3 * y.toInt().dp)
+    tXAnimator.start()
+    tYAnimator.start()
   }
 
   override fun doOnDraw(
@@ -87,7 +110,10 @@ class CloudDrawable(
     val animProgressValue = overshootInterpolator.getInterpolation(enterProgress)
     val scrollYAnimValue = scrollY / height.toFloat()
 
-    canvas.translate(0f, (-40).dp + 40.dp * animProgressValue - 80.dp * scrollYAnimValue)
+    canvas.translate(
+      0f + tXAnimator.animatedValue as Float,
+      (-40).dp + 40.dp * animProgressValue - 80.dp * scrollYAnimValue + tYAnimator.animatedValue as Float
+    )
     canvas.save()
     val centerX = width / 8f * 7f
     val centerY = 0f
