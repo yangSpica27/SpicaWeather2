@@ -133,7 +133,7 @@ class DailyItemView : View {
 
   private val iconPaint = Paint()
 
-  // 是否折叠模式
+  // 是否展开
   private var isExpend = true
     set(value) {
       field = value
@@ -146,14 +146,15 @@ class DailyItemView : View {
     }
 
   private val expendAnim =
-    ValueAnimator().apply {
+    ValueAnimator.ofFloat(mHight, 50.dp).apply {
+      end()
       this.addUpdateListener {
         mHight = it.animatedValue as Float
         requestLayout()
       }
     }
 
-  private var isFirstDraw = true
+
 
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
@@ -190,28 +191,21 @@ class DailyItemView : View {
         width - paddingRight - drawProgressIconBitmap.width * 1f,
         45.dp / 2f - drawProgressIconBitmap.height / 2,
       )
-      if (isFirstDraw) {
+
+      if (isExpend) {
         canvas.rotate(
-          0f,
+          90f * expendAnim.animatedFraction,
           drawProgressIconBitmap.width / 2f,
           drawProgressIconBitmap.height / 2f,
         )
-        isFirstDraw = false
       } else {
-        if (!isExpend) {
-          canvas.rotate(
-            90f * expendAnim.animatedFraction,
-            drawProgressIconBitmap.width / 2f,
-            drawProgressIconBitmap.height / 2f,
-          )
-        } else {
-          canvas.rotate(
-            90 - 90f * expendAnim.animatedFraction,
-            drawProgressIconBitmap.width / 2f,
-            drawProgressIconBitmap.height / 2f,
-          )
-        }
+        canvas.rotate(
+          90 - 90f * expendAnim.animatedFraction,
+          drawProgressIconBitmap.width / 2f,
+          drawProgressIconBitmap.height / 2f,
+        )
       }
+
       canvas.drawBitmap(
         drawProgressIconBitmap,
         0f,
@@ -316,6 +310,7 @@ class DailyItemView : View {
         canvas.drawCircle(currentX, 45.dp / 2f, 6.dp, progressPaint)
       }
     }
+
     if (!isExpend || (expendAnim.isRunning)) {
       // 绘制下半部分
 

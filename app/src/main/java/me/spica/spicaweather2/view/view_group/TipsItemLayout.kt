@@ -14,6 +14,7 @@ class TipsItemLayout(
   private val titleText =
     AppCompatTextView(context).apply {
       setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_TitleMedium)
+      setTextColor(context.getColor(R.color.textColorPrimary))
     }
 
   private val descText =
@@ -26,6 +27,7 @@ class TipsItemLayout(
         ).apply {
           topMargin = 8.dp
         }
+      setTextColor(context.getColor(R.color.textColorPrimaryHint))
     }
 
   fun setData(

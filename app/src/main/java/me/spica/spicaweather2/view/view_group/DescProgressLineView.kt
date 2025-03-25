@@ -217,7 +217,10 @@ class DescProgressLineView : View {
         }
       uvPointPaint.strokeWidth = 12.dp
       canvas.drawPoint(
-        (width.toFloat() - paddingRight) * progress,
+        ((width.toFloat() - paddingRight) * progress).coerceIn(
+          paddingLeft.toFloat() + uvPointPaint.strokeWidth/2f,
+          (width.toFloat() - paddingRight) - uvPointPaint.strokeWidth/2f,
+        ),
         height - uvShaderPaint.strokeWidth - paddingBottom,
         uvPointPaint,
       )
@@ -269,7 +272,10 @@ class DescProgressLineView : View {
           feelTempPaint2.strokeWidth = 16.dp
 
           canvas.drawPoint(
-            (width.toFloat() - paddingRight) * progress,
+            ((width.toFloat() - paddingRight) * progress).coerceIn(
+              paddingLeft.toFloat() + feelTempPaint2.strokeWidth/2f,
+              (width.toFloat() - paddingRight) - feelTempPaint2.strokeWidth/2f,
+            ),
             height - feelTempPaint.strokeWidth - paddingBottom,
             feelTempPaint2,
           )
@@ -283,7 +289,10 @@ class DescProgressLineView : View {
             }
 
           canvas.drawPoint(
-            (width.toFloat() - paddingRight) * progress,
+            ((width.toFloat() - paddingRight) * progress).coerceIn(
+              paddingLeft.toFloat() + feelTempPaint2.strokeWidth/2f,
+              (width.toFloat() - paddingRight) - feelTempPaint2.strokeWidth/2f,
+            ),
             height - feelTempPaint.strokeWidth - paddingBottom,
             feelTempPaint2,
           )
