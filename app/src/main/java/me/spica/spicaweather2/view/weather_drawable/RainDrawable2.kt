@@ -2,6 +2,7 @@ package me.spica.spicaweather2.view.weather_drawable
 
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.Paint
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.view.weather_bg.RainFlake
@@ -9,6 +10,10 @@ import me.spica.spicaweather2.weather_anim_counter.RainParticleManager
 import timber.log.Timber
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import androidx.core.graphics.toColorInt
+import androidx.core.graphics.withMatrix
+import kotlin.math.absoluteValue
+import androidx.core.graphics.withRotation
 
 /**
  * 雨水的绘制
@@ -19,7 +24,7 @@ class RainDrawable2 : WeatherDrawable() {
     Paint().apply {
       strokeCap = Paint.Cap.ROUND
       strokeWidth = 5.dp
-      color = Color.parseColor("#D9D9D9")
+      color = "#D9D9D9".toColorInt()
       style = Paint.Style.FILL
     }
 
@@ -44,8 +49,12 @@ class RainDrawable2 : WeatherDrawable() {
     }
   }
 
+  // 用于绘制背景的时候的旋转角
+  private var rotate = 0f
+
   override fun applyLinearImpulse(x: Float, y: Float) {
     rainEffectCounter.applyLinearImpulse(x, y)
+    rotate = Math.toDegrees(Math.atan2(x.toDouble(), y.toDouble())).toFloat()
   }
 
   override fun cancelAnim() {
@@ -73,7 +82,7 @@ class RainDrawable2 : WeatherDrawable() {
             width,
             height,
             rainPaint2,
-            Color.parseColor("#E8E8E8"),
+            "#E8E8E8".toColorInt(),
           ),
         )
       }
@@ -128,6 +137,8 @@ class RainDrawable2 : WeatherDrawable() {
   // 过滤屏幕之外的点
   private val positionArray2 = FloatArray(RainParticleManager.ParticleMaxCount * 2)
 
+  private val matrix = Matrix()
+
   override fun doOnDraw(
     canvas: Canvas,
     width: Int,
@@ -137,8 +148,19 @@ class RainDrawable2 : WeatherDrawable() {
       return
     }
     synchronized(lock) {
-      rainFlakes.forEach {
-        it.onlyDraw(canvas)
+      canvas.withMatrix(
+        matrix.apply {
+          reset()
+          postRotate(
+            rotate,
+            width / 2f,
+            height / 2f,
+          )
+        }
+      ) {
+        rainFlakes.forEach {
+          it.onlyDraw(this)
+        }
       }
       // 绘制无碰撞的前景
       mParticlePositionBuffer.rewind()
