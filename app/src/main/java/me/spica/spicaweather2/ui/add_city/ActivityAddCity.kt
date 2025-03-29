@@ -37,9 +37,9 @@ class ActivityAddCity : BaseActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     if (Build.VERSION.SDK_INT >= 34) {
-      overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.zoom_in, R.anim.zoom_out)
+      overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, R.anim.in_bottom, R.anim.out_bottom)
     } else {
-      overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out)
+      overridePendingTransition(R.anim.in_bottom, R.anim.out_bottom)
     }
     super.onCreate(savedInstanceState)
     setContentView(layout)
@@ -87,9 +87,9 @@ class ActivityAddCity : BaseActivity() {
   override fun finish() {
     super.finish()
     if (Build.VERSION.SDK_INT >= 34) {
-      overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.zoom_in, R.anim.zoom_out)
+      overrideActivityTransition(OVERRIDE_TRANSITION_CLOSE, R.anim.in_bottom, R.anim.out_bottom)
     } else {
-      overridePendingTransition(R.anim.zoom_in, R.anim.zoom_out)
+      overridePendingTransition(R.anim.in_bottom, R.anim.out_bottom)
     }
   }
 }
