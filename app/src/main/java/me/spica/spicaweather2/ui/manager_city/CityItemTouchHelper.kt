@@ -1,8 +1,10 @@
 package me.spica.spicaweather2.ui.manager_city
 
+import android.graphics.Canvas
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import timber.log.Timber
+
 
 class CityItemTouchHelper(
   var onMove: ((RecyclerView.ViewHolder, RecyclerView.ViewHolder) -> Unit)? = null,
@@ -44,62 +46,37 @@ class CityItemTouchHelper(
     ) {
       super.onSelectedChanged(viewHolder, actionState)
       if (viewHolder == null) return
-//      if (actionState == ACTION_STATE_DRAG) {
-//        doBiggerScale(viewHolder)
-//      }
-//      else {
-//        doSmallScale(viewHolder)
-//      }
+      if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+        // 被拖动项放大
+        viewHolder.itemView.animate().scaleX(1.025f).scaleY(1.025f).start()
+      }
     }
 
-//    // 缩小动画
-//    private fun doSmallScale(viewHolder: RecyclerView.ViewHolder) {
-//      viewHolder.itemView.let {
-//        val anim = ScaleAnimation(
-//          it.scaleX,
-//          0.95f,
-//          it.scaleY,
-//          0.95f,
-//          it.width / 2f,
-//          it.height / 2f
-//        )
-//        it.startAnimation(anim)
-//      }
-//    }
-//
-//    // 变得更大
-//    private fun doBiggerScale(viewHolder: RecyclerView.ViewHolder) {
-//      viewHolder.itemView.let {
-//        val anim = ScaleAnimation(
-//          it.scaleX,
-//          1.05f,
-//          it.scaleY,
-//          1.05f,
-//          it.width / 2f,
-//          it.height / 2f
-//        )
-//        it.startAnimation(anim)
-//      }
-//    }
-//
-//    // 删除缩放
-//    private fun removeScale(viewHolder: RecyclerView.ViewHolder) {
-//      viewHolder.itemView.let {
-//        val anim = ScaleAnimation(
-//          it.scaleX,
-//          1.00f,
-//          it.scaleY,
-//          1.00f,
-//          it.width / 2f,
-//          it.height / 2f
-//        )
-//        it.startAnimation(anim)
-//      }
-//    }
+    override fun onChildDraw(
+      c: Canvas,
+      recyclerView: RecyclerView,
+      viewHolder: RecyclerView.ViewHolder,
+      dX: Float,
+      dY: Float,
+      actionState: Int,
+      isCurrentlyActive: Boolean
+    ) {
+      super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+      for (i in 0..<recyclerView.childCount) {
+        val childView = recyclerView.getChildAt(i)
+        val holder = recyclerView.getChildViewHolder(childView)
+        if (holder !== viewHolder) {
+          childView.animate().scaleX(1f).scaleY(1f).start()
+        }
+      }
+    }
+
+
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
       super.clearView(recyclerView, viewHolder)
 //      removeScale(viewHolder)
+      viewHolder.itemView.animate().scaleX(1f).scaleY(1f).start()
     }
 
     override fun onSwiped(
