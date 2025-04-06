@@ -6,12 +6,13 @@ import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.viewpager2.widget.ViewPager2
 import me.spica.spicaweather2.view.weather_bg.WeatherBackgroundSurfaceView
+import me.spica.spicaweather2.view.weather_bg.WeatherBackgroundView
 
 class ActivityMainLayout(
   context: Context,
 ) : AViewGroup(context) {
-  val weatherBackgroundSurfaceView =
-    WeatherBackgroundSurfaceView(context)
+  val backgroundView =
+    WeatherBackgroundView(context)
       .apply {
         layoutParams =
           LayoutParams(
@@ -39,7 +40,7 @@ class ActivityMainLayout(
     }
 
   init {
-    addView(weatherBackgroundSurfaceView)
+    addView(backgroundView)
     addView(viewPager2)
     addView(mainTitleLayout)
     addView(currentWeatherLayout)
@@ -72,7 +73,7 @@ class ActivityMainLayout(
     p3: Int,
     p4: Int,
   ) {
-    weatherBackgroundSurfaceView.layout(0, 0)
+    backgroundView.layout(0, 0)
     viewPager2.layout(0, 0)
     mainTitleLayout.layout(0, 0)
     currentWeatherLayout.layout(0, mainTitleLayout.bottom)

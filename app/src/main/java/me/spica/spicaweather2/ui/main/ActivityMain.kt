@@ -34,6 +34,8 @@ import me.spica.spicaweather2.view.weather_bg.WeatherBackgroundSurfaceView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import androidx.core.graphics.createBitmap
+import androidx.core.view.drawToBitmap
 
 /**
  * 主页面
@@ -88,7 +90,7 @@ class ActivityMain : BaseActivity() {
         layout.viewPager2.setCurrentItem(event.extra as Int, false)
         data[event.extra].weather?.getWeatherType()?.getThemeColor()?.let {
           // 更新背景颜色
-          layout.weatherBackgroundSurfaceView.startBackgroundColorChangeAnim(it)
+          layout.backgroundView.startBackgroundColorChangeAnim(it)
         }
         manager2HomeView.invalidate()
       }
@@ -138,7 +140,7 @@ class ActivityMain : BaseActivity() {
               4 -> WeatherType.WEATHER_SNOW
               else -> WeatherType.WEATHER_SANDSTORM
             }
-          with(layout.weatherBackgroundSurfaceView) {
+          with(layout.backgroundView) {
             themeColor = type.getThemeColor()
             currentWeatherAnimType = type.getWeatherAnimType()
           }
@@ -170,15 +172,15 @@ class ActivityMain : BaseActivity() {
           updateOtherPageScroller()
         }
 
-        override fun onPageScrolled(
-          position: Int,
-          positionOffset: Float,
-          positionOffsetPixels: Int,
-        ) {
-          super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-          // 同步当前页面的滚动
-//          updateOtherPageScroller()
-        }
+//        override fun onPageScrolled(
+//          position: Int,
+//          positionOffset: Float,
+//          positionOffsetPixels: Int,
+//        ) {
+//          super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+//          // 同步当前页面的滚动
+////          updateOtherPageScroller()
+//        }
       },
     )
 
@@ -216,13 +218,10 @@ class ActivityMain : BaseActivity() {
         screenBitmap?.recycle()
         screenBitmap = null
       }
-      val bgBitmap: Bitmap = Bitmap.createBitmap(
-        window.decorView.width,
-        window.decorView.height,
-        Bitmap.Config.ARGB_8888,
-      ).apply {
-        eraseColor(WeatherBackgroundSurfaceView.BACKGROUND_COLOR)
-      }
+      val bgBitmap: Bitmap = window.decorView.drawToBitmap()
+//        createBitmap(window.decorView.width, window.decorView.height).apply {
+//        eraseColor(WeatherBackgroundSurfaceView.BACKGROUND_COLOR)
+//      }
       screenBitmap = bgBitmap
       startActivityWithAnimation<ActivityManagerCity> {
         putExtra(ActivityManagerCity.ARG_CITY_NAME, currentCurrentCity?.cityName)
@@ -252,7 +251,7 @@ class ActivityMain : BaseActivity() {
   // 更新标题
   private fun updateTitleBarUI(scrollY: Int) {
     layout.mainTitleLayout.translationY = -scrollY * 1f
-    layout.weatherBackgroundSurfaceView.setMScrollY(scrollY)
+    layout.backgroundView.setMScrollY(scrollY)
     layout.currentWeatherLayout.alpha =
       (1 - scrollY / 1350f)
         .coerceAtLeast(0f)
@@ -287,7 +286,7 @@ class ActivityMain : BaseActivity() {
       layout.mainTitleLayout.titleTextView.text = currentCity.cityName
       currentCurrentCity = currentCity
       currentWeather?.getWeatherType()?.let {
-        with(layout.weatherBackgroundSurfaceView) {
+        with(layout.backgroundView) {
           themeColor = it.getThemeColor()
           currentThemeColor = themeColor
           currentWeatherAnimType = it.getWeatherAnimType()
@@ -301,7 +300,7 @@ class ActivityMain : BaseActivity() {
 
   // 给引擎传入刚体进行碰撞计算
   fun setBox2dBackground(y: Int) {
-    layout.weatherBackgroundSurfaceView.setBackgroundY(y)
+    layout.backgroundView.setBackgroundY(y)
   }
 
   override fun onDestroy() {
