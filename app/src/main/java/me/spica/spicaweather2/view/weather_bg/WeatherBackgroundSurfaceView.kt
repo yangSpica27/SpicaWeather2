@@ -200,7 +200,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback, Sensor
 
   private fun drawBackground(canvas: Canvas) {
     // 绘制背景
-    canvas.drawColor(backgroundColorValue)
+    canvas.drawColor(BACKGROUND_COLOR)
   }
 
   override fun onSensorChanged(event: SensorEvent) {

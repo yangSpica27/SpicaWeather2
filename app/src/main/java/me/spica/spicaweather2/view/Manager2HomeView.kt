@@ -22,7 +22,9 @@ import android.widget.FrameLayout
 import androidx.core.animation.doOnEnd
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.drawToBitmap
+import com.google.android.material.animation.ArgbEvaluatorCompat
 import me.spica.spicaweather2.tools.dp
+import me.spica.spicaweather2.view.weather_bg.WeatherBackgroundSurfaceView
 import timber.log.Timber
 import kotlin.math.max
 
@@ -180,11 +182,18 @@ class Manager2HomeView : View {
     // 恢复图层
     canvas.restoreToCount(layer)
 
-    // 绘制遮罩
+//    // 绘制遮罩
     markerPaint.color =
       ColorUtils.setAlphaComponent(
-        themeColor,
-        max(255 - (255 * accelerateInterpolator.getInterpolation(progressAnimation.animatedValue as Float) ).toInt(), 0),
+        ArgbEvaluatorCompat.getInstance().evaluate(
+          progressAnimation.animatedValue as Float,
+          themeColor,
+          WeatherBackgroundSurfaceView.BACKGROUND_COLOR
+        ),
+        max(
+          255 - (255 * accelerateInterpolator.getInterpolation(progressAnimation.animatedValue as Float)).toInt(),
+          0
+        ),
       )
     canvas.drawRoundRect(
       clearRect,
@@ -193,6 +202,7 @@ class Manager2HomeView : View {
       markerPaint,
     )
   }
+
 
   @SuppressLint("ClickableViewAccessibility")
   override fun onTouchEvent(event: MotionEvent): Boolean = progressAnimation.animatedFraction != 1f
