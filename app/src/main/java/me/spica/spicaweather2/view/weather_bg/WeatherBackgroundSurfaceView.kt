@@ -1,7 +1,5 @@
 package me.spica.spicaweather2.view.weather_bg
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -39,8 +37,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback, Sensor
     val BACKGROUND_COLOR = Color.parseColor("#f7f8fa")
   }
 
-  // 背景色值
-  private var backgroundColorValue = Color.parseColor("#f7f8fa")
+
 
 
   // 加速度传感器
@@ -58,7 +55,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback, Sensor
   private val simpleDrawTask = object : SimpleDrawTask(
     8,
     { canvas ->
-      if (markerColor == backgroundColorValue) {
+      if (markerColor == BACKGROUND_COLOR) {
         // 如果标记颜色和背景颜色相同，则直接绘制标记颜色
         canvas.drawColor(markerColor)
       } else {
@@ -85,24 +82,12 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback, Sensor
   var themeColor = ContextCompat.getColor(context, R.color.light_blue_600)
 
 
-  // 背景颜色动画
-  private val backgroundColorAnim = ValueAnimator.ofArgb(
-    ContextCompat.getColor(context, R.color.white),
-    ContextCompat.getColor(context, R.color.white),
-  ).apply {
-    duration = 550
-    setEvaluator(ArgbEvaluator())
-    addUpdateListener {
-      backgroundColorValue = it.animatedValue as Int
-    }
-  }
-
   // 开始背景色变化动画
   fun startBackgroundColorChangeAnim(
     @ColorInt fromColor: Int
   ) {
-    backgroundColorAnim.setIntValues(fromColor, BACKGROUND_COLOR)
-    backgroundColorAnim.start()
+//    backgroundColorAnim.setIntValues(fromColor, BACKGROUND_COLOR)
+//    backgroundColorAnim.start()
   }
 
   // 当前天气动画类型
@@ -123,7 +108,7 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback, Sensor
     // 创建一个位图用于存储结果
     val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(result)
-    canvas.drawColor(backgroundColorValue)
+    canvas.drawColor(BACKGROUND_COLOR)
     canvas.drawBitmap(foregroundBitmap, 0f, 0f, null)
     callbacks.invoke(result)
 //        val background = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -185,11 +170,11 @@ class WeatherBackgroundSurfaceView : SurfaceView, SurfaceHolder.Callback, Sensor
         // 根据 Y 值计算透明度
         // 当滚动到一定值时 透明度将固定为 1
       if (y < 0) {
-        ColorUtils.setAlphaComponent(backgroundColorValue, 0)
+        ColorUtils.setAlphaComponent(BACKGROUND_COLOR, 0)
       } else if (y < limit) {
-        ColorUtils.setAlphaComponent(backgroundColorValue, 255 * y / limit)
+        ColorUtils.setAlphaComponent(BACKGROUND_COLOR, 255 * y / limit)
       } else {
-        ColorUtils.setAlphaComponent(backgroundColorValue, 255)
+        ColorUtils.setAlphaComponent(BACKGROUND_COLOR, 255)
       }
   }
 

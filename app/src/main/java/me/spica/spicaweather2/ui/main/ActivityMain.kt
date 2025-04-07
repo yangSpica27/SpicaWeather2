@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.WindowCompat
 import androidx.core.view.children
+import androidx.core.view.drawToBitmap
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -30,12 +31,9 @@ import me.spica.spicaweather2.ui.manager_city.ActivityManagerCity
 import me.spica.spicaweather2.view.Manager2HomeView
 import me.spica.spicaweather2.view.view_group.ActivityMainLayout
 import me.spica.spicaweather2.view.view_group.WeatherMainLayout2
-import me.spica.spicaweather2.view.weather_bg.WeatherBackgroundSurfaceView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import androidx.core.graphics.createBitmap
-import androidx.core.view.drawToBitmap
 
 /**
  * 主页面

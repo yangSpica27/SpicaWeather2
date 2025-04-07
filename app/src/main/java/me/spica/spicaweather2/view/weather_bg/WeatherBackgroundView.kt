@@ -28,8 +28,7 @@ class WeatherBackgroundView : View, SensorEventListener {
     defStyleAttr
   )
 
-  // 背景色值
-  private var backgroundColorValue = Color.parseColor("#f7f8fa")
+
 
 
   // 天气动画管理器
@@ -82,8 +81,8 @@ class WeatherBackgroundView : View, SensorEventListener {
   fun startBackgroundColorChangeAnim(
     @ColorInt toColor: Int
   ) {
-    backgroundColorAnim.setIntValues(backgroundColorValue, toColor)
-    backgroundColorAnim.start()
+//    backgroundColorAnim.setIntValues(backgroundColorValue, toColor)
+//    backgroundColorAnim.start()
   }
 
   fun setMScrollY(y: Int) {
@@ -94,11 +93,11 @@ class WeatherBackgroundView : View, SensorEventListener {
         // 根据 Y 值计算透明度
         // 当滚动到一定值时 透明度将固定为 1
       if (y < 0) {
-        ColorUtils.setAlphaComponent(backgroundColorValue, 0)
+        ColorUtils.setAlphaComponent(WeatherBackgroundSurfaceView.BACKGROUND_COLOR, 0)
       } else if (y < limit) {
-        ColorUtils.setAlphaComponent(backgroundColorValue, 255 * y / limit)
+        ColorUtils.setAlphaComponent(WeatherBackgroundSurfaceView.BACKGROUND_COLOR, 255 * y / limit)
       } else {
-        ColorUtils.setAlphaComponent(backgroundColorValue, 255)
+        ColorUtils.setAlphaComponent(WeatherBackgroundSurfaceView.BACKGROUND_COLOR, 255)
       }
   }
 
@@ -136,7 +135,7 @@ class WeatherBackgroundView : View, SensorEventListener {
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
     synchronized(this) {
-      if (markerColor == backgroundColorValue) {
+      if (markerColor == WeatherBackgroundSurfaceView.BACKGROUND_COLOR) {
         canvas.drawColor(WeatherBackgroundSurfaceView.BACKGROUND_COLOR)
         return
       }

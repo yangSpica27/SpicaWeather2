@@ -11,6 +11,7 @@ import com.google.android.material.animation.ArgbEvaluatorCompat
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.view.weather_drawable.WeatherDrawableManager
 
+
 class WeatherBackgroundTextureView(
   context: Context,
 ) : HwTextureView(context),
