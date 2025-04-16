@@ -27,7 +27,7 @@
   <color name="pathBgColor">#26787474</color>
   <color name="textColorPrimaryLight">#de6c6969</color>
   <color name="line_default">#4DB6AC</color>
-  <color name="text_color_white">#FBFCFF</color>
+  <color name="text_color_white">#CCFFFFFF</color>
 
   <color name="shadow_in_card">#1C000000</color>
 

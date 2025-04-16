@@ -8,6 +8,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.WeatherType
+import me.spica.spicaweather2.common.getIconRes
 import timber.log.Timber
 
 @Entity
@@ -35,7 +36,7 @@ data class Weather(
         return WeatherType.WEATHER_THUNDERSTORM
       }
 
-      100,150 -> {
+      100, 150 -> {
         return WeatherType.WEATHER_SUNNY
       }
 
@@ -91,21 +92,7 @@ data class Weather(
   }
 
   @DrawableRes
-  fun getWeatherIcon(): Int =
-    when (getWeatherType()) {
-      WeatherType.WEATHER_SUNNY -> R.drawable.ic_sunny
-      WeatherType.WEATHER_CLOUDY -> R.drawable.ic_cloudly
-      WeatherType.WEATHER_FORECAST -> R.drawable.ic_cloudly
-      WeatherType.WEATHER_RAINY -> R.drawable.ic_rain
-      WeatherType.WEATHER_SNOW -> R.drawable.ic_snow
-      WeatherType.WEATHER_SLEET -> R.drawable.ic_rain
-      WeatherType.WEATHER_FOG -> R.drawable.ic_fog
-      WeatherType.WEATHER_HAZE -> R.drawable.ic_fog
-      WeatherType.WEATHER_HAIL -> R.drawable.ic_rain
-      WeatherType.WEATHER_THUNDER -> R.drawable.ic_thumb
-      WeatherType.WEATHER_THUNDERSTORM -> R.drawable.ic_thumb
-      WeatherType.WEATHER_SANDSTORM -> R.drawable.ic_storm_icon
-    }
+  fun getWeatherIcon(): Int = getWeatherType().getIconRes()
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

@@ -31,17 +31,17 @@ enum class WeatherType {
 fun WeatherType.getIconRes(): Int =
   when (this) {
     WeatherType.WEATHER_SUNNY -> R.drawable.ic_sunny
-    WeatherType.WEATHER_CLOUDY -> R.drawable.ic_cloudly
+    WeatherType.WEATHER_CLOUDY -> R.drawable.ic_cloudy
     WeatherType.WEATHER_FORECAST -> R.drawable.ic_forecast
     WeatherType.WEATHER_RAINY -> R.drawable.ic_rain
     WeatherType.WEATHER_SNOW -> R.drawable.ic_snow
-    WeatherType.WEATHER_SLEET -> R.drawable.ic_rain
+    WeatherType.WEATHER_SLEET -> R.drawable.ic_rain_and_snow
     WeatherType.WEATHER_FOG -> R.drawable.ic_fog
     WeatherType.WEATHER_HAZE -> R.drawable.ic_fog
-    WeatherType.WEATHER_HAIL -> R.drawable.ic_rain
-    WeatherType.WEATHER_THUNDER -> R.drawable.ic_thumb
-    WeatherType.WEATHER_THUNDERSTORM -> R.drawable.ic_thumb
-    WeatherType.WEATHER_SANDSTORM -> R.drawable.ic_storm_icon
+    WeatherType.WEATHER_HAIL -> R.drawable.ic_rain_and_snow
+    WeatherType.WEATHER_THUNDER -> R.drawable.ic_thunderstorm
+    WeatherType.WEATHER_THUNDERSTORM -> R.drawable.ic_thunderstorm
+    WeatherType.WEATHER_SANDSTORM -> R.drawable.ic_sand_storm
   }
 
 // // 拓展方法 用于获取对应类型的动画
@@ -94,7 +94,8 @@ fun WeatherType.getDrawable(): GradientDrawable =
       GradientDrawable(
         GradientDrawable.Orientation.TOP_BOTTOM,
         intArrayOf(
-          Color.parseColor("#fdbc4c"),
+          Color.parseColor("#ffc53d"),
+          Color.parseColor("#ff8300"),
           Color.parseColor("#ff8300"),
         ),
       )
