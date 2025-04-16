@@ -1,7 +1,6 @@
 package me.spica.spicaweather2.base
 
 import android.app.Application
-import android.os.Looper
 import dagger.hilt.android.HiltAndroidApp
 import me.spica.spicaweather2.BuildConfig
 import timber.log.Timber
@@ -20,7 +19,6 @@ class App : Application() {
     if (BuildConfig.DEBUG){
       Timber.plant(Timber.DebugTree())
     }
-    Looper.getMainLooper()
   }
 
   init {

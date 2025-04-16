@@ -4,8 +4,7 @@ import com.squareup.moshi.JsonClass
 import me.spica.spicaweather2.common.WeatherCodeUtils
 import me.spica.spicaweather2.common.WeatherType
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 private val sdf =
   SimpleDateFormat(

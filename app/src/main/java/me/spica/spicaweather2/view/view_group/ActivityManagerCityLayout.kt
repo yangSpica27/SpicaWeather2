@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.core.view.updatePadding
-import androidx.core.widget.TextViewCompat.setCompoundDrawablesRelative
-import androidx.core.widget.TextViewCompat.setTextAppearance
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar

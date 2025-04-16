@@ -44,7 +44,7 @@ enum class HomeCardType(
       FOOTER -> AppCompatTextView(context).apply {
         layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         textAlignment = View.TEXT_ALIGNMENT_CENTER
-        text = HtmlCompat.fromHtml("<font color='#666'>数据来源于</font>&nbsp<b>和风天气<b/>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        text = HtmlCompat.fromHtml("<font color='#F5F5F5'>数据来源于</font>&nbsp<font color='#F5F5F5'>和风天气</font>", HtmlCompat.FROM_HTML_MODE_LEGACY)
       }
     }
 }

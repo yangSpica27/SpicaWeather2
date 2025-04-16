@@ -1,19 +1,16 @@
 package me.spica.spicaweather2.view.weather_drawable
 
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
+import androidx.core.graphics.toColorInt
+import androidx.core.graphics.withMatrix
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.view.weather_bg.RainFlake
 import me.spica.spicaweather2.weather_anim_counter.RainParticleManager
 import timber.log.Timber
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import androidx.core.graphics.toColorInt
-import androidx.core.graphics.withMatrix
-import kotlin.math.absoluteValue
-import androidx.core.graphics.withRotation
 
 /**
  * 雨水的绘制
@@ -24,7 +21,7 @@ class RainDrawable2 : WeatherDrawable() {
     Paint().apply {
       strokeCap = Paint.Cap.ROUND
       strokeWidth = 5.dp
-      color = "#D9D9D9".toColorInt()
+      color = "#14000000".toColorInt()
       style = Paint.Style.FILL
     }
 
@@ -32,7 +29,7 @@ class RainDrawable2 : WeatherDrawable() {
     Paint().apply {
       strokeCap = Paint.Cap.ROUND
       strokeWidth = 4.dp
-      color = Color.parseColor("#D9D9D9")
+      color = "#14000000".toColorInt()
       style = Paint.Style.FILL
     }
 
@@ -82,7 +79,7 @@ class RainDrawable2 : WeatherDrawable() {
             width,
             height,
             rainPaint2,
-            "#E8E8E8".toColorInt(),
+            rainPaint2.color,
           ),
         )
       }

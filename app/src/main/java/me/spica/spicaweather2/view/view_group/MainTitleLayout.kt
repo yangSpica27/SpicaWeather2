@@ -22,7 +22,7 @@ class MainTitleLayout(
         LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
       setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_TitleLarge)
       text = "--"
-      setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
       typeface =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
           Typeface.create(Typeface.DEFAULT, 500, false)
@@ -36,7 +36,7 @@ class MainTitleLayout(
       layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
       setText(R.string.add)
       setPadding(12.dp)
-      setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
       textSize = 18f
       typeface =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

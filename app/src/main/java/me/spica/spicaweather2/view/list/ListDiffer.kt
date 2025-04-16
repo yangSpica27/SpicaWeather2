@@ -1,6 +1,11 @@
 package me.spica.spicaweather2.view.list
 
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.AdapterListUpdateCallback
+import androidx.recyclerview.widget.AsyncDifferConfig
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListUpdateCallback
+import androidx.recyclerview.widget.RecyclerView
 
 interface ListDiffer<T, I> {
   /** The current list of [T] items. */

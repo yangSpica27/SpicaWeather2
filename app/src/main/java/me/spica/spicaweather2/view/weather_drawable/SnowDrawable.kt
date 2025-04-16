@@ -4,6 +4,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import androidx.annotation.WorkerThread
+import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.toColorInt
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.weather_anim_counter.RainOrSnowPoint
 import me.spica.spicaweather2.weather_anim_counter.SnowEffectCounter
@@ -20,7 +22,7 @@ class SnowDrawable : WeatherDrawable() {
     Paint().apply {
       strokeCap = Paint.Cap.ROUND
       strokeWidth = 2.dp
-      color = Color.WHITE
+      color = "#14000000".toColorInt()
       style = Paint.Style.FILL
     }
 
@@ -34,9 +36,9 @@ class SnowDrawable : WeatherDrawable() {
 
   private val colors =
     intArrayOf(
-      Color.parseColor("#26787474"),
-      Color.parseColor("#ff9A9A9A"),
-      Color.parseColor("#ff999999"),
+      Color.WHITE,
+      ColorUtils.setAlphaComponent(Color.WHITE,200),
+      ColorUtils.setAlphaComponent(Color.WHITE,150),
     )
 
   override fun startAnim() = Unit

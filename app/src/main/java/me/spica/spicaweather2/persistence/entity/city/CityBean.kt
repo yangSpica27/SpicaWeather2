@@ -15,7 +15,7 @@ import kotlinx.parcelize.Parcelize
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
-import java.util.Calendar
+import java.util.*
 
 @Parcelize
 @Entity(tableName = "t_city")

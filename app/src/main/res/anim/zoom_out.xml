@@ -18,6 +18,6 @@
     android:fromAlpha="1"
     android:toAlpha="0"
     android:interpolator="@android:anim/accelerate_interpolator"
-    android:duration="100"/>
+    android:duration="100" />
 
 </set>

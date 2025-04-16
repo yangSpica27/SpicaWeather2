@@ -1,14 +1,11 @@
 package me.spica.spicaweather2.view.weather_drawable
 
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
+import androidx.core.graphics.toColorInt
 import me.spica.spicaweather2.tools.dp
 import timber.log.Timber
 import kotlin.random.Random
-import androidx.core.graphics.toColorInt
-import java.util.ArrayList
-import java.util.Vector
 
 private val random = Random.Default
 

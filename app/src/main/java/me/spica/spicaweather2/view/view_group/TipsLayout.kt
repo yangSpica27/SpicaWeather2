@@ -12,6 +12,7 @@ import android.view.animation.DecelerateInterpolator
 import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.animation.doOnEnd
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.marginBottom
 import androidx.core.view.marginLeft
@@ -19,7 +20,6 @@ import androidx.core.view.marginTop
 import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.HomeCardType
-import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.weather.LifeIndexBean
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
@@ -64,6 +64,7 @@ class TipsLayout(
       )
       typeface = Typeface.DEFAULT_BOLD
       text = "生活指数"
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
     }
 
   // 空气指数
@@ -118,8 +119,6 @@ class TipsLayout(
   }
 
   override fun bindData(weather: Weather) {
-    val themeColor = weather.getWeatherType().getThemeColor()
-    titleText.setTextColor(themeColor)
     val spt =
       weather.lifeIndexes.firstOrNull {
         it.type == LifeIndexBean.SPT

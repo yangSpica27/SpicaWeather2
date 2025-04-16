@@ -43,7 +43,7 @@ class NowWeatherInfoCard(
           ViewGroup.LayoutParams.WRAP_CONTENT,
           ViewGroup.LayoutParams.WRAP_CONTENT,
         )
-      setTextColor(ContextCompat.getColor(context, R.color.humidness_color))
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
       updatePadding(bottom = 4.dp)
       typeface = android.graphics.Typeface.DEFAULT_BOLD
       text = "--"
@@ -56,7 +56,7 @@ class NowWeatherInfoCard(
           ViewGroup.LayoutParams.WRAP_CONTENT,
           ViewGroup.LayoutParams.WRAP_CONTENT,
         )
-      setTextColor(ContextCompat.getColor(context, R.color.humidness_color))
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
       text = "湿度"
       setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18f)
     }
@@ -69,7 +69,7 @@ class NowWeatherInfoCard(
           ViewGroup.LayoutParams.WRAP_CONTENT,
           ViewGroup.LayoutParams.WRAP_CONTENT,
         )
-      setTextColor(ContextCompat.getColor(context, R.color.wind_speed_color))
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
       typeface = android.graphics.Typeface.DEFAULT_BOLD
       updatePadding(bottom = 4.dp)
       text = "--"
@@ -82,7 +82,7 @@ class NowWeatherInfoCard(
           ViewGroup.LayoutParams.WRAP_CONTENT,
           ViewGroup.LayoutParams.WRAP_CONTENT,
         )
-      setTextColor(ContextCompat.getColor(context, R.color.wind_speed_color))
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
       text = "风速"
       setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18f)
     }
@@ -96,7 +96,7 @@ class NowWeatherInfoCard(
           ViewGroup.LayoutParams.WRAP_CONTENT,
         )
       updatePadding(bottom = 4.dp)
-      setTextColor(ContextCompat.getColor(context, R.color.pressure_color))
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
       typeface = android.graphics.Typeface.DEFAULT_BOLD
       text = "--"
     }
@@ -108,7 +108,7 @@ class NowWeatherInfoCard(
           ViewGroup.LayoutParams.WRAP_CONTENT,
           ViewGroup.LayoutParams.WRAP_CONTENT,
         )
-      setTextColor(ContextCompat.getColor(context, R.color.pressure_color))
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
       text = "气压"
       setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18f)
     }
@@ -122,7 +122,7 @@ class NowWeatherInfoCard(
           ViewGroup.LayoutParams.WRAP_CONTENT,
         )
       updatePadding(bottom = 4.dp)
-      setTextColor(ContextCompat.getColor(context, R.color.feel_temp_color))
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
       typeface = android.graphics.Typeface.DEFAULT_BOLD
       text = "--"
     }
@@ -134,7 +134,7 @@ class NowWeatherInfoCard(
           ViewGroup.LayoutParams.WRAP_CONTENT,
           ViewGroup.LayoutParams.WRAP_CONTENT,
         )
-      setTextColor(ContextCompat.getColor(context, R.color.feel_temp_color))
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
       text = "体感温度"
       setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18f)
     }
@@ -148,8 +148,8 @@ class NowWeatherInfoCard(
           ViewGroup.LayoutParams.WRAP_CONTENT,
         )
       setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_TitleMedium)
-      setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16f)
-      setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
+      setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16.5f)
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
       text = "--"
       updatePadding(0, 0, 0, 12.dp)
     }

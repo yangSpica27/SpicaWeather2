@@ -17,14 +17,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.toColorInt
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.WeatherCodeUtils
 import me.spica.spicaweather2.common.getIconRes
-import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.weather.DailyWeatherBean
 import me.spica.spicaweather2.tools.dp
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 
 /**
  * 每日天气itemView
@@ -155,7 +155,6 @@ class DailyItemView : View {
     }
 
 
-
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
     dailyWeatherBean?.let { dailyWeatherBean ->
@@ -169,9 +168,9 @@ class DailyItemView : View {
         }
       textPaint.color =
         if (isFirst) {
-          WeatherCodeUtils.getWeatherCode(dailyWeatherBean.iconId).getThemeColor()
+          ContextCompat.getColor(context, R.color.white)
         } else {
-          ContextCompat.getColor(context, R.color.textColorPrimary)
+          ContextCompat.getColor(context, R.color.text_color_white)
         }
 
       textPaint.textSize = 16.dp
@@ -186,7 +185,12 @@ class DailyItemView : View {
       canvas.save()
 
       val drawProgressIconBitmap =
-        getOrCreateBitmap(R.drawable.ic_down, width = 20.dp.toInt(), height = 20.dp.toInt())
+        getOrCreateBitmap(
+          R.drawable.ic_down,
+          width = 20.dp.toInt(),
+          height = 20.dp.toInt(),
+          tintColor = Color.WHITE
+        )
       canvas.translate(
         width - paddingRight - drawProgressIconBitmap.width * 1f,
         45.dp / 2f - drawProgressIconBitmap.height / 2,
@@ -215,7 +219,7 @@ class DailyItemView : View {
 
       canvas.restore()
 
-      textPaint.color = ContextCompat.getColor(context, R.color.textColorPrimary)
+      textPaint.color = ContextCompat.getColor(context, R.color.white)
       textPaint.textSize = 16.dp
       val maxTempText = "${dailyWeatherBean.maxTemp}℃"
       textPaint.getTextBounds(maxTempText, 0, maxTempText.length, textBound)
@@ -226,7 +230,7 @@ class DailyItemView : View {
         textPaint,
       )
 
-      textPaint.color = ContextCompat.getColor(context, R.color.textColorPrimary)
+      textPaint.color = ContextCompat.getColor(context, R.color.white)
       textPaint.textSize = 16.dp
       val minTempText = "${dailyWeatherBean.minTemp}℃"
       textPaint.getTextBounds(minTempText, 0, minTempText.length, textBound)
@@ -261,7 +265,7 @@ class DailyItemView : View {
 
       progressPaint.shader = null
       progressPaint.strokeWidth = 8.dp
-      progressPaint.color = ContextCompat.getColor(context, R.color.rainRectColor)
+      progressPaint.color = "#1B000000".toColorInt()
 
       canvas.drawLine(
         left,
@@ -387,7 +391,12 @@ class DailyItemView : View {
     right: Float,
     top: Float,
   ) {
-    val bitmap = getOrCreateBitmap(iconRes, width = 24.dp.toInt(), height = 24.dp.toInt())
+    val bitmap = getOrCreateBitmap(
+      iconRes,
+      width = 24.dp.toInt(),
+      height = 24.dp.toInt(),
+      tintColor = Color.WHITE
+    )
     canvas.drawBitmap(
       bitmap,
       left + 8.dp,
@@ -406,7 +415,7 @@ class DailyItemView : View {
 
     itemTextPaint.textSize = 17.dp
     itemTextPaint.typeface = Typeface.DEFAULT_BOLD
-    itemTextPaint.color = ContextCompat.getColor(context, R.color.textColorPrimary)
+    itemTextPaint.color = ContextCompat.getColor(context, R.color.text_color_white)
     itemTextPaint.getTextBounds(title, 0, title.length, textRect)
     canvas.drawText(
       title,
@@ -414,7 +423,7 @@ class DailyItemView : View {
       top + 12.dp + textRect.height(),
       itemTextPaint,
     )
-    itemTextPaint.color = ContextCompat.getColor(context, R.color.textColorPrimaryHint)
+    itemTextPaint.color = ContextCompat.getColor(context, R.color.text_color_white)
     itemTextPaint.typeface = Typeface.DEFAULT
     itemTextPaint.textSize = 16.dp
     itemTextPaint.getTextBounds(text, 0, text.length, textRect)
@@ -445,6 +454,7 @@ class DailyItemView : View {
     iconRes: Int,
     width: Int = 25.dp.toInt(),
     height: Int = 25.dp.toInt(),
+    tintColor: Int? = null
   ): Bitmap {
     if (bitmapPool[iconRes] != null) {
       return bitmapPool[iconRes]
@@ -454,7 +464,11 @@ class DailyItemView : View {
         .getDrawable(
           context,
           iconRes,
-        )!!
+        )?.apply {
+          if (tintColor != null) {
+            setTint(tintColor)
+          }
+        }!!
         .toBitmap(
           width = width,
           height = height,

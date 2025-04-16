@@ -6,11 +6,11 @@ import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.marginLeft
 import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.HomeCardType
-import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.line.HourlyLineView
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
@@ -46,6 +46,7 @@ class HourlyCardLayout(
         context,
         com.google.android.material.R.style.TextAppearance_Material3_TitleMedium
       )
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
       typeface = Typeface.DEFAULT_BOLD
     }
 
@@ -103,8 +104,6 @@ class HourlyCardLayout(
   override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
 
   override fun bindData(weather: Weather) {
-    val themeColor = weather.getWeatherType().getThemeColor()
-    titleTextView.setTextColor(themeColor)
     hourlyLineView.setData(weather.hourlyWeather)
   }
 }

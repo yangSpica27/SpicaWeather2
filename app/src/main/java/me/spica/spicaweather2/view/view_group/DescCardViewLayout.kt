@@ -26,7 +26,7 @@ class DescCardViewLayout(
       setSingleLine()
       setPadding(12.dp, 12.dp, 12.dp, 8.dp)
       setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_BodyMedium)
-      setTextColor(context.getColor(R.color.textColorPrimaryHint))
+      setTextColor(context.getColor(R.color.text_color_white))
       textSize = 15f
       text = "--"
     }
@@ -39,7 +39,7 @@ class DescCardViewLayout(
       text = "--"
       setPadding(12.dp, 0, 12.dp, 0)
       setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_TitleLarge)
-      setTextColor(context.getColor(R.color.textColorPrimary))
+      setTextColor(context.getColor(R.color.white))
       textSize = 20f
     }
 
@@ -56,7 +56,7 @@ class DescCardViewLayout(
       maxLines = 2
       text = "--"
       setPadding(12.dp, 0, 12.dp, 12.dp)
-      setTextColor(context.getColor(R.color.textColorPrimaryHint))
+      setTextColor(context.getColor(R.color.window_background))
       textSize = 14.5f
     }
 
@@ -94,7 +94,7 @@ class DescCardViewLayout(
         ImageSpan(
           context.getCompatDrawable(icon)?.apply {
             setBounds(0, 0, 16.dp, 16.dp)
-            setTint(context.getColor(R.color.textColorPrimaryHint))
+            setTint(context.getColor(R.color.text_color_white))
           }!!,
           ImageSpan.ALIGN_CENTER,
         )
@@ -102,7 +102,7 @@ class DescCardViewLayout(
         ImageSpan(
           context.getCompatDrawable(icon)?.apply {
             setBounds(0, 0, 16.dp, 16.dp)
-            setTint(context.getColor(R.color.textColorPrimaryHint))
+            setTint(context.getColor(R.color.text_color_white))
           }!!,
         )
       }

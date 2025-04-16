@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
 import androidx.core.text.HtmlCompat
 import androidx.core.view.marginLeft
 import androidx.core.view.marginTop
@@ -42,7 +43,7 @@ class CurrentWeatherLayout(
           ViewGroup.LayoutParams.WRAP_CONTENT,
           ViewGroup.LayoutParams.WRAP_CONTENT,
         )
-      setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
       includeFontPadding = false
     }
 
@@ -59,7 +60,7 @@ class CurrentWeatherLayout(
         ).also {
           it.updateMargins(left = 15.dp)
         }
-      setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
+      setTextColor("#D6E8F4".toColorInt())
       setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21f)
       includeFontPadding = false
     }
@@ -74,11 +75,11 @@ class CurrentWeatherLayout(
           it.topMargin = 12.dp
         }
       this.setPadding(0)
-      this.setDotIndicatorColor(ContextCompat.getColor(context, R.color.textColorPrimary))
+      this.setDotIndicatorColor(ContextCompat.getColor(context, R.color.text_color_white))
       this.setStrokeDotsIndicatorColor(
         ContextCompat.getColor(
           context,
-          R.color.textColorPrimaryLight,
+          R.color.white,
         ),
       )
     }
@@ -187,9 +188,9 @@ class CurrentWeatherLayout(
           0f,
           tempTextView.height * 1f,
           intArrayOf(
-            Color.BLACK,
-            getColorWithAlpha(0.9f, Color.BLACK),
-            getColorWithAlpha(0.5f, Color.BLACK),
+            Color.WHITE,
+            getColorWithAlpha(0.9f, Color.WHITE),
+            getColorWithAlpha(0.5f, Color.WHITE),
           ),
           floatArrayOf(
             0f,

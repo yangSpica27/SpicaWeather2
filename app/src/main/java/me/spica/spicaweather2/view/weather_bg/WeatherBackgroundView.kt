@@ -1,7 +1,5 @@
 package me.spica.spicaweather2.view.weather_bg
 
-import android.animation.ArgbEvaluator
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -11,7 +9,6 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.AttributeSet
 import android.view.View
-import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import me.spica.spicaweather2.R
@@ -42,21 +39,12 @@ class WeatherBackgroundView : View, SensorEventListener {
   var themeColor = ContextCompat.getColor(context, R.color.light_blue_600)
 
 
-  // 背景颜色动画
-  private val backgroundColorAnim = ValueAnimator.ofArgb(
-    ContextCompat.getColor(context, R.color.white),
-    ContextCompat.getColor(context, R.color.white),
-  ).apply {
-    duration = 550
-    setEvaluator(ArgbEvaluator())
-    addUpdateListener {
-//      backgroundColorValue = it.animatedValue as Int
-    }
-  }
+
 
   fun setBackgroundY(y: Int) {
     // 设置背景 Y
     weatherDrawableManager.setBackgroundY(y)
+
   }
 
   // 标记颜色
@@ -77,13 +65,7 @@ class WeatherBackgroundView : View, SensorEventListener {
     }
 
 
-  // 开始背景色变化动画
-  fun startBackgroundColorChangeAnim(
-    @ColorInt toColor: Int
-  ) {
-//    backgroundColorAnim.setIntValues(backgroundColorValue, toColor)
-//    backgroundColorAnim.start()
-  }
+
 
   fun setMScrollY(y: Int) {
     // 设置滚动 Y
@@ -93,11 +75,11 @@ class WeatherBackgroundView : View, SensorEventListener {
         // 根据 Y 值计算透明度
         // 当滚动到一定值时 透明度将固定为 1
       if (y < 0) {
-        ColorUtils.setAlphaComponent(WeatherBackgroundSurfaceView.BACKGROUND_COLOR, 0)
+        ColorUtils.setAlphaComponent(themeColor, 0)
       } else if (y < limit) {
-        ColorUtils.setAlphaComponent(WeatherBackgroundSurfaceView.BACKGROUND_COLOR, 255 * y / limit)
+        ColorUtils.setAlphaComponent(themeColor, 255 * y / limit)
       } else {
-        ColorUtils.setAlphaComponent(WeatherBackgroundSurfaceView.BACKGROUND_COLOR, 255)
+        ColorUtils.setAlphaComponent(themeColor, 255)
       }
   }
 
@@ -135,11 +117,11 @@ class WeatherBackgroundView : View, SensorEventListener {
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
     synchronized(this) {
-      if (markerColor == WeatherBackgroundSurfaceView.BACKGROUND_COLOR) {
-        canvas.drawColor(WeatherBackgroundSurfaceView.BACKGROUND_COLOR)
+      if (markerColor == themeColor) {
+        canvas.drawColor(themeColor)
         return
       }
-      canvas.drawColor(WeatherBackgroundSurfaceView.BACKGROUND_COLOR)
+//      canvas.drawColor(WeatherBackgroundSurfaceView.BACKGROUND_COLOR)
       weatherDrawableManager.doOnDraw(canvas, width, height)
       canvas.drawColor(markerColor)
     }

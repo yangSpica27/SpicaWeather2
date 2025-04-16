@@ -25,6 +25,7 @@ import android.view.ViewParent
 import android.widget.OverScroller
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.toBitmap
 import androidx.viewpager2.widget.ViewPager2
 import me.spica.spicaweather2.R
@@ -35,7 +36,7 @@ import me.spica.spicaweather2.persistence.entity.weather.HourlyWeatherBean
 import me.spica.spicaweather2.tools.dp
 import me.spica.spicaweather2.tools.getColorWithAlpha
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 import kotlin.math.abs
 
 /**
@@ -72,13 +73,13 @@ class HourlyLineView : View {
     TextPaint().apply {
       typeface = Typeface.DEFAULT_BOLD
       textSize = 16.dp
-      color = ContextCompat.getColor(context, R.color.textColorPrimary)
+      color = ContextCompat.getColor(context, R.color.text_color_white)
       textAlign = Paint.Align.CENTER
     }
 
   private val lineBgPaint =
     Paint().apply {
-      color = ContextCompat.getColor(context, R.color.black)
+      color = ContextCompat.getColor(context, R.color.text_color_white)
       style = Paint.Style.FILL
     }
 
@@ -192,7 +193,7 @@ class HourlyLineView : View {
           paddingTop + paddingBottom + topIconHeight + tempTextHeight + lineHeight + popHeight + weatherNameHeight + timeHeight,
           intArrayOf(
             Color.TRANSPARENT,
-            ColorUtils.setAlphaComponent(themeColor, 125),
+            ColorUtils.setAlphaComponent(Color.WHITE, 55),
             Color.TRANSPARENT,
           ),
           floatArrayOf(
@@ -208,7 +209,7 @@ class HourlyLineView : View {
       WeatherCodeUtils
         .getWeatherCode(iconId = data.firstOrNull()?.iconId ?: 101)
         .getThemeColor()
-    linePaint.color = themeColor
+    linePaint.color = ContextCompat.getColor(context,R.color.text_color_white)
 
     lineBgPaint.shader =
       LinearGradient(
@@ -221,8 +222,8 @@ class HourlyLineView : View {
             tempTextHeight + 12.dp +
             lineHeight - 12.dp,
         intArrayOf(
-          ColorUtils.setAlphaComponent(colors.firstOrNull() ?: Color.TRANSPARENT, 60),
-          ColorUtils.setAlphaComponent(colors.firstOrNull() ?: Color.TRANSPARENT, 0),
+          ColorUtils.setAlphaComponent(ContextCompat.getColor(context,R.color.text_color_white)?: Color.TRANSPARENT, 120),
+          ColorUtils.setAlphaComponent(ContextCompat.getColor(context,R.color.text_color_white)?: Color.TRANSPARENT, 0),
         ),
         floatArrayOf(0f, 1f),
         TileMode.CLAMP,
@@ -318,13 +319,13 @@ class HourlyLineView : View {
 
   private var cursorPaint =
     Paint(Paint.ANTI_ALIAS_FLAG).apply {
-      color = ContextCompat.getColor(context, R.color.line_divider)
+      color = ContextCompat.getColor(context, R.color.white)
       strokeWidth = itemWidth
     }
 
   private val baseLinePaint =
     Paint().apply {
-      color = ContextCompat.getColor(context, R.color.dottedLineColor)
+      color = ContextCompat.getColor(context, R.color.text_color_white)
       strokeWidth = 2f
       pathEffect = DashPathEffect(floatArrayOf(10f, 10f), 0f)
     }
@@ -336,11 +337,7 @@ class HourlyLineView : View {
     if (cacheBitmap == null) {
       // 没有缓存就画一遍 然后画完生成位图保存 后面直接加载图片就可以了 避免重复绘制工作
       cacheBitmap =
-        Bitmap.createBitmap(
-          (paddingLeft + paddingRight + mPointList.size * itemWidth).toInt(),
-          height,
-          Bitmap.Config.ARGB_8888,
-        )
+        createBitmap((paddingLeft + paddingRight + mPointList.size * itemWidth).toInt(), height)
       val cacheCanvas = Canvas(cacheBitmap!!)
       drawBaseLine(cacheCanvas)
       drawTempLine(cacheCanvas)
@@ -397,7 +394,7 @@ class HourlyLineView : View {
   private val popTextPaint =
     TextPaint().apply {
       textSize = 15.dp
-      color = ContextCompat.getColor(context, R.color.textColorPrimaryHint)
+      color = ContextCompat.getColor(context, R.color.text_color_white)
       typeface = Typeface.DEFAULT_BOLD
       textAlign = Paint.Align.CENTER
     }
@@ -446,11 +443,11 @@ class HourlyLineView : View {
     TextPaint().apply {
       textSize = 16.dp
       textAlign = Paint.Align.CENTER
-      color = ContextCompat.getColor(context, R.color.textColorPrimary)
+      color = ContextCompat.getColor(context, R.color.text_color_white)
       typeface = Typeface.DEFAULT_BOLD
     }
 
-  private val sdfHHMM = SimpleDateFormat("HH时", Locale.CHINA)
+  private val sdfHHMM = SimpleDateFormat("HH", Locale.CHINA)
 
   private fun drawTime(
     canvas: Canvas,
@@ -458,13 +455,24 @@ class HourlyLineView : View {
     index: Int,
   ) {
     val time = sdfHHMM.format(data[index].fxTime())
-    drawTimeTextPaint.getTextBounds(time, 0, time.length, textBound)
-    canvas.drawText(
-      time,
-      point.x.toFloat(),
-      height - (timeHeight - textBound.height()) / 2f,
-      drawTimeTextPaint,
-    )
+    if ((time.toIntOrNull() ?: 0) <= 12) {
+      drawTimeTextPaint.getTextBounds("$time AM", 0, time.length, textBound)
+      canvas.drawText(
+        "${time} AM",
+        point.x.toFloat(),
+        height - (timeHeight - textBound.height()) / 2f,
+        drawTimeTextPaint,
+      )
+    } else {
+      drawTimeTextPaint.getTextBounds("$time PM", 0, time.length, textBound)
+      canvas.drawText(
+        "$time PM",
+        point.x.toFloat(),
+        height - (timeHeight - textBound.height()) / 2f,
+        drawTimeTextPaint,
+      )
+    }
+
   }
 
   private fun drawPop(
@@ -473,10 +481,10 @@ class HourlyLineView : View {
     point: Point,
   ) {
     if (data[index].pop > 40) {
-      popTextPaint.color = ContextCompat.getColor(context, R.color.light_blue_600)
+      popTextPaint.color = ContextCompat.getColor(context, R.color.text_color_white)
       popTextPaint.typeface = Typeface.DEFAULT_BOLD
     } else {
-      popTextPaint.color = ContextCompat.getColor(context, R.color.textColorPrimaryHint)
+      popTextPaint.color = ContextCompat.getColor(context, R.color.text_color_white)
       popTextPaint.typeface = Typeface.DEFAULT
     }
     canvas.drawText(

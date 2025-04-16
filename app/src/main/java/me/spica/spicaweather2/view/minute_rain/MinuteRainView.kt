@@ -28,7 +28,7 @@ class MinuteRainView : View {
     TextPaint().apply {
       // 文本大小
       textSize = 14.dp
-      color = ContextCompat.getColor(context, R.color.rain_line_view_text_color)
+      color = ContextCompat.getColor(context, R.color.text_color_white)
     }
 
   constructor(context: Context?) : super(context)
@@ -121,7 +121,7 @@ class MinuteRainView : View {
     TextPaint().apply {
       textSize = 14.dp
       // 文本对齐方式
-      color = ContextCompat.getColor(context, R.color.rain_line_view_text_color)
+      color = ContextCompat.getColor(context, R.color.white)
       textAlign = Paint.Align.CENTER
     }
 

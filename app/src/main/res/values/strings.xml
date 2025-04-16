@@ -1,80 +1,80 @@
 <resources>
-    <string name="app_name">柠檬天气2</string>
-    <string name="str_hint_search_city">请输入城市名或拼音</string>
-    <string name="str_cancel">取消</string>
-    <string name="str_retry_location">重新定位</string>
-    <string name="str_is_location">正在定位</string>
-    <string name="rationale_location">将获取地理信息用于快速定位城市</string>
-    <string name="rationale_location_ok">好的</string>
-    <string name="rationale_location_cancel">取消</string>
-    <string name="sunrise_sunset_time">日出%1$s\n日落%2$s</string>
-    <string name="hint_city_name">城市名称</string>
-    <string name="cancel">取消</string>
-    <string name="key_word">关键字</string>
+  <string name="app_name">柠檬天气2</string>
+  <string name="str_hint_search_city">请输入城市名或拼音</string>
+  <string name="str_cancel">取消</string>
+  <string name="str_retry_location">重新定位</string>
+  <string name="str_is_location">正在定位</string>
+  <string name="rationale_location">将获取地理信息用于快速定位城市</string>
+  <string name="rationale_location_ok">好的</string>
+  <string name="rationale_location_cancel">取消</string>
+  <string name="sunrise_sunset_time">日出%1$s\n日落%2$s</string>
+  <string name="hint_city_name">城市名称</string>
+  <string name="cancel">取消</string>
+  <string name="key_word">关键字</string>
 
-    <string-array name="cards">
-        <item>当前天气</item>
-        <item>小时级别天气</item>
-        <item>日级别天气</item>
-        <item>日出日落</item>
-        <item>空气质量信息</item>
-        <item>生活指数</item>
-    </string-array>
+  <string-array name="cards">
+    <item>当前天气</item>
+    <item>小时级别天气</item>
+    <item>日级别天气</item>
+    <item>日出日落</item>
+    <item>空气质量信息</item>
+    <item>生活指数</item>
+  </string-array>
 
-    <string-array name="cards_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-    </string-array>
+  <string-array name="cards_values">
+    <item>0</item>
+    <item>1</item>
+    <item>2</item>
+    <item>3</item>
+    <item>4</item>
+    <item>5</item>
+  </string-array>
 
-    <string-array name="source">
-        <item>和风天气</item>
-    </string-array>
+  <string-array name="source">
+    <item>和风天气</item>
+  </string-array>
 
-    <string name="sport_index_desc">运动指数是考虑气象因素和环境对人体的影响，包括紫外线、风力、气压、温度、光照以及雨雪沙尘等，为广大老百姓提供的是否适宜运动的建议。运动指数分为3级，级数越高，就越不适宜运动。</string>
-    <string name="air_index_desc">空气污染扩散条件指数是不考虑污染源的情况下，从气象角度出发，对未来大气污染物的稀释、扩散、聚积和清除能力进行评价，主要考虑的气象因素是温度、湿度、风速和天气现象，对气象条件进行分级。空气污染扩散条件指数分为5级，级数越高气象条件越不利于污染物的扩散。</string>
-    <string name="clothes_index_desc">穿衣指数是根据自然环境对人体感觉温度影响最主要的天空状况、气温、湿度及风等气象条件，对人们适宜穿着的服装进行分级，以提醒人们根据天气变化适当着装。一般来说，温度较低、风速较大，则穿衣指数级别较高。穿衣气象指数共分8级，指数越小，穿衣的厚度越薄。</string>
-    <string name="car_index_desc">洗车指数是根据过去12小时和未来48小时有无雨雪天气，路面是否有积雪和泥水，是否容易使汽车溅上泥水，是否有沙尘等天气条件，给驾驶员朋友提供是否适宜洗车的气象指数。洗车指数共分为4级，级数越高，就越不适宜洗车。</string>
-    <string name="add_more_city">添加更多城市</string>
-    <string name="warning_detail">预警详情</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">当前的天气信息</string>
-    <string name="sun_rise_sun_set">日出日落</string>
-    <string name="moon_mode">盈亏月</string>
-    <string name="life_index">生活预报</string>
-    <string name="city_manager">城市管理</string>
-    <string name="request_runtime_permission">申请运行时权限</string>
-    <string name="get_location_fail">获取地理位置失败</string>
-    <string name="loc_to">定位%1$s</string>
-    <string name="add_city">添加城市</string>
+  <string name="sport_index_desc">运动指数是考虑气象因素和环境对人体的影响，包括紫外线、风力、气压、温度、光照以及雨雪沙尘等，为广大老百姓提供的是否适宜运动的建议。运动指数分为3级，级数越高，就越不适宜运动。</string>
+  <string name="air_index_desc">空气污染扩散条件指数是不考虑污染源的情况下，从气象角度出发，对未来大气污染物的稀释、扩散、聚积和清除能力进行评价，主要考虑的气象因素是温度、湿度、风速和天气现象，对气象条件进行分级。空气污染扩散条件指数分为5级，级数越高气象条件越不利于污染物的扩散。</string>
+  <string name="clothes_index_desc">穿衣指数是根据自然环境对人体感觉温度影响最主要的天空状况、气温、湿度及风等气象条件，对人们适宜穿着的服装进行分级，以提醒人们根据天气变化适当着装。一般来说，温度较低、风速较大，则穿衣指数级别较高。穿衣气象指数共分8级，指数越小，穿衣的厚度越薄。</string>
+  <string name="car_index_desc">洗车指数是根据过去12小时和未来48小时有无雨雪天气，路面是否有积雪和泥水，是否容易使汽车溅上泥水，是否有沙尘等天气条件，给驾驶员朋友提供是否适宜洗车的气象指数。洗车指数共分为4级，级数越高，就越不适宜洗车。</string>
+  <string name="add_more_city">添加更多城市</string>
+  <string name="warning_detail">预警详情</string>
+  <string name="appwidget_text">EXAMPLE</string>
+  <string name="add_widget">Add widget</string>
+  <string name="app_widget_description">当前的天气信息</string>
+  <string name="sun_rise_sun_set">日出日落</string>
+  <string name="moon_mode">盈亏月</string>
+  <string name="life_index">生活预报</string>
+  <string name="city_manager">城市管理</string>
+  <string name="request_runtime_permission">申请运行时权限</string>
+  <string name="get_location_fail">获取地理位置失败</string>
+  <string name="loc_to">定位%1$s</string>
+  <string name="add_city">添加城市</string>
 
-    <string name="air_introduce_1">空气质量指数等级标准</string>
-    <string name="air_introduce_2">空气污染指数（Air Pollution Index, API）是反映空气污染物，如最常见的氮氧化物、悬浮粒子（来自汽车）和二氧化硫（来自工厂）水平的一个指数，一般是根据实际污染物观测值并用特定公式算出。指数常被用来对公众发布“空气质量日报”，让人们知道目前的空气质量，从而更妥善地规划行程和工作。各个国家或地区对空气污染指数的计算方法和规定有所不同，称谓也稍有区别。</string>
+  <string name="air_introduce_1">空气质量指数等级标准</string>
+  <string name="air_introduce_2">空气污染指数（Air Pollution Index, API）是反映空气污染物，如最常见的氮氧化物、悬浮粒子（来自汽车）和二氧化硫（来自工厂）水平的一个指数，一般是根据实际污染物观测值并用特定公式算出。指数常被用来对公众发布“空气质量日报”，让人们知道目前的空气质量，从而更妥善地规划行程和工作。各个国家或地区对空气污染指数的计算方法和规定有所不同，称谓也稍有区别。</string>
 
-    <string name="air_level1_introduce_name">优\n0–50</string>
-    <string name="air_level2_introduce_name">良\n51–100</string>
-    <string name="air_level3_introduce_name">轻度\n101–150</string>
-    <string name="air_level4_introduce_name">中度\n151–200</string>
-    <string name="air_level5_introduce_name">重度\n201–300</string>
-    <string name="air_level6_introduce_name">严重\n301–500</string>
+  <string name="air_level1_introduce_name">优\n0–50</string>
+  <string name="air_level2_introduce_name">良\n51–100</string>
+  <string name="air_level3_introduce_name">轻度\n101–150</string>
+  <string name="air_level4_introduce_name">中度\n151–200</string>
+  <string name="air_level5_introduce_name">重度\n201–300</string>
+  <string name="air_level6_introduce_name">严重\n301–500</string>
 
-    <string name="air_level1_introduce_title">空气质量令人满意，基本无空气污染</string>
-    <string name="air_level2_introduce_title">空气质量可接受，但某些污染物可能对极少数异常敏感人群健康有较弱影响</string>
-    <string name="air_level3_introduce_title">易感人群症状有轻度加剧，健康人群出现刺激症状</string>
-    <string name="air_level4_introduce_title">进一步加剧易感人群症状，可能对健康人群心脏、呼吸系统有影响</string>
-    <string name="air_level5_introduce_title">心脏病和肺病患者症状显著加剧，运动耐受力降低，健康人群普遍出现症状</string>
-    <string name="air_level6_introduce_title">健康人群运动耐受力降低，有明显强烈症状，提前出现某些疾病</string>
+  <string name="air_level1_introduce_title">空气质量令人满意，基本无空气污染</string>
+  <string name="air_level2_introduce_title">空气质量可接受，但某些污染物可能对极少数异常敏感人群健康有较弱影响</string>
+  <string name="air_level3_introduce_title">易感人群症状有轻度加剧，健康人群出现刺激症状</string>
+  <string name="air_level4_introduce_title">进一步加剧易感人群症状，可能对健康人群心脏、呼吸系统有影响</string>
+  <string name="air_level5_introduce_title">心脏病和肺病患者症状显著加剧，运动耐受力降低，健康人群普遍出现症状</string>
+  <string name="air_level6_introduce_title">健康人群运动耐受力降低，有明显强烈症状，提前出现某些疾病</string>
 
-    <string name="air_level1_introduce_body">各类人群可正常活动</string>
-    <string name="air_level2_introduce_body">极少数异常敏感人群应减少户外活动</string>
-    <string name="air_level3_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应减少长时间、高强度的户外锻炼</string>
-    <string name="air_level4_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应避免长时间、高强度的户外锻炼，一般人群适量减少户外运动</string>
-    <string name="air_level5_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应停留在室内，停止户外活动，一般人群应避免户外活动</string>
-    <string name="air_level6_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应停留在室内，避免体力消耗，一般人群应避免户外活动</string>
-    <string name="add">新增</string>
+  <string name="air_level1_introduce_body">各类人群可正常活动</string>
+  <string name="air_level2_introduce_body">极少数异常敏感人群应减少户外活动</string>
+  <string name="air_level3_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应减少长时间、高强度的户外锻炼</string>
+  <string name="air_level4_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应避免长时间、高强度的户外锻炼，一般人群适量减少户外运动</string>
+  <string name="air_level5_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应停留在室内，停止户外活动，一般人群应避免户外活动</string>
+  <string name="air_level6_introduce_body">儿童、老年人及心脏病、呼吸系统疾病患者应停留在室内，避免体力消耗，一般人群应避免户外活动</string>
+  <string name="add">新增</string>
 
 </resources>

@@ -1,7 +1,6 @@
 package me.spica.spicaweather2.weather_anim_counter
 
 import com.google.fpl.liquidfun.Body
-import com.google.fpl.liquidfun.Vec2
 import me.spica.spicaweather2.tools.dp
 import java.util.*
 

@@ -32,7 +32,7 @@ class MinuteWeatherCard(
         }
       setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_LabelLarge)
       setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14f)
-      setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
+      setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
       text = "分钟级降水"
       addView(this)
     }

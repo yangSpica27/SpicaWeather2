@@ -10,9 +10,8 @@ import android.graphics.PathMeasure
 import android.graphics.Shader
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
 import androidx.core.view.ViewCompat
-import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
 
 // 描述卡片下面的条
@@ -30,7 +29,7 @@ class DescProgressLineView : View {
   private val bgPaint =
     Paint(Paint.ANTI_ALIAS_FLAG).apply {
       style = Paint.Style.FILL
-      color = ContextCompat.getColor(context, R.color.pathBgColor)
+      color = "#1B000000".toColorInt()
       strokeCap = Paint.Cap.ROUND
       strokeWidth = 6.dp
     }
@@ -54,7 +53,15 @@ class DescProgressLineView : View {
     Paint(Paint.ANTI_ALIAS_FLAG).apply {
       style = Paint.Style.FILL
       strokeCap = Paint.Cap.ROUND
-      strokeWidth = 6.dp
+      strokeWidth = 8.dp
+    }
+
+  private val uvShaderPaint2 =
+    Paint(Paint.ANTI_ALIAS_FLAG).apply {
+      style = Paint.Style.FILL
+      strokeCap = Paint.Cap.ROUND
+      strokeWidth = 10.dp
+      color = Color.WHITE
     }
 
   private val uvPointPaint =
@@ -181,6 +188,15 @@ class DescProgressLineView : View {
     super.onDraw(canvas)
     // 1:紫外线 2：湿度 3：体感温度 4：日出日落
     if (mode == 1) {
+
+      canvas.drawLine(
+        paddingLeft * 1f,
+        height - uvShaderPaint.strokeWidth - paddingBottom,
+        width.toFloat() - paddingRight,
+        height - uvShaderPaint.strokeWidth - paddingBottom,
+        uvShaderPaint2,
+      )
+
       canvas.drawLine(
         paddingLeft * 1f,
         height - uvShaderPaint.strokeWidth - paddingBottom,
@@ -190,7 +206,7 @@ class DescProgressLineView : View {
       )
 
       uvPointPaint.color = Color.WHITE
-      uvPointPaint.strokeWidth = 16.dp
+      uvPointPaint.strokeWidth = 18.dp
       canvas.drawPoint(
         (width.toFloat() - paddingRight) * progress,
         height - uvShaderPaint.strokeWidth - paddingBottom,
@@ -215,7 +231,7 @@ class DescProgressLineView : View {
             }
           }
         }
-      uvPointPaint.strokeWidth = 12.dp
+      uvPointPaint.strokeWidth = 14.dp
       canvas.drawPoint(
         ((width.toFloat() - paddingRight) * progress).coerceIn(
           paddingLeft.toFloat() + uvPointPaint.strokeWidth/2f,
@@ -231,7 +247,9 @@ class DescProgressLineView : View {
           height - waterShaderPaint.strokeWidth - paddingBottom,
           (width.toFloat() - paddingRight),
           height - waterShaderPaint.strokeWidth - paddingBottom,
-          bgPaint,
+          bgPaint.apply {
+            strokeWidth = 10.dp
+          },
         )
         canvas.drawLine(
           paddingLeft * 1f,
@@ -298,7 +316,7 @@ class DescProgressLineView : View {
           )
         } else if (mode == 4) {
           sunrisePaint.strokeWidth = 6.dp
-          sunrisePaint.color = Color.parseColor("#FFE5E5E5")
+          sunrisePaint.color = "#1B000000".toColorInt()
 
           canvas.drawArc(
             paddingLeft * 1f,
@@ -310,7 +328,7 @@ class DescProgressLineView : View {
             false,
             sunrisePaint,
           )
-          sunrisePaint.color = Color.parseColor("#FF999999")
+          sunrisePaint.color = "#1B000000".toColorInt()
           // 获取对应progress的角度
           val progressAngle = 135 * progress
 
@@ -338,10 +356,10 @@ class DescProgressLineView : View {
             floatArrayOf(0f, 0f),
           )
           sunrisePaint.strokeWidth = 25.dp
-          sunrisePaint.color = Color.parseColor("#FFD9D9D9")
+          sunrisePaint.color = "#FFD9D9D9".toColorInt()
           canvas.drawPoint(pos[0], pos[1], sunrisePaint)
           sunrisePaint.strokeWidth = 18.dp
-          sunrisePaint.color = Color.parseColor("#FF555555")
+          sunrisePaint.color = "#FF999999".toColorInt()
           canvas.drawPoint(pos[0], pos[1], sunrisePaint)
         }
       }

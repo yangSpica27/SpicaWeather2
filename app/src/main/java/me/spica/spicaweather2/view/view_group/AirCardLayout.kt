@@ -12,6 +12,7 @@ import android.view.animation.DecelerateInterpolator
 import androidx.annotation.Keep
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.animation.doOnEnd
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
@@ -20,7 +21,6 @@ import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.common.HomeCardType
-import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.persistence.entity.weather.Weather
 import me.spica.spicaweather2.view.AirCircleProgressView
 import me.spica.spicaweather2.view.weather_detail_card.SpicaWeatherCard
@@ -52,6 +52,7 @@ class AirCardLayout(
       )
       typeface = Typeface.DEFAULT_BOLD
       text = "空气质量"
+      setTextColor(ContextCompat.getColor(context,R.color.text_color_white))
     }
 
   // 进度条
@@ -97,7 +98,7 @@ class AirCardLayout(
         com.google.android.material.R.style.TextAppearance_Material3_BodyMedium
       )
       typeface = Typeface.DEFAULT_BOLD
-      setTextColor(context.getColor(R.color.textColorPrimary))
+      setTextColor(context.getColor(R.color.text_color_white))
       text = title
     }
 
@@ -116,7 +117,7 @@ class AirCardLayout(
         context,
         com.google.android.material.R.style.TextAppearance_Material3_BodyMedium
       )
-      setTextColor(context.getColor(R.color.textColorPrimaryHint))
+      setTextColor(context.getColor(R.color.white))
       text = value
     }
 
@@ -256,9 +257,7 @@ class AirCardLayout(
   override var hasInScreen: AtomicBoolean = AtomicBoolean(false)
 
   override fun bindData(weather: Weather) {
-    val themeColor = weather.getWeatherType().getThemeColor()
     airCircleProgressView.bindProgress(weather.air.aqi, weather.air.category)
-    titleText.setTextColor(themeColor)
     tvC0Value.text =
       HtmlCompat.fromHtml("${weather.air.co}<b>μg/m³</b>", HtmlCompat.FROM_HTML_MODE_LEGACY)
 //        tvC0Value.text = "${weather.air.co}μg/m³"

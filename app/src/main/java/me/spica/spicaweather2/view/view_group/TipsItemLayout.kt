@@ -2,8 +2,8 @@ package me.spica.spicaweather2.view.view_group
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.graphics.toColorInt
 import androidx.core.view.marginTop
 import me.spica.spicaweather2.R
 
@@ -14,7 +14,7 @@ class TipsItemLayout(
   private val titleText =
     AppCompatTextView(context).apply {
       setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_TitleMedium)
-      setTextColor(context.getColor(R.color.textColorPrimary))
+      setTextColor("#D6E8F4".toColorInt())
     }
 
   private val descText =
@@ -27,7 +27,7 @@ class TipsItemLayout(
         ).apply {
           topMargin = 8.dp
         }
-      setTextColor(context.getColor(R.color.textColorPrimaryHint))
+      setTextColor(context.getColor(R.color.text_color_white))
     }
 
   fun setData(
@@ -48,7 +48,7 @@ class TipsItemLayout(
     addView(titleText)
     addView(descText)
     setBackgroundResource(R.drawable.bg_card)
-    backgroundTintList = ColorStateList.valueOf(Color.parseColor("#1a4a4a4a"))
+    backgroundTintList = ColorStateList.valueOf("#A6000000".toColorInt())
   }
 
   override fun onMeasure(

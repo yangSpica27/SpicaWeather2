@@ -16,6 +16,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.dp
 
@@ -39,7 +40,7 @@ class AirCircleProgressView : View {
   private val textPaint =
     TextPaint().apply {
       textSize = 50.dp
-      color = ContextCompat.getColor(context, R.color.textColorPrimary)
+      color = ContextCompat.getColor(context, R.color.white)
       typeface = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         Typeface.create(Typeface.DEFAULT, 700, false)
       } else {
@@ -60,7 +61,7 @@ class AirCircleProgressView : View {
 
   private val secondTextBackgroundPaint =
     TextPaint().apply {
-      color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
+      color = ContextCompat.getColor(context, R.color.white)
       style = Paint.Style.FILL
     }
 
@@ -68,7 +69,7 @@ class AirCircleProgressView : View {
     Paint().apply {
       strokeWidth = 12.dp
       style = Paint.Style.STROKE
-      color = ContextCompat.getColor(context, R.color.textColorPrimaryHintLight)
+      color = "#1B000000".toColorInt()
       strokeCap = Paint.Cap.ROUND
       strokeJoin = Paint.Join.ROUND
     }
@@ -92,15 +93,14 @@ class AirCircleProgressView : View {
   ) {
     // 根据空气质量等级设置颜色
     val progressColor = when {
-      lv < 50 -> ContextCompat.getColor(context, R.color.l1)
-      lv < 100 -> ContextCompat.getColor(context, R.color.l2)
+      lv < 50 -> ContextCompat.getColor(context, R.color.l2)
+      lv < 100 -> ContextCompat.getColor(context, R.color.l4)
       lv < 150 -> ContextCompat.getColor(context, R.color.l5)
       lv < 200 -> ContextCompat.getColor(context, R.color.l6)
       lv < 300 -> ContextCompat.getColor(context, R.color.l7)
       else -> ContextCompat.getColor(context, R.color.l8)
     }
     secondTextBackgroundPaint.color = progressColor
-    secondTextPaint.color = progressColor
     this.lv = lv
     this.category = category
     postInvalidateOnAnimation()
@@ -228,8 +228,8 @@ class AirCircleProgressView : View {
 
   // 绘制背景弧
   private fun drawBack(canvas: Canvas) {
-    linePaint.strokeWidth = 10.dp
-    linePaint.color = Color.parseColor("#F5F5F5")
+    linePaint.strokeWidth = 20.dp
+    linePaint.color = "#1B000000".toColorInt()
     linePaint.shader = null
     canvas.drawArc(
       mRectF,

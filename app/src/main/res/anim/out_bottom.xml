@@ -15,12 +15,12 @@
     android:fromAlpha="1"
     android:toAlpha="0" />
 
-<!--  <scale-->
-<!--    android:fromXScale="100%"-->
-<!--    android:fromYScale="100%"-->
-<!--    android:pivotX="50%"-->
-<!--    android:pivotY="50%"-->
-<!--    android:toXScale="105%"-->
-<!--    android:toYScale="105%" />-->
+  <!--  <scale-->
+  <!--    android:fromXScale="100%"-->
+  <!--    android:fromYScale="100%"-->
+  <!--    android:pivotX="50%"-->
+  <!--    android:pivotY="50%"-->
+  <!--    android:toXScale="105%"-->
+  <!--    android:toYScale="105%" />-->
 
 </set>

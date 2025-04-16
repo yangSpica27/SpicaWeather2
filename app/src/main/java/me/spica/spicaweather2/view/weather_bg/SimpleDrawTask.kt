@@ -10,9 +10,6 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.SystemClock
 import java.util.concurrent.locks.ReentrantLock
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 import kotlin.system.measureTimeMillis
 
 abstract class SimpleDrawTask(

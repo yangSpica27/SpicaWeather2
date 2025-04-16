@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.spica.spicaweather2.base.BaseActivity
 import me.spica.spicaweather2.common.WeatherType
+import me.spica.spicaweather2.common.getDrawable
 import me.spica.spicaweather2.common.getThemeColor
 import me.spica.spicaweather2.common.getWeatherAnimType
 import me.spica.spicaweather2.persistence.entity.CityWithWeather
@@ -86,9 +87,8 @@ class ActivityMain : BaseActivity() {
       MessageType.Get2MainActivityAnim.tag -> {
         // 从管理城市页面返回进行动画 切换到用户选择的城市上去
         layout.viewPager2.setCurrentItem(event.extra as Int, false)
-        data[event.extra].weather?.getWeatherType()?.getThemeColor()?.let {
-          // 更新背景颜色
-          layout.backgroundView.startBackgroundColorChangeAnim(it)
+        data[event.extra].weather?.getWeatherType()?.getDrawable()?.let {
+          layout.backgroundView.background = it
         }
         manager2HomeView.invalidate()
       }
@@ -287,6 +287,7 @@ class ActivityMain : BaseActivity() {
         with(layout.backgroundView) {
           themeColor = it.getThemeColor()
           currentThemeColor = themeColor
+          background = it.getDrawable()
           currentWeatherAnimType = it.getWeatherAnimType()
           layout.currentWeatherLayout.bindData(currentWeather)
         }
