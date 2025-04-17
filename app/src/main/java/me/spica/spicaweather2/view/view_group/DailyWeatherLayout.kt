@@ -150,7 +150,7 @@ class DailyWeatherLayout(
           .withLayer()
           .alpha(1f)
           .translationY(0f)
-          .setStartDelay(30L * index)
+          .setStartDelay(20L * index)
           .setDuration(150 + 120L * index)
           .start()
       }

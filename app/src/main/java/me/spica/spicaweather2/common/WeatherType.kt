@@ -64,7 +64,7 @@ fun WeatherType.getIconRes(): Int =
 
 private val typeWithColorMap = hashMapOf(
   WeatherType.WEATHER_SUNNY to Color.parseColor("#FFfdbc4c"),
-  WeatherType.WEATHER_CLOUDY to Color.parseColor("#4297e7"),
+  WeatherType.WEATHER_CLOUDY to Color.parseColor("#59A3C1"),
   WeatherType.WEATHER_FORECAST to Color.parseColor("#68baff"),
   WeatherType.WEATHER_RAINY to Color.parseColor("#4297e7"),
   WeatherType.WEATHER_THUNDER to Color.parseColor("#B296BD"),
@@ -104,8 +104,9 @@ fun WeatherType.getDrawable(): GradientDrawable =
       GradientDrawable(
         GradientDrawable.Orientation.TOP_BOTTOM,
         intArrayOf(
-          Color.parseColor("#4297e7"),
-          Color.parseColor("#7F9CEA"),
+          Color.parseColor("#81B7BA"),
+          Color.parseColor("#59A3C1"),
+          Color.parseColor("#4A80AD"),
         ),
       )
 

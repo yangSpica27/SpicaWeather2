@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.DashPathEffect
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Rect
@@ -41,10 +42,11 @@ class AirCircleProgressView : View {
     TextPaint().apply {
       textSize = 50.dp
       color = ContextCompat.getColor(context, R.color.white)
+      isFakeBoldText = true
       typeface = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        Typeface.create(Typeface.DEFAULT, 700, false)
+        Typeface.create(Typeface.DEFAULT_BOLD, 900, false)
       } else {
-        Typeface.DEFAULT
+        Typeface.DEFAULT_BOLD
       }
     }
 
@@ -73,6 +75,12 @@ class AirCircleProgressView : View {
       strokeCap = Paint.Cap.ROUND
       strokeJoin = Paint.Join.ROUND
     }
+  private val dotLinePaint = Paint().apply {
+    strokeWidth = 6.dp
+    style = Paint.Style.STROKE
+    color = "#FFFFFF".toColorInt()
+    pathEffect = DashPathEffect(floatArrayOf(1.dp, 4.dp, 4.dp), 0f)
+  }
 
   private val startAngle = 135f
 
@@ -237,6 +245,13 @@ class AirCircleProgressView : View {
       swipeAngle,
       false,
       linePaint,
+    )
+    canvas.drawArc(
+      mRectF,
+      startAngle,
+      swipeAngle,
+      false,
+      dotLinePaint,
     )
     linePaint.strokeWidth = 14.dp
     linePaint.color = Color.WHITE

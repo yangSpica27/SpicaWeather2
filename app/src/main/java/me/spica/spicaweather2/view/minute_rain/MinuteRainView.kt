@@ -48,7 +48,7 @@ class MinuteRainView : View {
   private val linePaint =
     // 柱状画笔
     Paint(Paint.ANTI_ALIAS_FLAG).apply {
-      color = ContextCompat.getColor(context, R.color.rain_line_view_line_color)
+      color = ContextCompat.getColor(context, R.color.text_color_white)
       strokeWidth = lineWidth
       strokeCap = Paint.Cap.ROUND
     }

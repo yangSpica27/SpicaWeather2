@@ -8,6 +8,8 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
+import android.graphics.Typeface
+import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.AbsoluteSizeSpan
@@ -44,7 +46,13 @@ class CurrentWeatherLayout(
           ViewGroup.LayoutParams.WRAP_CONTENT,
         )
       setTextColor(ContextCompat.getColor(context, R.color.text_color_white))
+      paint.isFakeBoldText = true
       includeFontPadding = false
+      typeface = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        Typeface.create(Typeface.DEFAULT_BOLD, 700, false)
+      } else {
+        Typeface.DEFAULT_BOLD
+      }
     }
 
   private val descTextView =
