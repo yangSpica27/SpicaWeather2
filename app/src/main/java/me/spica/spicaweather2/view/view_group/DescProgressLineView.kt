@@ -26,64 +26,56 @@ class DescProgressLineView : View {
 
   constructor(context: Context?) : super(context)
 
-  private val bgPaint =
-    Paint(Paint.ANTI_ALIAS_FLAG).apply {
-      style = Paint.Style.FILL
-      color = "#1B000000".toColorInt()
-      strokeCap = Paint.Cap.ROUND
-      strokeWidth = 6.dp
-    }
+  private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    style = Paint.Style.FILL
+    color = "#1B000000".toColorInt()
+    strokeCap = Paint.Cap.ROUND
+    strokeWidth = 6.dp
+  }
 
-  private val sunrisePaint =
-    Paint(Paint.ANTI_ALIAS_FLAG).apply {
-      style = Paint.Style.STROKE
-      color = Color.parseColor("#FFE5E5E5")
-      strokeCap = Paint.Cap.ROUND
-      strokeWidth = 6.dp
-    }
+  private val sunrisePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    style = Paint.Style.STROKE
+    color = Color.parseColor("#FFE5E5E5")
+    strokeCap = Paint.Cap.ROUND
+    strokeWidth = 6.dp
+  }
 
-  private val waterShaderPaint =
-    Paint(Paint.ANTI_ALIAS_FLAG).apply {
-      style = Paint.Style.FILL
-      strokeCap = Paint.Cap.ROUND
-      strokeWidth = 6.dp
-    }
+  private val waterShaderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    style = Paint.Style.FILL
+    strokeCap = Paint.Cap.ROUND
+    strokeWidth = 6.dp
+  }
 
-  private val uvShaderPaint =
-    Paint(Paint.ANTI_ALIAS_FLAG).apply {
-      style = Paint.Style.FILL
-      strokeCap = Paint.Cap.ROUND
-      strokeWidth = 8.dp
-    }
+  private val uvShaderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    style = Paint.Style.FILL
+    strokeCap = Paint.Cap.ROUND
+    strokeWidth = 8.dp
+  }
 
-  private val uvShaderPaint2 =
-    Paint(Paint.ANTI_ALIAS_FLAG).apply {
-      style = Paint.Style.FILL
-      strokeCap = Paint.Cap.ROUND
-      strokeWidth = 10.dp
-      color = Color.WHITE
-    }
+  private val uvShaderPaint2 = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    style = Paint.Style.FILL
+    strokeCap = Paint.Cap.ROUND
+    strokeWidth = 10.dp
+    color = Color.WHITE
+  }
 
-  private val uvPointPaint =
-    Paint(Paint.ANTI_ALIAS_FLAG).apply {
-      style = Paint.Style.FILL
-      strokeCap = Paint.Cap.ROUND
-      strokeWidth = 6.dp
-    }
+  private val uvPointPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    style = Paint.Style.FILL
+    strokeCap = Paint.Cap.ROUND
+    strokeWidth = 6.dp
+  }
 
-  private val feelTempPaint =
-    Paint(Paint.ANTI_ALIAS_FLAG).apply {
-      style = Paint.Style.FILL
-      strokeCap = Paint.Cap.ROUND
-      strokeWidth = 8.dp
-    }
+  private val feelTempPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    style = Paint.Style.FILL
+    strokeCap = Paint.Cap.ROUND
+    strokeWidth = 8.dp
+  }
 
-  private val feelTempPaint2 =
-    Paint(Paint.ANTI_ALIAS_FLAG).apply {
-      style = Paint.Style.FILL
-      strokeCap = Paint.Cap.ROUND
-      strokeWidth = 6.dp
-    }
+  private val feelTempPaint2 = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    style = Paint.Style.FILL
+    strokeCap = Paint.Cap.ROUND
+    strokeWidth = 6.dp
+  }
 
   private var progress = 1f
 
@@ -112,57 +104,54 @@ class DescProgressLineView : View {
   ) {
     super.onSizeChanged(w, h, oldw, oldh)
     if (w != oldw) {
-      waterShaderPaint.shader =
-        LinearGradient(
+      waterShaderPaint.shader = LinearGradient(
+        0f,
+        0f,
+        w.toFloat(),
+        0f,
+        intArrayOf(
+          Color.parseColor("#FFB3E5FC"),
+          Color.parseColor("#FF81D4FA"),
+          Color.parseColor("#FF29B6F6"),
+          Color.parseColor("#FF42A5F5"),
+        ),
+        floatArrayOf(
           0f,
-          0f,
-          w.toFloat(),
-          0f,
-          intArrayOf(
-            Color.parseColor("#FFB3E5FC"),
-            Color.parseColor("#FF81D4FA"),
-            Color.parseColor("#FF29B6F6"),
-            Color.parseColor("#FF42A5F5"),
-          ),
-          floatArrayOf(
-            0f,
-            0.5f,
-            0.7f,
-            1f,
-          ),
-          Shader.TileMode.CLAMP,
-        )
-      uvShaderPaint.shader =
-        LinearGradient(
-          0f,
-          0f,
-          w.toFloat(),
-          0f,
-          intArrayOf(
-            Color.parseColor("#FF66BB6A"),
-            Color.parseColor("#FFFFEB3B"),
-            Color.parseColor("#FFFFAB40"),
-            Color.parseColor("#FFEF5350"),
-            Color.parseColor("#FFAB47BC"),
-          ),
-          floatArrayOf(
-            0.15f,
-            0.3f,
-            0.6f,
-            0.85f,
-            1f,
-          ),
-          Shader.TileMode.CLAMP,
-        )
+          0.5f,
+          0.7f,
+          1f,
+        ),
+        Shader.TileMode.CLAMP,
+      )
+      uvShaderPaint.shader = LinearGradient(
+        0f,
+        0f,
+        w.toFloat(),
+        0f,
+        intArrayOf(
+          Color.parseColor("#FF66BB6A"),
+          Color.parseColor("#FFFFEB3B"),
+          Color.parseColor("#FFFFAB40"),
+          Color.parseColor("#FFEF5350"),
+          Color.parseColor("#FFAB47BC"),
+        ),
+        floatArrayOf(
+          0.15f,
+          0.3f,
+          0.6f,
+          0.85f,
+          1f,
+        ),
+        Shader.TileMode.CLAMP,
+      )
     }
   }
 
-  private val feelTempColors =
-    intArrayOf(
-      Color.parseColor("#FF42A5F5"),
-      Color.parseColor("#FF66BB6A"),
-      Color.parseColor("#FFFF9100"),
-    )
+  private val feelTempColors = intArrayOf(
+    Color.parseColor("#FF42A5F5"),
+    Color.parseColor("#FF66BB6A"),
+    Color.parseColor("#FFFF9100"),
+  )
 
   override fun onMeasure(
     widthMeasureSpec: Int,
@@ -208,34 +197,36 @@ class DescProgressLineView : View {
       uvPointPaint.color = Color.WHITE
       uvPointPaint.strokeWidth = 18.dp
       canvas.drawPoint(
-        (width.toFloat() - paddingRight) * progress,
+        ((width.toFloat() - paddingRight) * progress).coerceIn(
+          paddingLeft.toFloat() + uvPointPaint.strokeWidth / 2f,
+          (width.toFloat() - paddingRight) - uvPointPaint.strokeWidth / 2f,
+        ),
         height - uvShaderPaint.strokeWidth - paddingBottom,
         uvPointPaint,
       )
 
-      uvPointPaint.color =
-        if (progress < 0.15f) {
-          Color.parseColor("#FF66BB6A")
+      uvPointPaint.color = if (progress < 0.15f) {
+        Color.parseColor("#FF66BB6A")
+      } else {
+        if (progress < 0.3f) {
+          Color.parseColor("#FFFFEB3B")
         } else {
-          if (progress < 0.3f) {
-            Color.parseColor("#FFFFEB3B")
+          if (progress < 0.6f) {
+            Color.parseColor("#FFFFAB40")
           } else {
-            if (progress < 0.6f) {
-              Color.parseColor("#FFFFAB40")
+            if (progress < 0.85f) {
+              Color.parseColor("#FFEF5350")
             } else {
-              if (progress < 0.85f) {
-                Color.parseColor("#FFEF5350")
-              } else {
-                Color.parseColor("#FFAB47BC")
-              }
+              Color.parseColor("#FFAB47BC")
             }
           }
         }
+      }
       uvPointPaint.strokeWidth = 14.dp
       canvas.drawPoint(
         ((width.toFloat() - paddingRight) * progress).coerceIn(
-          paddingLeft.toFloat() + uvPointPaint.strokeWidth/2f,
-          (width.toFloat() - paddingRight) - uvPointPaint.strokeWidth/2f,
+          paddingLeft.toFloat() + 18.dp / 2f,
+          (width.toFloat() - paddingRight) - 18.dp / 2f,
         ),
         height - uvShaderPaint.strokeWidth - paddingBottom,
         uvPointPaint,
@@ -260,60 +251,60 @@ class DescProgressLineView : View {
         )
       } else {
         if (mode == 3) {
-          feelTempPaint.color = feelTempColors[0]
+          feelTempPaint.color = "#1B000000".toColorInt()
+          feelTempPaint.strokeWidth = 20.dp
+          val sx = paddingLeft * 1f + feelTempPaint.strokeWidth / 2
+          val ex = width.toFloat() - paddingRight - feelTempPaint.strokeWidth / 2
           canvas.drawLine(
-            paddingLeft * 1f,
+            sx,
             height - feelTempPaint.strokeWidth - paddingBottom,
-            paddingLeft + (width.toFloat() - paddingLeft - paddingRight) * 0.45f - 6.dp,
-            height - feelTempPaint.strokeWidth - paddingBottom,
-            feelTempPaint,
-          )
-          feelTempPaint.color = feelTempColors[1]
-          canvas.drawLine(
-            paddingLeft + (width.toFloat() - paddingLeft - paddingRight) * 0.45f + 6.dp,
-            height - feelTempPaint.strokeWidth - paddingBottom,
-            paddingLeft + (width.toFloat() - paddingRight - paddingLeft) * 0.625f - 6.dp,
+            ex,
             height - feelTempPaint.strokeWidth - paddingBottom,
             feelTempPaint,
           )
 
-          feelTempPaint.color = feelTempColors[2]
-          canvas.drawLine(
-            paddingLeft + (width.toFloat() - paddingRight - paddingLeft) * 0.625f + 6.dp,
-            height - feelTempPaint.strokeWidth - paddingBottom,
-            paddingLeft + (width.toFloat() - paddingRight - paddingLeft) * 1f,
-            height - feelTempPaint.strokeWidth - paddingBottom,
-            feelTempPaint,
-          )
+          feelTempPaint2.color = "#A6FFFFFF".toColorInt()
+          feelTempPaint2.strokeWidth = 2.dp
+          for (index in 1..30) {
+            val fraction = index / 30f
+            val x = sx + (ex - sx) * fraction
 
-          feelTempPaint2.color = Color.BLACK
-          feelTempPaint2.strokeWidth = 16.dp
 
-          canvas.drawPoint(
-            ((width.toFloat() - paddingRight) * progress).coerceIn(
-              paddingLeft.toFloat() + feelTempPaint2.strokeWidth/2f,
-              (width.toFloat() - paddingRight) - feelTempPaint2.strokeWidth/2f,
-            ),
-            height - feelTempPaint.strokeWidth - paddingBottom,
-            feelTempPaint2,
-          )
-          feelTempPaint2.color =
-            if (progress < 0.45) {
-              feelTempColors[0]
-            } else if (progress < 0.625) {
-              feelTempColors[1]
+
+            val lineHeight = if (index == 13 || index == 19) {
+              feelTempPaint2.strokeWidth = 8f
+              5.dp
             } else {
-              feelTempColors[2]
+              feelTempPaint2.strokeWidth = 4f
+              3.dp
             }
-
-          canvas.drawPoint(
-            ((width.toFloat() - paddingRight) * progress).coerceIn(
-              paddingLeft.toFloat() + feelTempPaint2.strokeWidth/2f,
-              (width.toFloat() - paddingRight) - feelTempPaint2.strokeWidth/2f,
-            ),
+            canvas.drawLine(
+              x,
+              height - feelTempPaint.strokeWidth - paddingBottom - lineHeight,
+              x,
+              height - feelTempPaint.strokeWidth - paddingBottom + lineHeight, feelTempPaint2
+            )
+          }
+          feelTempPaint2.strokeWidth = 4.dp
+          canvas.drawLine(
+            sx + (ex - sx) / 30f,
+            height - feelTempPaint.strokeWidth - paddingBottom,
+            ex,
             height - feelTempPaint.strokeWidth - paddingBottom,
             feelTempPaint2,
           )
+
+          feelTempPaint2.color = "#A6FFFFFF".toColorInt()
+          feelTempPaint2.strokeWidth = 12.dp
+          canvas.drawLine(
+            sx,
+            height - feelTempPaint.strokeWidth - paddingBottom,
+            sx + (ex - sx) * progress,
+            height - feelTempPaint.strokeWidth - paddingBottom,
+            feelTempPaint2,
+          )
+
+
         } else if (mode == 4) {
           sunrisePaint.strokeWidth = 6.dp
           sunrisePaint.color = "#1B000000".toColorInt()

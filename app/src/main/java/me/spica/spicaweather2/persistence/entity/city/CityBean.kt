@@ -40,6 +40,9 @@ data class CityBean(
       "#"
     }
 
+
+
+
   companion object {
     // 读取配置文件中的所有城市信息
     @JvmStatic
@@ -121,5 +124,31 @@ data class CityBean(
       }
       return sb.toString()
     }
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as CityBean
+
+    if (sort != other.sort) return false
+    if (iconId != other.iconId) return false
+    if (cityName != other.cityName) return false
+    if (sortName != other.sortName) return false
+    if (lon != other.lon) return false
+    if (lat != other.lat) return false
+    if (sortId != other.sortId) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+   var result = iconId.hashCode()
+    result = 31 * result + cityName.hashCode()
+    result = 31 * result + sortName.hashCode()
+    result = 31 * result + lon.hashCode()
+    result = 31 * result + lat.hashCode()
+    return result
   }
 }

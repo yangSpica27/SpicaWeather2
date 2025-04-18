@@ -209,7 +209,7 @@ class HourlyLineView : View {
       WeatherCodeUtils
         .getWeatherCode(iconId = data.firstOrNull()?.iconId ?: 101)
         .getThemeColor()
-    linePaint.color = ContextCompat.getColor(context,R.color.text_color_white)
+    linePaint.color = ContextCompat.getColor(context, R.color.text_color_white)
 
     lineBgPaint.shader =
       LinearGradient(
@@ -222,8 +222,12 @@ class HourlyLineView : View {
             tempTextHeight + 12.dp +
             lineHeight - 12.dp,
         intArrayOf(
-          ColorUtils.setAlphaComponent(ContextCompat.getColor(context,R.color.text_color_white)?: Color.TRANSPARENT, 120),
-          ColorUtils.setAlphaComponent(ContextCompat.getColor(context,R.color.text_color_white)?: Color.TRANSPARENT, 0),
+          ColorUtils.setAlphaComponent(
+            ContextCompat.getColor(context, R.color.text_color_white) ?: Color.TRANSPARENT, 120
+          ),
+          ColorUtils.setAlphaComponent(
+            ContextCompat.getColor(context, R.color.text_color_white) ?: Color.TRANSPARENT, 0
+          ),
         ),
         floatArrayOf(0f, 1f),
         TileMode.CLAMP,
@@ -531,20 +535,29 @@ class HourlyLineView : View {
     Paint().apply {
       strokeWidth = itemWidth / 5f
       color = ContextCompat.getColor(context, R.color.rain_pop)
-      strokeCap = Paint.Cap.ROUND
     }
 
   private fun drawRainLine(canvas: Canvas) {
     for (point in rainPointList) {
-      canvas.drawLine(
-        point.x.toFloat(),
+      canvas.drawRoundRect(
+        point.x.toFloat() - itemWidth / 8f,
         point.y.toFloat(),
-        point.x.toFloat(),
+        point.x.toFloat() + itemWidth / 8f,
         paddingTop + 12.dp + 24.dp +
             tempTextHeight + 12.dp +
             lineHeight - 12.dp,
-        rainRectPaint,
+        14f, 14f,
+        rainRectPaint
       )
+//      canvas.drawLine(
+//        point.x.toFloat(),
+//        point.y.toFloat(),
+//        point.x.toFloat(),
+//        paddingTop + 12.dp + 24.dp +
+//            tempTextHeight + 12.dp +
+//            lineHeight - 12.dp,
+//        rainRectPaint,
+//      )
     }
   }
 

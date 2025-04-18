@@ -2,6 +2,7 @@ package me.spica.spicaweather2.base
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import leakcanary.LeakCanary
 import me.spica.spicaweather2.BuildConfig
 import timber.log.Timber
 

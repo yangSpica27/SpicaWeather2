@@ -45,6 +45,8 @@ constructor(
     _isSelectMode.tryEmit(isSelectable)
   }
 
+  fun getAllCity() = cityRepository.getAllCityWithWeather()
+
   fun moveCity(
     from: CityBean,
     to: CityBean,

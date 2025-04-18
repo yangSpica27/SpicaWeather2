@@ -3,10 +3,13 @@ package me.spica.spicaweather2.view.weather_bg
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.RenderEffect
+import android.graphics.Shader
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -26,8 +29,6 @@ class WeatherBackgroundView : View, SensorEventListener {
   )
 
 
-
-
   // 天气动画管理器
   private val weatherDrawableManager = WeatherDrawableManager(context)
 
@@ -37,8 +38,6 @@ class WeatherBackgroundView : View, SensorEventListener {
 
   // 主题色
   var themeColor = ContextCompat.getColor(context, R.color.light_blue_600)
-
-
 
 
   fun setBackgroundY(y: Int) {
@@ -63,8 +62,6 @@ class WeatherBackgroundView : View, SensorEventListener {
         weatherDrawableManager.setWeatherAnimType(value)
       }
     }
-
-
 
 
   fun setMScrollY(y: Int) {

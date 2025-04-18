@@ -31,7 +31,7 @@
 
   <color name="shadow_in_card">#1C000000</color>
 
-  <color name="test">#A6000000</color>
+  <color name="test">#A6FFFFFF</color>
 
   <color name="sun_light_color">#59FFC107</color>
 
@@ -62,7 +62,7 @@
   <color name="yellow_600">#faad14</color>
   <color name="yellow_700">#d48806</color>
 
-  <color name="rain_pop">#CCFFFFFF</color>
+  <color name="rain_pop">#80FFFFFF</color>
 
   <color name="rain_item">#00F8F8F8</color>
   <color name="rain_point_color">#A2CAF1</color>
