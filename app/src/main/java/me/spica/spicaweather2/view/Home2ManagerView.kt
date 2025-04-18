@@ -11,6 +11,9 @@ import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
+import android.graphics.RenderEffect
+import android.graphics.Shader
+import android.os.Build
 import android.os.HandlerThread
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -147,6 +150,25 @@ class Home2ManagerView : View {
             .e("height:$height bottom:${drawRect.bottom} lastB:$lastB progress:$progress")
         }
         lastB = drawRect.bottom
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//          if (animatedFraction < 0.5f) {
+//            setRenderEffect(
+//              RenderEffect.createBlurEffect(
+//                12.dp * animatedFraction,
+//                12.dp * animatedFraction,
+//                Shader.TileMode.CLAMP
+//              )
+//            )
+//          } else {
+//            setRenderEffect(
+//              RenderEffect.createBlurEffect(
+//                6.dp - 12.dp * (progress-0.5f),
+//                6.dp - 12.dp * (progress-0.5f),
+//                Shader.TileMode.CLAMP
+//              )
+//            )
+//          }
+//        }
         postInvalidateOnAnimation()
       }
       doOnEnd {

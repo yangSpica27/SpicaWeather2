@@ -7,16 +7,19 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.children
 import androidx.core.view.drawToBitmap
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import me.spica.spicaweather2.R
 import me.spica.spicaweather2.base.BaseActivity
 import me.spica.spicaweather2.common.WeatherType
 import me.spica.spicaweather2.common.getDrawable
@@ -110,14 +113,14 @@ class ActivityMain : BaseActivity() {
   private fun initializer() {
     startService(Intent(this, DataSyncService::class.java))
     handleBack()
-    WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
+    WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = false
     layout.mainTitleLayout.plusBtn.setOnClickListener {
       enterManagerCity()
     }
 
     layout.mainTitleLayout.titleTextView.setOnClickListener {
-      AlertDialog
-        .Builder(this)
+
+      MaterialAlertDialogBuilder(this, R.style.ExitDialog)
         .setTitle("选择天气动画类型")
         .setItems(
           arrayOf(
@@ -140,6 +143,7 @@ class ActivityMain : BaseActivity() {
             }
           with(layout.backgroundView) {
             themeColor = type.getThemeColor()
+            background = type.getDrawable()
             currentWeatherAnimType = type.getWeatherAnimType()
           }
         }.show()
@@ -195,8 +199,7 @@ class ActivityMain : BaseActivity() {
       this,
       object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-          AlertDialog
-            .Builder(this@ActivityMain)
+          MaterialAlertDialogBuilder(this@ActivityMain, R.style.ExitDialog)
             .setTitle("退出应用")
             .setMessage("是否退出应用")
             .setPositiveButton("退出") { _, _ ->
