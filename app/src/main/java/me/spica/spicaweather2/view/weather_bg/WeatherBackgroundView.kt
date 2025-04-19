@@ -95,7 +95,7 @@ class WeatherBackgroundView : View, SensorEventListener {
       synchronized(this) {
         weatherDrawableManager.calculate(width, height)
       }
-      postInvalidate()
+      postInvalidateOnAnimation()
     }, 0, 8, java.util.concurrent.TimeUnit.MILLISECONDS)
   }
 

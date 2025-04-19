@@ -11,9 +11,6 @@ import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
-import android.graphics.RenderEffect
-import android.graphics.Shader
-import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
