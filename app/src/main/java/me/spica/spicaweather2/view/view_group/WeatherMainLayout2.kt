@@ -85,10 +85,10 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
   @Synchronized
   fun updateBackgroundY() {
     val activityMain = getActivityFromContext(context) as ActivityMain
-    if (activityMain.currentCurrentCity?.cityName != tag.toString()) {
+    if (activityMain.currentCurrentCity?.cityName != tag?.toString()) {
       return
     }
-    if (activityMain.currentCurrentCity?.cityName == tag.toString()) {
+    if (activityMain.currentCurrentCity?.cityName == tag?.toString()) {
       activityMain.listScrollerY = scrollY
       contentView.children.find { it is MinuteWeatherCard }?.let {
         activityMain.setBox2dBackground((it as MinuteWeatherCard).getNowCardTop())

@@ -46,10 +46,10 @@ class CityItemTouchHelper(
     ) {
       super.onSelectedChanged(viewHolder, actionState)
       if (viewHolder == null) return
-      if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
-        // 被拖动项放大
-        viewHolder.itemView.animate().scaleX(1.025f).scaleY(1.025f).start()
-      }
+//      if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+//        // 被拖动项放大
+//        viewHolder.itemView.animate().scaleX(1.025f).scaleY(1.025f).start()
+//      }
     }
 
     override fun onChildDraw(
@@ -62,13 +62,13 @@ class CityItemTouchHelper(
       isCurrentlyActive: Boolean
     ) {
       super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-      for (i in 0..<recyclerView.childCount) {
-        val childView = recyclerView.getChildAt(i)
-        val holder = recyclerView.getChildViewHolder(childView)
-        if (holder !== viewHolder) {
-          childView.animate().scaleX(1f).scaleY(1f).start()
-        }
-      }
+//      for (i in 0..<recyclerView.childCount) {
+//        val childView = recyclerView.getChildAt(i)
+//        val holder = recyclerView.getChildViewHolder(childView)
+//        if (holder !== viewHolder) {
+//          childView.animate().scaleX(1f).scaleY(1f).start()
+//        }
+//      }
     }
 
 
@@ -76,7 +76,7 @@ class CityItemTouchHelper(
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
       super.clearView(recyclerView, viewHolder)
 //      removeScale(viewHolder)
-      viewHolder.itemView.animate().scaleX(1f).scaleY(1f).start()
+//      viewHolder.itemView.animate().scaleX(1f).scaleY(1f).start()
     }
 
     override fun onSwiped(

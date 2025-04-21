@@ -150,7 +150,7 @@ class ActivityMain : BaseActivity() {
     }
     with(layout.viewPager2) {
       orientation = ViewPager2.ORIENTATION_HORIZONTAL
-      offscreenPageLimit = 10
+      offscreenPageLimit = 1
       adapter = mainPagerAdapter
       isUserInputEnabled = true
     }

@@ -8,18 +8,23 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.ScaleAnimation
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
+import androidx.core.view.doOnPreDraw
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.size.Scale
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.spica.spicaweather2.R
@@ -55,11 +60,9 @@ class ActivityManagerCity : BaseActivity() {
     ActivityManagerCityLayout(this)
   }
 
-  private val mHandlerThread = android.os.HandlerThread("manager_city")
-  private val mHandler by lazy { android.os.Handler(mHandlerThread.looper) }
-
 
   // 是否已经执行了进入动画
+  @Volatile
   private var hasDoEnterAnim = false
 
   // 从主页到当前页面的动画遮罩
@@ -72,6 +75,7 @@ class ActivityManagerCity : BaseActivity() {
 
   private val viewModel by viewModels<CityManagerViewModel>()
 
+
   // 长按排序TouchHelper
   private val itemTouchHelper =
     CityItemTouchHelper(
@@ -80,10 +84,6 @@ class ActivityManagerCity : BaseActivity() {
         // 当列表发生移动时触发
         // 1. 更新数据
         // 2. 刷新UI
-        viewModel.moveCity(
-          adapter.items[viewHolder.absoluteAdapterPosition].city,
-          adapter.items[target.absoluteAdapterPosition].city,
-        )
         Collections.swap(
           adapter.items,
           viewHolder.absoluteAdapterPosition,
@@ -92,6 +92,10 @@ class ActivityManagerCity : BaseActivity() {
         adapter.notifyItemMoved(
           viewHolder.absoluteAdapterPosition,
           target.absoluteAdapterPosition,
+        )
+        viewModel.moveCity(
+          adapter.items[viewHolder.absoluteAdapterPosition].city,
+          adapter.items[target.absoluteAdapterPosition].city,
         )
       },
     )
@@ -110,7 +114,6 @@ class ActivityManagerCity : BaseActivity() {
 
   @Suppress("DEPRECATION")
   private fun init() {
-    mHandlerThread.start()
     setSupportActionBar(layout.titleBar)
     layout.recyclerView.layoutManager =
       LinearLayoutManager(
@@ -122,7 +125,7 @@ class ActivityManagerCity : BaseActivity() {
     WindowCompat.getInsetsController(this.window, window.decorView).apply {
       isAppearanceLightStatusBars = true
     }
-
+    window.decorView.setBackgroundColor(Color.WHITE)
     // 设置分割线
     dividerBuilder()
       .showLastDivider()
@@ -136,9 +139,10 @@ class ActivityManagerCity : BaseActivity() {
     home2ManagerView.attachToRootView()
 
     val layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-    layoutManager.initialPrefetchItemCount = 10
-    layout.recyclerView.layoutManager = layoutManager
+    layoutManager.initialPrefetchItemCount = 5
 
+    layout.recyclerView.layoutManager = layoutManager
+    layout.recyclerView.setHasFixedSize(true)
     layout.recyclerView.adapter = adapter
     itemTouchHelper.attachToRecyclerView(layout.recyclerView)
 
@@ -177,7 +181,7 @@ class ActivityManagerCity : BaseActivity() {
 
     // 点击删除城市
     layout.deleteBtn.setOnClickListener {
-      if (adapter.getSelectCityNames().size == adapter.items.size) {
+      if (adapter.getSelectCityNames().size == adapter.itemCount) {
         toast("至少保留一个城市")
         return@setOnClickListener
       }
@@ -186,7 +190,7 @@ class ActivityManagerCity : BaseActivity() {
     // 记录开始加载数据的时间 用于计算动画加载时间
     val startTime = System.currentTimeMillis()
 
-    mHandler.post {
+    lifecycleScope.launch(Dispatchers.Default) {
       layout.recyclerView.itemAnimator = null
       val data = cityRepository.getAllCityWithWeather()
       runOnUiThread {
@@ -202,21 +206,22 @@ class ActivityManagerCity : BaseActivity() {
         adapter.setItems(data)
       }
       hasDoEnterAnim = true
+    }
 
+
+    // 订阅title 的变化
+    lifecycleScope.launch {
+      viewModel.topTitle.collect {
+        layout.titleBar.title = it
+      }
     }
 
     // 订阅所有城市的数据变化
     lifecycleScope.launch {
-      viewModel.allCityWithWeather.collectLatest {
-        if (!hasDoEnterAnim) return@collectLatest
-        adapter.setItems(it)
-      }
-    }
-
-    // 订阅title 的变化
-    lifecycleScope.launch {
-      viewModel.topTitle.collectLatest {
-        layout.titleBar.title = it
+      viewModel.allCityWithWeather.collect {
+        if (hasDoEnterAnim) {
+          adapter.setItems(it)
+        }
       }
     }
 
@@ -270,17 +275,25 @@ class ActivityManagerCity : BaseActivity() {
   @OptIn(ExperimentalContracts::class)
   private fun createInAnim(toView: View) {
     home2ManagerView.bindEndView(toView, layout)
+    home2ManagerView.doOnPreDraw {
+      val scaleAnimator = ScaleAnimation(
+        0.925f,
+        1.0f,
+        0.925f,
+        1f,
+        home2ManagerView.endRect.centerX(),
+        home2ManagerView.endRect.centerY()
+      )
+//    scaleAnimator.interpolator = DecelerateInterpolator(1.2f)
+      scaleAnimator.duration = 350
+      layout.startAnimation(scaleAnimator)
+    }
+
     doOnMainThreadIdle({
       home2ManagerView.startAnim()
     }, 100)
   }
 
-
-  override fun onDestroy() {
-    super.onDestroy()
-    mHandler.removeCallbacksAndMessages(null)
-    mHandlerThread.quit()
-  }
 
   // 创建菜单
   override fun onCreateOptionsMenu(menu: Menu): Boolean {

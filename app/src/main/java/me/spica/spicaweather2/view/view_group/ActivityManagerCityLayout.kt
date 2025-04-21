@@ -78,7 +78,7 @@ class ActivityManagerCityLayout(
     addView(recyclerView)
     addView(titleBar)
     addView(deleteBtn)
-    setBackgroundColor(Color.WHITE)
+//    setBackgroundColor(Color.WHITE)
   }
 
   override fun onMeasure(

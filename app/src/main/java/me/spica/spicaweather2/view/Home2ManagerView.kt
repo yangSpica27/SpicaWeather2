@@ -40,7 +40,7 @@ class Home2ManagerView : View {
   )
 
   // 结束的View的位置
-  private val endRect: RectF = RectF(0f, 0f, 0f, 0f)
+  val endRect: RectF = RectF(0f, 0f, 0f, 0f)
 
   // 标记是否已经绑定了结束的View
   @Volatile
