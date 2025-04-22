@@ -3,12 +3,10 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:shape="rectangle">
 
-  <corners android:radius="12dp" />
+    <corners android:radius="12dp" />
 
-  <solid android:color="#1A343434" />
+    <solid android:color="#1A343434" />
 
-  <stroke
-    android:width="2dp"
-    android:color="#1AFFFFFF" />
+
 
 </shape>

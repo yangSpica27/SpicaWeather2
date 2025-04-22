@@ -7,10 +7,12 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
+import android.provider.CalendarContract.Colors
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -20,6 +22,7 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.core.animation.doOnEnd
+import androidx.core.graphics.withScale
 import androidx.core.view.drawToBitmap
 import me.spica.spicaweather2.tools.dp
 import timber.log.Timber
@@ -75,7 +78,7 @@ class Manager2HomeView : View {
   var endAction: (() -> Unit)? = null
 
   private val progressAnimation =
-    ValueAnimator.ofFloat(0f, 1f).setDuration(375).apply {
+    ValueAnimator.ofFloat(0f, 1f).setDuration(425).apply {
       interpolator = DecelerateInterpolator(1.2f)
       addUpdateListener {
         val progress = it.animatedValue as Float
@@ -172,7 +175,17 @@ class Manager2HomeView : View {
     val layer: Int = canvas.saveLayer(0f, 0f, width.toFloat(), height.toFloat(), null)
     // 绘制背景
     clearPaint.xfermode = null
-    mBackground?.let { canvas.drawBitmap(it, 0f, 0f, clearPaint) }
+    canvas.withScale(
+      1 - progressAnimation.animatedFraction * .1f,
+      1 - progressAnimation.animatedFraction * .1f,
+      clearRect.centerX(),
+      clearRect.centerY()
+    ) {
+      mBackground?.let {
+        canvas.drawColor(Color.WHITE)
+        canvas.drawBitmap(it, 0f, 0f, clearPaint)
+      }
+    }
     // 绘制清除区域
     clearPaint.xfermode = clearXfermode
 

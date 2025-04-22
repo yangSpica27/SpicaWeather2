@@ -109,7 +109,7 @@ class ItemCityManagerLayout(
       text = "--"
       typeface =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-          Typeface.create(Typeface.DEFAULT, 500, false)
+          Typeface.create(Typeface.DEFAULT_BOLD, 600, false)
         } else {
           Typeface.DEFAULT
         }
@@ -147,10 +147,12 @@ class ItemCityManagerLayout(
           ViewGroup.LayoutParams.WRAP_CONTENT,
         )
       text = "--"
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-        typeface = Typeface.create(Typeface.DEFAULT, 900, false)
+      typeface = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        Typeface.create(Typeface.DEFAULT_BOLD, 900, false)
+      }else{
+        Typeface.DEFAULT_BOLD
       }
-      textSize = 38f
+      textSize = 11.dp.toFloat()
       setPadding(0, 0, 10.dp, 0)
     }
 

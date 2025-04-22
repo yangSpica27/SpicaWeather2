@@ -1,9 +1,12 @@
 package me.spica.spicaweather2.view.scroller_view
 
 import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.ScrollView
+import timber.log.Timber
 
 /**
  * 处理了滑动冲突的滑动布局
@@ -13,13 +16,23 @@ abstract class ScrollViewAtViewPager : ScrollView {
 
   private var startY = 0
 
-  private var lastY = 0f
 
-  private var pullDownListener: PullDownListener? = null
 
-  fun setPullDownListener(pullDownListener: PullDownListener?) {
-    this.pullDownListener = pullDownListener
-  }
+//  private var pullDownFraction = 0f
+//
+//
+//  private val objectAnimator = ObjectAnimator.ofFloat(this, "pullDownFraction", 0f, 0f).apply {
+//    duration = 350
+//  }
+//
+//
+//  @Keep
+//  private fun setPullDownFraction(
+//    pullDownFraction: Float,
+//  ) {
+//    this.pullDownFraction = pullDownFraction
+//    postInvalidateOnAnimation()
+//  }
 
   override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
     when (ev.action) {
@@ -40,18 +53,51 @@ abstract class ScrollViewAtViewPager : ScrollView {
         } else {
           parent.requestDisallowInterceptTouchEvent(canScrollVertically(startX - endX))
         }
-        if (!canScrollVertically(-1) && pullDownListener != null) {
-          pullDownListener!!.onPullDown(ev.y - lastY)
-        } else {
-          lastY = ev.y
-        }
+//        if (!canScrollVertically(-1) && !objectAnimator.isRunning) {
+//          setPullDownFraction(((ev.y - startY) / (height / 4f)).coerceIn(0f, 1f))
+//        }
       }
 
-      MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->
+      MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+//        objectAnimator.setFloatValues(
+//          pullDownFraction,
+//          0f
+//        )
+//        objectAnimator.start()
         parent.requestDisallowInterceptTouchEvent(false)
+      }
     }
     return super.dispatchTouchEvent(ev)
   }
+
+  override fun onDraw(canvas: Canvas) {
+    super.onDraw(canvas)
+    Timber.tag("ScrollViewAtViewPager").d("onDraw")
+  }
+
+  private val pointPaint = Paint().apply {
+    color = android.graphics.Color.WHITE
+    strokeCap = android.graphics.Paint.Cap.ROUND
+  }
+
+
+  override fun onDrawForeground(canvas: Canvas) {
+    super.onDrawForeground(canvas)
+//    canvas.withTranslation(
+//      width / 2f,
+//      height / 4f * pullDownFraction - 45.dp
+//    ) {
+////      pointPaint.alpha = (255 * pullDownFraction).toInt()
+//      pointPaint.strokeWidth = 55.dp
+//      pointPaint.color = ContextCompat.getColor(context, R.color.white)
+//      canvas.drawPoint(0f, 0f, pointPaint)
+//      pointPaint.strokeWidth = 35.dp - 35.dp * pullDownFraction + 20.dp
+//      pointPaint.color = ContextCompat.getColor(context, R.color.black)
+//      canvas.drawPoint(0f, 0f, pointPaint)
+//    }
+  }
+
+
 
   constructor(context: Context?) : super(context)
   constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -61,9 +107,4 @@ abstract class ScrollViewAtViewPager : ScrollView {
     defStyleAttr
   )
 
-  interface PullDownListener {
-    fun onPullDown(downY: Float)
-
-    fun onPullUp(downY: Float)
-  }
 }

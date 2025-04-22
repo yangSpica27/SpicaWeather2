@@ -47,7 +47,7 @@ class TipsItemLayout(
     )
     addView(titleText)
     addView(descText)
-    setBackgroundResource(R.drawable.bg_card)
+    setBackgroundResource(R.drawable.bg_round)
     backgroundTintList = ColorStateList.valueOf("#A6000000".toColorInt())
   }
 
