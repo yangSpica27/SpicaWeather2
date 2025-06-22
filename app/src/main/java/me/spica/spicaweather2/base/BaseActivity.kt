@@ -1,7 +1,9 @@
 package me.spica.spicaweather2.base
 
+import android.R
 import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -18,12 +20,17 @@ abstract class BaseActivity : AppCompatActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    enableEdgeToEdge()
+    enableEdgeToEdge(
+      navigationBarStyle = SystemBarStyle.light(
+        Color.TRANSPARENT,
+        Color.TRANSPARENT
+      )
+    )
   }
 
 
   private val FragmentActivity.windowInsetsCompat: WindowInsetsCompat?
-    get() = ViewCompat.getRootWindowInsets(findViewById(android.R.id.content))
+    get() = ViewCompat.getRootWindowInsets(findViewById(R.id.content))
 
   // Get the height of the status bar
   protected fun FragmentActivity.getNavigationBarsHeight(): Int {

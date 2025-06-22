@@ -54,6 +54,8 @@ android {
     buildConfig=true
   }
 
+
+
   signingConfigs {
     signingConfig {
       storeFile rootProject.file("key.jks")

@@ -2,14 +2,20 @@ package me.spica.spicaweather2.view.view_group
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.RenderEffect
+import android.graphics.Shader
+import android.os.Build
 import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.viewpager2.widget.ViewPager2
+import me.spica.spicaweather2.view.RainDropForegroundView
 import me.spica.spicaweather2.view.weather_bg.WeatherBackgroundView
 
 class ActivityMainLayout(
   context: Context,
 ) : AViewGroup(context) {
+
+
   val backgroundView =
     WeatherBackgroundView(context)
       .apply {
@@ -38,11 +44,18 @@ class ActivityMainLayout(
         LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
+//  private val rainDropForegroundView = RainDropForegroundView(context).apply {
+//    layoutParams =
+//      LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+//    bindParentView(this@ActivityMainLayout)
+//  }
+
   init {
     addView(backgroundView)
     addView(viewPager2)
     addView(mainTitleLayout)
     addView(currentWeatherLayout)
+//    addView(rainDropForegroundView)
     layoutParams =
       LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT,
@@ -76,5 +89,6 @@ class ActivityMainLayout(
     viewPager2.layout(0, 0)
     mainTitleLayout.layout(0, 0)
     currentWeatherLayout.layout(0, mainTitleLayout.bottom)
+//    rainDropForegroundView.layout(0, 0)
   }
 }

@@ -44,6 +44,7 @@ class ManagerCityAdapter : RecyclerView.Adapter<ManagerCityAdapter.ViewHolder>()
 
   @SuppressLint("NotifyDataSetChanged")
   fun setItems(items: List<CityWithWeather>) {
+
     this.items.clear()
     this.items.addAll(items)
     notifyDataSetChanged()

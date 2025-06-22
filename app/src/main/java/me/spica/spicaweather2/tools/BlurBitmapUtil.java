@@ -29,7 +29,7 @@ public class BlurBitmapUtil {
       // 创建一张缩小后的图片做为渲染的图片
       bitmap = Bitmap.createScaledBitmap(image, width, height, false);
     } catch (Exception e) {
-      e.printStackTrace();
+      // e.printStackTrace();
       return null;
     }
     // 创建RenderScript内核对象
@@ -56,11 +56,15 @@ public class BlurBitmapUtil {
     blurScript.destroy();
     rs.destroy();
     try {
+
       type.destroy();
     } catch (Exception e) {
-      e.printStackTrace();
+      // e.printStackTrace();
     }
     return bitmap;
   }
+
+
+
 
 }

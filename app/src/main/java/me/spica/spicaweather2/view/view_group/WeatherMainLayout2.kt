@@ -122,7 +122,7 @@ class WeatherMainLayout2 : ScrollViewAtViewPager {
       if (itemView is SpicaWeatherCard) {
         if (!itemView.hasInScreen.get()) {
           val isVisible = itemView.getGlobalVisibleRect(itemVisibleRect)
-          Timber.tag(tag = tag?.toString() ?: "未知").e("是否可见:$isVisible")
+//          Timber.tag(tag = tag?.toString() ?: "未知").e("是否可见:$isVisible")
           itemView.checkEnterScreen(isVisible && itemVisibleRect.bottom - itemVisibleRect.top >= 20.dp)
         }
       }

@@ -72,7 +72,6 @@ abstract class ScrollViewAtViewPager : ScrollView {
 
   override fun onDraw(canvas: Canvas) {
     super.onDraw(canvas)
-    Timber.tag("ScrollViewAtViewPager").d("onDraw")
   }
 
   private val pointPaint = Paint().apply {

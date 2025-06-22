@@ -12,7 +12,7 @@ data class CityWithWeather(
     parentColumn = "cityName",
     entityColumn = "cityName",
   )
-  var weather: Weather?,
+  var weather: Weather? = null,
 ) {
 
 
