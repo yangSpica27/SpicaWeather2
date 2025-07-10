@@ -460,17 +460,17 @@ class HourlyLineView : View {
   ) {
     val time = sdfHHMM.format(data[index].fxTime())
     if ((time.toIntOrNull() ?: 0) <= 12) {
-      drawTimeTextPaint.getTextBounds("$time AM", 0, time.length, textBound)
+      drawTimeTextPaint.getTextBounds("${time}时", 0, time.length, textBound)
       canvas.drawText(
-        "${time} AM",
+        "${time}时",
         point.x.toFloat(),
         height - (timeHeight - textBound.height()) / 2f,
         drawTimeTextPaint,
       )
     } else {
-      drawTimeTextPaint.getTextBounds("$time PM", 0, time.length, textBound)
+      drawTimeTextPaint.getTextBounds("${time}时", 0, time.length, textBound)
       canvas.drawText(
-        "$time PM",
+        "${time}时",
         point.x.toFloat(),
         height - (timeHeight - textBound.height()) / 2f,
         drawTimeTextPaint,

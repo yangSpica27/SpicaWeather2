@@ -16,6 +16,7 @@ import android.util.LruCache
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.toColorInt
 import me.spica.spicaweather2.R
@@ -230,7 +231,8 @@ class DailyItemView : View {
         textPaint,
       )
 
-      textPaint.color = ContextCompat.getColor(context, R.color.white)
+      textPaint.color =
+        ColorUtils.setAlphaComponent(ContextCompat.getColor(context, R.color.white), 150)
       textPaint.textSize = 16.dp
       val minTempText = "${dailyWeatherBean.minTemp}℃"
       textPaint.getTextBounds(minTempText, 0, minTempText.length, textBound)
@@ -403,6 +405,7 @@ class DailyItemView : View {
       top + 65.dp / 2f + -bitmap.height / 2,
       iconPaint,
     )
+    rectPaint.style = Paint.Style.FILL
     canvas.drawRoundRect(
       left,
       top,
@@ -412,7 +415,6 @@ class DailyItemView : View {
       8.dp,
       rectPaint,
     )
-
     itemTextPaint.textSize = 17.dp
     itemTextPaint.typeface = Typeface.DEFAULT_BOLD
     itemTextPaint.color = ContextCompat.getColor(context, R.color.text_color_white)
@@ -443,7 +445,7 @@ class DailyItemView : View {
 
   private val rectPaint =
     Paint().apply {
-      color = Color.parseColor("#1a4a4a4a")
+      color = "#1AFFFFFF".toColorInt()
     }
 
   companion object {
