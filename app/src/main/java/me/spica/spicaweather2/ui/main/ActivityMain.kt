@@ -2,12 +2,10 @@ package me.spica.spicaweather2.ui.main
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
 import androidx.core.view.WindowCompat
 import androidx.core.view.children
 import androidx.core.view.drawToBitmap
@@ -47,7 +45,7 @@ class ActivityMain : BaseActivity() {
   companion object {
     // 当前页面的 截图
     var screenBitmap: Bitmap? = null
-    var currentThemeColor: Int = Color.parseColor("#4297e7")
+    var currentThemeColor: Int = "#4297e7".toColorInt()
   }
 
   private val viewModel: MainViewModel by viewModels()
