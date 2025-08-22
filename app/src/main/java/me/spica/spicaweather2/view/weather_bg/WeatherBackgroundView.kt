@@ -3,8 +3,6 @@ package me.spica.spicaweather2.view.weather_bg
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.RenderEffect
-import android.graphics.Shader
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -15,6 +13,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import me.spica.spicaweather2.R
+import me.spica.spicaweather2.tools.BitmapShaderUtils
 import me.spica.spicaweather2.view.weather_drawable.WeatherDrawableManager
 import java.util.concurrent.Executors
 
@@ -36,6 +35,9 @@ class WeatherBackgroundView : View, SensorEventListener {
     context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
   }
 
+
+  private var shaderUtils: BitmapShaderUtils? = null
+
   // 主题色
   var themeColor = ContextCompat.getColor(context, R.color.light_blue_600)
 
@@ -53,7 +55,9 @@ class WeatherBackgroundView : View, SensorEventListener {
   private val screenHeight = resources.displayMetrics.heightPixels
 
 
+
   var currentWeatherAnimType = NowWeatherView.WeatherAnimType.UNKNOWN
+    get() = field
     set(value) {
       if (value == field) return
       field = value
@@ -82,9 +86,11 @@ class WeatherBackgroundView : View, SensorEventListener {
 
   private lateinit var executor: java.util.concurrent.ScheduledExecutorService
 
+  private var startTime: Long = 0
 
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
+    startTime = System.nanoTime()
     sensorManager.registerListener(
       this,
       sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
@@ -94,6 +100,25 @@ class WeatherBackgroundView : View, SensorEventListener {
     executor.scheduleWithFixedDelay({
       synchronized(this) {
         weatherDrawableManager.calculate(width, height)
+        if (currentWeatherAnimType == NowWeatherView.WeatherAnimType.RAIN && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+          if (shaderUtils==null){
+            shaderUtils = BitmapShaderUtils()
+          }
+          shaderUtils?.updateShader(
+            (System.nanoTime() - startTime)/1.0E9f ,
+          )
+          post {
+            (parent as View).setRenderEffect(shaderUtils?.getRenderEffect(1))
+          }
+        }
+        if (currentWeatherAnimType != NowWeatherView.WeatherAnimType.RAIN
+          && shaderUtils!=null
+          && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ) {
+          shaderUtils = null
+          post {
+            (parent as View).setRenderEffect(null)
+          }
+        }
       }
       postInvalidateOnAnimation()
     }, 0, 8, java.util.concurrent.TimeUnit.MILLISECONDS)
@@ -109,6 +134,7 @@ class WeatherBackgroundView : View, SensorEventListener {
     sensorManager.unregisterListener(this)
     weatherDrawableManager.release()
     executor.shutdown()
+    shaderUtils = null
   }
 
   override fun onDraw(canvas: Canvas) {
@@ -128,6 +154,11 @@ class WeatherBackgroundView : View, SensorEventListener {
     val x: Float = event.values[SensorManager.DATA_X]
     val y: Float = event.values[SensorManager.DATA_Y]
     weatherDrawableManager.applyLinearImpulse(x, y)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      shaderUtils?.updateUGravity(
+        x/10f,y/10f
+      )
+    }
   }
 
   override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) = Unit
