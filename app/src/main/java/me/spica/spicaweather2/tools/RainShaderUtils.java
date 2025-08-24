@@ -10,16 +10,13 @@ import me.spica.spicaweather2.R;
 import me.spica.spicaweather2.base.App;
 
 @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-public class BitmapShaderUtils {
+public class RainShaderUtils {
 
+  private RuntimeShader shader_rain;
 
-  RuntimeShader shader_rain;
-
-
-  public BitmapShaderUtils() {
+  public RainShaderUtils() {
     init();
   }
-
 
   private String readRawToString(Resources resources, int raw_res) {
     Scanner scanner = new Scanner(resources.openRawResource(raw_res));
@@ -31,22 +28,18 @@ public class BitmapShaderUtils {
     return sb.toString();
   }
 
-
-  public RenderEffect getRenderEffect(int mode) {
+  public RenderEffect getRenderEffect() {
     return RenderEffect.createRuntimeShaderEffect(this.shader_rain, "uTex");
   }
 
-
   public void init() {
-    Resources resources =  App.getInstance().getApplicationContext().getResources();
+    Resources resources = App.getInstance().getApplicationContext().getResources();
     this.shader_rain = new RuntimeShader(readRawToString(resources, R.raw.rain_drop_new));
 
-    this.shader_rain.setFloatUniform("uResolution", new float[]{
+    this.shader_rain.setFloatUniform("uResolution", new float[] {
         AppToolsKt.getScreenWidth(App.getInstance().getApplicationContext()),
-        AppToolsKt.getScreenHeight(App.getInstance().getApplicationContext())});
+        AppToolsKt.getScreenHeight(App.getInstance().getApplicationContext()) });
   }
-
-
 
   public void updateShader(float nanoTime) {
     this.shader_rain.setFloatUniform("uTime", nanoTime);
@@ -58,8 +51,8 @@ public class BitmapShaderUtils {
     this.shader_rain.setFloatUniform("uRunningDropSpeed", 1.3f);
   }
 
-  public void updateUGravity(float x, float y){
-    this.shader_rain.setFloatUniform("uGravity", new float[]{x, y});
+  public void updateUGravity(float x, float y) {
+    this.shader_rain.setFloatUniform("uGravity", new float[] { x, y });
   }
 
 }

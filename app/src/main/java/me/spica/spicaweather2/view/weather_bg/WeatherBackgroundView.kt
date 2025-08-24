@@ -13,7 +13,8 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import me.spica.spicaweather2.R
-import me.spica.spicaweather2.tools.BitmapShaderUtils
+import me.spica.spicaweather2.tools.RainShaderUtils
+import me.spica.spicaweather2.tools.SnowShaderUtils
 import me.spica.spicaweather2.view.weather_drawable.WeatherDrawableManager
 import java.util.concurrent.Executors
 
@@ -36,7 +37,10 @@ class WeatherBackgroundView : View, SensorEventListener {
   }
 
 
-  private var shaderUtils: BitmapShaderUtils? = null
+  private var rainShaderUtils: RainShaderUtils? = null
+
+  private var snowShaderUtils: SnowShaderUtils? = null
+
 
   // 主题色
   var themeColor = ContextCompat.getColor(context, R.color.light_blue_600)
@@ -53,7 +57,6 @@ class WeatherBackgroundView : View, SensorEventListener {
 
   // 屏幕高度
   private val screenHeight = resources.displayMetrics.heightPixels
-
 
 
   var currentWeatherAnimType = NowWeatherView.WeatherAnimType.UNKNOWN
@@ -90,7 +93,6 @@ class WeatherBackgroundView : View, SensorEventListener {
 
   override fun onAttachedToWindow() {
     super.onAttachedToWindow()
-    startTime = System.nanoTime()
     sensorManager.registerListener(
       this,
       sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
@@ -100,23 +102,43 @@ class WeatherBackgroundView : View, SensorEventListener {
     executor.scheduleWithFixedDelay({
       synchronized(this) {
         weatherDrawableManager.calculate(width, height)
-        if (currentWeatherAnimType == NowWeatherView.WeatherAnimType.RAIN && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
-          if (shaderUtils==null){
-            shaderUtils = BitmapShaderUtils()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+          if (currentWeatherAnimType == NowWeatherView.WeatherAnimType.SNOW) {
+            if (snowShaderUtils == null) {
+              startTime = System.nanoTime()
+              snowShaderUtils = SnowShaderUtils()
+            }
+            snowShaderUtils?.update(
+              floatArrayOf(width.toFloat(), height.toFloat()),
+              ((System.nanoTime() - startTime) / 1.0E10f).coerceAtMost(1f)
+            )
+            post {
+              setRenderEffect(snowShaderUtils?.renderEffect)
+            }
+          } else if (snowShaderUtils != null) {
+            snowShaderUtils = null
+            post {
+              setRenderEffect(null)
+            }
           }
-          shaderUtils?.updateShader(
-            (System.nanoTime() - startTime)/1.0E9f ,
-          )
-          post {
-            (parent as View).setRenderEffect(shaderUtils?.getRenderEffect(1))
-          }
-        }
-        if (currentWeatherAnimType != NowWeatherView.WeatherAnimType.RAIN
-          && shaderUtils!=null
-          && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ) {
-          shaderUtils = null
-          post {
-            (parent as View).setRenderEffect(null)
+
+          if (currentWeatherAnimType == NowWeatherView.WeatherAnimType.RAIN) {
+            if (rainShaderUtils == null) {
+              rainShaderUtils = RainShaderUtils()
+              startTime = System.nanoTime()
+            }
+            rainShaderUtils?.updateShader(
+              (System.nanoTime() - startTime) / 1.0E9f,
+            )
+            post {
+              (parent as View).setRenderEffect(rainShaderUtils?.renderEffect)
+            }
+          } else if (rainShaderUtils != null) {
+            rainShaderUtils = null
+            post {
+              (parent as View).setRenderEffect(null)
+            }
           }
         }
       }
@@ -134,7 +156,8 @@ class WeatherBackgroundView : View, SensorEventListener {
     sensorManager.unregisterListener(this)
     weatherDrawableManager.release()
     executor.shutdown()
-    shaderUtils = null
+    rainShaderUtils = null
+    snowShaderUtils = null
   }
 
   override fun onDraw(canvas: Canvas) {
@@ -155,8 +178,8 @@ class WeatherBackgroundView : View, SensorEventListener {
     val y: Float = event.values[SensorManager.DATA_Y]
     weatherDrawableManager.applyLinearImpulse(x, y)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-      shaderUtils?.updateUGravity(
-        x/10f,y/10f
+      rainShaderUtils?.updateUGravity(
+        x / 10f, y / 10f
       )
     }
   }
