@@ -31,7 +31,7 @@ class RainParticleManager {
 
   private var mWorldWidth = 0
   private var mWorldHeight = 0
-  private var mDensity = .5f
+  private var mDensity = 1f
 
   private var boxWidth: Float = 0f
   private var boxHeight: Float = 0f
@@ -104,7 +104,7 @@ class RainParticleManager {
     val fixtureDef = FixtureDef()
     fixtureDef.shape = box
     fixtureDef.density = mDensity
-//        fixtureDef.friction = 0.1f // 摩擦系数
+    fixtureDef.friction = 10f // 摩擦系数
     fixtureDef.restitution = 0.3f // 补偿系数
     fixtureDef.filter.maskBits = 0b01
     fixtureDef.filter.groupIndex = 0b01

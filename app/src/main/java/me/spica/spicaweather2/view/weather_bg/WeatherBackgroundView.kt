@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import me.spica.spicaweather2.R
 import me.spica.spicaweather2.tools.RainShaderUtils
+import me.spica.spicaweather2.tools.SnowPointsShaderUtils
 import me.spica.spicaweather2.tools.SnowShaderUtils
 import me.spica.spicaweather2.view.weather_drawable.WeatherDrawableManager
 import java.util.concurrent.Executors
@@ -41,6 +42,7 @@ class WeatherBackgroundView : View, SensorEventListener {
 
   private var snowShaderUtils: SnowShaderUtils? = null
 
+  private var snowBackgroundShaderUtils: SnowPointsShaderUtils? = null
 
   // 主题色
   var themeColor = ContextCompat.getColor(context, R.color.light_blue_600)
@@ -108,18 +110,25 @@ class WeatherBackgroundView : View, SensorEventListener {
             if (snowShaderUtils == null) {
               startTime = System.nanoTime()
               snowShaderUtils = SnowShaderUtils()
+              snowBackgroundShaderUtils = SnowPointsShaderUtils()
             }
             snowShaderUtils?.update(
               floatArrayOf(width.toFloat(), height.toFloat()),
               ((System.nanoTime() - startTime) / 1.0E10f).coerceAtMost(1f)
             )
+            snowBackgroundShaderUtils?.updateTime(
+              ((System.nanoTime() - startTime) / 1.0E9f)
+            )
             post {
-              setRenderEffect(snowShaderUtils?.renderEffect)
+              setRenderEffect(snowShaderUtils?.getRenderEffect())
+              (parent as View).setRenderEffect(snowBackgroundShaderUtils?.getRenderEffect())
             }
           } else if (snowShaderUtils != null) {
             snowShaderUtils = null
+            snowBackgroundShaderUtils = null
             post {
               setRenderEffect(null)
+              (parent as View).setRenderEffect(null)
             }
           }
 
@@ -158,6 +167,7 @@ class WeatherBackgroundView : View, SensorEventListener {
     executor.shutdown()
     rainShaderUtils = null
     snowShaderUtils = null
+    snowBackgroundShaderUtils = null
   }
 
   override fun onDraw(canvas: Canvas) {
