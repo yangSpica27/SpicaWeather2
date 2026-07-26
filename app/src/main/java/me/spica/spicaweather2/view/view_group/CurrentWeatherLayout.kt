@@ -172,10 +172,14 @@ class CurrentWeatherLayout(
   }
 
   private fun setText(weather: Weather) {
+    // 注意：这里是从 progressAnim 的回调里跑的，ActivityMain 的 try/catch 拦不住，
+    // 缓存里若是旧版本写入的空列表会直接崩主线程。
+    val now = weather.hourlyWeather.firstOrNull()
+
     tempTextView.text =
       SpannableStringBuilder()
         .append(
-          "${weather.hourlyWeather[0].temp}",
+          "${now?.temp ?: weather.todayWeather.temp}",
           AbsoluteSizeSpan(170.dp),
           Spannable.SPAN_INCLUSIVE_INCLUSIVE,
         ).append(
@@ -185,7 +189,7 @@ class CurrentWeatherLayout(
         )
 
     descTextView.text = HtmlCompat.fromHtml(
-      "${weather.todayWeather.weatherName},降水概率&nbsp<b>${weather.hourlyWeather[0].pop}%<b/>",
+      "${weather.todayWeather.weatherName},降水概率&nbsp<b>${now?.pop ?: 0}%</b>",
       HtmlCompat.FROM_HTML_MODE_LEGACY,
     )
     tempTextView.post {

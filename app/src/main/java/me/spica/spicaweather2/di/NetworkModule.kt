@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import me.spica.spicaweather2.BuildConfig
 import me.spica.spicaweather2.network.HeClient
 import me.spica.spicaweather2.network.HeService
 import okhttp3.OkHttpClient
@@ -28,9 +29,14 @@ object NetworkModule {
   fun provideOkHttpClient(): OkHttpClient =
     OkHttpClient
       .Builder()
-      .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-      .retryOnConnectionFailure(true)
+      .addInterceptor(
+        HttpLoggingInterceptor().setLevel(
+          if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE,
+        ),
+      ).retryOnConnectionFailure(true)
       .connectTimeout(5000L, TimeUnit.MILLISECONDS)
+      .readTimeout(15L, TimeUnit.SECONDS)
+      .writeTimeout(15L, TimeUnit.SECONDS)
       .build()
 
   @Provides

@@ -2,23 +2,19 @@ package me.spica.spicaweather2.network
 
 import com.skydoves.sandwich.ApiResponse
 import me.spica.spicaweather2.network.model.BaseResponse
-import me.spica.spicaweather2.network.model.caiyun.CaiyunBean
-import me.spica.spicaweather2.persistence.entity.weather.Weather
-import retrofit2.http.GET
-import retrofit2.http.Query
+import me.spica.spicaweather2.network.model.batch.BatchWeatherList
+import me.spica.spicaweather2.network.model.batch.BatchWeatherRequest
+import retrofit2.http.Body
+import retrofit2.http.POST
 
 @Suppress("unused")
 interface HeService {
-  // 聚合接口
-  @GET("http://106.54.25.152:4040/api/weather/all")
-  suspend fun getAllWeather(
-    @Query("location")
-    location: String,
-  ): ApiResponse<BaseResponse<Weather>>
-
-  @GET("https://weatherapi.market.xiaomi.com/wtr-v3/weather/all")
-  suspend fun getMinutely(
-    @Query("latitude") latitude: Double,
-    @Query("longitude") longitude: Double,
-  ): ApiResponse<CaiyunBean>
+  /**
+   * 批量聚合接口：一次请求拿到所有城市的实时/预报/分钟级降水/空气质量/预警。
+   * 取代了旧的 :4040 /api/weather/all（单城 GET，schema 不兼容）。
+   */
+  @POST("http://106.54.25.152:4141/api/weather/batch")
+  suspend fun getBatchWeather(
+    @Body request: BatchWeatherRequest,
+  ): ApiResponse<BaseResponse<BatchWeatherList>>
 }
